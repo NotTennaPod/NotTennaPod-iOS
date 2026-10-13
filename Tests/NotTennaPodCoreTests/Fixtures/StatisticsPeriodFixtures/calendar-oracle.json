@@ -1,0 +1,5738 @@
+{
+  "kind": "transformed-host-Java-extraction-not-Android-UI",
+  "source": "reference/AntennaPod/ui/statistics/src/main/java/de/danoeh/antennapod/ui/statistics/subscriptions/StatisticsFilterDialog.java",
+  "sourceSHA256": "c496c8abc5753ab8560f00b671a9825cee7316c1b2aad20143471310d988d663",
+  "methodSHA256": "a9764015fa1c35851199407f83db93c60dc1ccb22ab6c89329c59e6b3ec6bdcd",
+  "transformedSHA256": "f913c5aa267b07883bfd4a07503eb91a3b01f5daee0a66396eb54bd6fb6179cd",
+  "transformations": [
+    [
+      "Calendar.getInstance()",
+      "Calendar.getInstance(zone, locale)"
+    ],
+    [
+      "Locale.getDefault()",
+      "locale"
+    ],
+    [
+      "DateFormat.getBestDateTimePattern(locale, \"MMM yyyy\")",
+      "\"MMM yyyy\""
+    ],
+    [
+      "System.currentTimeMillis()",
+      "now"
+    ],
+    [
+      "context.getString(R.string.statistics_today)",
+      "\"Today\""
+    ],
+    [
+      "SimpleDateFormat dateFormat = new SimpleDateFormat(skeleton, locale);",
+      "SimpleDateFormat dateFormat = new SimpleDateFormat(skeleton, locale);\n        dateFormat.setTimeZone(zone);"
+    ]
+  ],
+  "compileCommand": [
+    "javac",
+    "-d",
+    ".work/statistics-period/a2/oracle",
+    ".work/statistics-period/a2/oracle/StatisticsPeriodOracle.java"
+  ],
+  "javaVersion": "openjdk version \"21.0.11\" 2026-04-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.11+10 (build 21.0.11+10-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.11+10 (build 21.0.11+10-LTS, mixed mode, sharing)\n",
+  "limitations": [
+    "Android best-pattern label generator replaced with literal MMM yyyy.",
+    "Host Java Calendar/zone database is not Android calendar-runtime evidence.",
+    "Clock, locale and zone are injected; process defaults never changed.",
+    "Empty-list outputs preserve observations without defining app recovery policy."
+  ],
+  "cases": [
+    {
+      "id": "long/UTC/en-US",
+      "zone": "UTC",
+      "locale": "en-US",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730419200000,
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000
+      ],
+      "toDates": [
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000,
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
+        "Feb 2025",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jun 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025",
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026",
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
+        "Feb 2025",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jun 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025",
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026",
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/UTC/en-US",
+      "zone": "UTC",
+      "locale": "en-US",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788220800000
+      ],
+      "toDates": [
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/UTC/en-US",
+      "zone": "UTC",
+      "locale": "en-US",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704067200000,
+        1706745600000,
+        1709251200000
+      ],
+      "toDates": [
+        1706745600000,
+        1709251200000,
+        1711929600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024"
+      ],
+      "toLabels": [
+        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/UTC/en-US",
+      "zone": "UTC",
+      "locale": "en-US",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769904000000,
+        1772323200000,
+        1775001600000
+      ],
+      "toDates": [
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026"
+      ],
+      "toLabels": [
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/UTC/en-US",
+      "zone": "UTC",
+      "locale": "en-US",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790812800000,
+        1793491200000,
+        1796083200000
+      ],
+      "toDates": [
+        1793491200000,
+        1796083200000,
+        1798761600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Oct 2026",
+        "Nov 2026",
+        "Dec 2026"
+      ],
+      "toLabels": [
+        "Oct 2026",
+        "Nov 2026",
+        "Dec 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/UTC/en-US",
+      "zone": "UTC",
+      "locale": "en-US",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764547200000,
+        1767225600000
+      ],
+      "toDates": [
+        1767225600000,
+        1769904000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Dec 2025",
+        "Jan 2026"
+      ],
+      "toLabels": [
+        "Dec 2025",
+        "Jan 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/UTC/en-US",
+      "zone": "UTC",
+      "locale": "en-US",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/UTC/en-US",
+      "zone": "UTC",
+      "locale": "en-US",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/UTC/de-DE",
+      "zone": "UTC",
+      "locale": "de-DE",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730419200000,
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000
+      ],
+      "toDates": [
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000,
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Nov. 2024",
+        "Dez. 2024",
+        "Jan. 2025",
+        "Feb. 2025",
+        "März 2025",
+        "Apr. 2025",
+        "Mai 2025",
+        "Juni 2025",
+        "Juli 2025",
+        "Aug. 2025",
+        "Sept. 2025",
+        "Okt. 2025",
+        "Nov. 2025",
+        "Dez. 2025",
+        "Jan. 2026",
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Mai 2026",
+        "Juni 2026",
+        "Juli 2026",
+        "Aug. 2026",
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Nov. 2024",
+        "Dez. 2024",
+        "Jan. 2025",
+        "Feb. 2025",
+        "März 2025",
+        "Apr. 2025",
+        "Mai 2025",
+        "Juni 2025",
+        "Juli 2025",
+        "Aug. 2025",
+        "Sept. 2025",
+        "Okt. 2025",
+        "Nov. 2025",
+        "Dez. 2025",
+        "Jan. 2026",
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Mai 2026",
+        "Juni 2026",
+        "Juli 2026",
+        "Aug. 2026",
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/UTC/de-DE",
+      "zone": "UTC",
+      "locale": "de-DE",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788220800000
+      ],
+      "toDates": [
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/UTC/de-DE",
+      "zone": "UTC",
+      "locale": "de-DE",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704067200000,
+        1706745600000,
+        1709251200000
+      ],
+      "toDates": [
+        1706745600000,
+        1709251200000,
+        1711929600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Jan. 2024",
+        "Feb. 2024",
+        "März 2024"
+      ],
+      "toLabels": [
+        "Jan. 2024",
+        "Feb. 2024",
+        "März 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/UTC/de-DE",
+      "zone": "UTC",
+      "locale": "de-DE",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769904000000,
+        1772323200000,
+        1775001600000
+      ],
+      "toDates": [
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026"
+      ],
+      "toLabels": [
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/UTC/de-DE",
+      "zone": "UTC",
+      "locale": "de-DE",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790812800000,
+        1793491200000,
+        1796083200000
+      ],
+      "toDates": [
+        1793491200000,
+        1796083200000,
+        1798761600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Okt. 2026",
+        "Nov. 2026",
+        "Dez. 2026"
+      ],
+      "toLabels": [
+        "Okt. 2026",
+        "Nov. 2026",
+        "Dez. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/UTC/de-DE",
+      "zone": "UTC",
+      "locale": "de-DE",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764547200000,
+        1767225600000
+      ],
+      "toDates": [
+        1767225600000,
+        1769904000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Dez. 2025",
+        "Jan. 2026"
+      ],
+      "toLabels": [
+        "Dez. 2025",
+        "Jan. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/UTC/de-DE",
+      "zone": "UTC",
+      "locale": "de-DE",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/UTC/de-DE",
+      "zone": "UTC",
+      "locale": "de-DE",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/UTC/ar-EG",
+      "zone": "UTC",
+      "locale": "ar-EG",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730419200000,
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000
+      ],
+      "toDates": [
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000,
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "نوفمبر ٢٠٢٤",
+        "ديسمبر ٢٠٢٤",
+        "يناير ٢٠٢٥",
+        "فبراير ٢٠٢٥",
+        "مارس ٢٠٢٥",
+        "أبريل ٢٠٢٥",
+        "مايو ٢٠٢٥",
+        "يونيو ٢٠٢٥",
+        "يوليو ٢٠٢٥",
+        "أغسطس ٢٠٢٥",
+        "سبتمبر ٢٠٢٥",
+        "أكتوبر ٢٠٢٥",
+        "نوفمبر ٢٠٢٥",
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "مايو ٢٠٢٦",
+        "يونيو ٢٠٢٦",
+        "يوليو ٢٠٢٦",
+        "أغسطس ٢٠٢٦",
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "نوفمبر ٢٠٢٤",
+        "ديسمبر ٢٠٢٤",
+        "يناير ٢٠٢٥",
+        "فبراير ٢٠٢٥",
+        "مارس ٢٠٢٥",
+        "أبريل ٢٠٢٥",
+        "مايو ٢٠٢٥",
+        "يونيو ٢٠٢٥",
+        "يوليو ٢٠٢٥",
+        "أغسطس ٢٠٢٥",
+        "سبتمبر ٢٠٢٥",
+        "أكتوبر ٢٠٢٥",
+        "نوفمبر ٢٠٢٥",
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "مايو ٢٠٢٦",
+        "يونيو ٢٠٢٦",
+        "يوليو ٢٠٢٦",
+        "أغسطس ٢٠٢٦",
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/UTC/ar-EG",
+      "zone": "UTC",
+      "locale": "ar-EG",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788220800000
+      ],
+      "toDates": [
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/UTC/ar-EG",
+      "zone": "UTC",
+      "locale": "ar-EG",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704067200000,
+        1706745600000,
+        1709251200000
+      ],
+      "toDates": [
+        1706745600000,
+        1709251200000,
+        1711929600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "يناير ٢٠٢٤",
+        "فبراير ٢٠٢٤",
+        "مارس ٢٠٢٤"
+      ],
+      "toLabels": [
+        "يناير ٢٠٢٤",
+        "فبراير ٢٠٢٤",
+        "مارس ٢٠٢٤",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/UTC/ar-EG",
+      "zone": "UTC",
+      "locale": "ar-EG",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769904000000,
+        1772323200000,
+        1775001600000
+      ],
+      "toDates": [
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦"
+      ],
+      "toLabels": [
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/UTC/ar-EG",
+      "zone": "UTC",
+      "locale": "ar-EG",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790812800000,
+        1793491200000,
+        1796083200000
+      ],
+      "toDates": [
+        1793491200000,
+        1796083200000,
+        1798761600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "أكتوبر ٢٠٢٦",
+        "نوفمبر ٢٠٢٦",
+        "ديسمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "أكتوبر ٢٠٢٦",
+        "نوفمبر ٢٠٢٦",
+        "ديسمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/UTC/ar-EG",
+      "zone": "UTC",
+      "locale": "ar-EG",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764547200000,
+        1767225600000
+      ],
+      "toDates": [
+        1767225600000,
+        1769904000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦"
+      ],
+      "toLabels": [
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/UTC/ar-EG",
+      "zone": "UTC",
+      "locale": "ar-EG",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/UTC/ar-EG",
+      "zone": "UTC",
+      "locale": "ar-EG",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/UTC/ja-JP",
+      "zone": "UTC",
+      "locale": "ja-JP",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730419200000,
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000
+      ],
+      "toDates": [
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000,
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "11月 2024",
+        "12月 2024",
+        "1月 2025",
+        "2月 2025",
+        "3月 2025",
+        "4月 2025",
+        "5月 2025",
+        "6月 2025",
+        "7月 2025",
+        "8月 2025",
+        "9月 2025",
+        "10月 2025",
+        "11月 2025",
+        "12月 2025",
+        "1月 2026",
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "5月 2026",
+        "6月 2026",
+        "7月 2026",
+        "8月 2026",
+        "9月 2026"
+      ],
+      "toLabels": [
+        "11月 2024",
+        "12月 2024",
+        "1月 2025",
+        "2月 2025",
+        "3月 2025",
+        "4月 2025",
+        "5月 2025",
+        "6月 2025",
+        "7月 2025",
+        "8月 2025",
+        "9月 2025",
+        "10月 2025",
+        "11月 2025",
+        "12月 2025",
+        "1月 2026",
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "5月 2026",
+        "6月 2026",
+        "7月 2026",
+        "8月 2026",
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/UTC/ja-JP",
+      "zone": "UTC",
+      "locale": "ja-JP",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788220800000
+      ],
+      "toDates": [
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "9月 2026"
+      ],
+      "toLabels": [
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/UTC/ja-JP",
+      "zone": "UTC",
+      "locale": "ja-JP",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704067200000,
+        1706745600000,
+        1709251200000
+      ],
+      "toDates": [
+        1706745600000,
+        1709251200000,
+        1711929600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "1月 2024",
+        "2月 2024",
+        "3月 2024"
+      ],
+      "toLabels": [
+        "1月 2024",
+        "2月 2024",
+        "3月 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/UTC/ja-JP",
+      "zone": "UTC",
+      "locale": "ja-JP",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769904000000,
+        1772323200000,
+        1775001600000
+      ],
+      "toDates": [
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "2月 2026",
+        "3月 2026",
+        "4月 2026"
+      ],
+      "toLabels": [
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/UTC/ja-JP",
+      "zone": "UTC",
+      "locale": "ja-JP",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790812800000,
+        1793491200000,
+        1796083200000
+      ],
+      "toDates": [
+        1793491200000,
+        1796083200000,
+        1798761600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "10月 2026",
+        "11月 2026",
+        "12月 2026"
+      ],
+      "toLabels": [
+        "10月 2026",
+        "11月 2026",
+        "12月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/UTC/ja-JP",
+      "zone": "UTC",
+      "locale": "ja-JP",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764547200000,
+        1767225600000
+      ],
+      "toDates": [
+        1767225600000,
+        1769904000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "12月 2025",
+        "1月 2026"
+      ],
+      "toLabels": [
+        "12月 2025",
+        "1月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/UTC/ja-JP",
+      "zone": "UTC",
+      "locale": "ja-JP",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/UTC/ja-JP",
+      "zone": "UTC",
+      "locale": "ja-JP",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/UTC/th-TH",
+      "zone": "UTC",
+      "locale": "th-TH",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1730419200000,
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000
+      ],
+      "toDates": [
+        1733011200000,
+        1735689600000,
+        1738368000000,
+        1740787200000,
+        1743465600000,
+        1746057600000,
+        1748736000000,
+        1751328000000,
+        1754006400000,
+        1756684800000,
+        1759276800000,
+        1761955200000,
+        1764547200000,
+        1767225600000,
+        1769904000000,
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        1780272000000,
+        1782864000000,
+        1785542400000,
+        1788220800000,
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "พ.ย. 2567",
+        "ธ.ค. 2567",
+        "ม.ค. 2568",
+        "ก.พ. 2568",
+        "มี.ค. 2568",
+        "เม.ย. 2568",
+        "พ.ค. 2568",
+        "มิ.ย. 2568",
+        "ก.ค. 2568",
+        "ส.ค. 2568",
+        "ก.ย. 2568",
+        "ต.ค. 2568",
+        "พ.ย. 2568",
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "พ.ค. 2569",
+        "มิ.ย. 2569",
+        "ก.ค. 2569",
+        "ส.ค. 2569",
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "พ.ย. 2567",
+        "ธ.ค. 2567",
+        "ม.ค. 2568",
+        "ก.พ. 2568",
+        "มี.ค. 2568",
+        "เม.ย. 2568",
+        "พ.ค. 2568",
+        "มิ.ย. 2568",
+        "ก.ค. 2568",
+        "ส.ค. 2568",
+        "ก.ย. 2568",
+        "ต.ค. 2568",
+        "พ.ย. 2568",
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "พ.ค. 2569",
+        "มิ.ย. 2569",
+        "ก.ค. 2569",
+        "ส.ค. 2569",
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/UTC/th-TH",
+      "zone": "UTC",
+      "locale": "th-TH",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1788220800000
+      ],
+      "toDates": [
+        1790812800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/UTC/th-TH",
+      "zone": "UTC",
+      "locale": "th-TH",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1704067200000,
+        1706745600000,
+        1709251200000
+      ],
+      "toDates": [
+        1706745600000,
+        1709251200000,
+        1711929600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ม.ค. 2567",
+        "ก.พ. 2567",
+        "มี.ค. 2567"
+      ],
+      "toLabels": [
+        "ม.ค. 2567",
+        "ก.พ. 2567",
+        "มี.ค. 2567",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/UTC/th-TH",
+      "zone": "UTC",
+      "locale": "th-TH",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1769904000000,
+        1772323200000,
+        1775001600000
+      ],
+      "toDates": [
+        1772323200000,
+        1775001600000,
+        1777593600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/UTC/th-TH",
+      "zone": "UTC",
+      "locale": "th-TH",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1790812800000,
+        1793491200000,
+        1796083200000
+      ],
+      "toDates": [
+        1793491200000,
+        1796083200000,
+        1798761600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ต.ค. 2569",
+        "พ.ย. 2569",
+        "ธ.ค. 2569"
+      ],
+      "toLabels": [
+        "ต.ค. 2569",
+        "พ.ย. 2569",
+        "ธ.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/UTC/th-TH",
+      "zone": "UTC",
+      "locale": "th-TH",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1764547200000,
+        1767225600000
+      ],
+      "toDates": [
+        1767225600000,
+        1769904000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ธ.ค. 2568",
+        "ม.ค. 2569"
+      ],
+      "toLabels": [
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/UTC/th-TH",
+      "zone": "UTC",
+      "locale": "th-TH",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/UTC/th-TH",
+      "zone": "UTC",
+      "locale": "th-TH",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/America/Los_Angeles/en-US",
+      "zone": "America/Los_Angeles",
+      "locale": "en-US",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730444400000,
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000
+      ],
+      "toDates": [
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000,
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
+        "Feb 2025",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jun 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025",
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026",
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
+        "Feb 2025",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jun 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025",
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026",
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/America/Los_Angeles/en-US",
+      "zone": "America/Los_Angeles",
+      "locale": "en-US",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788246000000
+      ],
+      "toDates": [
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/America/Los_Angeles/en-US",
+      "zone": "America/Los_Angeles",
+      "locale": "en-US",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704096000000,
+        1706774400000,
+        1709280000000
+      ],
+      "toDates": [
+        1706774400000,
+        1709280000000,
+        1711954800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024"
+      ],
+      "toLabels": [
+        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/America/Los_Angeles/en-US",
+      "zone": "America/Los_Angeles",
+      "locale": "en-US",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769932800000,
+        1772352000000,
+        1775026800000
+      ],
+      "toDates": [
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026"
+      ],
+      "toLabels": [
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/America/Los_Angeles/en-US",
+      "zone": "America/Los_Angeles",
+      "locale": "en-US",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790838000000,
+        1793516400000,
+        1796112000000
+      ],
+      "toDates": [
+        1793516400000,
+        1796112000000,
+        1798790400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Oct 2026",
+        "Nov 2026",
+        "Dec 2026"
+      ],
+      "toLabels": [
+        "Oct 2026",
+        "Nov 2026",
+        "Dec 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/America/Los_Angeles/en-US",
+      "zone": "America/Los_Angeles",
+      "locale": "en-US",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764576000000,
+        1767254400000
+      ],
+      "toDates": [
+        1767254400000,
+        1769932800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Dec 2025",
+        "Jan 2026"
+      ],
+      "toLabels": [
+        "Dec 2025",
+        "Jan 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/America/Los_Angeles/en-US",
+      "zone": "America/Los_Angeles",
+      "locale": "en-US",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1785567600000
+      ],
+      "toDates": [
+        1788246000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Aug 2026"
+      ],
+      "toLabels": [
+        "Aug 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/America/Los_Angeles/en-US",
+      "zone": "America/Los_Angeles",
+      "locale": "en-US",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/America/Los_Angeles/de-DE",
+      "zone": "America/Los_Angeles",
+      "locale": "de-DE",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730444400000,
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000
+      ],
+      "toDates": [
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000,
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Nov. 2024",
+        "Dez. 2024",
+        "Jan. 2025",
+        "Feb. 2025",
+        "März 2025",
+        "Apr. 2025",
+        "Mai 2025",
+        "Juni 2025",
+        "Juli 2025",
+        "Aug. 2025",
+        "Sept. 2025",
+        "Okt. 2025",
+        "Nov. 2025",
+        "Dez. 2025",
+        "Jan. 2026",
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Mai 2026",
+        "Juni 2026",
+        "Juli 2026",
+        "Aug. 2026",
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Nov. 2024",
+        "Dez. 2024",
+        "Jan. 2025",
+        "Feb. 2025",
+        "März 2025",
+        "Apr. 2025",
+        "Mai 2025",
+        "Juni 2025",
+        "Juli 2025",
+        "Aug. 2025",
+        "Sept. 2025",
+        "Okt. 2025",
+        "Nov. 2025",
+        "Dez. 2025",
+        "Jan. 2026",
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Mai 2026",
+        "Juni 2026",
+        "Juli 2026",
+        "Aug. 2026",
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/America/Los_Angeles/de-DE",
+      "zone": "America/Los_Angeles",
+      "locale": "de-DE",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788246000000
+      ],
+      "toDates": [
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/America/Los_Angeles/de-DE",
+      "zone": "America/Los_Angeles",
+      "locale": "de-DE",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704096000000,
+        1706774400000,
+        1709280000000
+      ],
+      "toDates": [
+        1706774400000,
+        1709280000000,
+        1711954800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Jan. 2024",
+        "Feb. 2024",
+        "März 2024"
+      ],
+      "toLabels": [
+        "Jan. 2024",
+        "Feb. 2024",
+        "März 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/America/Los_Angeles/de-DE",
+      "zone": "America/Los_Angeles",
+      "locale": "de-DE",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769932800000,
+        1772352000000,
+        1775026800000
+      ],
+      "toDates": [
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026"
+      ],
+      "toLabels": [
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/America/Los_Angeles/de-DE",
+      "zone": "America/Los_Angeles",
+      "locale": "de-DE",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790838000000,
+        1793516400000,
+        1796112000000
+      ],
+      "toDates": [
+        1793516400000,
+        1796112000000,
+        1798790400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Okt. 2026",
+        "Nov. 2026",
+        "Dez. 2026"
+      ],
+      "toLabels": [
+        "Okt. 2026",
+        "Nov. 2026",
+        "Dez. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/America/Los_Angeles/de-DE",
+      "zone": "America/Los_Angeles",
+      "locale": "de-DE",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764576000000,
+        1767254400000
+      ],
+      "toDates": [
+        1767254400000,
+        1769932800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Dez. 2025",
+        "Jan. 2026"
+      ],
+      "toLabels": [
+        "Dez. 2025",
+        "Jan. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/America/Los_Angeles/de-DE",
+      "zone": "America/Los_Angeles",
+      "locale": "de-DE",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1785567600000
+      ],
+      "toDates": [
+        1788246000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Aug. 2026"
+      ],
+      "toLabels": [
+        "Aug. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/America/Los_Angeles/de-DE",
+      "zone": "America/Los_Angeles",
+      "locale": "de-DE",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/America/Los_Angeles/ar-EG",
+      "zone": "America/Los_Angeles",
+      "locale": "ar-EG",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730444400000,
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000
+      ],
+      "toDates": [
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000,
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "نوفمبر ٢٠٢٤",
+        "ديسمبر ٢٠٢٤",
+        "يناير ٢٠٢٥",
+        "فبراير ٢٠٢٥",
+        "مارس ٢٠٢٥",
+        "أبريل ٢٠٢٥",
+        "مايو ٢٠٢٥",
+        "يونيو ٢٠٢٥",
+        "يوليو ٢٠٢٥",
+        "أغسطس ٢٠٢٥",
+        "سبتمبر ٢٠٢٥",
+        "أكتوبر ٢٠٢٥",
+        "نوفمبر ٢٠٢٥",
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "مايو ٢٠٢٦",
+        "يونيو ٢٠٢٦",
+        "يوليو ٢٠٢٦",
+        "أغسطس ٢٠٢٦",
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "نوفمبر ٢٠٢٤",
+        "ديسمبر ٢٠٢٤",
+        "يناير ٢٠٢٥",
+        "فبراير ٢٠٢٥",
+        "مارس ٢٠٢٥",
+        "أبريل ٢٠٢٥",
+        "مايو ٢٠٢٥",
+        "يونيو ٢٠٢٥",
+        "يوليو ٢٠٢٥",
+        "أغسطس ٢٠٢٥",
+        "سبتمبر ٢٠٢٥",
+        "أكتوبر ٢٠٢٥",
+        "نوفمبر ٢٠٢٥",
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "مايو ٢٠٢٦",
+        "يونيو ٢٠٢٦",
+        "يوليو ٢٠٢٦",
+        "أغسطس ٢٠٢٦",
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/America/Los_Angeles/ar-EG",
+      "zone": "America/Los_Angeles",
+      "locale": "ar-EG",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788246000000
+      ],
+      "toDates": [
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/America/Los_Angeles/ar-EG",
+      "zone": "America/Los_Angeles",
+      "locale": "ar-EG",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704096000000,
+        1706774400000,
+        1709280000000
+      ],
+      "toDates": [
+        1706774400000,
+        1709280000000,
+        1711954800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "يناير ٢٠٢٤",
+        "فبراير ٢٠٢٤",
+        "مارس ٢٠٢٤"
+      ],
+      "toLabels": [
+        "يناير ٢٠٢٤",
+        "فبراير ٢٠٢٤",
+        "مارس ٢٠٢٤",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/America/Los_Angeles/ar-EG",
+      "zone": "America/Los_Angeles",
+      "locale": "ar-EG",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769932800000,
+        1772352000000,
+        1775026800000
+      ],
+      "toDates": [
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦"
+      ],
+      "toLabels": [
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/America/Los_Angeles/ar-EG",
+      "zone": "America/Los_Angeles",
+      "locale": "ar-EG",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790838000000,
+        1793516400000,
+        1796112000000
+      ],
+      "toDates": [
+        1793516400000,
+        1796112000000,
+        1798790400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "أكتوبر ٢٠٢٦",
+        "نوفمبر ٢٠٢٦",
+        "ديسمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "أكتوبر ٢٠٢٦",
+        "نوفمبر ٢٠٢٦",
+        "ديسمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/America/Los_Angeles/ar-EG",
+      "zone": "America/Los_Angeles",
+      "locale": "ar-EG",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764576000000,
+        1767254400000
+      ],
+      "toDates": [
+        1767254400000,
+        1769932800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦"
+      ],
+      "toLabels": [
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/America/Los_Angeles/ar-EG",
+      "zone": "America/Los_Angeles",
+      "locale": "ar-EG",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1785567600000
+      ],
+      "toDates": [
+        1788246000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "أغسطس ٢٠٢٦"
+      ],
+      "toLabels": [
+        "أغسطس ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/America/Los_Angeles/ar-EG",
+      "zone": "America/Los_Angeles",
+      "locale": "ar-EG",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/America/Los_Angeles/ja-JP",
+      "zone": "America/Los_Angeles",
+      "locale": "ja-JP",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730444400000,
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000
+      ],
+      "toDates": [
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000,
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "11月 2024",
+        "12月 2024",
+        "1月 2025",
+        "2月 2025",
+        "3月 2025",
+        "4月 2025",
+        "5月 2025",
+        "6月 2025",
+        "7月 2025",
+        "8月 2025",
+        "9月 2025",
+        "10月 2025",
+        "11月 2025",
+        "12月 2025",
+        "1月 2026",
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "5月 2026",
+        "6月 2026",
+        "7月 2026",
+        "8月 2026",
+        "9月 2026"
+      ],
+      "toLabels": [
+        "11月 2024",
+        "12月 2024",
+        "1月 2025",
+        "2月 2025",
+        "3月 2025",
+        "4月 2025",
+        "5月 2025",
+        "6月 2025",
+        "7月 2025",
+        "8月 2025",
+        "9月 2025",
+        "10月 2025",
+        "11月 2025",
+        "12月 2025",
+        "1月 2026",
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "5月 2026",
+        "6月 2026",
+        "7月 2026",
+        "8月 2026",
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/America/Los_Angeles/ja-JP",
+      "zone": "America/Los_Angeles",
+      "locale": "ja-JP",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788246000000
+      ],
+      "toDates": [
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "9月 2026"
+      ],
+      "toLabels": [
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/America/Los_Angeles/ja-JP",
+      "zone": "America/Los_Angeles",
+      "locale": "ja-JP",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704096000000,
+        1706774400000,
+        1709280000000
+      ],
+      "toDates": [
+        1706774400000,
+        1709280000000,
+        1711954800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "1月 2024",
+        "2月 2024",
+        "3月 2024"
+      ],
+      "toLabels": [
+        "1月 2024",
+        "2月 2024",
+        "3月 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/America/Los_Angeles/ja-JP",
+      "zone": "America/Los_Angeles",
+      "locale": "ja-JP",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769932800000,
+        1772352000000,
+        1775026800000
+      ],
+      "toDates": [
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "2月 2026",
+        "3月 2026",
+        "4月 2026"
+      ],
+      "toLabels": [
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/America/Los_Angeles/ja-JP",
+      "zone": "America/Los_Angeles",
+      "locale": "ja-JP",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790838000000,
+        1793516400000,
+        1796112000000
+      ],
+      "toDates": [
+        1793516400000,
+        1796112000000,
+        1798790400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "10月 2026",
+        "11月 2026",
+        "12月 2026"
+      ],
+      "toLabels": [
+        "10月 2026",
+        "11月 2026",
+        "12月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/America/Los_Angeles/ja-JP",
+      "zone": "America/Los_Angeles",
+      "locale": "ja-JP",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764576000000,
+        1767254400000
+      ],
+      "toDates": [
+        1767254400000,
+        1769932800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "12月 2025",
+        "1月 2026"
+      ],
+      "toLabels": [
+        "12月 2025",
+        "1月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/America/Los_Angeles/ja-JP",
+      "zone": "America/Los_Angeles",
+      "locale": "ja-JP",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1785567600000
+      ],
+      "toDates": [
+        1788246000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "8月 2026"
+      ],
+      "toLabels": [
+        "8月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/America/Los_Angeles/ja-JP",
+      "zone": "America/Los_Angeles",
+      "locale": "ja-JP",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/America/Los_Angeles/th-TH",
+      "zone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1730444400000,
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000
+      ],
+      "toDates": [
+        1733040000000,
+        1735718400000,
+        1738396800000,
+        1740816000000,
+        1743490800000,
+        1746082800000,
+        1748761200000,
+        1751353200000,
+        1754031600000,
+        1756710000000,
+        1759302000000,
+        1761980400000,
+        1764576000000,
+        1767254400000,
+        1769932800000,
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        1780297200000,
+        1782889200000,
+        1785567600000,
+        1788246000000,
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "พ.ย. 2567",
+        "ธ.ค. 2567",
+        "ม.ค. 2568",
+        "ก.พ. 2568",
+        "มี.ค. 2568",
+        "เม.ย. 2568",
+        "พ.ค. 2568",
+        "มิ.ย. 2568",
+        "ก.ค. 2568",
+        "ส.ค. 2568",
+        "ก.ย. 2568",
+        "ต.ค. 2568",
+        "พ.ย. 2568",
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "พ.ค. 2569",
+        "มิ.ย. 2569",
+        "ก.ค. 2569",
+        "ส.ค. 2569",
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "พ.ย. 2567",
+        "ธ.ค. 2567",
+        "ม.ค. 2568",
+        "ก.พ. 2568",
+        "มี.ค. 2568",
+        "เม.ย. 2568",
+        "พ.ค. 2568",
+        "มิ.ย. 2568",
+        "ก.ค. 2568",
+        "ส.ค. 2568",
+        "ก.ย. 2568",
+        "ต.ค. 2568",
+        "พ.ย. 2568",
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "พ.ค. 2569",
+        "มิ.ย. 2569",
+        "ก.ค. 2569",
+        "ส.ค. 2569",
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/America/Los_Angeles/th-TH",
+      "zone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1788246000000
+      ],
+      "toDates": [
+        1790838000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/America/Los_Angeles/th-TH",
+      "zone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1704096000000,
+        1706774400000,
+        1709280000000
+      ],
+      "toDates": [
+        1706774400000,
+        1709280000000,
+        1711954800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ม.ค. 2567",
+        "ก.พ. 2567",
+        "มี.ค. 2567"
+      ],
+      "toLabels": [
+        "ม.ค. 2567",
+        "ก.พ. 2567",
+        "มี.ค. 2567",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/America/Los_Angeles/th-TH",
+      "zone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1769932800000,
+        1772352000000,
+        1775026800000
+      ],
+      "toDates": [
+        1772352000000,
+        1775026800000,
+        1777618800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/America/Los_Angeles/th-TH",
+      "zone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1790838000000,
+        1793516400000,
+        1796112000000
+      ],
+      "toDates": [
+        1793516400000,
+        1796112000000,
+        1798790400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ต.ค. 2569",
+        "พ.ย. 2569",
+        "ธ.ค. 2569"
+      ],
+      "toLabels": [
+        "ต.ค. 2569",
+        "พ.ย. 2569",
+        "ธ.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/America/Los_Angeles/th-TH",
+      "zone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1764576000000,
+        1767254400000
+      ],
+      "toDates": [
+        1767254400000,
+        1769932800000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ธ.ค. 2568",
+        "ม.ค. 2569"
+      ],
+      "toLabels": [
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/America/Los_Angeles/th-TH",
+      "zone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1785567600000
+      ],
+      "toDates": [
+        1788246000000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ส.ค. 2569"
+      ],
+      "toLabels": [
+        "ส.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/America/Los_Angeles/th-TH",
+      "zone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Tokyo/en-US",
+      "zone": "Asia/Tokyo",
+      "locale": "en-US",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730386800000,
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000
+      ],
+      "toDates": [
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000,
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
+        "Feb 2025",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jun 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025",
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026",
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
+        "Feb 2025",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jun 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025",
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026",
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Tokyo/en-US",
+      "zone": "Asia/Tokyo",
+      "locale": "en-US",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Tokyo/en-US",
+      "zone": "Asia/Tokyo",
+      "locale": "en-US",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704034800000,
+        1706713200000,
+        1709218800000
+      ],
+      "toDates": [
+        1706713200000,
+        1709218800000,
+        1711897200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024"
+      ],
+      "toLabels": [
+        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Tokyo/en-US",
+      "zone": "Asia/Tokyo",
+      "locale": "en-US",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769871600000,
+        1772290800000,
+        1774969200000
+      ],
+      "toDates": [
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026"
+      ],
+      "toLabels": [
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Tokyo/en-US",
+      "zone": "Asia/Tokyo",
+      "locale": "en-US",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790780400000,
+        1793458800000,
+        1796050800000
+      ],
+      "toDates": [
+        1793458800000,
+        1796050800000,
+        1798729200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Oct 2026",
+        "Nov 2026",
+        "Dec 2026"
+      ],
+      "toLabels": [
+        "Oct 2026",
+        "Nov 2026",
+        "Dec 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Tokyo/en-US",
+      "zone": "Asia/Tokyo",
+      "locale": "en-US",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764514800000,
+        1767193200000
+      ],
+      "toDates": [
+        1767193200000,
+        1769871600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Dec 2025",
+        "Jan 2026"
+      ],
+      "toLabels": [
+        "Dec 2025",
+        "Jan 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Tokyo/en-US",
+      "zone": "Asia/Tokyo",
+      "locale": "en-US",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Tokyo/en-US",
+      "zone": "Asia/Tokyo",
+      "locale": "en-US",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Tokyo/de-DE",
+      "zone": "Asia/Tokyo",
+      "locale": "de-DE",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730386800000,
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000
+      ],
+      "toDates": [
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000,
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Nov. 2024",
+        "Dez. 2024",
+        "Jan. 2025",
+        "Feb. 2025",
+        "März 2025",
+        "Apr. 2025",
+        "Mai 2025",
+        "Juni 2025",
+        "Juli 2025",
+        "Aug. 2025",
+        "Sept. 2025",
+        "Okt. 2025",
+        "Nov. 2025",
+        "Dez. 2025",
+        "Jan. 2026",
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Mai 2026",
+        "Juni 2026",
+        "Juli 2026",
+        "Aug. 2026",
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Nov. 2024",
+        "Dez. 2024",
+        "Jan. 2025",
+        "Feb. 2025",
+        "März 2025",
+        "Apr. 2025",
+        "Mai 2025",
+        "Juni 2025",
+        "Juli 2025",
+        "Aug. 2025",
+        "Sept. 2025",
+        "Okt. 2025",
+        "Nov. 2025",
+        "Dez. 2025",
+        "Jan. 2026",
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Mai 2026",
+        "Juni 2026",
+        "Juli 2026",
+        "Aug. 2026",
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Tokyo/de-DE",
+      "zone": "Asia/Tokyo",
+      "locale": "de-DE",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Tokyo/de-DE",
+      "zone": "Asia/Tokyo",
+      "locale": "de-DE",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704034800000,
+        1706713200000,
+        1709218800000
+      ],
+      "toDates": [
+        1706713200000,
+        1709218800000,
+        1711897200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Jan. 2024",
+        "Feb. 2024",
+        "März 2024"
+      ],
+      "toLabels": [
+        "Jan. 2024",
+        "Feb. 2024",
+        "März 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Tokyo/de-DE",
+      "zone": "Asia/Tokyo",
+      "locale": "de-DE",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769871600000,
+        1772290800000,
+        1774969200000
+      ],
+      "toDates": [
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026"
+      ],
+      "toLabels": [
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Tokyo/de-DE",
+      "zone": "Asia/Tokyo",
+      "locale": "de-DE",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790780400000,
+        1793458800000,
+        1796050800000
+      ],
+      "toDates": [
+        1793458800000,
+        1796050800000,
+        1798729200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Okt. 2026",
+        "Nov. 2026",
+        "Dez. 2026"
+      ],
+      "toLabels": [
+        "Okt. 2026",
+        "Nov. 2026",
+        "Dez. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Tokyo/de-DE",
+      "zone": "Asia/Tokyo",
+      "locale": "de-DE",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764514800000,
+        1767193200000
+      ],
+      "toDates": [
+        1767193200000,
+        1769871600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Dez. 2025",
+        "Jan. 2026"
+      ],
+      "toLabels": [
+        "Dez. 2025",
+        "Jan. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Tokyo/de-DE",
+      "zone": "Asia/Tokyo",
+      "locale": "de-DE",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Tokyo/de-DE",
+      "zone": "Asia/Tokyo",
+      "locale": "de-DE",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Tokyo/ar-EG",
+      "zone": "Asia/Tokyo",
+      "locale": "ar-EG",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730386800000,
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000
+      ],
+      "toDates": [
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000,
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "نوفمبر ٢٠٢٤",
+        "ديسمبر ٢٠٢٤",
+        "يناير ٢٠٢٥",
+        "فبراير ٢٠٢٥",
+        "مارس ٢٠٢٥",
+        "أبريل ٢٠٢٥",
+        "مايو ٢٠٢٥",
+        "يونيو ٢٠٢٥",
+        "يوليو ٢٠٢٥",
+        "أغسطس ٢٠٢٥",
+        "سبتمبر ٢٠٢٥",
+        "أكتوبر ٢٠٢٥",
+        "نوفمبر ٢٠٢٥",
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "مايو ٢٠٢٦",
+        "يونيو ٢٠٢٦",
+        "يوليو ٢٠٢٦",
+        "أغسطس ٢٠٢٦",
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "نوفمبر ٢٠٢٤",
+        "ديسمبر ٢٠٢٤",
+        "يناير ٢٠٢٥",
+        "فبراير ٢٠٢٥",
+        "مارس ٢٠٢٥",
+        "أبريل ٢٠٢٥",
+        "مايو ٢٠٢٥",
+        "يونيو ٢٠٢٥",
+        "يوليو ٢٠٢٥",
+        "أغسطس ٢٠٢٥",
+        "سبتمبر ٢٠٢٥",
+        "أكتوبر ٢٠٢٥",
+        "نوفمبر ٢٠٢٥",
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "مايو ٢٠٢٦",
+        "يونيو ٢٠٢٦",
+        "يوليو ٢٠٢٦",
+        "أغسطس ٢٠٢٦",
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Tokyo/ar-EG",
+      "zone": "Asia/Tokyo",
+      "locale": "ar-EG",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Tokyo/ar-EG",
+      "zone": "Asia/Tokyo",
+      "locale": "ar-EG",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704034800000,
+        1706713200000,
+        1709218800000
+      ],
+      "toDates": [
+        1706713200000,
+        1709218800000,
+        1711897200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "يناير ٢٠٢٤",
+        "فبراير ٢٠٢٤",
+        "مارس ٢٠٢٤"
+      ],
+      "toLabels": [
+        "يناير ٢٠٢٤",
+        "فبراير ٢٠٢٤",
+        "مارس ٢٠٢٤",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Tokyo/ar-EG",
+      "zone": "Asia/Tokyo",
+      "locale": "ar-EG",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769871600000,
+        1772290800000,
+        1774969200000
+      ],
+      "toDates": [
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦"
+      ],
+      "toLabels": [
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Tokyo/ar-EG",
+      "zone": "Asia/Tokyo",
+      "locale": "ar-EG",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790780400000,
+        1793458800000,
+        1796050800000
+      ],
+      "toDates": [
+        1793458800000,
+        1796050800000,
+        1798729200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "أكتوبر ٢٠٢٦",
+        "نوفمبر ٢٠٢٦",
+        "ديسمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "أكتوبر ٢٠٢٦",
+        "نوفمبر ٢٠٢٦",
+        "ديسمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Tokyo/ar-EG",
+      "zone": "Asia/Tokyo",
+      "locale": "ar-EG",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764514800000,
+        1767193200000
+      ],
+      "toDates": [
+        1767193200000,
+        1769871600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦"
+      ],
+      "toLabels": [
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Tokyo/ar-EG",
+      "zone": "Asia/Tokyo",
+      "locale": "ar-EG",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Tokyo/ar-EG",
+      "zone": "Asia/Tokyo",
+      "locale": "ar-EG",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Tokyo/ja-JP",
+      "zone": "Asia/Tokyo",
+      "locale": "ja-JP",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730386800000,
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000
+      ],
+      "toDates": [
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000,
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "11月 2024",
+        "12月 2024",
+        "1月 2025",
+        "2月 2025",
+        "3月 2025",
+        "4月 2025",
+        "5月 2025",
+        "6月 2025",
+        "7月 2025",
+        "8月 2025",
+        "9月 2025",
+        "10月 2025",
+        "11月 2025",
+        "12月 2025",
+        "1月 2026",
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "5月 2026",
+        "6月 2026",
+        "7月 2026",
+        "8月 2026",
+        "9月 2026"
+      ],
+      "toLabels": [
+        "11月 2024",
+        "12月 2024",
+        "1月 2025",
+        "2月 2025",
+        "3月 2025",
+        "4月 2025",
+        "5月 2025",
+        "6月 2025",
+        "7月 2025",
+        "8月 2025",
+        "9月 2025",
+        "10月 2025",
+        "11月 2025",
+        "12月 2025",
+        "1月 2026",
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "5月 2026",
+        "6月 2026",
+        "7月 2026",
+        "8月 2026",
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Tokyo/ja-JP",
+      "zone": "Asia/Tokyo",
+      "locale": "ja-JP",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "9月 2026"
+      ],
+      "toLabels": [
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Tokyo/ja-JP",
+      "zone": "Asia/Tokyo",
+      "locale": "ja-JP",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704034800000,
+        1706713200000,
+        1709218800000
+      ],
+      "toDates": [
+        1706713200000,
+        1709218800000,
+        1711897200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "1月 2024",
+        "2月 2024",
+        "3月 2024"
+      ],
+      "toLabels": [
+        "1月 2024",
+        "2月 2024",
+        "3月 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Tokyo/ja-JP",
+      "zone": "Asia/Tokyo",
+      "locale": "ja-JP",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769871600000,
+        1772290800000,
+        1774969200000
+      ],
+      "toDates": [
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "2月 2026",
+        "3月 2026",
+        "4月 2026"
+      ],
+      "toLabels": [
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Tokyo/ja-JP",
+      "zone": "Asia/Tokyo",
+      "locale": "ja-JP",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790780400000,
+        1793458800000,
+        1796050800000
+      ],
+      "toDates": [
+        1793458800000,
+        1796050800000,
+        1798729200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "10月 2026",
+        "11月 2026",
+        "12月 2026"
+      ],
+      "toLabels": [
+        "10月 2026",
+        "11月 2026",
+        "12月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Tokyo/ja-JP",
+      "zone": "Asia/Tokyo",
+      "locale": "ja-JP",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764514800000,
+        1767193200000
+      ],
+      "toDates": [
+        1767193200000,
+        1769871600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "12月 2025",
+        "1月 2026"
+      ],
+      "toLabels": [
+        "12月 2025",
+        "1月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Tokyo/ja-JP",
+      "zone": "Asia/Tokyo",
+      "locale": "ja-JP",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "9月 2026"
+      ],
+      "toLabels": [
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Tokyo/ja-JP",
+      "zone": "Asia/Tokyo",
+      "locale": "ja-JP",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Tokyo/th-TH",
+      "zone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1730386800000,
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000
+      ],
+      "toDates": [
+        1732978800000,
+        1735657200000,
+        1738335600000,
+        1740754800000,
+        1743433200000,
+        1746025200000,
+        1748703600000,
+        1751295600000,
+        1753974000000,
+        1756652400000,
+        1759244400000,
+        1761922800000,
+        1764514800000,
+        1767193200000,
+        1769871600000,
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        1780239600000,
+        1782831600000,
+        1785510000000,
+        1788188400000,
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "พ.ย. 2567",
+        "ธ.ค. 2567",
+        "ม.ค. 2568",
+        "ก.พ. 2568",
+        "มี.ค. 2568",
+        "เม.ย. 2568",
+        "พ.ค. 2568",
+        "มิ.ย. 2568",
+        "ก.ค. 2568",
+        "ส.ค. 2568",
+        "ก.ย. 2568",
+        "ต.ค. 2568",
+        "พ.ย. 2568",
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "พ.ค. 2569",
+        "มิ.ย. 2569",
+        "ก.ค. 2569",
+        "ส.ค. 2569",
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "พ.ย. 2567",
+        "ธ.ค. 2567",
+        "ม.ค. 2568",
+        "ก.พ. 2568",
+        "มี.ค. 2568",
+        "เม.ย. 2568",
+        "พ.ค. 2568",
+        "มิ.ย. 2568",
+        "ก.ค. 2568",
+        "ส.ค. 2568",
+        "ก.ย. 2568",
+        "ต.ค. 2568",
+        "พ.ย. 2568",
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "พ.ค. 2569",
+        "มิ.ย. 2569",
+        "ก.ค. 2569",
+        "ส.ค. 2569",
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Tokyo/th-TH",
+      "zone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Tokyo/th-TH",
+      "zone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1704034800000,
+        1706713200000,
+        1709218800000
+      ],
+      "toDates": [
+        1706713200000,
+        1709218800000,
+        1711897200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ม.ค. 2567",
+        "ก.พ. 2567",
+        "มี.ค. 2567"
+      ],
+      "toLabels": [
+        "ม.ค. 2567",
+        "ก.พ. 2567",
+        "มี.ค. 2567",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Tokyo/th-TH",
+      "zone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1769871600000,
+        1772290800000,
+        1774969200000
+      ],
+      "toDates": [
+        1772290800000,
+        1774969200000,
+        1777561200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Tokyo/th-TH",
+      "zone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1790780400000,
+        1793458800000,
+        1796050800000
+      ],
+      "toDates": [
+        1793458800000,
+        1796050800000,
+        1798729200000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ต.ค. 2569",
+        "พ.ย. 2569",
+        "ธ.ค. 2569"
+      ],
+      "toLabels": [
+        "ต.ค. 2569",
+        "พ.ย. 2569",
+        "ธ.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Tokyo/th-TH",
+      "zone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1764514800000,
+        1767193200000
+      ],
+      "toDates": [
+        1767193200000,
+        1769871600000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ธ.ค. 2568",
+        "ม.ค. 2569"
+      ],
+      "toLabels": [
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Tokyo/th-TH",
+      "zone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1788188400000
+      ],
+      "toDates": [
+        1790780400000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Tokyo/th-TH",
+      "zone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Kathmandu/en-US",
+      "zone": "Asia/Kathmandu",
+      "locale": "en-US",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730398500000,
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000
+      ],
+      "toDates": [
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000,
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
+        "Feb 2025",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jun 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025",
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026",
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
+        "Feb 2025",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jun 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025",
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026",
+        "Jul 2026",
+        "Aug 2026",
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Kathmandu/en-US",
+      "zone": "Asia/Kathmandu",
+      "locale": "en-US",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Kathmandu/en-US",
+      "zone": "Asia/Kathmandu",
+      "locale": "en-US",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704046500000,
+        1706724900000,
+        1709230500000
+      ],
+      "toDates": [
+        1706724900000,
+        1709230500000,
+        1711908900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024"
+      ],
+      "toLabels": [
+        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Kathmandu/en-US",
+      "zone": "Asia/Kathmandu",
+      "locale": "en-US",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769883300000,
+        1772302500000,
+        1774980900000
+      ],
+      "toDates": [
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026"
+      ],
+      "toLabels": [
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Kathmandu/en-US",
+      "zone": "Asia/Kathmandu",
+      "locale": "en-US",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790792100000,
+        1793470500000,
+        1796062500000
+      ],
+      "toDates": [
+        1793470500000,
+        1796062500000,
+        1798740900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Oct 2026",
+        "Nov 2026",
+        "Dec 2026"
+      ],
+      "toLabels": [
+        "Oct 2026",
+        "Nov 2026",
+        "Dec 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Kathmandu/en-US",
+      "zone": "Asia/Kathmandu",
+      "locale": "en-US",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764526500000,
+        1767204900000
+      ],
+      "toDates": [
+        1767204900000,
+        1769883300000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Dec 2025",
+        "Jan 2026"
+      ],
+      "toLabels": [
+        "Dec 2025",
+        "Jan 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Kathmandu/en-US",
+      "zone": "Asia/Kathmandu",
+      "locale": "en-US",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sep 2026"
+      ],
+      "toLabels": [
+        "Sep 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Kathmandu/en-US",
+      "zone": "Asia/Kathmandu",
+      "locale": "en-US",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Kathmandu/de-DE",
+      "zone": "Asia/Kathmandu",
+      "locale": "de-DE",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730398500000,
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000
+      ],
+      "toDates": [
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000,
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Nov. 2024",
+        "Dez. 2024",
+        "Jan. 2025",
+        "Feb. 2025",
+        "März 2025",
+        "Apr. 2025",
+        "Mai 2025",
+        "Juni 2025",
+        "Juli 2025",
+        "Aug. 2025",
+        "Sept. 2025",
+        "Okt. 2025",
+        "Nov. 2025",
+        "Dez. 2025",
+        "Jan. 2026",
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Mai 2026",
+        "Juni 2026",
+        "Juli 2026",
+        "Aug. 2026",
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Nov. 2024",
+        "Dez. 2024",
+        "Jan. 2025",
+        "Feb. 2025",
+        "März 2025",
+        "Apr. 2025",
+        "Mai 2025",
+        "Juni 2025",
+        "Juli 2025",
+        "Aug. 2025",
+        "Sept. 2025",
+        "Okt. 2025",
+        "Nov. 2025",
+        "Dez. 2025",
+        "Jan. 2026",
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Mai 2026",
+        "Juni 2026",
+        "Juli 2026",
+        "Aug. 2026",
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Kathmandu/de-DE",
+      "zone": "Asia/Kathmandu",
+      "locale": "de-DE",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Kathmandu/de-DE",
+      "zone": "Asia/Kathmandu",
+      "locale": "de-DE",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704046500000,
+        1706724900000,
+        1709230500000
+      ],
+      "toDates": [
+        1706724900000,
+        1709230500000,
+        1711908900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Jan. 2024",
+        "Feb. 2024",
+        "März 2024"
+      ],
+      "toLabels": [
+        "Jan. 2024",
+        "Feb. 2024",
+        "März 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Kathmandu/de-DE",
+      "zone": "Asia/Kathmandu",
+      "locale": "de-DE",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769883300000,
+        1772302500000,
+        1774980900000
+      ],
+      "toDates": [
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026"
+      ],
+      "toLabels": [
+        "Feb. 2026",
+        "März 2026",
+        "Apr. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Kathmandu/de-DE",
+      "zone": "Asia/Kathmandu",
+      "locale": "de-DE",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790792100000,
+        1793470500000,
+        1796062500000
+      ],
+      "toDates": [
+        1793470500000,
+        1796062500000,
+        1798740900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Okt. 2026",
+        "Nov. 2026",
+        "Dez. 2026"
+      ],
+      "toLabels": [
+        "Okt. 2026",
+        "Nov. 2026",
+        "Dez. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Kathmandu/de-DE",
+      "zone": "Asia/Kathmandu",
+      "locale": "de-DE",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764526500000,
+        1767204900000
+      ],
+      "toDates": [
+        1767204900000,
+        1769883300000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Dez. 2025",
+        "Jan. 2026"
+      ],
+      "toLabels": [
+        "Dez. 2025",
+        "Jan. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Kathmandu/de-DE",
+      "zone": "Asia/Kathmandu",
+      "locale": "de-DE",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "Sept. 2026"
+      ],
+      "toLabels": [
+        "Sept. 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Kathmandu/de-DE",
+      "zone": "Asia/Kathmandu",
+      "locale": "de-DE",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Kathmandu/ar-EG",
+      "zone": "Asia/Kathmandu",
+      "locale": "ar-EG",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730398500000,
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000
+      ],
+      "toDates": [
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000,
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "نوفمبر ٢٠٢٤",
+        "ديسمبر ٢٠٢٤",
+        "يناير ٢٠٢٥",
+        "فبراير ٢٠٢٥",
+        "مارس ٢٠٢٥",
+        "أبريل ٢٠٢٥",
+        "مايو ٢٠٢٥",
+        "يونيو ٢٠٢٥",
+        "يوليو ٢٠٢٥",
+        "أغسطس ٢٠٢٥",
+        "سبتمبر ٢٠٢٥",
+        "أكتوبر ٢٠٢٥",
+        "نوفمبر ٢٠٢٥",
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "مايو ٢٠٢٦",
+        "يونيو ٢٠٢٦",
+        "يوليو ٢٠٢٦",
+        "أغسطس ٢٠٢٦",
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "نوفمبر ٢٠٢٤",
+        "ديسمبر ٢٠٢٤",
+        "يناير ٢٠٢٥",
+        "فبراير ٢٠٢٥",
+        "مارس ٢٠٢٥",
+        "أبريل ٢٠٢٥",
+        "مايو ٢٠٢٥",
+        "يونيو ٢٠٢٥",
+        "يوليو ٢٠٢٥",
+        "أغسطس ٢٠٢٥",
+        "سبتمبر ٢٠٢٥",
+        "أكتوبر ٢٠٢٥",
+        "نوفمبر ٢٠٢٥",
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "مايو ٢٠٢٦",
+        "يونيو ٢٠٢٦",
+        "يوليو ٢٠٢٦",
+        "أغسطس ٢٠٢٦",
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Kathmandu/ar-EG",
+      "zone": "Asia/Kathmandu",
+      "locale": "ar-EG",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Kathmandu/ar-EG",
+      "zone": "Asia/Kathmandu",
+      "locale": "ar-EG",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704046500000,
+        1706724900000,
+        1709230500000
+      ],
+      "toDates": [
+        1706724900000,
+        1709230500000,
+        1711908900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "يناير ٢٠٢٤",
+        "فبراير ٢٠٢٤",
+        "مارس ٢٠٢٤"
+      ],
+      "toLabels": [
+        "يناير ٢٠٢٤",
+        "فبراير ٢٠٢٤",
+        "مارس ٢٠٢٤",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Kathmandu/ar-EG",
+      "zone": "Asia/Kathmandu",
+      "locale": "ar-EG",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769883300000,
+        1772302500000,
+        1774980900000
+      ],
+      "toDates": [
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦"
+      ],
+      "toLabels": [
+        "فبراير ٢٠٢٦",
+        "مارس ٢٠٢٦",
+        "أبريل ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Kathmandu/ar-EG",
+      "zone": "Asia/Kathmandu",
+      "locale": "ar-EG",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790792100000,
+        1793470500000,
+        1796062500000
+      ],
+      "toDates": [
+        1793470500000,
+        1796062500000,
+        1798740900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "أكتوبر ٢٠٢٦",
+        "نوفمبر ٢٠٢٦",
+        "ديسمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "أكتوبر ٢٠٢٦",
+        "نوفمبر ٢٠٢٦",
+        "ديسمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Kathmandu/ar-EG",
+      "zone": "Asia/Kathmandu",
+      "locale": "ar-EG",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764526500000,
+        1767204900000
+      ],
+      "toDates": [
+        1767204900000,
+        1769883300000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦"
+      ],
+      "toLabels": [
+        "ديسمبر ٢٠٢٥",
+        "يناير ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Kathmandu/ar-EG",
+      "zone": "Asia/Kathmandu",
+      "locale": "ar-EG",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "سبتمبر ٢٠٢٦"
+      ],
+      "toLabels": [
+        "سبتمبر ٢٠٢٦",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Kathmandu/ar-EG",
+      "zone": "Asia/Kathmandu",
+      "locale": "ar-EG",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Kathmandu/ja-JP",
+      "zone": "Asia/Kathmandu",
+      "locale": "ja-JP",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1730398500000,
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000
+      ],
+      "toDates": [
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000,
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "11月 2024",
+        "12月 2024",
+        "1月 2025",
+        "2月 2025",
+        "3月 2025",
+        "4月 2025",
+        "5月 2025",
+        "6月 2025",
+        "7月 2025",
+        "8月 2025",
+        "9月 2025",
+        "10月 2025",
+        "11月 2025",
+        "12月 2025",
+        "1月 2026",
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "5月 2026",
+        "6月 2026",
+        "7月 2026",
+        "8月 2026",
+        "9月 2026"
+      ],
+      "toLabels": [
+        "11月 2024",
+        "12月 2024",
+        "1月 2025",
+        "2月 2025",
+        "3月 2025",
+        "4月 2025",
+        "5月 2025",
+        "6月 2025",
+        "7月 2025",
+        "8月 2025",
+        "9月 2025",
+        "10月 2025",
+        "11月 2025",
+        "12月 2025",
+        "1月 2026",
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "5月 2026",
+        "6月 2026",
+        "7月 2026",
+        "8月 2026",
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Kathmandu/ja-JP",
+      "zone": "Asia/Kathmandu",
+      "locale": "ja-JP",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "9月 2026"
+      ],
+      "toLabels": [
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Kathmandu/ja-JP",
+      "zone": "Asia/Kathmandu",
+      "locale": "ja-JP",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1704046500000,
+        1706724900000,
+        1709230500000
+      ],
+      "toDates": [
+        1706724900000,
+        1709230500000,
+        1711908900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "1月 2024",
+        "2月 2024",
+        "3月 2024"
+      ],
+      "toLabels": [
+        "1月 2024",
+        "2月 2024",
+        "3月 2024",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Kathmandu/ja-JP",
+      "zone": "Asia/Kathmandu",
+      "locale": "ja-JP",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1769883300000,
+        1772302500000,
+        1774980900000
+      ],
+      "toDates": [
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "2月 2026",
+        "3月 2026",
+        "4月 2026"
+      ],
+      "toLabels": [
+        "2月 2026",
+        "3月 2026",
+        "4月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Kathmandu/ja-JP",
+      "zone": "Asia/Kathmandu",
+      "locale": "ja-JP",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1790792100000,
+        1793470500000,
+        1796062500000
+      ],
+      "toDates": [
+        1793470500000,
+        1796062500000,
+        1798740900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "10月 2026",
+        "11月 2026",
+        "12月 2026"
+      ],
+      "toLabels": [
+        "10月 2026",
+        "11月 2026",
+        "12月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Kathmandu/ja-JP",
+      "zone": "Asia/Kathmandu",
+      "locale": "ja-JP",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1764526500000,
+        1767204900000
+      ],
+      "toDates": [
+        1767204900000,
+        1769883300000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "12月 2025",
+        "1月 2026"
+      ],
+      "toLabels": [
+        "12月 2025",
+        "1月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Kathmandu/ja-JP",
+      "zone": "Asia/Kathmandu",
+      "locale": "ja-JP",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "9月 2026"
+      ],
+      "toLabels": [
+        "9月 2026",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Kathmandu/ja-JP",
+      "zone": "Asia/Kathmandu",
+      "locale": "ja-JP",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "java.util.GregorianCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    },
+    {
+      "id": "long/Asia/Kathmandu/th-TH",
+      "zone": "Asia/Kathmandu",
+      "locale": "th-TH",
+      "oldest": 1730808000000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1730398500000,
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000
+      ],
+      "toDates": [
+        1732990500000,
+        1735668900000,
+        1738347300000,
+        1740766500000,
+        1743444900000,
+        1746036900000,
+        1748715300000,
+        1751307300000,
+        1753985700000,
+        1756664100000,
+        1759256100000,
+        1761934500000,
+        1764526500000,
+        1767204900000,
+        1769883300000,
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        1780251300000,
+        1782843300000,
+        1785521700000,
+        1788200100000,
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "พ.ย. 2567",
+        "ธ.ค. 2567",
+        "ม.ค. 2568",
+        "ก.พ. 2568",
+        "มี.ค. 2568",
+        "เม.ย. 2568",
+        "พ.ค. 2568",
+        "มิ.ย. 2568",
+        "ก.ค. 2568",
+        "ส.ค. 2568",
+        "ก.ย. 2568",
+        "ต.ค. 2568",
+        "พ.ย. 2568",
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "พ.ค. 2569",
+        "มิ.ย. 2569",
+        "ก.ค. 2569",
+        "ส.ค. 2569",
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "พ.ย. 2567",
+        "ธ.ค. 2567",
+        "ม.ค. 2568",
+        "ก.พ. 2568",
+        "มี.ค. 2568",
+        "เม.ย. 2568",
+        "พ.ค. 2568",
+        "มิ.ย. 2568",
+        "ก.ค. 2568",
+        "ส.ค. 2568",
+        "ก.ย. 2568",
+        "ต.ค. 2568",
+        "พ.ย. 2568",
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "พ.ค. 2569",
+        "มิ.ย. 2569",
+        "ก.ค. 2569",
+        "ส.ค. 2569",
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "short/Asia/Kathmandu/th-TH",
+      "zone": "Asia/Kathmandu",
+      "locale": "th-TH",
+      "oldest": 1790161200000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "leap/Asia/Kathmandu/th-TH",
+      "zone": "Asia/Kathmandu",
+      "locale": "th-TH",
+      "oldest": 1706702400000,
+      "now": 1709380800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1704046500000,
+        1706724900000,
+        1709230500000
+      ],
+      "toDates": [
+        1706724900000,
+        1709230500000,
+        1711908900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ม.ค. 2567",
+        "ก.พ. 2567",
+        "มี.ค. 2567"
+      ],
+      "toLabels": [
+        "ม.ค. 2567",
+        "ก.พ. 2567",
+        "มี.ค. 2567",
+        "Today"
+      ]
+    },
+    {
+      "id": "spring/Asia/Kathmandu/th-TH",
+      "zone": "Asia/Kathmandu",
+      "locale": "th-TH",
+      "oldest": 1770724800000,
+      "now": 1775217600000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1769883300000,
+        1772302500000,
+        1774980900000
+      ],
+      "toDates": [
+        1772302500000,
+        1774980900000,
+        1777572900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.พ. 2569",
+        "มี.ค. 2569",
+        "เม.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "fall/Asia/Kathmandu/th-TH",
+      "zone": "Asia/Kathmandu",
+      "locale": "th-TH",
+      "oldest": 1791633600000,
+      "now": 1796299200000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1790792100000,
+        1793470500000,
+        1796062500000
+      ],
+      "toDates": [
+        1793470500000,
+        1796062500000,
+        1798740900000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ต.ค. 2569",
+        "พ.ย. 2569",
+        "ธ.ค. 2569"
+      ],
+      "toLabels": [
+        "ต.ค. 2569",
+        "พ.ย. 2569",
+        "ธ.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "newyear/Asia/Kathmandu/th-TH",
+      "zone": "Asia/Kathmandu",
+      "locale": "th-TH",
+      "oldest": 1767182400000,
+      "now": 1767355200000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1764526500000,
+        1767204900000
+      ],
+      "toDates": [
+        1767204900000,
+        1769883300000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ธ.ค. 2568",
+        "ม.ค. 2569"
+      ],
+      "toLabels": [
+        "ธ.ค. 2568",
+        "ม.ค. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "empty-exact-UTC-month/Asia/Kathmandu/th-TH",
+      "zone": "Asia/Kathmandu",
+      "locale": "th-TH",
+      "oldest": 1788220800000,
+      "now": 1788220800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [
+        1788200100000
+      ],
+      "toDates": [
+        1790792100000,
+        9223372036854775807
+      ],
+      "fromLabels": [
+        "ก.ย. 2569"
+      ],
+      "toLabels": [
+        "ก.ย. 2569",
+        "Today"
+      ]
+    },
+    {
+      "id": "future-input/Asia/Kathmandu/th-TH",
+      "zone": "Asia/Kathmandu",
+      "locale": "th-TH",
+      "oldest": 1793880000000,
+      "now": 1790164800000,
+      "hostCalendar": "sun.util.BuddhistCalendar",
+      "fromDates": [],
+      "toDates": [
+        9223372036854775807
+      ],
+      "fromLabels": [],
+      "toLabels": [
+        "Today"
+      ]
+    }
+  ]
+}

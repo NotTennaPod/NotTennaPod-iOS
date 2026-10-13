@@ -1,0 +1,6379 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "sources": {
+    "reference/AntennaPod/model/src/main/java/de/danoeh/antennapod/model/feed/FeedFilter.java": "21ea815b2050c425b0fb621c781bcc6e1c42fed85a3d204ed89ed5472f93a43e",
+    "reference/AntennaPod/net/download/service/src/main/java/de/danoeh/antennapod/net/download/service/episode/autodownload/AutomaticDownloadAlgorithm.java": "7ca546b6beef1cd1e9c248e13cadde6ce86ce957f0da249ce52f1ad8d556f041"
+  },
+  "filters": [
+    {
+      "include": "",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "news science",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"deep dive\"",
+      "exclude": "trailer",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "missing",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": "ads",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": " ",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "",
+      "exclude": " ",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"\"",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\"two words",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u0130",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "\u00e9",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "News today",
+      "duration": 59999,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "NEWS science",
+      "duration": 60000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive trailer",
+      "duration": 61000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "deep dive today",
+      "duration": 0,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "missing ads",
+      "duration": -1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "I \u0130 \u0131 i",
+      "duration": 120000,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "e\u0301",
+      "duration": 1,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": false
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": -1,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 0,
+      "locale": "tr-TR",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "en-US",
+      "expected": true
+    },
+    {
+      "include": "a\u00a0b",
+      "exclude": "",
+      "title": "a\u00a0b",
+      "duration": null,
+      "minimum": 60,
+      "locale": "tr-TR",
+      "expected": true
+    }
+  ],
+  "capacities": [
+    {
+      "candidates": 0,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 2,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 0,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 2,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 2,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 1,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 2,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:3"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 0,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:1"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 0,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 0,
+      "deleted": 2,
+      "cache": 3,
+      "result": "ok:2"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 3,
+      "active": 2,
+      "deleted": 2,
+      "cache": 3,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:2"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 2,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 0,
+      "deleted": 2,
+      "cache": 10,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": -1,
+      "result": "ok:4"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 0,
+      "cache": 10,
+      "result": "ok:0"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 2,
+      "cache": 0,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 2,
+      "cache": 3,
+      "result": "IllegalArgumentException"
+    },
+    {
+      "candidates": 4,
+      "downloaded": 8,
+      "active": 2,
+      "deleted": 2,
+      "cache": 10,
+      "result": "ok:2"
+    }
+  ]
+}

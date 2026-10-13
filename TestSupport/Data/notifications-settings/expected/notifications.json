@@ -1,0 +1,4390 @@
+{
+ "reference_commit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+ "strings": {
+  "notification_pref_fragment": {
+   "value": "Notifications",
+   "strings_xml_line": 38
+  },
+  "notification_group_errors": {
+   "value": "Errors",
+   "strings_xml_line": 947
+  },
+  "notification_channel_download_error": {
+   "value": "Download failed",
+   "strings_xml_line": 957
+  },
+  "notification_channel_download_error_description": {
+   "value": "Shown when download or feed update fails.",
+   "strings_xml_line": 958
+  },
+  "notification_channel_sync_error": {
+   "value": "Synchronization failed",
+   "strings_xml_line": 959
+  },
+  "notification_channel_sync_error_description": {
+   "value": "Shown when gpodder synchronization fails.",
+   "strings_xml_line": 960
+  },
+  "download_error_details": {
+   "value": "Details",
+   "strings_xml_line": 320
+  },
+  "download_error_retrying": {
+   "value": "Download of \"%1$s\" failed. Will be retried later.",
+   "strings_xml_line": 326
+  },
+  "download_error_not_retrying": {
+   "value": "Download of \"%1$s\" failed.",
+   "strings_xml_line": 327
+  },
+  "download_error_tap_for_details": {
+   "value": "Tap to view details.",
+   "strings_xml_line": 328
+  },
+  "episode_download_failed": {
+   "value": "Episode download failed",
+   "strings_xml_line": 348
+  },
+  "download_notification_title_episodes": {
+   "value": "Downloading episodes",
+   "strings_xml_line": 357
+  },
+  "gpodnetsync_error_title": {
+   "value": "gpodder.net sync error",
+   "strings_xml_line": 770
+  },
+  "gpodnetsync_error_descr": {
+   "value": "An error occurred during syncing: ",
+   "strings_xml_line": 771
+  },
+  "settings_label": {
+   "value": "Settings",
+   "strings_xml_line": 27
+  },
+  "downloads_log_label": {
+   "value": "Download log",
+   "strings_xml_line": 30
+  }
+ },
+ "download": [
+  {
+   "name": "http401_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http403_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http404_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http410_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http404_foreground",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http404_background_no_permission",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "io_blocked_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http500_background_x3",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http500_foreground_x3",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      },
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http500_fg_bg_bg",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http500_bg_bg_fg",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      },
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http500_bg_no_permission_x3",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http503_then_success",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "success"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "success"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "connection_error_background_x3",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "unknown_host_foreground_then_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "not_enough_space_mixed",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      },
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http416_background_x3",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 0,
+     "partial_file_deleted": true,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 0,
+     "partial_file_deleted": true,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 0,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 0,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 0,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "http416_then_404_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 0,
+     "partial_file_deleted": true,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 0,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "downloader_throws_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [
+      {
+       "id": "notification_download_report",
+       "channel": "error",
+       "title": "Episode download failed",
+       "text": "Tap to view details.",
+       "ticker": "Episode download failed",
+       "small_icon": "ic_notification_sync_error",
+       "auto_cancel": true,
+       "visibility": "public",
+       "tap": {
+        "request_code": "pending_intent_download_service_report",
+        "opens": "download_log",
+        "extras": {
+         "clear_back_stack": false,
+         "open_download_logs": true
+        }
+       }
+      }
+     ],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": true,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "downloader_throws_foreground",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episode 404\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "cancelled",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 0,
+     "partial_file_deleted": false,
+     "result": "success"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 0,
+     "result": "success"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "success_background",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "success"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": false,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "success"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "success_foreground",
+   "request_title": "Episode 404",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "success"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "success"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "title_20_units",
+   "request_title": "Twenty characters!!!",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Twenty characters!!!\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Twenty characters!!!\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "title_21_units",
+   "request_title": "Twenty-one characters",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Twenty-one characte\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Twenty-one characte\u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "title_long",
+   "request_title": "The Very Long Episode Title About Everything",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"The Very Long Episo\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"The Very Long Episo\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": false,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"The Very Long Episo\u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      },
+      {
+       "text": "Download of \"The Very Long Episo\u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"The Very Long Episo\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 1,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"The Very Long Episo\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "retry"
+    },
+    {
+     "attempt": 2,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"The Very Long Episo\u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "title_null_uses_url",
+   "request_title": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"https://example.tes\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"https://example.tes\u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "title_emoji_after_cut",
+   "request_title": "Weekly news roundup\ud83c\udfa7 part 2",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Weekly news roundup\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Weekly news roundup\u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "title_emoji_at_cut",
+   "request_title": "Weekly news round \ud83c\udfa7 part 2",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Weekly news round \ud83c\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Weekly news round \u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "title_combining_split",
+   "request_title": "Episodes about cafe\u0301s and more",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episodes about cafe\u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"Episodes about caf\u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  },
+  {
+   "name": "title_rtl",
+   "request_title": "\u05e4\u05e8\u05e7 \u05e8\u05d0\u05e9\u05d5\u05df \u05e2\u05dc \u05d4\u05e2\u05d5\u05dc\u05dd \u05d4\u05d2\u05d3\u05d5\u05dc",
+   "android": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"\u05e4\u05e8\u05e7 \u05e8\u05d0\u05e9\u05d5\u05df \u05e2\u05dc \u05d4\u05e2\u05d5\u05dc\u05dd \u2026\" failed. Will be retried later.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notifications": [],
+     "log_entries": 1,
+     "partial_file_deleted": true,
+     "result": "failure"
+    }
+   ],
+   "ios": [
+    {
+     "attempt": 0,
+     "foreground": true,
+     "messages": [
+      {
+       "text": "Download of \"\u05e4\u05e8\u05e7 \u05e8\u05d0\u05e9\u05d5\u05df \u05e2\u05dc \u05d4\u05e2\u05d5\u05dc\u05dd \u2026\" failed.",
+       "action": "Details",
+       "action_opens": "download_log"
+      }
+     ],
+     "notification_requests": [],
+     "log_entries": 1,
+     "result": "failure"
+    }
+   ],
+   "ios_delivery": [
+    {
+     "toggle_on": true,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": true,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "authorized",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "provisional",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "denied",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    },
+    {
+     "toggle_on": false,
+     "authorization": "notDetermined",
+     "notification_delivered": false,
+     "authorization_prompt": false
+    }
+   ]
+  }
+ ],
+ "sync": [
+  {
+   "name": "sdk25_pref_on_fg_perm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [
+    {
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "action": null
+    }
+   ],
+   "notifications": [],
+   "ios": {
+    "message": "An error occurred during syncing: HTTP 401 Unauthorized",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk25_pref_on_fg_noperm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [
+    {
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "action": null
+    }
+   ],
+   "notifications": [],
+   "ios": {
+    "message": "An error occurred during syncing: HTTP 401 Unauthorized",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk25_pref_on_bg_perm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [
+    {
+     "id": "notification_gpodnet_sync_error",
+     "channel": "sync_error",
+     "title": "gpodder.net sync error",
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "big_text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "small_icon": "ic_notification_sync_error",
+     "auto_cancel": true,
+     "visibility": "public",
+     "tap": {
+      "request_code": "pending_intent_sync_error",
+      "opens": "app_launch"
+     }
+    }
+   ],
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk25_pref_on_bg_noperm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [],
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk25_pref_off_fg_perm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [],
+   "ios": {
+    "message": "An error occurred during syncing: HTTP 401 Unauthorized",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk25_pref_off_fg_noperm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [],
+   "ios": {
+    "message": "An error occurred during syncing: HTTP 401 Unauthorized",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk25_pref_off_bg_perm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [],
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk25_pref_off_bg_noperm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [],
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_pref_on_fg_perm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [
+    {
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "action": null
+    }
+   ],
+   "notifications": [],
+   "ios": {
+    "message": "An error occurred during syncing: HTTP 401 Unauthorized",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_pref_on_fg_noperm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [
+    {
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "action": null
+    }
+   ],
+   "notifications": [],
+   "ios": {
+    "message": "An error occurred during syncing: HTTP 401 Unauthorized",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_pref_on_bg_perm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [
+    {
+     "id": "notification_gpodnet_sync_error",
+     "channel": "sync_error",
+     "title": "gpodder.net sync error",
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "big_text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "small_icon": "ic_notification_sync_error",
+     "auto_cancel": true,
+     "visibility": "public",
+     "tap": {
+      "request_code": "pending_intent_sync_error",
+      "opens": "app_launch"
+     }
+    }
+   ],
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_pref_on_bg_noperm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [],
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_pref_off_fg_perm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [
+    {
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "action": null
+    }
+   ],
+   "notifications": [],
+   "note": "pref ignored on API>=26; system channel decides display",
+   "ios": {
+    "message": "An error occurred during syncing: HTTP 401 Unauthorized",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_pref_off_fg_noperm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [
+    {
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "action": null
+    }
+   ],
+   "notifications": [],
+   "note": "pref ignored on API>=26; system channel decides display",
+   "ios": {
+    "message": "An error occurred during syncing: HTTP 401 Unauthorized",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_pref_off_bg_perm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [
+    {
+     "id": "notification_gpodnet_sync_error",
+     "channel": "sync_error",
+     "title": "gpodder.net sync error",
+     "text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "big_text": "An error occurred during syncing: HTTP 401 Unauthorized",
+     "small_icon": "ic_notification_sync_error",
+     "auto_cancel": true,
+     "visibility": "public",
+     "tap": {
+      "request_code": "pending_intent_sync_error",
+      "opens": "app_launch"
+     }
+    }
+   ],
+   "note": "pref ignored on API>=26; system channel decides display",
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_pref_off_bg_noperm",
+   "description": "An error occurred during syncing: HTTP 401 Unauthorized",
+   "messages": [],
+   "notifications": [],
+   "note": "pref ignored on API>=26; system channel decides display",
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_null_message_bg",
+   "description": "An error occurred during syncing: null",
+   "messages": [],
+   "notifications": [
+    {
+     "id": "notification_gpodnet_sync_error",
+     "channel": "sync_error",
+     "title": "gpodder.net sync error",
+     "text": "An error occurred during syncing: null",
+     "big_text": "An error occurred during syncing: null",
+     "small_icon": "ic_notification_sync_error",
+     "auto_cancel": true,
+     "visibility": "public",
+     "tap": {
+      "request_code": "pending_intent_sync_error",
+      "opens": "app_launch"
+     }
+    }
+   ],
+   "ios": {
+    "message": null,
+    "notification_requested": true,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": true
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  },
+  {
+   "name": "sdk36_null_message_fg",
+   "description": "An error occurred during syncing: null",
+   "messages": [
+    {
+     "text": "An error occurred during syncing: null",
+     "action": null
+    }
+   ],
+   "notifications": [],
+   "ios": {
+    "message": "An error occurred during syncing:",
+    "notification_requested": false,
+    "delivery": [
+     {
+      "toggle_on": true,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": true,
+      "authorization": "denied",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "authorized",
+      "notification_delivered": false
+     },
+     {
+      "toggle_on": false,
+      "authorization": "denied",
+      "notification_delivered": false
+     }
+    ]
+   }
+  }
+ ],
+ "sync_attempts": [
+  {
+   "exception": "SyncServiceException",
+   "attempts": 9,
+   "notifies": [
+    false,
+    false,
+    true,
+    false,
+    false,
+    true,
+    false,
+    false,
+    true
+   ]
+  },
+  {
+   "exception": "IOException",
+   "attempts": 3,
+   "notifies": [
+    true,
+    true,
+    true
+   ]
+  }
+ ],
+ "settings_screens": [
+  {
+   "name": "logged_out_defaults",
+   "prefs_after": {},
+   "title": "Notifications",
+   "categories": [
+    {
+     "title": "Errors",
+     "rows": [
+      {
+       "key": "prefShowDownloadReport",
+       "control": "switch",
+       "title": "Download failed",
+       "summary": "Shown when download or feed update fails.",
+       "checked": true,
+       "enabled": true
+      },
+      {
+       "key": "pref_gpodnet_notifications",
+       "control": "switch",
+       "title": "Synchronization failed",
+       "summary": "Shown when gpodder synchronization fails.",
+       "checked": true,
+       "enabled": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "logged_in_defaults",
+   "prefs_after": {},
+   "title": "Notifications",
+   "categories": [
+    {
+     "title": "Errors",
+     "rows": [
+      {
+       "key": "prefShowDownloadReport",
+       "control": "switch",
+       "title": "Download failed",
+       "summary": "Shown when download or feed update fails.",
+       "checked": true,
+       "enabled": true
+      },
+      {
+       "key": "pref_gpodnet_notifications",
+       "control": "switch",
+       "title": "Synchronization failed",
+       "summary": "Shown when gpodder synchronization fails.",
+       "checked": true,
+       "enabled": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "logged_in_both_off",
+   "prefs_after": {
+    "prefShowDownloadReport": false,
+    "pref_gpodnet_notifications": false
+   },
+   "title": "Notifications",
+   "categories": [
+    {
+     "title": "Errors",
+     "rows": [
+      {
+       "key": "prefShowDownloadReport",
+       "control": "switch",
+       "title": "Download failed",
+       "summary": "Shown when download or feed update fails.",
+       "checked": false,
+       "enabled": true
+      },
+      {
+       "key": "pref_gpodnet_notifications",
+       "control": "switch",
+       "title": "Synchronization failed",
+       "summary": "Shown when gpodder synchronization fails.",
+       "checked": false,
+       "enabled": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "logout_resets_sync_pref",
+   "prefs_after": {
+    "prefShowDownloadReport": false,
+    "pref_gpodnet_notifications": true
+   },
+   "title": "Notifications",
+   "categories": [
+    {
+     "title": "Errors",
+     "rows": [
+      {
+       "key": "prefShowDownloadReport",
+       "control": "switch",
+       "title": "Download failed",
+       "summary": "Shown when download or feed update fails.",
+       "checked": false,
+       "enabled": true
+      },
+      {
+       "key": "pref_gpodnet_notifications",
+       "control": "switch",
+       "title": "Synchronization failed",
+       "summary": "Shown when gpodder synchronization fails.",
+       "checked": true,
+       "enabled": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "login_resets_sync_pref",
+   "prefs_after": {
+    "prefShowDownloadReport": false,
+    "pref_gpodnet_notifications": true
+   },
+   "title": "Notifications",
+   "categories": [
+    {
+     "title": "Errors",
+     "rows": [
+      {
+       "key": "prefShowDownloadReport",
+       "control": "switch",
+       "title": "Download failed",
+       "summary": "Shown when download or feed update fails.",
+       "checked": false,
+       "enabled": true
+      },
+      {
+       "key": "pref_gpodnet_notifications",
+       "control": "switch",
+       "title": "Synchronization failed",
+       "summary": "Shown when gpodder synchronization fails.",
+       "checked": true,
+       "enabled": true
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

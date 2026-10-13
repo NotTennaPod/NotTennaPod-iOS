@@ -1,0 +1,205 @@
+{
+  "source": "synthetic linear chirp; no third-party recordings",
+  "ticks": {
+    "periodSeconds": 0.2,
+    "toneSeconds": 0.06,
+    "baseHz": 300.0,
+    "stepHz": 25.0,
+    "amplitude": 0.5,
+    "edgeSeconds": 0.005,
+    "contentSecondsOfTick": "periodSeconds * round((hz - baseHz) / stepHz)"
+  },
+  "gaps": {
+    "durationSeconds": 12.7,
+    "speechWindows": [
+      [
+        0.0,
+        1.2
+      ],
+      [
+        3.7,
+        4.7
+      ],
+      [
+        5.1,
+        6.1
+      ],
+      [
+        8.6,
+        9.6
+      ],
+      [
+        11.6,
+        12.4
+      ]
+    ],
+    "edgeSeconds": 0.005,
+    "baseHz": 200.0,
+    "slopeHzPerSecond": 100.0,
+    "amplitude": 0.5,
+    "contentSecondsFromHz": "(hz - baseHz) / slopeHzPerSecond"
+  },
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": [
+    {
+      "name": "ticks.mp3",
+      "sha256": "21146e9333a045b5d551c0d989502b17bc87df08ada24c72dde618c3c0ba6643",
+      "sampleRate": 44100,
+      "channels": 1,
+      "contentSeconds": 30.0,
+      "arguments": [
+        "-i",
+        "<synthesized wav>",
+        ".work/heard-rate-ysxgrpuc/ticks.mp3.wav",
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libmp3lame",
+        "-b:a",
+        "64k"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 1,
+            "duration": "30.000000"
+          }
+        ],
+        "format": {
+          "format_name": "mp3",
+          "duration": "30.000000",
+          "size": "240554"
+        }
+      }
+    },
+    {
+      "name": "ticks.aac",
+      "sha256": "6cf22d7c450a65a163d98133622ea0e6ecb2571ec0dfb7017510cffd678648fa",
+      "sampleRate": 48000,
+      "channels": 1,
+      "contentSeconds": 30.0,
+      "arguments": [
+        "-i",
+        "<synthesized wav>",
+        ".work/heard-rate-ysxgrpuc/ticks.aac.wav",
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k",
+        "-f",
+        "adts"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "29.565407"
+          }
+        ],
+        "format": {
+          "format_name": "aac",
+          "duration": "29.565407",
+          "size": "217424"
+        }
+      }
+    },
+    {
+      "name": "ticks.m4a",
+      "sha256": "d37ce8ea71e0a679a8521821cb27677b98d9d655d4020006a52a5ca9a227a27a",
+      "sampleRate": 44100,
+      "channels": 2,
+      "contentSeconds": 30.0,
+      "arguments": [
+        "-i",
+        "<synthesized wav>",
+        ".work/heard-rate-ysxgrpuc/ticks.m4a.wav",
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "96k",
+        "-movflags",
+        "+faststart"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "44100",
+            "channels": 2,
+            "duration": "30.000000"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "30.000000",
+          "size": "228807"
+        }
+      }
+    },
+    {
+      "name": "gaps.mp3",
+      "sha256": "5473d089344de92f62d985d3a0af08d6bd956b776fc080377146686cc9f46c10",
+      "sampleRate": 44100,
+      "channels": 1,
+      "contentSeconds": 12.700000000000003,
+      "arguments": [
+        "-i",
+        "<synthesized wav>",
+        ".work/heard-rate-ysxgrpuc/gaps.mp3.wav",
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libmp3lame",
+        "-b:a",
+        "64k"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 1,
+            "duration": "12.700000"
+          }
+        ],
+        "format": {
+          "format_name": "mp3",
+          "duration": "12.700000",
+          "size": "102210"
+        }
+      }
+    }
+  ]
+}

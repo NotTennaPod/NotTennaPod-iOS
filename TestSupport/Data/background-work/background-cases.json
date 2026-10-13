@@ -1,0 +1,3514 @@
+{
+ "schema": 1,
+ "contract": "the background-work design contract (M29 A1)",
+ "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+ "now_ms": 1790510400000,
+ "download_log": {
+  "now_ms": 1790510400000,
+  "rows": [
+   {
+    "id": 1,
+    "feedfile": 1001,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789905600000,
+    "reason_detailed": "503",
+    "title": "exactly 7 days old"
+   },
+   {
+    "id": 2,
+    "feedfile": 1002,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789905599999,
+    "reason_detailed": "503",
+    "title": "7 days + 1 ms"
+   },
+   {
+    "id": 3,
+    "feedfile": 1003,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789905600001,
+    "reason_detailed": "503",
+    "title": "7 days - 1 ms"
+   },
+   {
+    "id": 4,
+    "feedfile": 1004,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789909200000,
+    "reason_detailed": null,
+    "title": "6 d 23 h"
+   },
+   {
+    "id": 5,
+    "feedfile": 1005,
+    "feedfile_type": 0,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789902000000,
+    "reason_detailed": "503",
+    "title": "feed, 7 d 1 h"
+   },
+   {
+    "id": 6,
+    "feedfile": 1006,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": null,
+    "reason_detailed": "503",
+    "title": "NULL completion_date"
+   },
+   {
+    "id": 7,
+    "feedfile": 1007,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790514000000,
+    "reason_detailed": null,
+    "title": "future (clock skew)"
+   },
+   {
+    "id": 8,
+    "feedfile": 1008,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 0,
+    "reason_detailed": "503",
+    "title": "epoch 0"
+   },
+   {
+    "id": 9,
+    "feedfile": 1009,
+    "feedfile_type": 0,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790337600000,
+    "reason_detailed": null,
+    "title": "tie A"
+   },
+   {
+    "id": 10,
+    "feedfile": 1010,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790337600000,
+    "reason_detailed": "503",
+    "title": "tie B"
+   },
+   {
+    "id": 11,
+    "feedfile": 1011,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1787918400000,
+    "reason_detailed": null,
+    "title": "30 days"
+   },
+   {
+    "id": 12,
+    "feedfile": 1012,
+    "feedfile_type": 0,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790506800000,
+    "reason_detailed": "503",
+    "title": "1 hour"
+   }
+  ]
+ },
+ "download_log_cap": {
+  "now_ms": 1790510400000,
+  "rows": [
+   {
+    "id": 100,
+    "feedfile": 1100,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790510400000,
+    "reason_detailed": null,
+    "title": "Row 100"
+   },
+   {
+    "id": 101,
+    "feedfile": 1101,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790508600000,
+    "reason_detailed": "503",
+    "title": "Row 101"
+   },
+   {
+    "id": 102,
+    "feedfile": 1102,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790506800000,
+    "reason_detailed": "503",
+    "title": "Row 102"
+   },
+   {
+    "id": 103,
+    "feedfile": 1103,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790505000000,
+    "reason_detailed": null,
+    "title": "Row 103"
+   },
+   {
+    "id": 104,
+    "feedfile": 1104,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790503200000,
+    "reason_detailed": "503",
+    "title": "Row 104"
+   },
+   {
+    "id": 105,
+    "feedfile": 1105,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790501400000,
+    "reason_detailed": "503",
+    "title": "Row 105"
+   },
+   {
+    "id": 106,
+    "feedfile": 1106,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790499600000,
+    "reason_detailed": null,
+    "title": "Row 106"
+   },
+   {
+    "id": 107,
+    "feedfile": 1107,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790497800000,
+    "reason_detailed": "503",
+    "title": "Row 107"
+   },
+   {
+    "id": 108,
+    "feedfile": 1108,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790496000000,
+    "reason_detailed": "503",
+    "title": "Row 108"
+   },
+   {
+    "id": 109,
+    "feedfile": 1109,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790494200000,
+    "reason_detailed": null,
+    "title": "Row 109"
+   },
+   {
+    "id": 110,
+    "feedfile": 1110,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790492400000,
+    "reason_detailed": "503",
+    "title": "Row 110"
+   },
+   {
+    "id": 111,
+    "feedfile": 1111,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790490600000,
+    "reason_detailed": "503",
+    "title": "Row 111"
+   },
+   {
+    "id": 112,
+    "feedfile": 1112,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790488800000,
+    "reason_detailed": null,
+    "title": "Row 112"
+   },
+   {
+    "id": 113,
+    "feedfile": 1113,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790487000000,
+    "reason_detailed": "503",
+    "title": "Row 113"
+   },
+   {
+    "id": 114,
+    "feedfile": 1114,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790485200000,
+    "reason_detailed": "503",
+    "title": "Row 114"
+   },
+   {
+    "id": 115,
+    "feedfile": 1115,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790483400000,
+    "reason_detailed": null,
+    "title": "Row 115"
+   },
+   {
+    "id": 116,
+    "feedfile": 1116,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790481600000,
+    "reason_detailed": "503",
+    "title": "Row 116"
+   },
+   {
+    "id": 117,
+    "feedfile": 1117,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790479800000,
+    "reason_detailed": "503",
+    "title": "Row 117"
+   },
+   {
+    "id": 118,
+    "feedfile": 1118,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790478000000,
+    "reason_detailed": null,
+    "title": "Row 118"
+   },
+   {
+    "id": 119,
+    "feedfile": 1119,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790476200000,
+    "reason_detailed": "503",
+    "title": "Row 119"
+   },
+   {
+    "id": 120,
+    "feedfile": 1120,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790474400000,
+    "reason_detailed": "503",
+    "title": "Row 120"
+   },
+   {
+    "id": 121,
+    "feedfile": 1121,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790472600000,
+    "reason_detailed": null,
+    "title": "Row 121"
+   },
+   {
+    "id": 122,
+    "feedfile": 1122,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790470800000,
+    "reason_detailed": "503",
+    "title": "Row 122"
+   },
+   {
+    "id": 123,
+    "feedfile": 1123,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790469000000,
+    "reason_detailed": "503",
+    "title": "Row 123"
+   },
+   {
+    "id": 124,
+    "feedfile": 1124,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790467200000,
+    "reason_detailed": null,
+    "title": "Row 124"
+   },
+   {
+    "id": 125,
+    "feedfile": 1125,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790465400000,
+    "reason_detailed": "503",
+    "title": "Row 125"
+   },
+   {
+    "id": 126,
+    "feedfile": 1126,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790463600000,
+    "reason_detailed": "503",
+    "title": "Row 126"
+   },
+   {
+    "id": 127,
+    "feedfile": 1127,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790461800000,
+    "reason_detailed": null,
+    "title": "Row 127"
+   },
+   {
+    "id": 128,
+    "feedfile": 1128,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790460000000,
+    "reason_detailed": "503",
+    "title": "Row 128"
+   },
+   {
+    "id": 129,
+    "feedfile": 1129,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790458200000,
+    "reason_detailed": "503",
+    "title": "Row 129"
+   },
+   {
+    "id": 130,
+    "feedfile": 1130,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790456400000,
+    "reason_detailed": null,
+    "title": "Row 130"
+   },
+   {
+    "id": 131,
+    "feedfile": 1131,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790454600000,
+    "reason_detailed": "503",
+    "title": "Row 131"
+   },
+   {
+    "id": 132,
+    "feedfile": 1132,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790452800000,
+    "reason_detailed": "503",
+    "title": "Row 132"
+   },
+   {
+    "id": 133,
+    "feedfile": 1133,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790451000000,
+    "reason_detailed": null,
+    "title": "Row 133"
+   },
+   {
+    "id": 134,
+    "feedfile": 1134,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790449200000,
+    "reason_detailed": "503",
+    "title": "Row 134"
+   },
+   {
+    "id": 135,
+    "feedfile": 1135,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790447400000,
+    "reason_detailed": "503",
+    "title": "Row 135"
+   },
+   {
+    "id": 136,
+    "feedfile": 1136,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790445600000,
+    "reason_detailed": null,
+    "title": "Row 136"
+   },
+   {
+    "id": 137,
+    "feedfile": 1137,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790443800000,
+    "reason_detailed": "503",
+    "title": "Row 137"
+   },
+   {
+    "id": 138,
+    "feedfile": 1138,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790442000000,
+    "reason_detailed": "503",
+    "title": "Row 138"
+   },
+   {
+    "id": 139,
+    "feedfile": 1139,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790440200000,
+    "reason_detailed": null,
+    "title": "Row 139"
+   },
+   {
+    "id": 140,
+    "feedfile": 1140,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790438400000,
+    "reason_detailed": "503",
+    "title": "Row 140"
+   },
+   {
+    "id": 141,
+    "feedfile": 1141,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790436600000,
+    "reason_detailed": "503",
+    "title": "Row 141"
+   },
+   {
+    "id": 142,
+    "feedfile": 1142,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790434800000,
+    "reason_detailed": null,
+    "title": "Row 142"
+   },
+   {
+    "id": 143,
+    "feedfile": 1143,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790433000000,
+    "reason_detailed": "503",
+    "title": "Row 143"
+   },
+   {
+    "id": 144,
+    "feedfile": 1144,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790431200000,
+    "reason_detailed": "503",
+    "title": "Row 144"
+   },
+   {
+    "id": 145,
+    "feedfile": 1145,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790429400000,
+    "reason_detailed": null,
+    "title": "Row 145"
+   },
+   {
+    "id": 146,
+    "feedfile": 1146,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790427600000,
+    "reason_detailed": "503",
+    "title": "Row 146"
+   },
+   {
+    "id": 147,
+    "feedfile": 1147,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790425800000,
+    "reason_detailed": "503",
+    "title": "Row 147"
+   },
+   {
+    "id": 148,
+    "feedfile": 1148,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790424000000,
+    "reason_detailed": null,
+    "title": "Row 148"
+   },
+   {
+    "id": 149,
+    "feedfile": 1149,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790422200000,
+    "reason_detailed": "503",
+    "title": "Row 149"
+   },
+   {
+    "id": 150,
+    "feedfile": 1150,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790420400000,
+    "reason_detailed": "503",
+    "title": "Row 150"
+   },
+   {
+    "id": 151,
+    "feedfile": 1151,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790418600000,
+    "reason_detailed": null,
+    "title": "Row 151"
+   },
+   {
+    "id": 152,
+    "feedfile": 1152,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790416800000,
+    "reason_detailed": "503",
+    "title": "Row 152"
+   },
+   {
+    "id": 153,
+    "feedfile": 1153,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790415000000,
+    "reason_detailed": "503",
+    "title": "Row 153"
+   },
+   {
+    "id": 154,
+    "feedfile": 1154,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790413200000,
+    "reason_detailed": null,
+    "title": "Row 154"
+   },
+   {
+    "id": 155,
+    "feedfile": 1155,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790411400000,
+    "reason_detailed": "503",
+    "title": "Row 155"
+   },
+   {
+    "id": 156,
+    "feedfile": 1156,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790409600000,
+    "reason_detailed": "503",
+    "title": "Row 156"
+   },
+   {
+    "id": 157,
+    "feedfile": 1157,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790407800000,
+    "reason_detailed": null,
+    "title": "Row 157"
+   },
+   {
+    "id": 158,
+    "feedfile": 1158,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790406000000,
+    "reason_detailed": "503",
+    "title": "Row 158"
+   },
+   {
+    "id": 159,
+    "feedfile": 1159,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790404200000,
+    "reason_detailed": "503",
+    "title": "Row 159"
+   },
+   {
+    "id": 160,
+    "feedfile": 1160,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790402400000,
+    "reason_detailed": null,
+    "title": "Row 160"
+   },
+   {
+    "id": 161,
+    "feedfile": 1161,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790400600000,
+    "reason_detailed": "503",
+    "title": "Row 161"
+   },
+   {
+    "id": 162,
+    "feedfile": 1162,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790398800000,
+    "reason_detailed": "503",
+    "title": "Row 162"
+   },
+   {
+    "id": 163,
+    "feedfile": 1163,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790397000000,
+    "reason_detailed": null,
+    "title": "Row 163"
+   },
+   {
+    "id": 164,
+    "feedfile": 1164,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790395200000,
+    "reason_detailed": "503",
+    "title": "Row 164"
+   },
+   {
+    "id": 165,
+    "feedfile": 1165,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790393400000,
+    "reason_detailed": "503",
+    "title": "Row 165"
+   },
+   {
+    "id": 166,
+    "feedfile": 1166,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790391600000,
+    "reason_detailed": null,
+    "title": "Row 166"
+   },
+   {
+    "id": 167,
+    "feedfile": 1167,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790389800000,
+    "reason_detailed": "503",
+    "title": "Row 167"
+   },
+   {
+    "id": 168,
+    "feedfile": 1168,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790388000000,
+    "reason_detailed": "503",
+    "title": "Row 168"
+   },
+   {
+    "id": 169,
+    "feedfile": 1169,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790386200000,
+    "reason_detailed": null,
+    "title": "Row 169"
+   },
+   {
+    "id": 170,
+    "feedfile": 1170,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790384400000,
+    "reason_detailed": "503",
+    "title": "Row 170"
+   },
+   {
+    "id": 171,
+    "feedfile": 1171,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790382600000,
+    "reason_detailed": "503",
+    "title": "Row 171"
+   },
+   {
+    "id": 172,
+    "feedfile": 1172,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790380800000,
+    "reason_detailed": null,
+    "title": "Row 172"
+   },
+   {
+    "id": 173,
+    "feedfile": 1173,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790379000000,
+    "reason_detailed": "503",
+    "title": "Row 173"
+   },
+   {
+    "id": 174,
+    "feedfile": 1174,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790377200000,
+    "reason_detailed": "503",
+    "title": "Row 174"
+   },
+   {
+    "id": 175,
+    "feedfile": 1175,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790375400000,
+    "reason_detailed": null,
+    "title": "Row 175"
+   },
+   {
+    "id": 176,
+    "feedfile": 1176,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790373600000,
+    "reason_detailed": "503",
+    "title": "Row 176"
+   },
+   {
+    "id": 177,
+    "feedfile": 1177,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790371800000,
+    "reason_detailed": "503",
+    "title": "Row 177"
+   },
+   {
+    "id": 178,
+    "feedfile": 1178,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790370000000,
+    "reason_detailed": null,
+    "title": "Row 178"
+   },
+   {
+    "id": 179,
+    "feedfile": 1179,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790368200000,
+    "reason_detailed": "503",
+    "title": "Row 179"
+   },
+   {
+    "id": 180,
+    "feedfile": 1180,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790366400000,
+    "reason_detailed": "503",
+    "title": "Row 180"
+   },
+   {
+    "id": 181,
+    "feedfile": 1181,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790364600000,
+    "reason_detailed": null,
+    "title": "Row 181"
+   },
+   {
+    "id": 182,
+    "feedfile": 1182,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790362800000,
+    "reason_detailed": "503",
+    "title": "Row 182"
+   },
+   {
+    "id": 183,
+    "feedfile": 1183,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790361000000,
+    "reason_detailed": "503",
+    "title": "Row 183"
+   },
+   {
+    "id": 184,
+    "feedfile": 1184,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790359200000,
+    "reason_detailed": null,
+    "title": "Row 184"
+   },
+   {
+    "id": 185,
+    "feedfile": 1185,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790357400000,
+    "reason_detailed": "503",
+    "title": "Row 185"
+   },
+   {
+    "id": 186,
+    "feedfile": 1186,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790355600000,
+    "reason_detailed": "503",
+    "title": "Row 186"
+   },
+   {
+    "id": 187,
+    "feedfile": 1187,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790353800000,
+    "reason_detailed": null,
+    "title": "Row 187"
+   },
+   {
+    "id": 188,
+    "feedfile": 1188,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790352000000,
+    "reason_detailed": "503",
+    "title": "Row 188"
+   },
+   {
+    "id": 189,
+    "feedfile": 1189,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790350200000,
+    "reason_detailed": "503",
+    "title": "Row 189"
+   },
+   {
+    "id": 190,
+    "feedfile": 1190,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790348400000,
+    "reason_detailed": null,
+    "title": "Row 190"
+   },
+   {
+    "id": 191,
+    "feedfile": 1191,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790346600000,
+    "reason_detailed": "503",
+    "title": "Row 191"
+   },
+   {
+    "id": 192,
+    "feedfile": 1192,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790344800000,
+    "reason_detailed": "503",
+    "title": "Row 192"
+   },
+   {
+    "id": 193,
+    "feedfile": 1193,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790343000000,
+    "reason_detailed": null,
+    "title": "Row 193"
+   },
+   {
+    "id": 194,
+    "feedfile": 1194,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790341200000,
+    "reason_detailed": "503",
+    "title": "Row 194"
+   },
+   {
+    "id": 195,
+    "feedfile": 1195,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790339400000,
+    "reason_detailed": "503",
+    "title": "Row 195"
+   },
+   {
+    "id": 196,
+    "feedfile": 1196,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790337600000,
+    "reason_detailed": null,
+    "title": "Row 196"
+   },
+   {
+    "id": 197,
+    "feedfile": 1197,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790335800000,
+    "reason_detailed": "503",
+    "title": "Row 197"
+   },
+   {
+    "id": 198,
+    "feedfile": 1198,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790334000000,
+    "reason_detailed": "503",
+    "title": "Row 198"
+   },
+   {
+    "id": 199,
+    "feedfile": 1199,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790332200000,
+    "reason_detailed": null,
+    "title": "Row 199"
+   },
+   {
+    "id": 200,
+    "feedfile": 1200,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790330400000,
+    "reason_detailed": "503",
+    "title": "Row 200"
+   },
+   {
+    "id": 201,
+    "feedfile": 1201,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790328600000,
+    "reason_detailed": "503",
+    "title": "Row 201"
+   },
+   {
+    "id": 202,
+    "feedfile": 1202,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790326800000,
+    "reason_detailed": null,
+    "title": "Row 202"
+   },
+   {
+    "id": 203,
+    "feedfile": 1203,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790325000000,
+    "reason_detailed": "503",
+    "title": "Row 203"
+   },
+   {
+    "id": 204,
+    "feedfile": 1204,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790323200000,
+    "reason_detailed": "503",
+    "title": "Row 204"
+   },
+   {
+    "id": 205,
+    "feedfile": 1205,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790321400000,
+    "reason_detailed": null,
+    "title": "Row 205"
+   },
+   {
+    "id": 206,
+    "feedfile": 1206,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790319600000,
+    "reason_detailed": "503",
+    "title": "Row 206"
+   },
+   {
+    "id": 207,
+    "feedfile": 1207,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790317800000,
+    "reason_detailed": "503",
+    "title": "Row 207"
+   },
+   {
+    "id": 208,
+    "feedfile": 1208,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790316000000,
+    "reason_detailed": null,
+    "title": "Row 208"
+   },
+   {
+    "id": 209,
+    "feedfile": 1209,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790314200000,
+    "reason_detailed": "503",
+    "title": "Row 209"
+   },
+   {
+    "id": 210,
+    "feedfile": 1210,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790312400000,
+    "reason_detailed": "503",
+    "title": "Row 210"
+   },
+   {
+    "id": 211,
+    "feedfile": 1211,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790310600000,
+    "reason_detailed": null,
+    "title": "Row 211"
+   },
+   {
+    "id": 212,
+    "feedfile": 1212,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790308800000,
+    "reason_detailed": "503",
+    "title": "Row 212"
+   },
+   {
+    "id": 213,
+    "feedfile": 1213,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790307000000,
+    "reason_detailed": "503",
+    "title": "Row 213"
+   },
+   {
+    "id": 214,
+    "feedfile": 1214,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790305200000,
+    "reason_detailed": null,
+    "title": "Row 214"
+   },
+   {
+    "id": 215,
+    "feedfile": 1215,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790303400000,
+    "reason_detailed": "503",
+    "title": "Row 215"
+   },
+   {
+    "id": 216,
+    "feedfile": 1216,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790301600000,
+    "reason_detailed": "503",
+    "title": "Row 216"
+   },
+   {
+    "id": 217,
+    "feedfile": 1217,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790299800000,
+    "reason_detailed": null,
+    "title": "Row 217"
+   },
+   {
+    "id": 218,
+    "feedfile": 1218,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790298000000,
+    "reason_detailed": "503",
+    "title": "Row 218"
+   },
+   {
+    "id": 219,
+    "feedfile": 1219,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790296200000,
+    "reason_detailed": "503",
+    "title": "Row 219"
+   },
+   {
+    "id": 220,
+    "feedfile": 1220,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790294400000,
+    "reason_detailed": null,
+    "title": "Row 220"
+   },
+   {
+    "id": 221,
+    "feedfile": 1221,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790292600000,
+    "reason_detailed": "503",
+    "title": "Row 221"
+   },
+   {
+    "id": 222,
+    "feedfile": 1222,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790290800000,
+    "reason_detailed": "503",
+    "title": "Row 222"
+   },
+   {
+    "id": 223,
+    "feedfile": 1223,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790289000000,
+    "reason_detailed": null,
+    "title": "Row 223"
+   },
+   {
+    "id": 224,
+    "feedfile": 1224,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790287200000,
+    "reason_detailed": "503",
+    "title": "Row 224"
+   },
+   {
+    "id": 225,
+    "feedfile": 1225,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790285400000,
+    "reason_detailed": "503",
+    "title": "Row 225"
+   },
+   {
+    "id": 226,
+    "feedfile": 1226,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790283600000,
+    "reason_detailed": null,
+    "title": "Row 226"
+   },
+   {
+    "id": 227,
+    "feedfile": 1227,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790281800000,
+    "reason_detailed": "503",
+    "title": "Row 227"
+   },
+   {
+    "id": 228,
+    "feedfile": 1228,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790280000000,
+    "reason_detailed": "503",
+    "title": "Row 228"
+   },
+   {
+    "id": 229,
+    "feedfile": 1229,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790278200000,
+    "reason_detailed": null,
+    "title": "Row 229"
+   },
+   {
+    "id": 230,
+    "feedfile": 1230,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790276400000,
+    "reason_detailed": "503",
+    "title": "Row 230"
+   },
+   {
+    "id": 231,
+    "feedfile": 1231,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790274600000,
+    "reason_detailed": "503",
+    "title": "Row 231"
+   },
+   {
+    "id": 232,
+    "feedfile": 1232,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790272800000,
+    "reason_detailed": null,
+    "title": "Row 232"
+   },
+   {
+    "id": 233,
+    "feedfile": 1233,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790271000000,
+    "reason_detailed": "503",
+    "title": "Row 233"
+   },
+   {
+    "id": 234,
+    "feedfile": 1234,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790269200000,
+    "reason_detailed": "503",
+    "title": "Row 234"
+   },
+   {
+    "id": 235,
+    "feedfile": 1235,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790267400000,
+    "reason_detailed": null,
+    "title": "Row 235"
+   },
+   {
+    "id": 236,
+    "feedfile": 1236,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790265600000,
+    "reason_detailed": "503",
+    "title": "Row 236"
+   },
+   {
+    "id": 237,
+    "feedfile": 1237,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790263800000,
+    "reason_detailed": "503",
+    "title": "Row 237"
+   },
+   {
+    "id": 238,
+    "feedfile": 1238,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790262000000,
+    "reason_detailed": null,
+    "title": "Row 238"
+   },
+   {
+    "id": 239,
+    "feedfile": 1239,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790260200000,
+    "reason_detailed": "503",
+    "title": "Row 239"
+   },
+   {
+    "id": 240,
+    "feedfile": 1240,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790258400000,
+    "reason_detailed": "503",
+    "title": "Row 240"
+   },
+   {
+    "id": 241,
+    "feedfile": 1241,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790256600000,
+    "reason_detailed": null,
+    "title": "Row 241"
+   },
+   {
+    "id": 242,
+    "feedfile": 1242,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790254800000,
+    "reason_detailed": "503",
+    "title": "Row 242"
+   },
+   {
+    "id": 243,
+    "feedfile": 1243,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790253000000,
+    "reason_detailed": "503",
+    "title": "Row 243"
+   },
+   {
+    "id": 244,
+    "feedfile": 1244,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790251200000,
+    "reason_detailed": null,
+    "title": "Row 244"
+   },
+   {
+    "id": 245,
+    "feedfile": 1245,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790249400000,
+    "reason_detailed": "503",
+    "title": "Row 245"
+   },
+   {
+    "id": 246,
+    "feedfile": 1246,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790247600000,
+    "reason_detailed": "503",
+    "title": "Row 246"
+   },
+   {
+    "id": 247,
+    "feedfile": 1247,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790245800000,
+    "reason_detailed": null,
+    "title": "Row 247"
+   },
+   {
+    "id": 248,
+    "feedfile": 1248,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790244000000,
+    "reason_detailed": "503",
+    "title": "Row 248"
+   },
+   {
+    "id": 249,
+    "feedfile": 1249,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790242200000,
+    "reason_detailed": "503",
+    "title": "Row 249"
+   },
+   {
+    "id": 250,
+    "feedfile": 1250,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790240400000,
+    "reason_detailed": null,
+    "title": "Row 250"
+   },
+   {
+    "id": 251,
+    "feedfile": 1251,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790238600000,
+    "reason_detailed": "503",
+    "title": "Row 251"
+   },
+   {
+    "id": 252,
+    "feedfile": 1252,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790236800000,
+    "reason_detailed": "503",
+    "title": "Row 252"
+   },
+   {
+    "id": 253,
+    "feedfile": 1253,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790235000000,
+    "reason_detailed": null,
+    "title": "Row 253"
+   },
+   {
+    "id": 254,
+    "feedfile": 1254,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790233200000,
+    "reason_detailed": "503",
+    "title": "Row 254"
+   },
+   {
+    "id": 255,
+    "feedfile": 1255,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790231400000,
+    "reason_detailed": "503",
+    "title": "Row 255"
+   },
+   {
+    "id": 256,
+    "feedfile": 1256,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790229600000,
+    "reason_detailed": null,
+    "title": "Row 256"
+   },
+   {
+    "id": 257,
+    "feedfile": 1257,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790227800000,
+    "reason_detailed": "503",
+    "title": "Row 257"
+   },
+   {
+    "id": 258,
+    "feedfile": 1258,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790226000000,
+    "reason_detailed": "503",
+    "title": "Row 258"
+   },
+   {
+    "id": 259,
+    "feedfile": 1259,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790224200000,
+    "reason_detailed": null,
+    "title": "Row 259"
+   },
+   {
+    "id": 260,
+    "feedfile": 1260,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790222400000,
+    "reason_detailed": "503",
+    "title": "Row 260"
+   },
+   {
+    "id": 261,
+    "feedfile": 1261,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790220600000,
+    "reason_detailed": "503",
+    "title": "Row 261"
+   },
+   {
+    "id": 262,
+    "feedfile": 1262,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790218800000,
+    "reason_detailed": null,
+    "title": "Row 262"
+   },
+   {
+    "id": 263,
+    "feedfile": 1263,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790217000000,
+    "reason_detailed": "503",
+    "title": "Row 263"
+   },
+   {
+    "id": 264,
+    "feedfile": 1264,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790215200000,
+    "reason_detailed": "503",
+    "title": "Row 264"
+   },
+   {
+    "id": 265,
+    "feedfile": 1265,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790213400000,
+    "reason_detailed": null,
+    "title": "Row 265"
+   },
+   {
+    "id": 266,
+    "feedfile": 1266,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790211600000,
+    "reason_detailed": "503",
+    "title": "Row 266"
+   },
+   {
+    "id": 267,
+    "feedfile": 1267,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790209800000,
+    "reason_detailed": "503",
+    "title": "Row 267"
+   },
+   {
+    "id": 268,
+    "feedfile": 1268,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790208000000,
+    "reason_detailed": null,
+    "title": "Row 268"
+   },
+   {
+    "id": 269,
+    "feedfile": 1269,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790206200000,
+    "reason_detailed": "503",
+    "title": "Row 269"
+   },
+   {
+    "id": 270,
+    "feedfile": 1270,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790204400000,
+    "reason_detailed": "503",
+    "title": "Row 270"
+   },
+   {
+    "id": 271,
+    "feedfile": 1271,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790202600000,
+    "reason_detailed": null,
+    "title": "Row 271"
+   },
+   {
+    "id": 272,
+    "feedfile": 1272,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790200800000,
+    "reason_detailed": "503",
+    "title": "Row 272"
+   },
+   {
+    "id": 273,
+    "feedfile": 1273,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790199000000,
+    "reason_detailed": "503",
+    "title": "Row 273"
+   },
+   {
+    "id": 274,
+    "feedfile": 1274,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790197200000,
+    "reason_detailed": null,
+    "title": "Row 274"
+   },
+   {
+    "id": 275,
+    "feedfile": 1275,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790195400000,
+    "reason_detailed": "503",
+    "title": "Row 275"
+   },
+   {
+    "id": 276,
+    "feedfile": 1276,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790193600000,
+    "reason_detailed": "503",
+    "title": "Row 276"
+   },
+   {
+    "id": 277,
+    "feedfile": 1277,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790191800000,
+    "reason_detailed": null,
+    "title": "Row 277"
+   },
+   {
+    "id": 278,
+    "feedfile": 1278,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790190000000,
+    "reason_detailed": "503",
+    "title": "Row 278"
+   },
+   {
+    "id": 279,
+    "feedfile": 1279,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790188200000,
+    "reason_detailed": "503",
+    "title": "Row 279"
+   },
+   {
+    "id": 280,
+    "feedfile": 1280,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790186400000,
+    "reason_detailed": null,
+    "title": "Row 280"
+   },
+   {
+    "id": 281,
+    "feedfile": 1281,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790184600000,
+    "reason_detailed": "503",
+    "title": "Row 281"
+   },
+   {
+    "id": 282,
+    "feedfile": 1282,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790182800000,
+    "reason_detailed": "503",
+    "title": "Row 282"
+   },
+   {
+    "id": 283,
+    "feedfile": 1283,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790181000000,
+    "reason_detailed": null,
+    "title": "Row 283"
+   },
+   {
+    "id": 284,
+    "feedfile": 1284,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790179200000,
+    "reason_detailed": "503",
+    "title": "Row 284"
+   },
+   {
+    "id": 285,
+    "feedfile": 1285,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790177400000,
+    "reason_detailed": "503",
+    "title": "Row 285"
+   },
+   {
+    "id": 286,
+    "feedfile": 1286,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790175600000,
+    "reason_detailed": null,
+    "title": "Row 286"
+   },
+   {
+    "id": 287,
+    "feedfile": 1287,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790173800000,
+    "reason_detailed": "503",
+    "title": "Row 287"
+   },
+   {
+    "id": 288,
+    "feedfile": 1288,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790172000000,
+    "reason_detailed": "503",
+    "title": "Row 288"
+   },
+   {
+    "id": 289,
+    "feedfile": 1289,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790170200000,
+    "reason_detailed": null,
+    "title": "Row 289"
+   },
+   {
+    "id": 290,
+    "feedfile": 1290,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790168400000,
+    "reason_detailed": "503",
+    "title": "Row 290"
+   },
+   {
+    "id": 291,
+    "feedfile": 1291,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790166600000,
+    "reason_detailed": "503",
+    "title": "Row 291"
+   },
+   {
+    "id": 292,
+    "feedfile": 1292,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790164800000,
+    "reason_detailed": null,
+    "title": "Row 292"
+   },
+   {
+    "id": 293,
+    "feedfile": 1293,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790163000000,
+    "reason_detailed": "503",
+    "title": "Row 293"
+   },
+   {
+    "id": 294,
+    "feedfile": 1294,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790161200000,
+    "reason_detailed": "503",
+    "title": "Row 294"
+   },
+   {
+    "id": 295,
+    "feedfile": 1295,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790159400000,
+    "reason_detailed": null,
+    "title": "Row 295"
+   },
+   {
+    "id": 296,
+    "feedfile": 1296,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790157600000,
+    "reason_detailed": "503",
+    "title": "Row 296"
+   },
+   {
+    "id": 297,
+    "feedfile": 1297,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790155800000,
+    "reason_detailed": "503",
+    "title": "Row 297"
+   },
+   {
+    "id": 298,
+    "feedfile": 1298,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790154000000,
+    "reason_detailed": null,
+    "title": "Row 298"
+   },
+   {
+    "id": 299,
+    "feedfile": 1299,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790152200000,
+    "reason_detailed": "503",
+    "title": "Row 299"
+   },
+   {
+    "id": 300,
+    "feedfile": 1300,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790150400000,
+    "reason_detailed": "503",
+    "title": "Row 300"
+   },
+   {
+    "id": 301,
+    "feedfile": 1301,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790148600000,
+    "reason_detailed": null,
+    "title": "Row 301"
+   },
+   {
+    "id": 302,
+    "feedfile": 1302,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790146800000,
+    "reason_detailed": "503",
+    "title": "Row 302"
+   },
+   {
+    "id": 303,
+    "feedfile": 1303,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790145000000,
+    "reason_detailed": "503",
+    "title": "Row 303"
+   },
+   {
+    "id": 304,
+    "feedfile": 1304,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790143200000,
+    "reason_detailed": null,
+    "title": "Row 304"
+   },
+   {
+    "id": 305,
+    "feedfile": 1305,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790141400000,
+    "reason_detailed": "503",
+    "title": "Row 305"
+   },
+   {
+    "id": 306,
+    "feedfile": 1306,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790139600000,
+    "reason_detailed": "503",
+    "title": "Row 306"
+   },
+   {
+    "id": 400,
+    "feedfile": 1400,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789819200000,
+    "reason_detailed": "503",
+    "title": "Row 400"
+   },
+   {
+    "id": 401,
+    "feedfile": 1401,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789815600000,
+    "reason_detailed": "503",
+    "title": "Row 401"
+   },
+   {
+    "id": 402,
+    "feedfile": 1402,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789812000000,
+    "reason_detailed": "503",
+    "title": "Row 402"
+   }
+  ]
+ },
+ "log_timeline": {
+  "first_enqueue_ms": 1789128000000,
+  "horizon_ms": 1790510400000,
+  "rows": [
+   {
+    "id": 500,
+    "feedfile": 1500,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789128000000,
+    "reason_detailed": null,
+    "title": "Row 500"
+   },
+   {
+    "id": 501,
+    "feedfile": 1501,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789171200000,
+    "reason_detailed": "503",
+    "title": "Row 501"
+   },
+   {
+    "id": 502,
+    "feedfile": 1502,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789214400000,
+    "reason_detailed": null,
+    "title": "Row 502"
+   },
+   {
+    "id": 503,
+    "feedfile": 1503,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789257600000,
+    "reason_detailed": "503",
+    "title": "Row 503"
+   },
+   {
+    "id": 504,
+    "feedfile": 1504,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789300800000,
+    "reason_detailed": null,
+    "title": "Row 504"
+   },
+   {
+    "id": 505,
+    "feedfile": 1505,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789344000000,
+    "reason_detailed": "503",
+    "title": "Row 505"
+   },
+   {
+    "id": 506,
+    "feedfile": 1506,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789387200000,
+    "reason_detailed": null,
+    "title": "Row 506"
+   },
+   {
+    "id": 507,
+    "feedfile": 1507,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789430400000,
+    "reason_detailed": "503",
+    "title": "Row 507"
+   },
+   {
+    "id": 508,
+    "feedfile": 1508,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789473600000,
+    "reason_detailed": null,
+    "title": "Row 508"
+   },
+   {
+    "id": 509,
+    "feedfile": 1509,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789516800000,
+    "reason_detailed": "503",
+    "title": "Row 509"
+   },
+   {
+    "id": 510,
+    "feedfile": 1510,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789560000000,
+    "reason_detailed": null,
+    "title": "Row 510"
+   },
+   {
+    "id": 511,
+    "feedfile": 1511,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789603200000,
+    "reason_detailed": "503",
+    "title": "Row 511"
+   },
+   {
+    "id": 512,
+    "feedfile": 1512,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789646400000,
+    "reason_detailed": null,
+    "title": "Row 512"
+   },
+   {
+    "id": 513,
+    "feedfile": 1513,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789689600000,
+    "reason_detailed": "503",
+    "title": "Row 513"
+   },
+   {
+    "id": 514,
+    "feedfile": 1514,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789732800000,
+    "reason_detailed": null,
+    "title": "Row 514"
+   },
+   {
+    "id": 515,
+    "feedfile": 1515,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789776000000,
+    "reason_detailed": "503",
+    "title": "Row 515"
+   },
+   {
+    "id": 516,
+    "feedfile": 1516,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789819200000,
+    "reason_detailed": null,
+    "title": "Row 516"
+   },
+   {
+    "id": 517,
+    "feedfile": 1517,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789862400000,
+    "reason_detailed": "503",
+    "title": "Row 517"
+   },
+   {
+    "id": 518,
+    "feedfile": 1518,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789905600000,
+    "reason_detailed": null,
+    "title": "Row 518"
+   },
+   {
+    "id": 519,
+    "feedfile": 1519,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1789948800000,
+    "reason_detailed": "503",
+    "title": "Row 519"
+   },
+   {
+    "id": 520,
+    "feedfile": 1520,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1789992000000,
+    "reason_detailed": null,
+    "title": "Row 520"
+   },
+   {
+    "id": 521,
+    "feedfile": 1521,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790035200000,
+    "reason_detailed": "503",
+    "title": "Row 521"
+   },
+   {
+    "id": 522,
+    "feedfile": 1522,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790078400000,
+    "reason_detailed": null,
+    "title": "Row 522"
+   },
+   {
+    "id": 523,
+    "feedfile": 1523,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790121600000,
+    "reason_detailed": "503",
+    "title": "Row 523"
+   },
+   {
+    "id": 524,
+    "feedfile": 1524,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790164800000,
+    "reason_detailed": null,
+    "title": "Row 524"
+   },
+   {
+    "id": 525,
+    "feedfile": 1525,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790208000000,
+    "reason_detailed": "503",
+    "title": "Row 525"
+   },
+   {
+    "id": 526,
+    "feedfile": 1526,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790251200000,
+    "reason_detailed": null,
+    "title": "Row 526"
+   },
+   {
+    "id": 527,
+    "feedfile": 1527,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790294400000,
+    "reason_detailed": "503",
+    "title": "Row 527"
+   },
+   {
+    "id": 528,
+    "feedfile": 1528,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790337600000,
+    "reason_detailed": null,
+    "title": "Row 528"
+   },
+   {
+    "id": 529,
+    "feedfile": 1529,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790380800000,
+    "reason_detailed": "503",
+    "title": "Row 529"
+   },
+   {
+    "id": 530,
+    "feedfile": 1530,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790424000000,
+    "reason_detailed": null,
+    "title": "Row 530"
+   },
+   {
+    "id": 531,
+    "feedfile": 1531,
+    "feedfile_type": 2,
+    "reason": 1,
+    "successful": 0,
+    "completion_date": 1790467200000,
+    "reason_detailed": "503",
+    "title": "Row 531"
+   },
+   {
+    "id": 532,
+    "feedfile": 1532,
+    "feedfile_type": 2,
+    "reason": 0,
+    "successful": 1,
+    "completion_date": 1790510400000,
+    "reason_detailed": null,
+    "title": "Row 532"
+   }
+  ],
+  "events": [
+   {
+    "t": 1789128000000,
+    "kind": "prune"
+   },
+   {
+    "t": 1789214400001,
+    "kind": "view"
+   },
+   {
+    "t": 1789300800001,
+    "kind": "view"
+   },
+   {
+    "t": 1789387200000,
+    "kind": "prune"
+   },
+   {
+    "t": 1789387200001,
+    "kind": "view"
+   },
+   {
+    "t": 1789473600001,
+    "kind": "view"
+   },
+   {
+    "t": 1789560000001,
+    "kind": "view"
+   },
+   {
+    "t": 1789646400000,
+    "kind": "prune"
+   },
+   {
+    "t": 1789646400001,
+    "kind": "view"
+   },
+   {
+    "t": 1789732800001,
+    "kind": "view"
+   },
+   {
+    "t": 1789819200001,
+    "kind": "view"
+   },
+   {
+    "t": 1789905600000,
+    "kind": "prune"
+   },
+   {
+    "t": 1789905600001,
+    "kind": "view"
+   },
+   {
+    "t": 1789992000001,
+    "kind": "view"
+   },
+   {
+    "t": 1790078400001,
+    "kind": "view"
+   },
+   {
+    "t": 1790164800000,
+    "kind": "prune"
+   },
+   {
+    "t": 1790164800001,
+    "kind": "view"
+   },
+   {
+    "t": 1790251200001,
+    "kind": "view"
+   },
+   {
+    "t": 1790337600001,
+    "kind": "view"
+   },
+   {
+    "t": 1790424000000,
+    "kind": "prune"
+   },
+   {
+    "t": 1790424000001,
+    "kind": "view"
+   },
+   {
+    "t": 1790510400001,
+    "kind": "view"
+   }
+  ]
+ },
+ "maintenance_due": [
+  {
+   "name": "never_run",
+   "last_run_ms": null,
+   "now_ms": 1790510400000
+  },
+  {
+   "name": "3d_minus_1ms",
+   "last_run_ms": 1790251200001,
+   "now_ms": 1790510400000
+  },
+  {
+   "name": "exactly_3d",
+   "last_run_ms": 1790251200000,
+   "now_ms": 1790510400000
+  },
+  {
+   "name": "10d",
+   "last_run_ms": 1789646400000,
+   "now_ms": 1790510400000
+  },
+  {
+   "name": "clock_rollback",
+   "last_run_ms": 1790596800000,
+   "now_ms": 1790510400000
+  }
+ ],
+ "constraints": {
+  "networks": {
+   "wifi": {
+    "transport": "wifi",
+    "metered": false,
+    "vpn": false
+   },
+   "wifi_metered": {
+    "transport": "wifi",
+    "metered": true,
+    "vpn": false
+   },
+   "vpn_over_wifi_metered": {
+    "transport": "wifi",
+    "metered": true,
+    "vpn": true
+   },
+   "vpn_over_wifi_unmetered": {
+    "transport": "wifi",
+    "metered": false,
+    "vpn": true
+   },
+   "cellular": {
+    "transport": "cellular",
+    "metered": true,
+    "vpn": false
+   },
+   "cellular_unmetered_plan": {
+    "transport": "cellular",
+    "metered": false,
+    "vpn": false
+   },
+   "ethernet": {
+    "transport": "ethernet",
+    "metered": false,
+    "vpn": false
+   },
+   "none": {
+    "transport": "none",
+    "metered": true,
+    "vpn": false
+   }
+  },
+  "cases": [
+   {
+    "name": "CONNECTED@wifi",
+    "constraint": "CONNECTED",
+    "network": "wifi"
+   },
+   {
+    "name": "CONNECTED@wifi_metered",
+    "constraint": "CONNECTED",
+    "network": "wifi_metered"
+   },
+   {
+    "name": "CONNECTED@vpn_over_wifi_metered",
+    "constraint": "CONNECTED",
+    "network": "vpn_over_wifi_metered"
+   },
+   {
+    "name": "CONNECTED@vpn_over_wifi_unmetered",
+    "constraint": "CONNECTED",
+    "network": "vpn_over_wifi_unmetered"
+   },
+   {
+    "name": "CONNECTED@cellular",
+    "constraint": "CONNECTED",
+    "network": "cellular"
+   },
+   {
+    "name": "CONNECTED@cellular_unmetered_plan",
+    "constraint": "CONNECTED",
+    "network": "cellular_unmetered_plan"
+   },
+   {
+    "name": "CONNECTED@ethernet",
+    "constraint": "CONNECTED",
+    "network": "ethernet"
+   },
+   {
+    "name": "CONNECTED@none",
+    "constraint": "CONNECTED",
+    "network": "none"
+   },
+   {
+    "name": "UNMETERED@wifi",
+    "constraint": "UNMETERED",
+    "network": "wifi"
+   },
+   {
+    "name": "UNMETERED@wifi_metered",
+    "constraint": "UNMETERED",
+    "network": "wifi_metered"
+   },
+   {
+    "name": "UNMETERED@vpn_over_wifi_metered",
+    "constraint": "UNMETERED",
+    "network": "vpn_over_wifi_metered"
+   },
+   {
+    "name": "UNMETERED@vpn_over_wifi_unmetered",
+    "constraint": "UNMETERED",
+    "network": "vpn_over_wifi_unmetered"
+   },
+   {
+    "name": "UNMETERED@cellular",
+    "constraint": "UNMETERED",
+    "network": "cellular"
+   },
+   {
+    "name": "UNMETERED@cellular_unmetered_plan",
+    "constraint": "UNMETERED",
+    "network": "cellular_unmetered_plan"
+   },
+   {
+    "name": "UNMETERED@ethernet",
+    "constraint": "UNMETERED",
+    "network": "ethernet"
+   },
+   {
+    "name": "UNMETERED@none",
+    "constraint": "UNMETERED",
+    "network": "none"
+   },
+   {
+    "name": "UNMETERED wifi->cellular mid-transfer",
+    "constraint": "UNMETERED",
+    "network": "wifi",
+    "change_to": "cellular"
+   },
+   {
+    "name": "CONNECTED wifi->cellular mid-transfer",
+    "constraint": "CONNECTED",
+    "network": "wifi",
+    "change_to": "cellular"
+   },
+   {
+    "name": "CONNECTED wifi->none mid-transfer",
+    "constraint": "CONNECTED",
+    "network": "wifi",
+    "change_to": "none"
+   }
+  ]
+ },
+ "download_button": [
+  {
+   "media": true,
+   "downloaded": true,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "name": "already downloaded"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": true,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "name": "already downloading"
+  },
+  {
+   "media": false,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": true,
+   "network": "wifi",
+   "name": "no media"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "wifi",
+   "name": "wifi, pref off"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "ethernet",
+   "name": "ethernet, pref off"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": true,
+   "network": "cellular",
+   "name": "cellular, pref on"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": true,
+   "network": "wifi_metered",
+   "name": "metered wifi, pref on"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "choice": "later",
+   "name": "cellular, pref off, choose later"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "choice": "anyway",
+   "name": "cellular, pref off, choose anyway"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "choice": "cancel",
+   "name": "cellular, pref off, choose cancel"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "wifi_metered",
+   "name": "metered wifi, pref off -> dialog"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "vpn_over_wifi_metered",
+   "name": "VPN over metered wifi -> dialog with VPN text"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "cellular_unmetered_plan",
+   "name": "unmetered cellular plan counts as restricted"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": false,
+   "network": "none",
+   "name": "offline, pref off -> dialog (no network counts as metered)"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 0,
+   "bypass_timer_s": 0,
+   "allow_mobile_episode_download": true,
+   "network": "none",
+   "name": "offline, pref on -> queued CONNECTED"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 1,
+   "bypass_timer_s": 1790510101,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "name": "anyway 299 s ago -> toast, CONNECTED"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 1,
+   "bypass_timer_s": 1790510100,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "name": "anyway 300 s ago -> window over, dialog"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 2,
+   "bypass_timer_s": 1790510390,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "name": "later 10 s ago -> no dialog, UNMETERED"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 1,
+   "bypass_timer_s": 1790424000,
+   "allow_mobile_episode_download": false,
+   "network": "wifi",
+   "name": "anyway long ago, now on wifi -> still CONNECTED (sticky type)"
+  },
+  {
+   "media": true,
+   "downloaded": false,
+   "downloading": false,
+   "now_ms": 1790510400000,
+   "bypass_type": 1,
+   "bypass_timer_s": 1790511000,
+   "allow_mobile_episode_download": false,
+   "network": "cellular",
+   "name": "anyway, clock rolled back -> negative age still bypasses"
+  }
+ ],
+ "attempts": [
+  {
+   "name": "success first try",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "success",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "two retryable failures then success (background)",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "retryable",
+     "foreground": false,
+     "reason": "ERROR_IO_WRONG_SIZE"
+    },
+    {
+     "outcome": "retryable",
+     "foreground": false,
+     "reason": "ERROR_CONNECTION_ERROR"
+    },
+    {
+     "outcome": "success",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "three retryable failures (foreground)",
+   "title": "The Very Long Episode Title Number 42",
+   "runs": [
+    {
+     "outcome": "retryable",
+     "foreground": true,
+     "reason": "ERROR_HTTP_DATA_ERROR"
+    },
+    {
+     "outcome": "retryable",
+     "foreground": true,
+     "reason": "ERROR_HTTP_DATA_ERROR"
+    },
+    {
+     "outcome": "retryable",
+     "foreground": true,
+     "reason": "ERROR_HTTP_DATA_ERROR"
+    }
+   ]
+  },
+  {
+   "name": "three retryable failures (background)",
+   "title": "The Very Long Episode Title Number 42",
+   "runs": [
+    {
+     "outcome": "retryable",
+     "foreground": false,
+     "reason": "ERROR_UNKNOWN_HOST"
+    },
+    {
+     "outcome": "retryable",
+     "foreground": false,
+     "reason": "ERROR_UNKNOWN_HOST"
+    },
+    {
+     "outcome": "retryable",
+     "foreground": false,
+     "reason": "ERROR_UNKNOWN_HOST"
+    }
+   ]
+  },
+  {
+   "name": "fail fast 404 (background)",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "fail_fast",
+     "foreground": false,
+     "reason": "ERROR_NOT_FOUND"
+    }
+   ]
+  },
+  {
+   "name": "fail fast 401 (foreground)",
+   "title": "Café ☕ show, ep 12🎙️ edition",
+   "runs": [
+    {
+     "outcome": "fail_fast",
+     "foreground": true,
+     "reason": "ERROR_UNAUTHORIZED"
+    }
+   ]
+  },
+  {
+   "name": "416 then success",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "http_416",
+     "foreground": true
+    },
+    {
+     "outcome": "success",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "416 three times (foreground)",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "http_416",
+     "foreground": true
+    },
+    {
+     "outcome": "http_416",
+     "foreground": true
+    },
+    {
+     "outcome": "http_416",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "stopped twice (Wi-Fi lost), then one transient error",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "stopped",
+     "foreground": false
+    },
+    {
+     "outcome": "stopped",
+     "foreground": false
+    },
+    {
+     "outcome": "retryable",
+     "foreground": false,
+     "reason": "ERROR_IO_WRONG_SIZE"
+    },
+    {
+     "outcome": "success",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "stopped then success",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "stopped",
+     "foreground": false
+    },
+    {
+     "outcome": "success",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "not enough space is retried",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "retryable",
+     "foreground": true,
+     "reason": "ERROR_NOT_ENOUGH_SPACE"
+    },
+    {
+     "outcome": "retryable",
+     "foreground": true,
+     "reason": "ERROR_NOT_ENOUGH_SPACE"
+    },
+    {
+     "outcome": "retryable",
+     "foreground": true,
+     "reason": "ERROR_NOT_ENOUGH_SPACE"
+    }
+   ]
+  },
+  {
+   "name": "malformed Content-Range (downloader exception)",
+   "title": "Short title",
+   "runs": [
+    {
+     "outcome": "downloader_exception",
+     "foreground": false
+    }
+   ]
+  }
+ ],
+ "sync_requests": [
+  {
+   "provider_connected": true,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790506800000,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "enqueue_action",
+   "name": "action while idle"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": true,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790506800000,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "enqueue_action",
+   "name": "action while a sync runs"
+  },
+  {
+   "provider_connected": false,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790506800000,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "enqueue_action",
+   "name": "action without provider"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790506800000,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "sync_immediately",
+   "name": "refresh finished (syncImmediately)"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": true,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790506800000,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "sync_immediately",
+   "name": "syncImmediately while active"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790506800000,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "full_sync",
+   "name": "Force full synchronization"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790509799999,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "sync_if_not_synced_recently",
+   "name": "launch, last attempt 10 min + 1 ms ago"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790509800000,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "sync_if_not_synced_recently",
+   "name": "launch, last attempt exactly 10 min ago"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 0,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "sync_if_not_synced_recently",
+   "name": "launch, never synced"
+  },
+  {
+   "provider_connected": false,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 0,
+   "mobile_types": [
+    "images",
+    "sync"
+   ],
+   "kind": "sync_if_not_synced_recently",
+   "name": "launch without provider still schedules (worker no-ops)"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790506800000,
+   "mobile_types": null,
+   "kind": "enqueue_action",
+   "name": "mobile types unset (reader default images only)"
+  },
+  {
+   "provider_connected": true,
+   "currently_active": false,
+   "now_ms": 1790510400000,
+   "last_sync_attempt_ms": 1790506800000,
+   "mobile_types": [
+    "images"
+   ],
+   "kind": "enqueue_action",
+   "name": "mobile types without sync"
+  }
+ ],
+ "sync_runs": [
+  {
+   "name": "success",
+   "outcomes": [
+    "success"
+   ]
+  },
+  {
+   "name": "server errors x7 then success",
+   "outcomes": [
+    "sync_exception",
+    "sync_exception",
+    "sync_exception",
+    "sync_exception",
+    "sync_exception",
+    "sync_exception",
+    "sync_exception",
+    "success"
+   ]
+  },
+  {
+   "name": "unexpected exception",
+   "outcomes": [
+    "sync_exception",
+    "other_exception"
+   ]
+  }
+ ],
+ "played_actions": [
+  {
+   "provider_connected": true,
+   "subscribed": true,
+   "local_feed": false,
+   "has_item": true,
+   "start_position_ms": 61999,
+   "position_ms": 125500,
+   "duration_ms": 1800999,
+   "completed": false,
+   "name": "pause after listening"
+  },
+  {
+   "provider_connected": true,
+   "subscribed": true,
+   "local_feed": false,
+   "has_item": true,
+   "start_position_ms": 125500,
+   "position_ms": 125500,
+   "duration_ms": 1800000,
+   "completed": false,
+   "name": "pause without progress"
+  },
+  {
+   "provider_connected": true,
+   "subscribed": true,
+   "local_feed": false,
+   "has_item": true,
+   "start_position_ms": 1700000,
+   "position_ms": 1790000,
+   "duration_ms": 1800999,
+   "completed": true,
+   "name": "completed"
+  },
+  {
+   "provider_connected": true,
+   "subscribed": true,
+   "local_feed": false,
+   "has_item": true,
+   "start_position_ms": 1800000,
+   "position_ms": 1800000,
+   "duration_ms": 1800000,
+   "completed": true,
+   "name": "completed with start == position"
+  },
+  {
+   "provider_connected": true,
+   "subscribed": true,
+   "local_feed": false,
+   "has_item": true,
+   "start_position_ms": -1,
+   "position_ms": 10000,
+   "duration_ms": 60000,
+   "completed": false,
+   "name": "negative start"
+  },
+  {
+   "provider_connected": false,
+   "subscribed": true,
+   "local_feed": false,
+   "has_item": true,
+   "start_position_ms": 0,
+   "position_ms": 10000,
+   "duration_ms": 60000,
+   "completed": false,
+   "name": "no provider"
+  },
+  {
+   "provider_connected": true,
+   "subscribed": true,
+   "local_feed": true,
+   "has_item": true,
+   "start_position_ms": 0,
+   "position_ms": 10000,
+   "duration_ms": 60000,
+   "completed": false,
+   "name": "local feed"
+  },
+  {
+   "provider_connected": true,
+   "subscribed": false,
+   "local_feed": false,
+   "has_item": true,
+   "start_position_ms": 0,
+   "position_ms": 10000,
+   "duration_ms": 60000,
+   "completed": false,
+   "name": "not subscribed (preview)"
+  }
+ ]
+}

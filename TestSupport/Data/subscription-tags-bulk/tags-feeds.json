@@ -1,0 +1,307 @@
+{
+ "doc": "Synthetic M24 fixture; see build_fixture.py docstring.",
+ "preferences": {
+  "prefDrawerFeedOrder": "1",
+  "prefDrawerFeedIndicator": "1",
+  "prefSubscriptionsFilter": "",
+  "prefEnableAutoDl": false
+ },
+ "feeds": [
+  {
+   "id": 1,
+   "title": "Alpha Daily",
+   "state": 0,
+   "tags": "",
+   "download_url": "https://example.org/m24/1.xml",
+   "auto_download": 1,
+   "keep_updated": 1,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 2,
+   "title": "Beta Weekly",
+   "state": 0,
+   "tags": "News",
+   "download_url": "https://example.org/m24/2.xml",
+   "auto_download": 1,
+   "keep_updated": 1,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 3,
+   "title": "Gamma Talk",
+   "state": 0,
+   "tags": "News\u001eTech",
+   "download_url": "https://example.org/m24/3.xml",
+   "auto_download": 1,
+   "keep_updated": 1,
+   "episode_notification": 1,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 4,
+   "title": "Delta Radio",
+   "state": 0,
+   "tags": "#root\u001eTech",
+   "download_url": "https://example.org/m24/4.xml",
+   "auto_download": 2,
+   "keep_updated": 1,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": 1.25,
+   "feed_skip_silence": 2
+  },
+  {
+   "id": 5,
+   "title": "Epsilon Cast",
+   "state": 0,
+   "tags": "news\u001eTech",
+   "download_url": "https://example.org/m24/5.xml",
+   "auto_download": 1,
+   "keep_updated": 0,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 6,
+   "title": "Zeta Local",
+   "state": 0,
+   "tags": "Tech",
+   "download_url": "antennapod_local:content://com.example.docs/tree/zeta",
+   "auto_download": 1,
+   "keep_updated": 1,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 7,
+   "title": "Eta Archive",
+   "state": 2,
+   "tags": "News\u001eOld",
+   "download_url": "https://example.org/m24/7.xml",
+   "auto_download": 1,
+   "keep_updated": 0,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 8,
+   "title": "Theta Preview",
+   "state": 1,
+   "tags": "News",
+   "download_url": "https://example.org/m24/8.xml",
+   "auto_download": 1,
+   "keep_updated": 0,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 9,
+   "title": "Iota Pair",
+   "state": 0,
+   "tags": "Aa\u001eBB",
+   "download_url": "https://example.org/m24/9.xml",
+   "auto_download": 1,
+   "keep_updated": 1,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 10,
+   "title": "Kappa Pair",
+   "state": 0,
+   "tags": "BB\u001eAa",
+   "download_url": "https://example.org/m24/10.xml",
+   "auto_download": 1,
+   "keep_updated": 1,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 11,
+   "title": "Lambda Solo",
+   "state": 0,
+   "tags": "Solo",
+   "download_url": "https://example.org/m24/11.xml",
+   "auto_download": 1,
+   "keep_updated": 1,
+   "episode_notification": 0,
+   "auto_delete_action": 2,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  },
+  {
+   "id": 12,
+   "title": "Mu Long",
+   "state": 0,
+   "tags": "A very long tag name exceeding twenty\u001e123456789012345678🎧xyz",
+   "download_url": "https://example.org/m24/12.xml",
+   "auto_download": 1,
+   "keep_updated": 1,
+   "episode_notification": 0,
+   "auto_delete_action": 0,
+   "feed_playback_speed": -1.0,
+   "feed_skip_silence": 1
+  }
+ ],
+ "episodes": [
+  {
+   "id": 1,
+   "feed": 1,
+   "read": -1,
+   "item_identifier": "m24-1-1"
+  },
+  {
+   "id": 2,
+   "feed": 1,
+   "read": -1,
+   "item_identifier": "m24-1-2"
+  },
+  {
+   "id": 3,
+   "feed": 1,
+   "read": 1,
+   "item_identifier": "m24-1-3"
+  },
+  {
+   "id": 4,
+   "feed": 2,
+   "read": -1,
+   "item_identifier": "m24-2-1"
+  },
+  {
+   "id": 5,
+   "feed": 2,
+   "read": 0,
+   "item_identifier": "m24-2-2"
+  },
+  {
+   "id": 6,
+   "feed": 3,
+   "read": -1,
+   "item_identifier": "m24-3-1"
+  },
+  {
+   "id": 7,
+   "feed": 3,
+   "read": -1,
+   "item_identifier": "m24-3-2"
+  },
+  {
+   "id": 8,
+   "feed": 3,
+   "read": -1,
+   "item_identifier": "m24-3-3"
+  },
+  {
+   "id": 9,
+   "feed": 3,
+   "read": 1,
+   "item_identifier": "m24-3-4"
+  },
+  {
+   "id": 10,
+   "feed": 4,
+   "read": 0,
+   "item_identifier": "m24-4-1"
+  },
+  {
+   "id": 11,
+   "feed": 4,
+   "read": 1,
+   "item_identifier": "m24-4-2"
+  },
+  {
+   "id": 12,
+   "feed": 5,
+   "read": -1,
+   "item_identifier": "m24-5-1"
+  },
+  {
+   "id": 13,
+   "feed": 6,
+   "read": -1,
+   "item_identifier": "m24-6-1"
+  },
+  {
+   "id": 14,
+   "feed": 6,
+   "read": 0,
+   "item_identifier": "m24-6-2"
+  },
+  {
+   "id": 15,
+   "feed": 7,
+   "read": -1,
+   "item_identifier": "m24-7-1"
+  },
+  {
+   "id": 16,
+   "feed": 7,
+   "read": -1,
+   "item_identifier": "m24-7-2"
+  },
+  {
+   "id": 17,
+   "feed": 8,
+   "read": -1,
+   "item_identifier": "m24-8-1"
+  },
+  {
+   "id": 18,
+   "feed": 9,
+   "read": -1,
+   "item_identifier": "m24-9-1"
+  },
+  {
+   "id": 19,
+   "feed": 10,
+   "read": 1,
+   "item_identifier": "m24-10-1"
+  },
+  {
+   "id": 20,
+   "feed": 11,
+   "read": -1,
+   "item_identifier": "m24-11-1"
+  },
+  {
+   "id": 21,
+   "feed": 11,
+   "read": -1,
+   "item_identifier": "m24-11-2"
+  },
+  {
+   "id": 22,
+   "feed": 12,
+   "read": -1,
+   "item_identifier": "m24-12-1"
+  },
+  {
+   "id": 23,
+   "feed": 12,
+   "read": 0,
+   "item_identifier": "m24-12-2"
+  }
+ ]
+}

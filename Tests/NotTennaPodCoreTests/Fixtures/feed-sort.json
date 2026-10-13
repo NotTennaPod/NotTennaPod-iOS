@@ -1,0 +1,1236 @@
+{
+  "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "sourceSHA256": {
+    "model/src/main/java/de/danoeh/antennapod/model/feed/SortOrder.java": "7b49974362eb1bccb53fcf91e3851120f34edd12944dd77fe4a6b2220c5b7d51",
+    "storage/database/src/main/java/de/danoeh/antennapod/storage/database/mapper/FeedItemSortQuery.java": "1955e191369010c744952a45a5da43057540008f8e7e97e20479042320027f20"
+  },
+  "sqlite": "3.53.4",
+  "items": [
+    {
+      "id": 1,
+      "title": null,
+      "link": "file:///z.mp3",
+      "date": 5000,
+      "duration": 10000
+    },
+    {
+      "id": 2,
+      "title": "",
+      "link": "file:///A.mp3",
+      "date": 1000,
+      "duration": 60000
+    },
+    {
+      "id": 3,
+      "title": "Alpha",
+      "link": "file:///a%20b.mp3",
+      "date": 5000,
+      "duration": 0
+    },
+    {
+      "id": 4,
+      "title": "alpha",
+      "link": null,
+      "date": 0,
+      "duration": null
+    },
+    {
+      "id": 5,
+      "title": "Episode 2",
+      "link": "file:///z.mp3",
+      "date": 5000,
+      "duration": 60000
+    },
+    {
+      "id": 6,
+      "title": "Episode 10",
+      "link": "file:///A.mp3",
+      "date": 1000,
+      "duration": 0
+    },
+    {
+      "id": 7,
+      "title": "é",
+      "link": "file:///a%20b.mp3",
+      "date": 5000,
+      "duration": 10000
+    },
+    {
+      "id": 8,
+      "title": "é",
+      "link": null,
+      "date": 0,
+      "duration": null
+    },
+    {
+      "id": 9,
+      "title": "日本語",
+      "link": "file:///z.mp3",
+      "date": 5000,
+      "duration": 0
+    },
+    {
+      "id": 10,
+      "title": "😀",
+      "link": "file:///A.mp3",
+      "date": 1000,
+      "duration": 10000
+    },
+    {
+      "id": 11,
+      "title": "Alpha",
+      "link": "file:///a%20b.mp3",
+      "date": 5000,
+      "duration": 60000
+    },
+    {
+      "id": 12,
+      "title": "Alpha",
+      "link": null,
+      "date": 0,
+      "duration": null
+    }
+  ],
+  "cases": [
+    {
+      "code": 0,
+      "globalCode": 1,
+      "sql": "FeedItems.pubDate ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "code": 1,
+      "globalCode": 1,
+      "sql": "FeedItems.pubDate ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "code": 2,
+      "globalCode": 1,
+      "sql": "FeedItems.pubDate DESC",
+      "ids": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 3,
+      "globalCode": 1,
+      "sql": "FeedItems.title ASC",
+      "ids": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        6,
+        5,
+        4,
+        8,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "code": 4,
+      "globalCode": 1,
+      "sql": "FeedItems.title DESC",
+      "ids": [
+        10,
+        9,
+        7,
+        8,
+        4,
+        5,
+        6,
+        3,
+        11,
+        12,
+        2,
+        1
+      ]
+    },
+    {
+      "code": 5,
+      "globalCode": 1,
+      "sql": "FeedMedia.duration ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        3,
+        6,
+        9,
+        1,
+        7,
+        10,
+        2,
+        5,
+        11
+      ]
+    },
+    {
+      "code": 6,
+      "globalCode": 1,
+      "sql": "FeedMedia.duration DESC",
+      "ids": [
+        2,
+        5,
+        11,
+        1,
+        7,
+        10,
+        3,
+        6,
+        9,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 7,
+      "globalCode": 1,
+      "sql": "link ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        3,
+        7,
+        11,
+        1,
+        5,
+        9
+      ]
+    },
+    {
+      "code": 8,
+      "globalCode": 1,
+      "sql": "link DESC",
+      "ids": [
+        1,
+        5,
+        9,
+        3,
+        7,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 11,
+      "globalCode": 1,
+      "sql": "FeedItems.pubDate ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "code": 0,
+      "globalCode": 2,
+      "sql": "FeedItems.pubDate DESC",
+      "ids": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 1,
+      "globalCode": 2,
+      "sql": "FeedItems.pubDate ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "code": 2,
+      "globalCode": 2,
+      "sql": "FeedItems.pubDate DESC",
+      "ids": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 3,
+      "globalCode": 2,
+      "sql": "FeedItems.title ASC",
+      "ids": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        6,
+        5,
+        4,
+        8,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "code": 4,
+      "globalCode": 2,
+      "sql": "FeedItems.title DESC",
+      "ids": [
+        10,
+        9,
+        7,
+        8,
+        4,
+        5,
+        6,
+        3,
+        11,
+        12,
+        2,
+        1
+      ]
+    },
+    {
+      "code": 5,
+      "globalCode": 2,
+      "sql": "FeedMedia.duration ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        3,
+        6,
+        9,
+        1,
+        7,
+        10,
+        2,
+        5,
+        11
+      ]
+    },
+    {
+      "code": 6,
+      "globalCode": 2,
+      "sql": "FeedMedia.duration DESC",
+      "ids": [
+        2,
+        5,
+        11,
+        1,
+        7,
+        10,
+        3,
+        6,
+        9,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 7,
+      "globalCode": 2,
+      "sql": "link ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        3,
+        7,
+        11,
+        1,
+        5,
+        9
+      ]
+    },
+    {
+      "code": 8,
+      "globalCode": 2,
+      "sql": "link DESC",
+      "ids": [
+        1,
+        5,
+        9,
+        3,
+        7,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 11,
+      "globalCode": 2,
+      "sql": "FeedItems.pubDate DESC",
+      "ids": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 0,
+      "globalCode": 3,
+      "sql": "FeedItems.title ASC",
+      "ids": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        6,
+        5,
+        4,
+        8,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "code": 1,
+      "globalCode": 3,
+      "sql": "FeedItems.pubDate ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "code": 2,
+      "globalCode": 3,
+      "sql": "FeedItems.pubDate DESC",
+      "ids": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 3,
+      "globalCode": 3,
+      "sql": "FeedItems.title ASC",
+      "ids": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        6,
+        5,
+        4,
+        8,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "code": 4,
+      "globalCode": 3,
+      "sql": "FeedItems.title DESC",
+      "ids": [
+        10,
+        9,
+        7,
+        8,
+        4,
+        5,
+        6,
+        3,
+        11,
+        12,
+        2,
+        1
+      ]
+    },
+    {
+      "code": 5,
+      "globalCode": 3,
+      "sql": "FeedMedia.duration ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        3,
+        6,
+        9,
+        1,
+        7,
+        10,
+        2,
+        5,
+        11
+      ]
+    },
+    {
+      "code": 6,
+      "globalCode": 3,
+      "sql": "FeedMedia.duration DESC",
+      "ids": [
+        2,
+        5,
+        11,
+        1,
+        7,
+        10,
+        3,
+        6,
+        9,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 7,
+      "globalCode": 3,
+      "sql": "link ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        3,
+        7,
+        11,
+        1,
+        5,
+        9
+      ]
+    },
+    {
+      "code": 8,
+      "globalCode": 3,
+      "sql": "link DESC",
+      "ids": [
+        1,
+        5,
+        9,
+        3,
+        7,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 11,
+      "globalCode": 3,
+      "sql": "FeedItems.title ASC",
+      "ids": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        6,
+        5,
+        4,
+        8,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "code": 0,
+      "globalCode": 4,
+      "sql": "FeedItems.title DESC",
+      "ids": [
+        10,
+        9,
+        7,
+        8,
+        4,
+        5,
+        6,
+        3,
+        11,
+        12,
+        2,
+        1
+      ]
+    },
+    {
+      "code": 1,
+      "globalCode": 4,
+      "sql": "FeedItems.pubDate ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "code": 2,
+      "globalCode": 4,
+      "sql": "FeedItems.pubDate DESC",
+      "ids": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 3,
+      "globalCode": 4,
+      "sql": "FeedItems.title ASC",
+      "ids": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        6,
+        5,
+        4,
+        8,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "code": 4,
+      "globalCode": 4,
+      "sql": "FeedItems.title DESC",
+      "ids": [
+        10,
+        9,
+        7,
+        8,
+        4,
+        5,
+        6,
+        3,
+        11,
+        12,
+        2,
+        1
+      ]
+    },
+    {
+      "code": 5,
+      "globalCode": 4,
+      "sql": "FeedMedia.duration ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        3,
+        6,
+        9,
+        1,
+        7,
+        10,
+        2,
+        5,
+        11
+      ]
+    },
+    {
+      "code": 6,
+      "globalCode": 4,
+      "sql": "FeedMedia.duration DESC",
+      "ids": [
+        2,
+        5,
+        11,
+        1,
+        7,
+        10,
+        3,
+        6,
+        9,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 7,
+      "globalCode": 4,
+      "sql": "link ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        3,
+        7,
+        11,
+        1,
+        5,
+        9
+      ]
+    },
+    {
+      "code": 8,
+      "globalCode": 4,
+      "sql": "link DESC",
+      "ids": [
+        1,
+        5,
+        9,
+        3,
+        7,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 11,
+      "globalCode": 4,
+      "sql": "FeedItems.title DESC",
+      "ids": [
+        10,
+        9,
+        7,
+        8,
+        4,
+        5,
+        6,
+        3,
+        11,
+        12,
+        2,
+        1
+      ]
+    },
+    {
+      "code": 0,
+      "globalCode": 5,
+      "sql": "FeedMedia.duration ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        3,
+        6,
+        9,
+        1,
+        7,
+        10,
+        2,
+        5,
+        11
+      ]
+    },
+    {
+      "code": 1,
+      "globalCode": 5,
+      "sql": "FeedItems.pubDate ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "code": 2,
+      "globalCode": 5,
+      "sql": "FeedItems.pubDate DESC",
+      "ids": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 3,
+      "globalCode": 5,
+      "sql": "FeedItems.title ASC",
+      "ids": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        6,
+        5,
+        4,
+        8,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "code": 4,
+      "globalCode": 5,
+      "sql": "FeedItems.title DESC",
+      "ids": [
+        10,
+        9,
+        7,
+        8,
+        4,
+        5,
+        6,
+        3,
+        11,
+        12,
+        2,
+        1
+      ]
+    },
+    {
+      "code": 5,
+      "globalCode": 5,
+      "sql": "FeedMedia.duration ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        3,
+        6,
+        9,
+        1,
+        7,
+        10,
+        2,
+        5,
+        11
+      ]
+    },
+    {
+      "code": 6,
+      "globalCode": 5,
+      "sql": "FeedMedia.duration DESC",
+      "ids": [
+        2,
+        5,
+        11,
+        1,
+        7,
+        10,
+        3,
+        6,
+        9,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 7,
+      "globalCode": 5,
+      "sql": "link ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        3,
+        7,
+        11,
+        1,
+        5,
+        9
+      ]
+    },
+    {
+      "code": 8,
+      "globalCode": 5,
+      "sql": "link DESC",
+      "ids": [
+        1,
+        5,
+        9,
+        3,
+        7,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 11,
+      "globalCode": 5,
+      "sql": "FeedMedia.duration ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        3,
+        6,
+        9,
+        1,
+        7,
+        10,
+        2,
+        5,
+        11
+      ]
+    },
+    {
+      "code": 0,
+      "globalCode": 6,
+      "sql": "FeedMedia.duration DESC",
+      "ids": [
+        2,
+        5,
+        11,
+        1,
+        7,
+        10,
+        3,
+        6,
+        9,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 1,
+      "globalCode": 6,
+      "sql": "FeedItems.pubDate ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    {
+      "code": 2,
+      "globalCode": 6,
+      "sql": "FeedItems.pubDate DESC",
+      "ids": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 3,
+      "globalCode": 6,
+      "sql": "FeedItems.title ASC",
+      "ids": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        6,
+        5,
+        4,
+        8,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "code": 4,
+      "globalCode": 6,
+      "sql": "FeedItems.title DESC",
+      "ids": [
+        10,
+        9,
+        7,
+        8,
+        4,
+        5,
+        6,
+        3,
+        11,
+        12,
+        2,
+        1
+      ]
+    },
+    {
+      "code": 5,
+      "globalCode": 6,
+      "sql": "FeedMedia.duration ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        3,
+        6,
+        9,
+        1,
+        7,
+        10,
+        2,
+        5,
+        11
+      ]
+    },
+    {
+      "code": 6,
+      "globalCode": 6,
+      "sql": "FeedMedia.duration DESC",
+      "ids": [
+        2,
+        5,
+        11,
+        1,
+        7,
+        10,
+        3,
+        6,
+        9,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 7,
+      "globalCode": 6,
+      "sql": "link ASC",
+      "ids": [
+        4,
+        8,
+        12,
+        2,
+        6,
+        10,
+        3,
+        7,
+        11,
+        1,
+        5,
+        9
+      ]
+    },
+    {
+      "code": 8,
+      "globalCode": 6,
+      "sql": "link DESC",
+      "ids": [
+        1,
+        5,
+        9,
+        3,
+        7,
+        11,
+        2,
+        6,
+        10,
+        4,
+        8,
+        12
+      ]
+    },
+    {
+      "code": 11,
+      "globalCode": 6,
+      "sql": "FeedMedia.duration DESC",
+      "ids": [
+        2,
+        5,
+        11,
+        1,
+        7,
+        10,
+        3,
+        6,
+        9,
+        4,
+        8,
+        12
+      ]
+    }
+  ]
+}

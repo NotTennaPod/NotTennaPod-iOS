@@ -1,0 +1,16 @@
+{
+  "segments": [
+    {
+      "startTime": 0,
+      "endTime": 5,
+      "speaker": "Ada",
+      "body": "Line 001\nLine 002\nLine 003\nLine 004\nLine 005\nLine 006\nLine 007\nLine 008\nLine 009\nLine 010\nLine 011\nLine 012\nLine 013\nLine 014\nLine 015\nLine 016\nLine 017\nLine 018\nLine 019\nLine 020\nLine 021\nLine 022\nLine 023\nLine 024\nLine 025\nLine 026\nLine 027\nLine 028\nLine 029\nLine 030\nLine 031\nLine 032\nLine 033\nLine 034\nLine 035\nLine 036\nLine 037\nLine 038\nLine 039\nLine 040\nLine 041\nLine 042\nLine 043\nLine 044\nLine 045\nLine 046\nLine 047\nLine 048\nLine 049\nLine 050\nLine 051\nLine 052\nLine 053\nLine 054\nLine 055\nLine 056\nLine 057\nLine 058\nLine 059\nLine 060\nLine 061\nLine 062\nLine 063\nLine 064\nLine 065\nLine 066\nLine 067\nLine 068\nLine 069\nLine 070\nLine 071\nLine 072\nLine 073\nLine 074\nLine 075\nLine 076\nLine 077\nLine 078\nLine 079\nLine 080\nLine 081\nLine 082\nLine 083\nLine 084\nLine 085\nLine 086\nLine 087\nLine 088\nLine 089\nLine 090\nLine 091\nLine 092\nLine 093\nLine 094\nLine 095\nLine 096\nLine 097\nLine 098\nLine 099\nLine 100\nLine 101"
+    },
+    {
+      "startTime": 5,
+      "endTime": 30,
+      "speaker": "Bob",
+      "body": "Following segment."
+    }
+  ]
+}

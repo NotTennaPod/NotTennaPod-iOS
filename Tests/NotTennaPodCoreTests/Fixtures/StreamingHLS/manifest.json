@@ -1,0 +1,13 @@
+{
+  "source": "Fixtures/StreamingFormats/tone.m4a",
+  "sourceSHA256": "3f98abf645a3ba431647b4ab477491b7b92d7e3655e25433599860e5f6f82672",
+  "generator": "FFmpeg 8.1.2; -map 0:a:0 -c:a copy -hls_time 2 -hls_list_size 0 -hls_playlist_type vod -hls_segment_filename part%02d.ts index.m3u8",
+  "files": {
+    "part03.ts": "828606f8a6c81e54e99b9f0e01ef2c93b8f6757e5a73a6ff49c41b484ff6484e",
+    "part02.ts": "72ce3dcb3c10caccdb907477b1b2bc62eaa8c8cb26b37dead3d7f821b966acf9",
+    "index.m3u8": "65c39cebe9524119f5ec4870f213537d9fbf175e3ebdcbed894aed4f1228be64",
+    "part01.ts": "35e0db0b9a434c71e45d6a0ddf8b33de1e8ee2e8f32e49f20d7204f96baf5a5f",
+    "part04.ts": "c9512e4fa00cef273137307a5a77cfb3bfed0d79027a575af726a277de496eb9",
+    "part00.ts": "8d35b157072f0d250bd463f27df5cd099c638f9da4bdf73bbd93cfa36e40e48c"
+  }
+}

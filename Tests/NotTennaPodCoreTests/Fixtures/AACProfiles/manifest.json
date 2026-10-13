@@ -1,0 +1,2214 @@
+{
+  "source": "Synthetic separate440/733Hz stereo channels; four seconds; native Apple AAC encoder; no third-party audio",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": [
+    {
+      "name": "lc-stereo.aac",
+      "sha256": "51c4e762040480675484e932748c030b92008539f089de40f19cc50f5407ab88",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "aevalsrc=0.2*sin(2*PI*440*t)|0.15*sin(2*PI*733*t):s=48000:d=4",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "2",
+        "-ar",
+        "48000",
+        "-c:a",
+        "aac_at",
+        "-profile:a",
+        "1",
+        "-b:a",
+        "96k",
+        "-f",
+        "adts"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "profile": "LC",
+            "sample_rate": "48000",
+            "channels": 2,
+            "duration": "4.098778"
+          }
+        ],
+        "format": {
+          "format_name": "aac",
+          "duration": "4.098778",
+          "size": "50105"
+        }
+      },
+      "packets": [
+        {
+          "offset": 0,
+          "size": 135
+        },
+        {
+          "offset": 135,
+          "size": 361
+        },
+        {
+          "offset": 496,
+          "size": 193
+        },
+        {
+          "offset": 689,
+          "size": 329
+        },
+        {
+          "offset": 1018,
+          "size": 185
+        },
+        {
+          "offset": 1203,
+          "size": 295
+        },
+        {
+          "offset": 1498,
+          "size": 309
+        },
+        {
+          "offset": 1807,
+          "size": 191
+        },
+        {
+          "offset": 1998,
+          "size": 293
+        },
+        {
+          "offset": 2291,
+          "size": 292
+        },
+        {
+          "offset": 2583,
+          "size": 298
+        },
+        {
+          "offset": 2881,
+          "size": 176
+        },
+        {
+          "offset": 3057,
+          "size": 305
+        },
+        {
+          "offset": 3362,
+          "size": 283
+        },
+        {
+          "offset": 3645,
+          "size": 193
+        },
+        {
+          "offset": 3838,
+          "size": 308
+        },
+        {
+          "offset": 4146,
+          "size": 274
+        },
+        {
+          "offset": 4420,
+          "size": 291
+        },
+        {
+          "offset": 4711,
+          "size": 187
+        },
+        {
+          "offset": 4898,
+          "size": 302
+        },
+        {
+          "offset": 5200,
+          "size": 281
+        },
+        {
+          "offset": 5481,
+          "size": 201
+        },
+        {
+          "offset": 5682,
+          "size": 297
+        },
+        {
+          "offset": 5979,
+          "size": 297
+        },
+        {
+          "offset": 6276,
+          "size": 194
+        },
+        {
+          "offset": 6470,
+          "size": 304
+        },
+        {
+          "offset": 6774,
+          "size": 287
+        },
+        {
+          "offset": 7061,
+          "size": 195
+        },
+        {
+          "offset": 7256,
+          "size": 299
+        },
+        {
+          "offset": 7555,
+          "size": 274
+        },
+        {
+          "offset": 7829,
+          "size": 288
+        },
+        {
+          "offset": 8117,
+          "size": 187
+        },
+        {
+          "offset": 8304,
+          "size": 296
+        },
+        {
+          "offset": 8600,
+          "size": 299
+        },
+        {
+          "offset": 8899,
+          "size": 192
+        },
+        {
+          "offset": 9091,
+          "size": 295
+        },
+        {
+          "offset": 9386,
+          "size": 307
+        },
+        {
+          "offset": 9693,
+          "size": 184
+        },
+        {
+          "offset": 9877,
+          "size": 295
+        },
+        {
+          "offset": 10172,
+          "size": 292
+        },
+        {
+          "offset": 10464,
+          "size": 268
+        },
+        {
+          "offset": 10732,
+          "size": 269
+        },
+        {
+          "offset": 11001,
+          "size": 190
+        },
+        {
+          "offset": 11191,
+          "size": 311
+        },
+        {
+          "offset": 11502,
+          "size": 288
+        },
+        {
+          "offset": 11790,
+          "size": 189
+        },
+        {
+          "offset": 11979,
+          "size": 298
+        },
+        {
+          "offset": 12277,
+          "size": 300
+        },
+        {
+          "offset": 12577,
+          "size": 277
+        },
+        {
+          "offset": 12854,
+          "size": 186
+        },
+        {
+          "offset": 13040,
+          "size": 308
+        },
+        {
+          "offset": 13348,
+          "size": 284
+        },
+        {
+          "offset": 13632,
+          "size": 199
+        },
+        {
+          "offset": 13831,
+          "size": 304
+        },
+        {
+          "offset": 14135,
+          "size": 283
+        },
+        {
+          "offset": 14418,
+          "size": 194
+        },
+        {
+          "offset": 14612,
+          "size": 298
+        },
+        {
+          "offset": 14910,
+          "size": 293
+        },
+        {
+          "offset": 15203,
+          "size": 286
+        },
+        {
+          "offset": 15489,
+          "size": 196
+        },
+        {
+          "offset": 15685,
+          "size": 292
+        },
+        {
+          "offset": 15977,
+          "size": 291
+        },
+        {
+          "offset": 16268,
+          "size": 195
+        },
+        {
+          "offset": 16463,
+          "size": 304
+        },
+        {
+          "offset": 16767,
+          "size": 301
+        },
+        {
+          "offset": 17068,
+          "size": 190
+        },
+        {
+          "offset": 17258,
+          "size": 306
+        },
+        {
+          "offset": 17564,
+          "size": 196
+        },
+        {
+          "offset": 17760,
+          "size": 289
+        },
+        {
+          "offset": 18049,
+          "size": 309
+        },
+        {
+          "offset": 18358,
+          "size": 285
+        },
+        {
+          "offset": 18643,
+          "size": 190
+        },
+        {
+          "offset": 18833,
+          "size": 309
+        },
+        {
+          "offset": 19142,
+          "size": 199
+        },
+        {
+          "offset": 19341,
+          "size": 305
+        },
+        {
+          "offset": 19646,
+          "size": 290
+        },
+        {
+          "offset": 19936,
+          "size": 192
+        },
+        {
+          "offset": 20128,
+          "size": 306
+        },
+        {
+          "offset": 20434,
+          "size": 285
+        },
+        {
+          "offset": 20719,
+          "size": 282
+        },
+        {
+          "offset": 21001,
+          "size": 182
+        },
+        {
+          "offset": 21183,
+          "size": 311
+        },
+        {
+          "offset": 21494,
+          "size": 290
+        },
+        {
+          "offset": 21784,
+          "size": 192
+        },
+        {
+          "offset": 21976,
+          "size": 295
+        },
+        {
+          "offset": 22271,
+          "size": 301
+        },
+        {
+          "offset": 22572,
+          "size": 197
+        },
+        {
+          "offset": 22769,
+          "size": 297
+        },
+        {
+          "offset": 23066,
+          "size": 288
+        },
+        {
+          "offset": 23354,
+          "size": 273
+        },
+        {
+          "offset": 23627,
+          "size": 193
+        },
+        {
+          "offset": 23820,
+          "size": 294
+        },
+        {
+          "offset": 24114,
+          "size": 301
+        },
+        {
+          "offset": 24415,
+          "size": 277
+        },
+        {
+          "offset": 24692,
+          "size": 185
+        },
+        {
+          "offset": 24877,
+          "size": 303
+        },
+        {
+          "offset": 25180,
+          "size": 291
+        },
+        {
+          "offset": 25471,
+          "size": 288
+        },
+        {
+          "offset": 25759,
+          "size": 177
+        },
+        {
+          "offset": 25936,
+          "size": 297
+        },
+        {
+          "offset": 26233,
+          "size": 295
+        },
+        {
+          "offset": 26528,
+          "size": 196
+        },
+        {
+          "offset": 26724,
+          "size": 289
+        },
+        {
+          "offset": 27013,
+          "size": 304
+        },
+        {
+          "offset": 27317,
+          "size": 183
+        },
+        {
+          "offset": 27500,
+          "size": 288
+        },
+        {
+          "offset": 27788,
+          "size": 301
+        },
+        {
+          "offset": 28089,
+          "size": 190
+        },
+        {
+          "offset": 28279,
+          "size": 301
+        },
+        {
+          "offset": 28580,
+          "size": 297
+        },
+        {
+          "offset": 28877,
+          "size": 266
+        },
+        {
+          "offset": 29143,
+          "size": 283
+        },
+        {
+          "offset": 29426,
+          "size": 189
+        },
+        {
+          "offset": 29615,
+          "size": 297
+        },
+        {
+          "offset": 29912,
+          "size": 299
+        },
+        {
+          "offset": 30211,
+          "size": 185
+        },
+        {
+          "offset": 30396,
+          "size": 303
+        },
+        {
+          "offset": 30699,
+          "size": 295
+        },
+        {
+          "offset": 30994,
+          "size": 187
+        },
+        {
+          "offset": 31181,
+          "size": 292
+        },
+        {
+          "offset": 31473,
+          "size": 301
+        },
+        {
+          "offset": 31774,
+          "size": 187
+        },
+        {
+          "offset": 31961,
+          "size": 296
+        },
+        {
+          "offset": 32257,
+          "size": 307
+        },
+        {
+          "offset": 32564,
+          "size": 285
+        },
+        {
+          "offset": 32849,
+          "size": 185
+        },
+        {
+          "offset": 33034,
+          "size": 287
+        },
+        {
+          "offset": 33321,
+          "size": 291
+        },
+        {
+          "offset": 33612,
+          "size": 287
+        },
+        {
+          "offset": 33899,
+          "size": 190
+        },
+        {
+          "offset": 34089,
+          "size": 293
+        },
+        {
+          "offset": 34382,
+          "size": 294
+        },
+        {
+          "offset": 34676,
+          "size": 203
+        },
+        {
+          "offset": 34879,
+          "size": 290
+        },
+        {
+          "offset": 35169,
+          "size": 294
+        },
+        {
+          "offset": 35463,
+          "size": 201
+        },
+        {
+          "offset": 35664,
+          "size": 297
+        },
+        {
+          "offset": 35961,
+          "size": 297
+        },
+        {
+          "offset": 36258,
+          "size": 187
+        },
+        {
+          "offset": 36445,
+          "size": 306
+        },
+        {
+          "offset": 36751,
+          "size": 293
+        },
+        {
+          "offset": 37044,
+          "size": 185
+        },
+        {
+          "offset": 37229,
+          "size": 297
+        },
+        {
+          "offset": 37526,
+          "size": 297
+        },
+        {
+          "offset": 37823,
+          "size": 291
+        },
+        {
+          "offset": 38114,
+          "size": 187
+        },
+        {
+          "offset": 38301,
+          "size": 292
+        },
+        {
+          "offset": 38593,
+          "size": 204
+        },
+        {
+          "offset": 38797,
+          "size": 296
+        },
+        {
+          "offset": 39093,
+          "size": 283
+        },
+        {
+          "offset": 39376,
+          "size": 295
+        },
+        {
+          "offset": 39671,
+          "size": 286
+        },
+        {
+          "offset": 39957,
+          "size": 184
+        },
+        {
+          "offset": 40141,
+          "size": 293
+        },
+        {
+          "offset": 40434,
+          "size": 288
+        },
+        {
+          "offset": 40722,
+          "size": 192
+        },
+        {
+          "offset": 40914,
+          "size": 294
+        },
+        {
+          "offset": 41208,
+          "size": 299
+        },
+        {
+          "offset": 41507,
+          "size": 273
+        },
+        {
+          "offset": 41780,
+          "size": 187
+        },
+        {
+          "offset": 41967,
+          "size": 307
+        },
+        {
+          "offset": 42274,
+          "size": 271
+        },
+        {
+          "offset": 42545,
+          "size": 272
+        },
+        {
+          "offset": 42817,
+          "size": 193
+        },
+        {
+          "offset": 43010,
+          "size": 298
+        },
+        {
+          "offset": 43308,
+          "size": 299
+        },
+        {
+          "offset": 43607,
+          "size": 279
+        },
+        {
+          "offset": 43886,
+          "size": 193
+        },
+        {
+          "offset": 44079,
+          "size": 289
+        },
+        {
+          "offset": 44368,
+          "size": 295
+        },
+        {
+          "offset": 44663,
+          "size": 200
+        },
+        {
+          "offset": 44863,
+          "size": 296
+        },
+        {
+          "offset": 45159,
+          "size": 294
+        },
+        {
+          "offset": 45453,
+          "size": 190
+        },
+        {
+          "offset": 45643,
+          "size": 298
+        },
+        {
+          "offset": 45941,
+          "size": 309
+        },
+        {
+          "offset": 46250,
+          "size": 199
+        },
+        {
+          "offset": 46449,
+          "size": 295
+        },
+        {
+          "offset": 46744,
+          "size": 272
+        },
+        {
+          "offset": 47016,
+          "size": 293
+        },
+        {
+          "offset": 47309,
+          "size": 181
+        },
+        {
+          "offset": 47490,
+          "size": 296
+        },
+        {
+          "offset": 47786,
+          "size": 292
+        },
+        {
+          "offset": 48078,
+          "size": 193
+        },
+        {
+          "offset": 48271,
+          "size": 299
+        },
+        {
+          "offset": 48570,
+          "size": 293
+        },
+        {
+          "offset": 48863,
+          "size": 197
+        },
+        {
+          "offset": 49060,
+          "size": 258
+        },
+        {
+          "offset": 49318,
+          "size": 263
+        },
+        {
+          "offset": 49581,
+          "size": 278
+        },
+        {
+          "offset": 49859,
+          "size": 246
+        }
+      ],
+      "expectedDecodedRate": 48000,
+      "expectedDecodedChannels": 2
+    },
+    {
+      "name": "lc-mono.aac",
+      "sha256": "b6edb9d248211a625513503abb8f15fb2dfbcbfc5d3b8cc7a973f1e95bd50fdd",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "aevalsrc=0.2*sin(2*PI*440*t)|0.15*sin(2*PI*733*t):s=48000:d=4",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-ar",
+        "24000",
+        "-c:a",
+        "aac_at",
+        "-profile:a",
+        "1",
+        "-b:a",
+        "48k",
+        "-f",
+        "adts"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "profile": "LC",
+            "sample_rate": "24000",
+            "channels": 1,
+            "duration": "4.142875"
+          }
+        ],
+        "format": {
+          "format_name": "aac",
+          "duration": "4.142875",
+          "size": "25459"
+        }
+      },
+      "packets": [
+        {
+          "offset": 0,
+          "size": 211
+        },
+        {
+          "offset": 211,
+          "size": 264
+        },
+        {
+          "offset": 475,
+          "size": 284
+        },
+        {
+          "offset": 759,
+          "size": 325
+        },
+        {
+          "offset": 1084,
+          "size": 226
+        },
+        {
+          "offset": 1310,
+          "size": 225
+        },
+        {
+          "offset": 1535,
+          "size": 315
+        },
+        {
+          "offset": 1850,
+          "size": 234
+        },
+        {
+          "offset": 2084,
+          "size": 319
+        },
+        {
+          "offset": 2403,
+          "size": 188
+        },
+        {
+          "offset": 2591,
+          "size": 315
+        },
+        {
+          "offset": 2906,
+          "size": 226
+        },
+        {
+          "offset": 3132,
+          "size": 293
+        },
+        {
+          "offset": 3425,
+          "size": 228
+        },
+        {
+          "offset": 3653,
+          "size": 316
+        },
+        {
+          "offset": 3969,
+          "size": 204
+        },
+        {
+          "offset": 4173,
+          "size": 309
+        },
+        {
+          "offset": 4482,
+          "size": 232
+        },
+        {
+          "offset": 4714,
+          "size": 321
+        },
+        {
+          "offset": 5035,
+          "size": 184
+        },
+        {
+          "offset": 5219,
+          "size": 317
+        },
+        {
+          "offset": 5536,
+          "size": 220
+        },
+        {
+          "offset": 5756,
+          "size": 296
+        },
+        {
+          "offset": 6052,
+          "size": 224
+        },
+        {
+          "offset": 6276,
+          "size": 309
+        },
+        {
+          "offset": 6585,
+          "size": 225
+        },
+        {
+          "offset": 6810,
+          "size": 297
+        },
+        {
+          "offset": 7107,
+          "size": 225
+        },
+        {
+          "offset": 7332,
+          "size": 292
+        },
+        {
+          "offset": 7624,
+          "size": 218
+        },
+        {
+          "offset": 7842,
+          "size": 314
+        },
+        {
+          "offset": 8156,
+          "size": 236
+        },
+        {
+          "offset": 8392,
+          "size": 313
+        },
+        {
+          "offset": 8705,
+          "size": 221
+        },
+        {
+          "offset": 8926,
+          "size": 230
+        },
+        {
+          "offset": 9156,
+          "size": 296
+        },
+        {
+          "offset": 9452,
+          "size": 288
+        },
+        {
+          "offset": 9740,
+          "size": 219
+        },
+        {
+          "offset": 9959,
+          "size": 309
+        },
+        {
+          "offset": 10268,
+          "size": 241
+        },
+        {
+          "offset": 10509,
+          "size": 241
+        },
+        {
+          "offset": 10750,
+          "size": 318
+        },
+        {
+          "offset": 11068,
+          "size": 216
+        },
+        {
+          "offset": 11284,
+          "size": 307
+        },
+        {
+          "offset": 11591,
+          "size": 231
+        },
+        {
+          "offset": 11822,
+          "size": 296
+        },
+        {
+          "offset": 12118,
+          "size": 220
+        },
+        {
+          "offset": 12338,
+          "size": 312
+        },
+        {
+          "offset": 12650,
+          "size": 219
+        },
+        {
+          "offset": 12869,
+          "size": 241
+        },
+        {
+          "offset": 13110,
+          "size": 301
+        },
+        {
+          "offset": 13411,
+          "size": 240
+        },
+        {
+          "offset": 13651,
+          "size": 239
+        },
+        {
+          "offset": 13890,
+          "size": 308
+        },
+        {
+          "offset": 14198,
+          "size": 234
+        },
+        {
+          "offset": 14432,
+          "size": 300
+        },
+        {
+          "offset": 14732,
+          "size": 233
+        },
+        {
+          "offset": 14965,
+          "size": 319
+        },
+        {
+          "offset": 15284,
+          "size": 237
+        },
+        {
+          "offset": 15521,
+          "size": 232
+        },
+        {
+          "offset": 15753,
+          "size": 306
+        },
+        {
+          "offset": 16059,
+          "size": 236
+        },
+        {
+          "offset": 16295,
+          "size": 244
+        },
+        {
+          "offset": 16539,
+          "size": 306
+        },
+        {
+          "offset": 16845,
+          "size": 232
+        },
+        {
+          "offset": 17077,
+          "size": 319
+        },
+        {
+          "offset": 17396,
+          "size": 193
+        },
+        {
+          "offset": 17589,
+          "size": 322
+        },
+        {
+          "offset": 17911,
+          "size": 225
+        },
+        {
+          "offset": 18136,
+          "size": 241
+        },
+        {
+          "offset": 18377,
+          "size": 303
+        },
+        {
+          "offset": 18680,
+          "size": 239
+        },
+        {
+          "offset": 18919,
+          "size": 233
+        },
+        {
+          "offset": 19152,
+          "size": 303
+        },
+        {
+          "offset": 19455,
+          "size": 230
+        },
+        {
+          "offset": 19685,
+          "size": 307
+        },
+        {
+          "offset": 19992,
+          "size": 234
+        },
+        {
+          "offset": 20226,
+          "size": 297
+        },
+        {
+          "offset": 20523,
+          "size": 240
+        },
+        {
+          "offset": 20763,
+          "size": 249
+        },
+        {
+          "offset": 21012,
+          "size": 242
+        },
+        {
+          "offset": 21254,
+          "size": 333
+        },
+        {
+          "offset": 21587,
+          "size": 217
+        },
+        {
+          "offset": 21804,
+          "size": 308
+        },
+        {
+          "offset": 22112,
+          "size": 201
+        },
+        {
+          "offset": 22313,
+          "size": 311
+        },
+        {
+          "offset": 22624,
+          "size": 242
+        },
+        {
+          "offset": 22866,
+          "size": 246
+        },
+        {
+          "offset": 23112,
+          "size": 319
+        },
+        {
+          "offset": 23431,
+          "size": 195
+        },
+        {
+          "offset": 23626,
+          "size": 308
+        },
+        {
+          "offset": 23934,
+          "size": 235
+        },
+        {
+          "offset": 24169,
+          "size": 302
+        },
+        {
+          "offset": 24471,
+          "size": 229
+        },
+        {
+          "offset": 24700,
+          "size": 235
+        },
+        {
+          "offset": 24935,
+          "size": 272
+        },
+        {
+          "offset": 25207,
+          "size": 252
+        }
+      ],
+      "expectedDecodedRate": 24000,
+      "expectedDecodedChannels": 1
+    },
+    {
+      "name": "he-stereo.aac",
+      "sha256": "980d88d651539fbbeea79eb519a18280b776e87321482c99a9b9e96e9d749e3e",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "aevalsrc=0.2*sin(2*PI*440*t)|0.15*sin(2*PI*733*t):s=48000:d=4",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "2",
+        "-ar",
+        "48000",
+        "-c:a",
+        "aac_at",
+        "-profile:a",
+        "4",
+        "-b:a",
+        "48k",
+        "-f",
+        "adts"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "profile": "HE-AAC",
+            "sample_rate": "48000",
+            "channels": 2,
+            "duration": "4.139939"
+          }
+        ],
+        "format": {
+          "format_name": "aac",
+          "duration": "4.139939",
+          "size": "25383"
+        }
+      },
+      "packets": [
+        {
+          "offset": 0,
+          "size": 135
+        },
+        {
+          "offset": 135,
+          "size": 357
+        },
+        {
+          "offset": 492,
+          "size": 197
+        },
+        {
+          "offset": 689,
+          "size": 269
+        },
+        {
+          "offset": 958,
+          "size": 279
+        },
+        {
+          "offset": 1237,
+          "size": 267
+        },
+        {
+          "offset": 1504,
+          "size": 275
+        },
+        {
+          "offset": 1779,
+          "size": 273
+        },
+        {
+          "offset": 2052,
+          "size": 257
+        },
+        {
+          "offset": 2309,
+          "size": 276
+        },
+        {
+          "offset": 2585,
+          "size": 272
+        },
+        {
+          "offset": 2857,
+          "size": 279
+        },
+        {
+          "offset": 3136,
+          "size": 184
+        },
+        {
+          "offset": 3320,
+          "size": 266
+        },
+        {
+          "offset": 3586,
+          "size": 269
+        },
+        {
+          "offset": 3855,
+          "size": 278
+        },
+        {
+          "offset": 4133,
+          "size": 270
+        },
+        {
+          "offset": 4403,
+          "size": 274
+        },
+        {
+          "offset": 4677,
+          "size": 286
+        },
+        {
+          "offset": 4963,
+          "size": 255
+        },
+        {
+          "offset": 5218,
+          "size": 275
+        },
+        {
+          "offset": 5493,
+          "size": 271
+        },
+        {
+          "offset": 5764,
+          "size": 178
+        },
+        {
+          "offset": 5942,
+          "size": 258
+        },
+        {
+          "offset": 6200,
+          "size": 268
+        },
+        {
+          "offset": 6468,
+          "size": 271
+        },
+        {
+          "offset": 6739,
+          "size": 265
+        },
+        {
+          "offset": 7004,
+          "size": 277
+        },
+        {
+          "offset": 7281,
+          "size": 261
+        },
+        {
+          "offset": 7542,
+          "size": 271
+        },
+        {
+          "offset": 7813,
+          "size": 262
+        },
+        {
+          "offset": 8075,
+          "size": 277
+        },
+        {
+          "offset": 8352,
+          "size": 283
+        },
+        {
+          "offset": 8635,
+          "size": 274
+        },
+        {
+          "offset": 8909,
+          "size": 271
+        },
+        {
+          "offset": 9180,
+          "size": 197
+        },
+        {
+          "offset": 9377,
+          "size": 259
+        },
+        {
+          "offset": 9636,
+          "size": 278
+        },
+        {
+          "offset": 9914,
+          "size": 274
+        },
+        {
+          "offset": 10188,
+          "size": 283
+        },
+        {
+          "offset": 10471,
+          "size": 273
+        },
+        {
+          "offset": 10744,
+          "size": 255
+        },
+        {
+          "offset": 10999,
+          "size": 276
+        },
+        {
+          "offset": 11275,
+          "size": 267
+        },
+        {
+          "offset": 11542,
+          "size": 281
+        },
+        {
+          "offset": 11823,
+          "size": 173
+        },
+        {
+          "offset": 11996,
+          "size": 286
+        },
+        {
+          "offset": 12282,
+          "size": 260
+        },
+        {
+          "offset": 12542,
+          "size": 271
+        },
+        {
+          "offset": 12813,
+          "size": 269
+        },
+        {
+          "offset": 13082,
+          "size": 288
+        },
+        {
+          "offset": 13370,
+          "size": 294
+        },
+        {
+          "offset": 13664,
+          "size": 193
+        },
+        {
+          "offset": 13857,
+          "size": 279
+        },
+        {
+          "offset": 14136,
+          "size": 274
+        },
+        {
+          "offset": 14410,
+          "size": 271
+        },
+        {
+          "offset": 14681,
+          "size": 260
+        },
+        {
+          "offset": 14941,
+          "size": 288
+        },
+        {
+          "offset": 15229,
+          "size": 263
+        },
+        {
+          "offset": 15492,
+          "size": 264
+        },
+        {
+          "offset": 15756,
+          "size": 266
+        },
+        {
+          "offset": 16022,
+          "size": 187
+        },
+        {
+          "offset": 16209,
+          "size": 286
+        },
+        {
+          "offset": 16495,
+          "size": 269
+        },
+        {
+          "offset": 16764,
+          "size": 282
+        },
+        {
+          "offset": 17046,
+          "size": 272
+        },
+        {
+          "offset": 17318,
+          "size": 272
+        },
+        {
+          "offset": 17590,
+          "size": 259
+        },
+        {
+          "offset": 17849,
+          "size": 274
+        },
+        {
+          "offset": 18123,
+          "size": 274
+        },
+        {
+          "offset": 18397,
+          "size": 195
+        },
+        {
+          "offset": 18592,
+          "size": 261
+        },
+        {
+          "offset": 18853,
+          "size": 264
+        },
+        {
+          "offset": 19117,
+          "size": 274
+        },
+        {
+          "offset": 19391,
+          "size": 267
+        },
+        {
+          "offset": 19658,
+          "size": 277
+        },
+        {
+          "offset": 19935,
+          "size": 268
+        },
+        {
+          "offset": 20203,
+          "size": 282
+        },
+        {
+          "offset": 20485,
+          "size": 270
+        },
+        {
+          "offset": 20755,
+          "size": 277
+        },
+        {
+          "offset": 21032,
+          "size": 167
+        },
+        {
+          "offset": 21199,
+          "size": 278
+        },
+        {
+          "offset": 21477,
+          "size": 273
+        },
+        {
+          "offset": 21750,
+          "size": 254
+        },
+        {
+          "offset": 22004,
+          "size": 274
+        },
+        {
+          "offset": 22278,
+          "size": 266
+        },
+        {
+          "offset": 22544,
+          "size": 287
+        },
+        {
+          "offset": 22831,
+          "size": 267
+        },
+        {
+          "offset": 23098,
+          "size": 275
+        },
+        {
+          "offset": 23373,
+          "size": 265
+        },
+        {
+          "offset": 23638,
+          "size": 274
+        },
+        {
+          "offset": 23912,
+          "size": 180
+        },
+        {
+          "offset": 24092,
+          "size": 294
+        },
+        {
+          "offset": 24386,
+          "size": 271
+        },
+        {
+          "offset": 24657,
+          "size": 231
+        },
+        {
+          "offset": 24888,
+          "size": 260
+        },
+        {
+          "offset": 25148,
+          "size": 235
+        }
+      ],
+      "expectedDecodedRate": 48000,
+      "expectedDecodedChannels": 2
+    },
+    {
+      "name": "hev2-stereo.aac",
+      "sha256": "f036b29eff6d397f70eccda25dcfc91c02b32b7afa937673edae9875f9706247",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "aevalsrc=0.2*sin(2*PI*440*t)|0.15*sin(2*PI*733*t):s=48000:d=4",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "2",
+        "-ar",
+        "48000",
+        "-c:a",
+        "aac_at",
+        "-profile:a",
+        "28",
+        "-b:a",
+        "32k",
+        "-f",
+        "adts"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "profile": "HE-AACv2",
+            "sample_rate": "48000",
+            "channels": 2,
+            "duration": "4.146306"
+          }
+        ],
+        "format": {
+          "format_name": "aac",
+          "duration": "4.146306",
+          "size": "17174"
+        }
+      },
+      "packets": [
+        {
+          "offset": 0,
+          "size": 118
+        },
+        {
+          "offset": 118,
+          "size": 194
+        },
+        {
+          "offset": 312,
+          "size": 170
+        },
+        {
+          "offset": 482,
+          "size": 215
+        },
+        {
+          "offset": 697,
+          "size": 167
+        },
+        {
+          "offset": 864,
+          "size": 176
+        },
+        {
+          "offset": 1040,
+          "size": 164
+        },
+        {
+          "offset": 1204,
+          "size": 168
+        },
+        {
+          "offset": 1372,
+          "size": 188
+        },
+        {
+          "offset": 1560,
+          "size": 162
+        },
+        {
+          "offset": 1722,
+          "size": 244
+        },
+        {
+          "offset": 1966,
+          "size": 119
+        },
+        {
+          "offset": 2085,
+          "size": 170
+        },
+        {
+          "offset": 2255,
+          "size": 206
+        },
+        {
+          "offset": 2461,
+          "size": 161
+        },
+        {
+          "offset": 2622,
+          "size": 168
+        },
+        {
+          "offset": 2790,
+          "size": 231
+        },
+        {
+          "offset": 3021,
+          "size": 127
+        },
+        {
+          "offset": 3148,
+          "size": 248
+        },
+        {
+          "offset": 3396,
+          "size": 128
+        },
+        {
+          "offset": 3524,
+          "size": 167
+        },
+        {
+          "offset": 3691,
+          "size": 192
+        },
+        {
+          "offset": 3883,
+          "size": 185
+        },
+        {
+          "offset": 4068,
+          "size": 142
+        },
+        {
+          "offset": 4210,
+          "size": 182
+        },
+        {
+          "offset": 4392,
+          "size": 175
+        },
+        {
+          "offset": 4567,
+          "size": 232
+        },
+        {
+          "offset": 4799,
+          "size": 122
+        },
+        {
+          "offset": 4921,
+          "size": 186
+        },
+        {
+          "offset": 5107,
+          "size": 182
+        },
+        {
+          "offset": 5289,
+          "size": 188
+        },
+        {
+          "offset": 5477,
+          "size": 185
+        },
+        {
+          "offset": 5662,
+          "size": 149
+        },
+        {
+          "offset": 5811,
+          "size": 197
+        },
+        {
+          "offset": 6008,
+          "size": 194
+        },
+        {
+          "offset": 6202,
+          "size": 138
+        },
+        {
+          "offset": 6340,
+          "size": 184
+        },
+        {
+          "offset": 6524,
+          "size": 200
+        },
+        {
+          "offset": 6724,
+          "size": 172
+        },
+        {
+          "offset": 6896,
+          "size": 160
+        },
+        {
+          "offset": 7056,
+          "size": 180
+        },
+        {
+          "offset": 7236,
+          "size": 199
+        },
+        {
+          "offset": 7435,
+          "size": 151
+        },
+        {
+          "offset": 7586,
+          "size": 205
+        },
+        {
+          "offset": 7791,
+          "size": 192
+        },
+        {
+          "offset": 7983,
+          "size": 136
+        },
+        {
+          "offset": 8119,
+          "size": 189
+        },
+        {
+          "offset": 8308,
+          "size": 194
+        },
+        {
+          "offset": 8502,
+          "size": 147
+        },
+        {
+          "offset": 8649,
+          "size": 188
+        },
+        {
+          "offset": 8837,
+          "size": 184
+        },
+        {
+          "offset": 9021,
+          "size": 196
+        },
+        {
+          "offset": 9217,
+          "size": 149
+        },
+        {
+          "offset": 9366,
+          "size": 173
+        },
+        {
+          "offset": 9539,
+          "size": 186
+        },
+        {
+          "offset": 9725,
+          "size": 186
+        },
+        {
+          "offset": 9911,
+          "size": 188
+        },
+        {
+          "offset": 10099,
+          "size": 147
+        },
+        {
+          "offset": 10246,
+          "size": 188
+        },
+        {
+          "offset": 10434,
+          "size": 188
+        },
+        {
+          "offset": 10622,
+          "size": 174
+        },
+        {
+          "offset": 10796,
+          "size": 186
+        },
+        {
+          "offset": 10982,
+          "size": 195
+        },
+        {
+          "offset": 11177,
+          "size": 141
+        },
+        {
+          "offset": 11318,
+          "size": 193
+        },
+        {
+          "offset": 11511,
+          "size": 185
+        },
+        {
+          "offset": 11696,
+          "size": 182
+        },
+        {
+          "offset": 11878,
+          "size": 191
+        },
+        {
+          "offset": 12069,
+          "size": 138
+        },
+        {
+          "offset": 12207,
+          "size": 183
+        },
+        {
+          "offset": 12390,
+          "size": 199
+        },
+        {
+          "offset": 12589,
+          "size": 198
+        },
+        {
+          "offset": 12787,
+          "size": 134
+        },
+        {
+          "offset": 12921,
+          "size": 185
+        },
+        {
+          "offset": 13106,
+          "size": 184
+        },
+        {
+          "offset": 13290,
+          "size": 160
+        },
+        {
+          "offset": 13450,
+          "size": 179
+        },
+        {
+          "offset": 13629,
+          "size": 202
+        },
+        {
+          "offset": 13831,
+          "size": 177
+        },
+        {
+          "offset": 14008,
+          "size": 159
+        },
+        {
+          "offset": 14167,
+          "size": 249
+        },
+        {
+          "offset": 14416,
+          "size": 119
+        },
+        {
+          "offset": 14535,
+          "size": 187
+        },
+        {
+          "offset": 14722,
+          "size": 184
+        },
+        {
+          "offset": 14906,
+          "size": 145
+        },
+        {
+          "offset": 15051,
+          "size": 205
+        },
+        {
+          "offset": 15256,
+          "size": 146
+        },
+        {
+          "offset": 15402,
+          "size": 190
+        },
+        {
+          "offset": 15592,
+          "size": 195
+        },
+        {
+          "offset": 15787,
+          "size": 187
+        },
+        {
+          "offset": 15974,
+          "size": 139
+        },
+        {
+          "offset": 16113,
+          "size": 194
+        },
+        {
+          "offset": 16307,
+          "size": 165
+        },
+        {
+          "offset": 16472,
+          "size": 195
+        },
+        {
+          "offset": 16667,
+          "size": 172
+        },
+        {
+          "offset": 16839,
+          "size": 201
+        },
+        {
+          "offset": 17040,
+          "size": 134
+        }
+      ],
+      "expectedDecodedRate": 48000,
+      "expectedDecodedChannels": 2
+    },
+    {
+      "name": "he-stereo.m4a",
+      "sha256": "e563899422ebad8ba60d094a4ae035fb2a6353c4193e007624e0fc29302eedca",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-i",
+        "Tests/NotTennaPodCoreTests/Fixtures/AACProfiles/he-stereo.aac",
+        "-map_metadata",
+        "-1",
+        "-c:a",
+        "copy",
+        "-movflags",
+        "+faststart"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "profile": "HE-AAC",
+            "sample_rate": "48000",
+            "channels": 2,
+            "duration": "4.138667"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "4.138667",
+          "size": "25888"
+        }
+      },
+      "expectedDecodedRate": 48000,
+      "expectedDecodedChannels": 2,
+      "sourceADTS": "he-stereo.aac",
+      "unchangedPacketPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4"
+    },
+    {
+      "name": "hev2-stereo.m4a",
+      "sha256": "62307576b190fe1c636fa2049994df702068de65368f2d71f0f3ddb5765aeb09",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-i",
+        "Tests/NotTennaPodCoreTests/Fixtures/AACProfiles/hev2-stereo.aac",
+        "-map_metadata",
+        "-1",
+        "-c:a",
+        "copy",
+        "-movflags",
+        "+faststart"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "profile": "HE-AACv2",
+            "sample_rate": "48000",
+            "channels": 2,
+            "duration": "4.138667"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "4.138667",
+          "size": "17679"
+        }
+      },
+      "expectedDecodedRate": 48000,
+      "expectedDecodedChannels": 2,
+      "sourceADTS": "hev2-stereo.aac",
+      "unchangedPacketPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c"
+    }
+  ]
+}

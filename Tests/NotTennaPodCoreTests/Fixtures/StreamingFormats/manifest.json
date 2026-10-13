@@ -1,0 +1,353 @@
+{
+  "source": "synthetic 440 Hz tone, 8 seconds, 48000 Hz; no third-party recordings",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": [
+    {
+      "name": "tone.wav",
+      "sha256": "05b58bd38cd184982e473eaaac0a8d819e658a8cb1b3267be248626643b38da7",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=8",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "pcm_s16le"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "pcm_s16le",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "8.000000"
+          }
+        ],
+        "format": {
+          "format_name": "wav",
+          "duration": "8.000000",
+          "size": "768044"
+        }
+      }
+    },
+    {
+      "name": "tone.m4a",
+      "sha256": "3f98abf645a3ba431647b4ab477491b7b92d7e3655e25433599860e5f6f82672",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=8",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k",
+        "-movflags",
+        "+faststart"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "8.000000"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "8.000000",
+          "size": "66729"
+        }
+      }
+    },
+    {
+      "name": "tone-tail.m4a",
+      "sha256": "9540c18b7dd79db894c79e74a2f1274333d47429ad719b07c2d3f609a0f4a425",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=8",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "8.000000"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "8.000000",
+          "size": "66729"
+        }
+      }
+    },
+    {
+      "name": "tone.aac",
+      "sha256": "bfbbe9390459761b756da2af615e0509e715d950448dd9a5b2efa2b833570373",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=8",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k",
+        "-f",
+        "adts"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "7.912030"
+          }
+        ],
+        "format": {
+          "format_name": "aac",
+          "duration": "7.912030",
+          "size": "67095"
+        }
+      }
+    },
+    {
+      "name": "tone.flac",
+      "sha256": "74c53b005c0637aaa6843a2197dcf40bc5855b4191f46a47364cc6293af717b9",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=8",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "flac"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "flac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "8.000000"
+          }
+        ],
+        "format": {
+          "format_name": "flac",
+          "duration": "8.000000",
+          "size": "113190"
+        }
+      }
+    },
+    {
+      "name": "tone-vorbis.ogg",
+      "sha256": "8570b4d9deaf482cd0a885f12e90304d06bd94b90a3622f830d9bbda6ee024b3",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=8",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-ac",
+        "2",
+        "-c:a",
+        "vorbis",
+        "-strict",
+        "experimental",
+        "-q:a",
+        "4"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vorbis",
+            "sample_rate": "48000",
+            "channels": 2,
+            "duration": "8.000000"
+          }
+        ],
+        "format": {
+          "format_name": "ogg",
+          "duration": "8.000000",
+          "size": "31793"
+        }
+      }
+    },
+    {
+      "name": "tone-opus.ogg",
+      "sha256": "cb1b669614207c0a3faafcbc2686de15da26104e78f60b661c10bfe64b692dc2",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=8",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libopus",
+        "-b:a",
+        "64k"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "opus",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "8.006500"
+          }
+        ],
+        "format": {
+          "format_name": "ogg",
+          "duration": "8.006500",
+          "size": "83738"
+        }
+      }
+    },
+    {
+      "name": "tone-opus.webm",
+      "sha256": "0f725f2e8d1b5f11718b11840367521865e0f7fe44c3b6ac8aa25ecbe1af7360",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=8",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libopus",
+        "-b:a",
+        "64k"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "opus",
+            "sample_rate": "48000",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "format_name": "matroska,webm",
+          "duration": "8.008000",
+          "size": "86290"
+        }
+      }
+    }
+  ]
+}

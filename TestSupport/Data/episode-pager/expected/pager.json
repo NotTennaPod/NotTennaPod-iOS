@@ -1,0 +1,1947 @@
+{
+ "oracle": "EpisodePagerVerification/expected_pager.py",
+ "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+ "fixture": "TestSupport/Data/episode-pager/pager-fixture.json",
+ "page_size": 150,
+ "search_limit": 300,
+ "home_limits": {
+  "home_queue": 8,
+  "home_inbox": 2,
+  "home_surprise": 8,
+  "home_downloads": 2
+ },
+ "offscreen_page_limit": 1,
+ "seeds": [
+  {
+   "caller": "inbox",
+   "pages_loaded": 1,
+   "full_list_size": 5,
+   "tapped_row": 2,
+   "tapped_id": 303,
+   "pager_size": 5,
+   "position": 2,
+   "page_number": 3,
+   "first_id": 310,
+   "last_reachable_id": 307,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    310,
+    301,
+    303,
+    304,
+    307
+   ],
+   "ids_head": [
+    310,
+    301,
+    303
+   ],
+   "ids_tail": [
+    303,
+    304,
+    307
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "all_episodes",
+   "pages_loaded": 1,
+   "full_list_size": 9,
+   "tapped_row": 0,
+   "tapped_id": 310,
+   "pager_size": 9,
+   "position": 0,
+   "page_number": 1,
+   "first_id": 310,
+   "last_reachable_id": 301,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    310,
+    308,
+    307,
+    306,
+    305,
+    304,
+    303,
+    302,
+    301
+   ],
+   "ids_head": [
+    310,
+    308,
+    307
+   ],
+   "ids_tail": [
+    303,
+    302,
+    301
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "all_episodes",
+   "pages_loaded": 1,
+   "full_list_size": 9,
+   "tapped_row": 8,
+   "tapped_id": 301,
+   "pager_size": 9,
+   "position": 8,
+   "page_number": 9,
+   "first_id": 310,
+   "last_reachable_id": 301,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    310,
+    308,
+    307,
+    306,
+    305,
+    304,
+    303,
+    302,
+    301
+   ],
+   "ids_head": [
+    310,
+    308,
+    307
+   ],
+   "ids_tail": [
+    303,
+    302,
+    301
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "favorites",
+   "pages_loaded": 1,
+   "full_list_size": 2,
+   "tapped_row": 1,
+   "tapped_id": 302,
+   "pager_size": 2,
+   "position": 1,
+   "page_number": 2,
+   "first_id": 305,
+   "last_reachable_id": 302,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    305,
+    302
+   ],
+   "ids_head": [
+    305,
+    302
+   ],
+   "ids_tail": [
+    305,
+    302
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "history",
+   "pages_loaded": 1,
+   "full_list_size": 1,
+   "tapped_row": 0,
+   "tapped_id": 305,
+   "pager_size": 1,
+   "position": 0,
+   "page_number": 1,
+   "first_id": 305,
+   "last_reachable_id": 305,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    305
+   ],
+   "ids_head": [
+    305
+   ],
+   "ids_tail": [
+    305
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "feed",
+   "pages_loaded": 1,
+   "full_list_size": 7,
+   "tapped_row": 3,
+   "tapped_id": 305,
+   "pager_size": 7,
+   "position": 3,
+   "page_number": 4,
+   "first_id": 310,
+   "last_reachable_id": 301,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    310,
+    308,
+    306,
+    305,
+    304,
+    302,
+    301
+   ],
+   "ids_head": [
+    310,
+    308,
+    306
+   ],
+   "ids_tail": [
+    304,
+    302,
+    301
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "online_feed_preview",
+   "pages_loaded": 1,
+   "full_list_size": 1,
+   "tapped_row": 0,
+   "tapped_id": 309,
+   "pager_size": 1,
+   "position": 0,
+   "page_number": 1,
+   "first_id": 309,
+   "last_reachable_id": 309,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    309
+   ],
+   "ids_head": [
+    309
+   ],
+   "ids_tail": [
+    309
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "queue",
+   "pages_loaded": null,
+   "full_list_size": 3,
+   "tapped_row": 1,
+   "tapped_id": 308,
+   "pager_size": 3,
+   "position": 1,
+   "page_number": 2,
+   "first_id": 302,
+   "last_reachable_id": 303,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    302,
+    308,
+    303
+   ],
+   "ids_head": [
+    302,
+    308,
+    303
+   ],
+   "ids_tail": [
+    302,
+    308,
+    303
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "search",
+   "pages_loaded": null,
+   "full_list_size": 2,
+   "tapped_row": 1,
+   "tapped_id": 301,
+   "pager_size": 2,
+   "position": 1,
+   "page_number": 2,
+   "first_id": 304,
+   "last_reachable_id": 301,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    304,
+    301
+   ],
+   "ids_head": [
+    304,
+    301
+   ],
+   "ids_tail": [
+    304,
+    301
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "downloads",
+   "pages_loaded": null,
+   "full_list_size": 3,
+   "tapped_row": 0,
+   "tapped_id": 301,
+   "pager_size": 3,
+   "position": 0,
+   "page_number": 1,
+   "first_id": 301,
+   "last_reachable_id": 307,
+   "unreachable_by_swiping": 0,
+   "ids": [
+    301,
+    305,
+    307
+   ],
+   "ids_head": [
+    301,
+    305,
+    307
+   ],
+   "ids_tail": [
+    301,
+    305,
+    307
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "lists"
+  },
+  {
+   "caller": "feed",
+   "pages_loaded": 1,
+   "full_list_size": 160,
+   "tapped_row": 149,
+   "tapped_id": 1150,
+   "pager_size": 150,
+   "position": 149,
+   "page_number": 150,
+   "first_id": 1001,
+   "last_reachable_id": 1150,
+   "unreachable_by_swiping": 10,
+   "ids": null,
+   "ids_head": [
+    1001,
+    1002,
+    1003
+   ],
+   "ids_tail": [
+    1148,
+    1149,
+    1150
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "long"
+  },
+  {
+   "caller": "feed",
+   "pages_loaded": 2,
+   "full_list_size": 160,
+   "tapped_row": 149,
+   "tapped_id": 1150,
+   "pager_size": 160,
+   "position": 149,
+   "page_number": 150,
+   "first_id": 1001,
+   "last_reachable_id": 1160,
+   "unreachable_by_swiping": 0,
+   "ids": null,
+   "ids_head": [
+    1001,
+    1002,
+    1003
+   ],
+   "ids_tail": [
+    1158,
+    1159,
+    1160
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "long"
+  },
+  {
+   "caller": "inbox",
+   "pages_loaded": 1,
+   "full_list_size": 157,
+   "tapped_row": 2,
+   "tapped_id": 2003,
+   "pager_size": 150,
+   "position": 2,
+   "page_number": 3,
+   "first_id": 2001,
+   "last_reachable_id": 2150,
+   "unreachable_by_swiping": 7,
+   "ids": null,
+   "ids_head": [
+    2001,
+    2002,
+    2003
+   ],
+   "ids_tail": [
+    2148,
+    2149,
+    2150
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "long"
+  },
+  {
+   "caller": "inbox",
+   "pages_loaded": 2,
+   "full_list_size": 157,
+   "tapped_row": 155,
+   "tapped_id": 2156,
+   "pager_size": 157,
+   "position": 155,
+   "page_number": 156,
+   "first_id": 2001,
+   "last_reachable_id": 2157,
+   "unreachable_by_swiping": 0,
+   "ids": null,
+   "ids_head": [
+    2001,
+    2002,
+    2003
+   ],
+   "ids_tail": [
+    2155,
+    2156,
+    2157
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "long"
+  },
+  {
+   "caller": "search",
+   "pages_loaded": null,
+   "full_list_size": 320,
+   "tapped_row": 299,
+   "tapped_id": 3300,
+   "pager_size": 300,
+   "position": 299,
+   "page_number": 300,
+   "first_id": 3001,
+   "last_reachable_id": 3300,
+   "unreachable_by_swiping": 20,
+   "ids": null,
+   "ids_head": [
+    3001,
+    3002,
+    3003
+   ],
+   "ids_tail": [
+    3298,
+    3299,
+    3300
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "long"
+  },
+  {
+   "caller": "queue",
+   "pages_loaded": null,
+   "full_list_size": 200,
+   "tapped_row": 199,
+   "tapped_id": 4200,
+   "pager_size": 200,
+   "position": 199,
+   "page_number": 200,
+   "first_id": 4001,
+   "last_reachable_id": 4200,
+   "unreachable_by_swiping": 0,
+   "ids": null,
+   "ids_head": [
+    4001,
+    4002,
+    4003
+   ],
+   "ids_tail": [
+    4198,
+    4199,
+    4200
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "long"
+  },
+  {
+   "caller": "home_queue",
+   "pages_loaded": null,
+   "full_list_size": 12,
+   "tapped_row": 7,
+   "tapped_id": 5008,
+   "pager_size": 8,
+   "position": 7,
+   "page_number": 8,
+   "first_id": 5001,
+   "last_reachable_id": 5008,
+   "unreachable_by_swiping": 4,
+   "ids": [
+    5001,
+    5002,
+    5003,
+    5004,
+    5005,
+    5006,
+    5007,
+    5008
+   ],
+   "ids_head": [
+    5001,
+    5002,
+    5003
+   ],
+   "ids_tail": [
+    5006,
+    5007,
+    5008
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "long"
+  },
+  {
+   "caller": "home_inbox",
+   "pages_loaded": null,
+   "full_list_size": 5,
+   "tapped_row": 1,
+   "tapped_id": 5102,
+   "pager_size": 2,
+   "position": 1,
+   "page_number": 2,
+   "first_id": 5101,
+   "last_reachable_id": 5102,
+   "unreachable_by_swiping": 3,
+   "ids": [
+    5101,
+    5102
+   ],
+   "ids_head": [
+    5101,
+    5102
+   ],
+   "ids_tail": [
+    5101,
+    5102
+   ],
+   "visible_is_tapped": true,
+   "ids_equal_displayed": true,
+   "list": "long"
+  }
+ ],
+ "single_id_entry": {
+  "ids": [
+   304
+  ],
+  "position": 0
+ },
+ "duplicate_ids_case": {
+  "input": {
+   "list": [
+    5,
+    6,
+    5,
+    7
+   ],
+   "tapped": 5
+  },
+  "result": {
+   "ids": [
+    5,
+    6,
+    5,
+    7
+   ],
+   "position": 2
+  },
+  "reachable": false
+ },
+ "absent_tapped_case": {
+  "input": {
+   "list": [
+    5,
+    6,
+    7
+   ],
+   "tapped": 9
+  },
+  "result": {
+   "ids": [
+    5,
+    6,
+    7
+   ],
+   "position": 0
+  },
+  "reachable": false
+ },
+ "navigation": [
+  {
+   "name": "journey_inbox_row3",
+   "caller": "inbox",
+   "direction": "ltr",
+   "ids": [
+    310,
+    301,
+    303,
+    304,
+    307
+   ],
+   "start_index": 2,
+   "start_menu": {
+    "toolbar_icons": [],
+    "overflow": [
+     "Remove from inbox",
+     "Mark as played",
+     "Remove from queue",
+     "Open podcast",
+     "Add to favorites",
+     "Share"
+    ]
+   },
+   "final_index": 3,
+   "final_visible_id": 304,
+   "steps": [
+    {
+     "gesture": "next",
+     "moved": true,
+     "index": 3,
+     "page_number": 4,
+     "visible_id": 304,
+     "resident_ids": [
+      303,
+      304,
+      307
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Reset playback position",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "prev",
+     "moved": true,
+     "index": 2,
+     "page_number": 3,
+     "visible_id": 303,
+     "resident_ids": [
+      301,
+      303,
+      304
+     ],
+     "menu": {
+      "toolbar_icons": [],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Remove from queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "next",
+     "moved": true,
+     "index": 3,
+     "page_number": 4,
+     "visible_id": 304,
+     "resident_ids": [
+      303,
+      304,
+      307
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Reset playback position",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "name": "first_page_prev_is_noop_ltr",
+   "caller": "inbox",
+   "direction": "ltr",
+   "ids": [
+    310,
+    301,
+    303,
+    304,
+    307
+   ],
+   "start_index": 0,
+   "start_menu": {
+    "toolbar_icons": [
+     "Visit website"
+    ],
+    "overflow": [
+     "Remove from inbox",
+     "Mark as played",
+     "Add to queue",
+     "Open podcast",
+     "Add to favorites",
+     "Share"
+    ]
+   },
+   "final_index": 1,
+   "final_visible_id": 301,
+   "steps": [
+    {
+     "gesture": "drag_right",
+     "moved": false,
+     "index": 0,
+     "page_number": 1,
+     "visible_id": 310,
+     "resident_ids": [
+      310,
+      301
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "drag_left",
+     "moved": true,
+     "index": 1,
+     "page_number": 2,
+     "visible_id": 301,
+     "resident_ids": [
+      310,
+      301,
+      303
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "name": "last_page_next_is_noop_ltr",
+   "caller": "inbox",
+   "direction": "ltr",
+   "ids": [
+    310,
+    301,
+    303,
+    304,
+    307
+   ],
+   "start_index": 4,
+   "start_menu": {
+    "toolbar_icons": [],
+    "overflow": [
+     "Remove from inbox",
+     "Mark as played",
+     "Add to queue",
+     "Open podcast",
+     "Add to favorites"
+    ]
+   },
+   "final_index": 3,
+   "final_visible_id": 304,
+   "steps": [
+    {
+     "gesture": "drag_left",
+     "moved": false,
+     "index": 4,
+     "page_number": 5,
+     "visible_id": 307,
+     "resident_ids": [
+      304,
+      307
+     ],
+     "menu": {
+      "toolbar_icons": [],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites"
+      ]
+     }
+    },
+    {
+     "gesture": "drag_right",
+     "moved": true,
+     "index": 3,
+     "page_number": 4,
+     "visible_id": 304,
+     "resident_ids": [
+      303,
+      304,
+      307
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Reset playback position",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "name": "rtl_drag_right_is_next",
+   "caller": "inbox",
+   "direction": "rtl",
+   "ids": [
+    310,
+    301,
+    303,
+    304,
+    307
+   ],
+   "start_index": 2,
+   "start_menu": {
+    "toolbar_icons": [],
+    "overflow": [
+     "Remove from inbox",
+     "Mark as played",
+     "Remove from queue",
+     "Open podcast",
+     "Add to favorites",
+     "Share"
+    ]
+   },
+   "final_index": 3,
+   "final_visible_id": 304,
+   "steps": [
+    {
+     "gesture": "drag_right",
+     "moved": true,
+     "index": 3,
+     "page_number": 4,
+     "visible_id": 304,
+     "resident_ids": [
+      303,
+      304,
+      307
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Reset playback position",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "drag_right",
+     "moved": true,
+     "index": 4,
+     "page_number": 5,
+     "visible_id": 307,
+     "resident_ids": [
+      304,
+      307
+     ],
+     "menu": {
+      "toolbar_icons": [],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites"
+      ]
+     }
+    },
+    {
+     "gesture": "drag_right",
+     "moved": false,
+     "index": 4,
+     "page_number": 5,
+     "visible_id": 307,
+     "resident_ids": [
+      304,
+      307
+     ],
+     "menu": {
+      "toolbar_icons": [],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites"
+      ]
+     }
+    },
+    {
+     "gesture": "drag_left",
+     "moved": true,
+     "index": 3,
+     "page_number": 4,
+     "visible_id": 304,
+     "resident_ids": [
+      303,
+      304,
+      307
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Reset playback position",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "name": "rtl_first_page_drag_left_is_noop",
+   "caller": "inbox",
+   "direction": "rtl",
+   "ids": [
+    310,
+    301,
+    303,
+    304,
+    307
+   ],
+   "start_index": 0,
+   "start_menu": {
+    "toolbar_icons": [
+     "Visit website"
+    ],
+    "overflow": [
+     "Remove from inbox",
+     "Mark as played",
+     "Add to queue",
+     "Open podcast",
+     "Add to favorites",
+     "Share"
+    ]
+   },
+   "final_index": 1,
+   "final_visible_id": 301,
+   "steps": [
+    {
+     "gesture": "drag_left",
+     "moved": false,
+     "index": 0,
+     "page_number": 1,
+     "visible_id": 310,
+     "resident_ids": [
+      310,
+      301
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "drag_right",
+     "moved": true,
+     "index": 1,
+     "page_number": 2,
+     "visible_id": 301,
+     "resident_ids": [
+      310,
+      301,
+      303
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "name": "rapid_swipes",
+   "caller": "all_episodes",
+   "direction": "ltr",
+   "ids": [
+    310,
+    308,
+    307,
+    306,
+    305,
+    304,
+    303,
+    302,
+    301
+   ],
+   "start_index": 1,
+   "start_menu": {
+    "toolbar_icons": [
+     "Visit website"
+    ],
+    "overflow": [
+     "Skip episode",
+     "Mark as played",
+     "Remove from queue",
+     "Reset playback position",
+     "Open podcast",
+     "Add to favorites",
+     "Share"
+    ]
+   },
+   "final_index": 4,
+   "final_visible_id": 305,
+   "steps": [
+    {
+     "gesture": "next",
+     "moved": true,
+     "index": 2,
+     "page_number": 3,
+     "visible_id": 307,
+     "resident_ids": [
+      308,
+      307,
+      306
+     ],
+     "menu": {
+      "toolbar_icons": [],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites"
+      ]
+     }
+    },
+    {
+     "gesture": "next",
+     "moved": true,
+     "index": 3,
+     "page_number": 4,
+     "visible_id": 306,
+     "resident_ids": [
+      307,
+      306,
+      305
+     ],
+     "menu": {
+      "toolbar_icons": [],
+      "overflow": [
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "next",
+     "moved": true,
+     "index": 4,
+     "page_number": 5,
+     "visible_id": 305,
+     "resident_ids": [
+      306,
+      305,
+      304
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Mark as unplayed",
+       "Add to queue",
+       "Open podcast",
+       "Remove from favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "next",
+     "moved": true,
+     "index": 5,
+     "page_number": 6,
+     "visible_id": 304,
+     "resident_ids": [
+      305,
+      304,
+      303
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Reset playback position",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "next",
+     "moved": true,
+     "index": 6,
+     "page_number": 7,
+     "visible_id": 303,
+     "resident_ids": [
+      304,
+      303,
+      302
+     ],
+     "menu": {
+      "toolbar_icons": [],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Remove from queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "prev",
+     "moved": true,
+     "index": 5,
+     "page_number": 6,
+     "visible_id": 304,
+     "resident_ids": [
+      305,
+      304,
+      303
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Remove from inbox",
+       "Mark as played",
+       "Add to queue",
+       "Reset playback position",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "prev",
+     "moved": true,
+     "index": 4,
+     "page_number": 5,
+     "visible_id": 305,
+     "resident_ids": [
+      306,
+      305,
+      304
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Mark as unplayed",
+       "Add to queue",
+       "Open podcast",
+       "Remove from favorites",
+       "Share"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "name": "single_page",
+   "caller": "online_feed_preview",
+   "direction": "ltr",
+   "ids": [
+    309
+   ],
+   "start_index": 0,
+   "start_menu": {
+    "toolbar_icons": [
+     "Visit website"
+    ],
+    "overflow": [
+     "Add to queue",
+     "Open podcast",
+     "Add to favorites",
+     "Share"
+    ]
+   },
+   "final_index": 0,
+   "final_visible_id": 309,
+   "steps": [
+    {
+     "gesture": "next",
+     "moved": false,
+     "index": 0,
+     "page_number": 1,
+     "visible_id": 309,
+     "resident_ids": [
+      309
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "prev",
+     "moved": false,
+     "index": 0,
+     "page_number": 1,
+     "visible_id": 309,
+     "resident_ids": [
+      309
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "drag_left",
+     "moved": false,
+     "index": 0,
+     "page_number": 1,
+     "visible_id": 309,
+     "resident_ids": [
+      309
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    },
+    {
+     "gesture": "drag_right",
+     "moved": false,
+     "index": 0,
+     "page_number": 1,
+     "visible_id": 309,
+     "resident_ids": [
+      309
+     ],
+     "menu": {
+      "toolbar_icons": [
+       "Visit website"
+      ],
+      "overflow": [
+       "Add to queue",
+       "Open podcast",
+       "Add to favorites",
+       "Share"
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "journey": {
+  "name": "inbox_row3_next_prev_mark_played_page4_back_relaunch",
+  "inbox_before": [
+   310,
+   301,
+   303,
+   304,
+   307
+  ],
+  "open_row": 3,
+  "opened_id": 303,
+  "steps": [
+   {
+    "gesture": "next",
+    "page_number": 4,
+    "visible_id": 304
+   },
+   {
+    "gesture": "prev",
+    "page_number": 3,
+    "visible_id": 303
+   },
+   {
+    "gesture": "next",
+    "page_number": 4,
+    "visible_id": 304
+   }
+  ],
+  "action": {
+   "menu_item": "Mark as played",
+   "target_id": 304,
+   "page_number": 4,
+   "must_not_touch_id": 303
+  },
+  "database_effect": {
+   "sql": "UPDATE FeedItems SET read=1 WHERE id=?; UPDATE FeedMedia SET position=0 WHERE id=?",
+   "before": {
+    "read": -1,
+    "position": 45000
+   },
+   "after": {
+    "read": 1,
+    "position": 0
+   },
+   "unchanged_fields": [
+    "queued",
+    "favorite",
+    "downloaded",
+    "completion_date",
+    "last_played_time"
+   ],
+   "snackbar": null,
+   "sync_episode_action": "PLAY action queued only when a sync provider is connected (EpisodeMultiSelectActionHandler:103-120); none in this fixture"
+  },
+  "pager_after_action": {
+   "ids": [
+    310,
+    301,
+    303,
+    304,
+    307
+   ],
+   "index": 3,
+   "visible_id": 304,
+   "menu_before": {
+    "toolbar_icons": [
+     "Visit website"
+    ],
+    "overflow": [
+     "Remove from inbox",
+     "Mark as played",
+     "Add to queue",
+     "Reset playback position",
+     "Open podcast",
+     "Add to favorites",
+     "Share"
+    ]
+   },
+   "menu_after": {
+    "toolbar_icons": [
+     "Visit website"
+    ],
+    "overflow": [
+     "Mark as unplayed",
+     "Add to queue",
+     "Open podcast",
+     "Add to favorites",
+     "Share"
+    ]
+   }
+  },
+  "after_back": {
+   "screen": "Inbox",
+   "list": [
+    310,
+    301,
+    303,
+    307
+   ],
+   "removed": [
+    304
+   ]
+  },
+  "after_relaunch": {
+   "inbox": [
+    310,
+    301,
+    303,
+    307
+   ],
+   "episode": {
+    "read": 1,
+    "position": 0
+   },
+   "pager_restored": false
+  },
+  "same_episode_in_other_lists": {
+   "inbox": [
+    310,
+    301,
+    303,
+    307
+   ],
+   "all_episodes": [
+    310,
+    308,
+    307,
+    306,
+    305,
+    304,
+    303,
+    302,
+    301
+   ],
+   "feed": [
+    310,
+    308,
+    306,
+    305,
+    304,
+    302,
+    301
+   ],
+   "search": [
+    304,
+    301
+   ]
+  }
+ },
+ "menus": {
+  "301": {
+   "toolbar_icons": [
+    "Visit website"
+   ],
+   "overflow": [
+    "Remove from inbox",
+    "Mark as played",
+    "Add to queue",
+    "Open podcast",
+    "Add to favorites",
+    "Share"
+   ]
+  },
+  "302": {
+   "toolbar_icons": [
+    "Visit website"
+   ],
+   "overflow": [
+    "Mark as played",
+    "Remove from queue",
+    "Reset playback position",
+    "Open podcast",
+    "Remove from favorites",
+    "Share"
+   ]
+  },
+  "303": {
+   "toolbar_icons": [],
+   "overflow": [
+    "Remove from inbox",
+    "Mark as played",
+    "Remove from queue",
+    "Open podcast",
+    "Add to favorites",
+    "Share"
+   ]
+  },
+  "304": {
+   "toolbar_icons": [
+    "Visit website"
+   ],
+   "overflow": [
+    "Remove from inbox",
+    "Mark as played",
+    "Add to queue",
+    "Reset playback position",
+    "Open podcast",
+    "Add to favorites",
+    "Share"
+   ]
+  },
+  "305": {
+   "toolbar_icons": [
+    "Visit website"
+   ],
+   "overflow": [
+    "Mark as unplayed",
+    "Add to queue",
+    "Open podcast",
+    "Remove from favorites",
+    "Share"
+   ]
+  },
+  "306": {
+   "toolbar_icons": [],
+   "overflow": [
+    "Open podcast",
+    "Add to favorites",
+    "Share"
+   ]
+  },
+  "307": {
+   "toolbar_icons": [],
+   "overflow": [
+    "Remove from inbox",
+    "Mark as played",
+    "Add to queue",
+    "Open podcast",
+    "Add to favorites"
+   ]
+  },
+  "308": {
+   "toolbar_icons": [
+    "Visit website"
+   ],
+   "overflow": [
+    "Skip episode",
+    "Mark as played",
+    "Remove from queue",
+    "Reset playback position",
+    "Open podcast",
+    "Add to favorites",
+    "Share"
+   ]
+  },
+  "309": {
+   "toolbar_icons": [
+    "Visit website"
+   ],
+   "overflow": [
+    "Add to queue",
+    "Open podcast",
+    "Add to favorites",
+    "Share"
+   ]
+  },
+  "310": {
+   "toolbar_icons": [
+    "Visit website"
+   ],
+   "overflow": [
+    "Remove from inbox",
+    "Mark as played",
+    "Add to queue",
+    "Open podcast",
+    "Add to favorites",
+    "Share"
+   ]
+  }
+ },
+ "android_menu_before_first_load_defect": {
+  "toolbar_icons": [
+   "Visit website"
+  ],
+  "overflow": [
+   "Skip episode",
+   "Remove from inbox",
+   "Mark as played",
+   "Mark as unplayed",
+   "Add to queue",
+   "Remove from queue",
+   "Reset playback position",
+   "Open podcast",
+   "Add to favorites",
+   "Remove from favorites",
+   "Share"
+  ]
+ },
+ "cross_oracle": {
+  "m22_lists": {
+   "source": "TestSupport/Data/episode-list-menus/expected/lists.json",
+   "screens": {
+    "inbox": {
+     "sort_code": 2,
+     "total_count": 157,
+     "tapped_row": 3,
+     "tapped_id": 3,
+     "page1": {
+      "pager_size": 150,
+      "position": 2,
+      "last_reachable_id": 149,
+      "ids_equal_displayed": true
+     },
+     "after_load_more": {
+      "pager_size": 157,
+      "last_reachable_id": 156
+     }
+    },
+    "all_episodes": {
+     "sort_code": 2,
+     "total_count": 170,
+     "tapped_row": 3,
+     "tapped_id": 3,
+     "page1": {
+      "pager_size": 150,
+      "position": 2,
+      "last_reachable_id": 151,
+      "ids_equal_displayed": true
+     },
+     "after_load_more": {
+      "pager_size": 170,
+      "last_reachable_id": 213
+     }
+    },
+    "favorites": {
+     "sort_code": 2,
+     "total_count": 8,
+     "tapped_row": 3,
+     "tapped_id": 201,
+     "page1": {
+      "pager_size": 8,
+      "position": 2,
+      "last_reachable_id": 302,
+      "ids_equal_displayed": true
+     },
+     "after_load_more": {
+      "pager_size": 8,
+      "last_reachable_id": 302
+     }
+    },
+    "history": {
+     "sort_code": 106,
+     "total_count": 8,
+     "tapped_row": 3,
+     "tapped_id": 206,
+     "page1": {
+      "pager_size": 8,
+      "position": 2,
+      "last_reachable_id": 201,
+      "ids_equal_displayed": true
+     },
+     "after_load_more": {
+      "pager_size": 8,
+      "last_reachable_id": 201
+     }
+    }
+   }
+  },
+  "m23_queue": {
+   "source": "TestSupport/Data/queue-sort-clear/expected/queue-sort.json",
+   "cases": [
+    {
+     "queue": "base",
+     "order": "EPISODE_TITLE_A_Z",
+     "locale": "en-US",
+     "displayed": [
+      107,
+      109,
+      112,
+      110,
+      101,
+      102,
+      115,
+      103,
+      113,
+      114,
+      104,
+      106,
+      111,
+      108,
+      105
+     ],
+     "pager_ids": [
+      107,
+      109,
+      112,
+      110,
+      101,
+      102,
+      115,
+      103,
+      113,
+      114,
+      104,
+      106,
+      111,
+      108,
+      105
+     ],
+     "position": 2
+    },
+    {
+     "queue": "base",
+     "order": "EPISODE_TITLE_Z_A",
+     "locale": "en-US",
+     "displayed": [
+      105,
+      108,
+      111,
+      106,
+      104,
+      114,
+      113,
+      103,
+      115,
+      101,
+      102,
+      110,
+      112,
+      109,
+      107
+     ],
+     "pager_ids": [
+      105,
+      108,
+      111,
+      106,
+      104,
+      114,
+      113,
+      103,
+      115,
+      101,
+      102,
+      110,
+      112,
+      109,
+      107
+     ],
+     "position": 2
+    },
+    {
+     "queue": "base",
+     "order": "FEED_TITLE_A_Z",
+     "locale": "en-US",
+     "displayed": [
+      106,
+      104,
+      105,
+      107,
+      109,
+      110,
+      108,
+      112,
+      113,
+      114,
+      101,
+      115,
+      102,
+      103,
+      111
+     ],
+     "pager_ids": [
+      106,
+      104,
+      105,
+      107,
+      109,
+      110,
+      108,
+      112,
+      113,
+      114,
+      101,
+      115,
+      102,
+      103,
+      111
+     ],
+     "position": 2
+    }
+   ]
+  },
+  "m20_home": {
+   "source": "TestSupport/Data/home-sections/expected/rich.json",
+   "sections": [
+    {
+     "section": "QueueSection",
+     "title": "Continue listening",
+     "displayed": [
+      2003,
+      2010,
+      2002,
+      2001,
+      2006,
+      2007,
+      2005,
+      2008
+     ],
+     "tap_last_card": {
+      "pager_ids": [
+       2003,
+       2010,
+       2002,
+       2001,
+       2006,
+       2007,
+       2005,
+       2008
+      ],
+      "position": 7
+     }
+    },
+    {
+     "section": "InboxSection",
+     "title": "See what's new",
+     "displayed": [
+      1202,
+      1001
+     ],
+     "tap_last_card": {
+      "pager_ids": [
+       1202,
+       1001
+      ],
+      "position": 1
+     }
+    },
+    {
+     "section": "EpisodesSurpriseSection",
+     "title": "Get surprised",
+     "displayed": [
+      1054,
+      1069,
+      1005,
+      1020,
+      1001,
+      1016,
+      1012,
+      1027
+     ],
+     "tap_last_card": {
+      "pager_ids": [
+       1054,
+       1069,
+       1005,
+       1020,
+       1001,
+       1016,
+       1012,
+       1027
+      ],
+      "position": 7
+     }
+    },
+    {
+     "section": "DownloadsSection",
+     "title": "Manage downloads",
+     "displayed": [
+      4001,
+      4002
+     ],
+     "tap_last_card": {
+      "pager_ids": [
+       4001,
+       4002
+      ],
+      "position": 1
+     }
+    }
+   ]
+  }
+ },
+ "negative_controls": {
+  "first_match_seeding_differs_on_duplicates": true,
+  "ltr_only_drag_mapping_differs_in_rtl": true,
+  "previous_page_menu_target_differs": true
+ },
+ "checks": {
+  "failed": [],
+  "passed": true
+ }
+}

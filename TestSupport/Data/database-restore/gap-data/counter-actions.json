@@ -1,0 +1,13 @@
+{
+  "description": "GAP-DATA: actions a person takes on counter-states.db, in order; each changes the Inbox count. The view test performs them through the app's controls; navigation_counters.py derives Android's counters after each one (counter-expected.json).",
+  "source": "gap-data/counter-states.db",
+  "steps": [
+    {"action": "markPlayed", "episode": 28},
+    {"action": "removeFromInbox", "episode": 29},
+    {"action": "markPlayed", "episode": 19},
+    {"action": "archive", "feed": 5},
+    {"action": "restoreArchived", "feed": 2},
+    {"action": "subscribePreview", "feed": 8},
+    {"action": "removeAllFromInbox"}
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "source": "Synthetic changing harmonics, 1800 seconds, 44100Hz mono. No third-party recording.",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "arguments": [
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-f",
+    "lavfi",
+    "-i",
+    "aevalsrc=0.15*sin(2*PI*217*t)+0.08*sin(2*PI*(431*t+17*sin(t/7)))+0.03*sin(2*PI*1301*t):s=44100:d=1800",
+    "-map_metadata",
+    "-1",
+    "-ac",
+    "1",
+    "-c:a",
+    "libmp3lame",
+    "-b:a",
+    "96k",
+    "-write_xing",
+    "1",
+    "-id3v2_version",
+    "0"
+  ],
+  "sha256": "71a127511889f1816645d95231cec28816c6b7f1358266e5737d6a4d7f72cb49",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "sample_rate": "44100",
+        "channels": 1,
+        "duration": "1800.000000"
+      }
+    ],
+    "format": {
+      "duration": "1800.000000",
+      "size": "21600862"
+    }
+  }
+}

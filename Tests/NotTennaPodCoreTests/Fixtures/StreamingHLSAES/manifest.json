@@ -1,0 +1,48 @@
+{
+  "tool": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+  "encryption": "AES-128-CBC with PKCS7 padding; explicit 128-bit segment-index IVs; two deterministic fixture keys",
+  "segments": [
+    {
+      "source": "../StreamingHLS/part00.ts",
+      "sourceSHA256": "8d35b157072f0d250bd463f27df5cd099c638f9da4bdf73bbd93cfa36e40e48c",
+      "offset": 0,
+      "bytes": 18432,
+      "decryptedMatchesSource": true
+    },
+    {
+      "source": "../StreamingHLS/part01.ts",
+      "sourceSHA256": "35e0db0b9a434c71e45d6a0ddf8b33de1e8ee2e8f32e49f20d7204f96baf5a5f",
+      "offset": 18432,
+      "bytes": 18240,
+      "decryptedMatchesSource": true
+    },
+    {
+      "source": "../StreamingHLS/part02.ts",
+      "sourceSHA256": "72ce3dcb3c10caccdb907477b1b2bc62eaa8c8cb26b37dead3d7f821b966acf9",
+      "offset": 36672,
+      "bytes": 18240,
+      "decryptedMatchesSource": true
+    },
+    {
+      "source": "../StreamingHLS/part03.ts",
+      "sourceSHA256": "828606f8a6c81e54e99b9f0e01ef2c93b8f6757e5a73a6ff49c41b484ff6484e",
+      "offset": 54912,
+      "bytes": 18064,
+      "decryptedMatchesSource": true
+    },
+    {
+      "source": "../StreamingHLS/part04.ts",
+      "sourceSHA256": "c9512e4fa00cef273137307a5a77cfb3bfed0d79027a575af726a277de496eb9",
+      "offset": 72976,
+      "bytes": 944,
+      "decryptedMatchesSource": true
+    }
+  ],
+  "files": {
+    "key-a.bin": "be45cb2605bf36bebde684841a28f0fd43c69850a3dce5fedba69928ee3a8991",
+    "key-b.bin": "fc2e2c73072bfa2bda03ff9307472debd3cc8105028a8a9e235e35ba8d2e37f4",
+    "master.m3u8": "778488fe8d86b706340b6cfc0381cf1186677450c01e747b589d8a2326461b32",
+    "media.bin": "0e4449efe07e0b3da92636c4a30e5ca00c08658271a6e4617afe8ff86f3d6450",
+    "variant.m3u8": "bdbbcfae3c583120dc20516046d00075a7e512530753054b4200e6ef7a7cd0ef"
+  }
+}

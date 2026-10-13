@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
+<opml version="2.0">
+  <head>
+    <title>AntennaPod Subscriptions</title>
+    <dateCreated>24 Sep 26 08:58:51 +0545</dateCreated>
+  </head>
+  <body>
+    <outline text='Zed &amp; &lt;tags&gt; "double" &apos;single&apos;' title='Zed &amp; &lt;tags&gt; "double" &apos;single&apos;' type="rss" xmlUrl="https://example.com/a?x=1&amp;y=%22#part" htmlUrl='https://example.com/?q=&lt;&amp;x="' />
+    <outline text="日本語 café 😀" title="日本語 café 😀" type="atom" xmlUrl="https://例え.example/声.xml" />
+    <outline text="Line&#10;Carriage&#13;Tab&#9;Name" title="Line&#10;Carriage&#13;Tab&#9;Name" type="" xmlUrl="https://example.com/line" htmlUrl="" />
+  </body>
+</opml>

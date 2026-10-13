@@ -1,0 +1,13 @@
+.DS_Store
+.work/
+.build/
+DerivedData/
+**/xcuserdata/
+*.xcuserstate
+**/.swiftpm/
+__pycache__/
+# Built or downloaded by the setup steps in docs/DEPENDENCIES.md; never committed.
+Vendor/CFFmpegCodec.xcframework/
+Vendor/GoogleCastSDK/
+# Local tool files, not for redistribution.
+.agents/

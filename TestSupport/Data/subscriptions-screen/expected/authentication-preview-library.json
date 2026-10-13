@@ -1,0 +1,469 @@
+{
+  "oracle": "SubscriptionsScreenVerification/expected_subscriptions.py",
+  "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "db": "TestSupport/Data/database-restore/android-3.12.1/authentication-preview-library.db",
+  "python_sqlite_version": "3.53.4",
+  "now_ms": 1790000000000,
+  "preferences": {
+    "prefDrawerFeedOrder": {
+      "raw": "0",
+      "resolved": 0,
+      "name": "COUNTER"
+    },
+    "prefDrawerFeedIndicator": {
+      "raw": "1",
+      "resolved": 1,
+      "name": "SHOW_NEW"
+    },
+    "prefSubscriptionsFilter": {
+      "raw": "",
+      "tokens": [],
+      "enabled": false,
+      "unknown_tokens": []
+    },
+    "prefSubscriptionTitle": false,
+    "prefEnableAutoDl": false,
+    "SubscriptionFragment.columns": null,
+    "SubscriptionFragment.last_tag": "#root",
+    "NavDrawerPrefs.prefOpenFolders": []
+  },
+  "sql_preorder_feed_ids": [
+    9,
+    1,
+    4,
+    2,
+    10,
+    5,
+    6,
+    8,
+    3
+  ],
+  "counters_by_setting": {
+    "SHOW_NEW": {
+      "3": 1
+    },
+    "SHOW_UNPLAYED": {
+      "1": 2,
+      "2": 12,
+      "3": 5,
+      "4": 8,
+      "5": 12,
+      "10": 1
+    },
+    "SHOW_DOWNLOADED": {
+      "10": 1
+    },
+    "SHOW_DOWNLOADED_UNPLAYED": {},
+    "SHOW_NONE": {}
+  },
+  "subscriptions": {
+    "state": 0,
+    "selected_tag": "#root",
+    "feed_ids": [
+      3,
+      1,
+      4,
+      2,
+      10,
+      5
+    ],
+    "feeds": [
+      {
+        "id": 3,
+        "title": "Pull delivered podcast",
+        "counter": 1,
+        "counter_text": "1",
+        "last_update_failed": false
+      },
+      {
+        "id": 1,
+        "title": "Episode Header Lab",
+        "counter": 0,
+        "counter_text": null,
+        "last_update_failed": true
+      },
+      {
+        "id": 4,
+        "title": "Feed Selection Lab",
+        "counter": 0,
+        "counter_text": null,
+        "last_update_failed": false
+      },
+      {
+        "id": 2,
+        "title": "Pagination Lab",
+        "counter": 0,
+        "counter_text": null,
+        "last_update_failed": false
+      },
+      {
+        "id": 10,
+        "title": "Parity Listening Lab",
+        "counter": 0,
+        "counter_text": null,
+        "last_update_failed": false
+      },
+      {
+        "id": 5,
+        "title": "Preview Navigation Lab",
+        "counter": 0,
+        "counter_text": null,
+        "last_update_failed": false
+      }
+    ],
+    "filtered_out": [],
+    "filtered_message_visible": false,
+    "ties": [],
+    "notes": []
+  },
+  "archive": {
+    "state": 2,
+    "selected_tag": "#root",
+    "feed_ids": [],
+    "feeds": [],
+    "filtered_out": [],
+    "filtered_message_visible": false,
+    "ties": [],
+    "notes": [],
+    "empty_view": {
+      "title": "Nothing archived",
+      "message": "You can archive podcasts from the main subscriptions screen."
+    }
+  },
+  "drawer": {
+    "flat_items": [
+      {
+        "type": "feed",
+        "id": 3,
+        "title": "Pull delivered podcast",
+        "counter": 1,
+        "layer": 0
+      },
+      {
+        "type": "feed",
+        "id": 1,
+        "title": "Episode Header Lab",
+        "counter": 0,
+        "layer": 0
+      },
+      {
+        "type": "feed",
+        "id": 4,
+        "title": "Feed Selection Lab",
+        "counter": 0,
+        "layer": 0
+      },
+      {
+        "type": "feed",
+        "id": 2,
+        "title": "Pagination Lab",
+        "counter": 0,
+        "layer": 0
+      },
+      {
+        "type": "feed",
+        "id": 10,
+        "title": "Parity Listening Lab",
+        "counter": 0,
+        "layer": 0
+      },
+      {
+        "type": "feed",
+        "id": 5,
+        "title": "Preview Navigation Lab",
+        "counter": 0,
+        "layer": 0
+      }
+    ],
+    "root_feed_ids": [
+      3,
+      1,
+      4,
+      2,
+      10,
+      5
+    ],
+    "folders": [],
+    "subscriptions_entry_counter": 1,
+    "subscriptions_entry_counter_text": "1",
+    "filtered_message_visible": false
+  },
+  "dialogs": {
+    "sort": {
+      "title": "Sort",
+      "negative": "Cancel",
+      "options": [
+        {
+          "value": "0",
+          "label": "Sort by counter",
+          "checked": true
+        },
+        {
+          "value": "1",
+          "label": "Sort alphabetically",
+          "checked": false
+        },
+        {
+          "value": "2",
+          "label": "Sort by publication date",
+          "checked": false
+        },
+        {
+          "value": "3",
+          "label": "Sort by number of played episodes",
+          "checked": false
+        }
+      ]
+    },
+    "counter": {
+      "title": "Counter",
+      "negative": "Cancel",
+      "options": [
+        {
+          "value": "1",
+          "label": "Number of episodes in the inbox",
+          "checked": true
+        },
+        {
+          "value": "2",
+          "label": "Number of unplayed episodes",
+          "checked": false
+        },
+        {
+          "value": "4",
+          "label": "Number of downloaded episodes",
+          "checked": false
+        },
+        {
+          "value": "5",
+          "label": "Number of downloaded and unplayed episodes",
+          "checked": false
+        },
+        {
+          "value": "3",
+          "label": "None",
+          "checked": false
+        }
+      ]
+    },
+    "filter": {
+      "rows": [
+        [
+          {
+            "token": "counter_greater_zero",
+            "label": "Counter greater than zero",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "enabled_auto_download",
+            "label": "Auto downloaded",
+            "checked": false
+          },
+          {
+            "token": "disabled_auto_download",
+            "label": "Not auto downloaded",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "enabled_updates",
+            "label": "Kept updated",
+            "checked": false
+          },
+          {
+            "token": "disabled_updates",
+            "label": "Not kept updated",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "episode_notification_enabled",
+            "label": "Notification enabled",
+            "checked": false
+          },
+          {
+            "token": "episode_notification_disabled",
+            "label": "Notification disabled",
+            "checked": false
+          }
+        ]
+      ],
+      "buttons": [
+        "Reset",
+        "Confirm"
+      ]
+    }
+  },
+  "limitations": [
+    "Java HashMap treeified buckets (>=8 colliding tags with capacity>=64) are not modelled",
+    "Character case mappings come from Python's Unicode tables (simple mappings), not Android ICU",
+    "counter_text assumes an en-US default locale for NumberFormat.getInstance()",
+    "Feeds.title COLLATE NOCASE ties keep this host SQLite's order (python_sqlite_version)"
+  ],
+  "matrix_subscribed_feed_ids": {
+    "COUNTER/SHOW_NEW": [
+      3,
+      1,
+      4,
+      2,
+      10,
+      5
+    ],
+    "COUNTER/SHOW_UNPLAYED": [
+      2,
+      5,
+      4,
+      3,
+      1,
+      10
+    ],
+    "COUNTER/SHOW_DOWNLOADED": [
+      10,
+      1,
+      4,
+      2,
+      5,
+      3
+    ],
+    "COUNTER/SHOW_DOWNLOADED_UNPLAYED": [
+      1,
+      4,
+      2,
+      10,
+      5,
+      3
+    ],
+    "COUNTER/SHOW_NONE": [
+      1,
+      4,
+      2,
+      10,
+      5,
+      3
+    ],
+    "ALPHABETICAL/SHOW_NEW": [
+      1,
+      4,
+      2,
+      10,
+      5,
+      3
+    ],
+    "ALPHABETICAL/SHOW_UNPLAYED": [
+      1,
+      4,
+      2,
+      10,
+      5,
+      3
+    ],
+    "ALPHABETICAL/SHOW_DOWNLOADED": [
+      1,
+      4,
+      2,
+      10,
+      5,
+      3
+    ],
+    "ALPHABETICAL/SHOW_DOWNLOADED_UNPLAYED": [
+      1,
+      4,
+      2,
+      10,
+      5,
+      3
+    ],
+    "ALPHABETICAL/SHOW_NONE": [
+      1,
+      4,
+      2,
+      10,
+      5,
+      3
+    ],
+    "MOST_RECENT_EPISODE/SHOW_NEW": [
+      1,
+      10,
+      3,
+      2,
+      5,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_UNPLAYED": [
+      1,
+      10,
+      3,
+      2,
+      5,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_DOWNLOADED": [
+      1,
+      10,
+      3,
+      2,
+      5,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_DOWNLOADED_UNPLAYED": [
+      1,
+      10,
+      3,
+      2,
+      5,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_NONE": [
+      1,
+      10,
+      3,
+      2,
+      5,
+      4
+    ],
+    "MOST_PLAYED/SHOW_NEW": [
+      10,
+      1,
+      4,
+      2,
+      5,
+      3
+    ],
+    "MOST_PLAYED/SHOW_UNPLAYED": [
+      10,
+      1,
+      4,
+      2,
+      5,
+      3
+    ],
+    "MOST_PLAYED/SHOW_DOWNLOADED": [
+      10,
+      1,
+      4,
+      2,
+      5,
+      3
+    ],
+    "MOST_PLAYED/SHOW_DOWNLOADED_UNPLAYED": [
+      10,
+      1,
+      4,
+      2,
+      5,
+      3
+    ],
+    "MOST_PLAYED/SHOW_NONE": [
+      10,
+      1,
+      4,
+      2,
+      5,
+      3
+    ]
+  }
+}

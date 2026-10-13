@@ -1,0 +1,2316 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "sources": {
+    "reference/AntennaPod/net/download/service/src/main/java/de/danoeh/antennapod/net/download/service/feed/NewEpisodesNotification.java": "06311ae83e429bf4db1a2552afc4bec6ed2dbcd05ff10709af63dfcfdacec2e4",
+    "reference/AntennaPod/storage/database/src/main/java/de/danoeh/antennapod/storage/database/PodDBAdapter.java": "74e39999e4857b9a445a7bf01bc0580e6846ead85c9cf48eef84f001df5dbd36"
+  },
+  "showMethodSHA256": "fd6296825865c3d7abe309c523d6722399bdbd6979574b5e5b41f06ac046a525",
+  "counterMethodsSHA256": "d9e8d05a6c3e4f45dbe4ded7f626e53743cb497bd255c91354513b0d25e91a0e",
+  "cases": [
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": null,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": null,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": null,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": null,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": null,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": null,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": null,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": null,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 0,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 0,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 0,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 0,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 0,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 0,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 0,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 0,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 1,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 1,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 1,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 1,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 1,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 1,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 1,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 1,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 10,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 10,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 10,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 10,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 10,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 10,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 10,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 10,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 100,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 100,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 100,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 100,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 100,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 100,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 100,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 100,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": null,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": null,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": null,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": null,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": null,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": null,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": null,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": null,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 0,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 0,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 0,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 0,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 0,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 0,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 0,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 0,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 1,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 1,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 1,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 1,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 1,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 1,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 1,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 1,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 10,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 10,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 10,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 10,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 10,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 10,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 10,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 10,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 100,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 100,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 100,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 100,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 100,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 100,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 100,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 100,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": false,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": null,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": null,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": null,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": null,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": null,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": null,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": null,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": null,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 0,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 0,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 0,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 0,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 0,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 0,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 0,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 0,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 1,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 1,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 1,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 1,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 1,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 1,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 1,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 1,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 10,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 10,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 10,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 10,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 10,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 10,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 10,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 10,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 100,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 100,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 100,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 100,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 100,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 100,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 100,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 100,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": false,
+      "before": 2147483647,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 0
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": null,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": null,
+      "after": 1,
+      "notificationCount": 1,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": null,
+      "after": 2,
+      "notificationCount": 2,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": null,
+      "after": 3,
+      "notificationCount": 3,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": null,
+      "after": 10,
+      "notificationCount": 10,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": null,
+      "after": 100,
+      "notificationCount": 100,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": null,
+      "after": 101,
+      "notificationCount": 101,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": null,
+      "after": 2147483647,
+      "notificationCount": 2147483647,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 0,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 0,
+      "after": 1,
+      "notificationCount": 1,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 0,
+      "after": 2,
+      "notificationCount": 2,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 0,
+      "after": 3,
+      "notificationCount": 3,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 0,
+      "after": 10,
+      "notificationCount": 10,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 0,
+      "after": 100,
+      "notificationCount": 100,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 0,
+      "after": 101,
+      "notificationCount": 101,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 0,
+      "after": 2147483647,
+      "notificationCount": 2147483647,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 1,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 1,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 1,
+      "after": 2,
+      "notificationCount": 2,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 1,
+      "after": 3,
+      "notificationCount": 3,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 1,
+      "after": 10,
+      "notificationCount": 10,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 1,
+      "after": 100,
+      "notificationCount": 100,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 1,
+      "after": 101,
+      "notificationCount": 101,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 1,
+      "after": 2147483647,
+      "notificationCount": 2147483647,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2,
+      "after": 3,
+      "notificationCount": 3,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2,
+      "after": 10,
+      "notificationCount": 10,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2,
+      "after": 100,
+      "notificationCount": 100,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2,
+      "after": 101,
+      "notificationCount": 101,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2,
+      "after": 2147483647,
+      "notificationCount": 2147483647,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 10,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 10,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 10,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 10,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 10,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 10,
+      "after": 100,
+      "notificationCount": 100,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 10,
+      "after": 101,
+      "notificationCount": 101,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 10,
+      "after": 2147483647,
+      "notificationCount": 2147483647,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 100,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 100,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 100,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 100,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 100,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 100,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 100,
+      "after": 101,
+      "notificationCount": 101,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 100,
+      "after": 2147483647,
+      "notificationCount": 2147483647,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 0,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 1,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 2,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 3,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 10,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 100,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 101,
+      "notificationCount": null,
+      "countReads": 1
+    },
+    {
+      "keepUpdated": true,
+      "enabled": true,
+      "before": 2147483647,
+      "after": 2147483647,
+      "notificationCount": null,
+      "countReads": 1
+    }
+  ],
+  "feeds": [
+    {
+      "id": 1,
+      "state": 0,
+      "episodeStates": [
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 2,
+      "state": 0,
+      "episodeStates": [
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 3,
+      "state": 0,
+      "episodeStates": [
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 4,
+      "state": 0,
+      "episodeStates": [
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 5,
+      "state": 0,
+      "episodeStates": [
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 6,
+      "state": 0,
+      "episodeStates": [
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 7,
+      "state": 0,
+      "episodeStates": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 8,
+      "state": 0,
+      "episodeStates": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 9,
+      "state": 1,
+      "episodeStates": [
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 10,
+      "state": 1,
+      "episodeStates": [
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 11,
+      "state": 1,
+      "episodeStates": [
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 12,
+      "state": 1,
+      "episodeStates": [
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 13,
+      "state": 1,
+      "episodeStates": [
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 14,
+      "state": 1,
+      "episodeStates": [
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 15,
+      "state": 1,
+      "episodeStates": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 16,
+      "state": 1,
+      "episodeStates": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 17,
+      "state": 2,
+      "episodeStates": [
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 18,
+      "state": 2,
+      "episodeStates": [
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 19,
+      "state": 2,
+      "episodeStates": [
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 20,
+      "state": 2,
+      "episodeStates": [
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 21,
+      "state": 2,
+      "episodeStates": [
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 22,
+      "state": 2,
+      "episodeStates": [
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    },
+    {
+      "id": 23,
+      "state": 2,
+      "episodeStates": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": false
+    },
+    {
+      "id": 24,
+      "state": 2,
+      "episodeStates": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        0,
+        1
+      ],
+      "media": true
+    }
+  ],
+  "queries": [
+    {
+      "feedIDs": [],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE FeedItems.feed IN (SELECT id FROM Feeds WHERE state=0) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 5,
+        "8": 5
+      }
+    },
+    {
+      "feedIDs": [
+        1
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (1) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    },
+    {
+      "feedIDs": [
+        2
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (2) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    },
+    {
+      "feedIDs": [
+        3
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (3) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "3": 1
+      }
+    },
+    {
+      "feedIDs": [
+        4
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (4) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "4": 1
+      }
+    },
+    {
+      "feedIDs": [
+        5
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (5) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "5": 2
+      }
+    },
+    {
+      "feedIDs": [
+        6
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (6) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "6": 2
+      }
+    },
+    {
+      "feedIDs": [
+        7
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (7) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "7": 5
+      }
+    },
+    {
+      "feedIDs": [
+        8
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (8) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "8": 5
+      }
+    },
+    {
+      "feedIDs": [
+        9
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (9) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    },
+    {
+      "feedIDs": [
+        10
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (10) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    },
+    {
+      "feedIDs": [
+        11
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (11) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "11": 1
+      }
+    },
+    {
+      "feedIDs": [
+        12
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (12) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "12": 1
+      }
+    },
+    {
+      "feedIDs": [
+        13
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (13) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "13": 2
+      }
+    },
+    {
+      "feedIDs": [
+        14
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (14) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "14": 2
+      }
+    },
+    {
+      "feedIDs": [
+        15
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (15) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "15": 5
+      }
+    },
+    {
+      "feedIDs": [
+        16
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (16) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "16": 5
+      }
+    },
+    {
+      "feedIDs": [
+        17
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (17) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    },
+    {
+      "feedIDs": [
+        18
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (18) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    },
+    {
+      "feedIDs": [
+        19
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (19) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "19": 1
+      }
+    },
+    {
+      "feedIDs": [
+        20
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (20) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "20": 1
+      }
+    },
+    {
+      "feedIDs": [
+        21
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (21) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "21": 2
+      }
+    },
+    {
+      "feedIDs": [
+        22
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (22) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "22": 2
+      }
+    },
+    {
+      "feedIDs": [
+        23
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (23) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "23": 5
+      }
+    },
+    {
+      "feedIDs": [
+        24
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (24) AND  read=-1 GROUP BY feed",
+      "counts": {
+        "24": 5
+      }
+    },
+    {
+      "feedIDs": [
+        1,
+        2,
+        9,
+        10,
+        17,
+        18
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (1,2,9,10,17,18) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    },
+    {
+      "feedIDs": [
+        2,
+        2,
+        10,
+        999
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (2,2,10,999) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    },
+    {
+      "feedIDs": [
+        999
+      ],
+      "sql": "SELECT feed, COUNT(FeedItems.id) AS count  FROM FeedItems LEFT JOIN FeedMedia ON FeedItems.id=FeedMedia.feeditem WHERE feed IN (999) AND  read=-1 GROUP BY feed",
+      "counts": {}
+    }
+  ]
+}

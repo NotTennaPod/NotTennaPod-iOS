@@ -1,0 +1,380 @@
+{
+  "oracle": "SubscriptionsScreenVerification/expected_subscriptions.py",
+  "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "db": "TestSupport/Data/subscriptions-screen/databases/mixed.db",
+  "python_sqlite_version": "3.53.4",
+  "now_ms": 1790000000000,
+  "preferences": {
+    "prefDrawerFeedOrder": {
+      "raw": "0",
+      "resolved": 0,
+      "name": "COUNTER"
+    },
+    "prefDrawerFeedIndicator": {
+      "raw": "1",
+      "resolved": 1,
+      "name": "SHOW_NEW"
+    },
+    "prefSubscriptionsFilter": {
+      "raw": "enabled_auto_download",
+      "tokens": [
+        "enabled_auto_download"
+      ],
+      "enabled": true,
+      "unknown_tokens": []
+    },
+    "prefSubscriptionTitle": false,
+    "prefEnableAutoDl": false,
+    "SubscriptionFragment.columns": null,
+    "SubscriptionFragment.last_tag": "#root",
+    "NavDrawerPrefs.prefOpenFolders": []
+  },
+  "sql_preorder_feed_ids": [
+    1,
+    2,
+    3,
+    6,
+    16,
+    15,
+    12,
+    8,
+    20,
+    18,
+    17,
+    10,
+    19,
+    4,
+    11,
+    5,
+    9,
+    7,
+    14,
+    13
+  ],
+  "counters_by_setting": {
+    "SHOW_NEW": {
+      "1": 2,
+      "2": 2,
+      "3": 2,
+      "4": 5,
+      "5": 1,
+      "6": 1,
+      "9": 3,
+      "10": 3,
+      "11": 1,
+      "13": 2,
+      "14": 2,
+      "20": 4
+    },
+    "SHOW_UNPLAYED": {
+      "1": 3,
+      "2": 3,
+      "3": 2,
+      "4": 5,
+      "5": 1,
+      "6": 4,
+      "8": 1,
+      "9": 3,
+      "10": 3,
+      "11": 1,
+      "13": 2,
+      "14": 2,
+      "19": 1,
+      "20": 4
+    },
+    "SHOW_DOWNLOADED": {
+      "2": 1,
+      "3": 2,
+      "5": 1,
+      "8": 1,
+      "10": 3,
+      "12": 1
+    },
+    "SHOW_DOWNLOADED_UNPLAYED": {
+      "2": 1,
+      "3": 2,
+      "5": 1,
+      "8": 1,
+      "10": 3
+    },
+    "SHOW_NONE": {}
+  },
+  "subscriptions": {
+    "state": 0,
+    "selected_tag": "#root",
+    "feed_ids": [
+      9,
+      2,
+      5
+    ],
+    "feeds": [
+      {
+        "id": 9,
+        "title": "ßRadio",
+        "counter": 3,
+        "counter_text": "3",
+        "last_update_failed": false
+      },
+      {
+        "id": 2,
+        "title": "Alpha",
+        "counter": 2,
+        "counter_text": "2",
+        "last_update_failed": false
+      },
+      {
+        "id": 5,
+        "title": "Äpfel",
+        "counter": 1,
+        "counter_text": "1",
+        "last_update_failed": false
+      }
+    ],
+    "filtered_out": [
+      {
+        "id": 1,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 3,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 6,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 12,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 8,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 20,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 18,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 10,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 19,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 4,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 11,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 7,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 14,
+        "reason": "enabled_auto_download"
+      },
+      {
+        "id": 13,
+        "reason": "enabled_auto_download"
+      }
+    ],
+    "filtered_message_visible": true,
+    "ties": [],
+    "notes": []
+  },
+  "archive": {
+    "state": 2,
+    "selected_tag": "#root",
+    "feed_ids": [
+      16,
+      15
+    ],
+    "feeds": [
+      {
+        "id": 16,
+        "title": "archived other",
+        "counter": 0,
+        "counter_text": null,
+        "last_update_failed": false
+      },
+      {
+        "id": 15,
+        "title": "Archived Show",
+        "counter": 0,
+        "counter_text": null,
+        "last_update_failed": false
+      }
+    ],
+    "filtered_out": [],
+    "filtered_message_visible": true,
+    "ties": [],
+    "notes": []
+  },
+  "drawer": {
+    "flat_items": [
+      {
+        "type": "feed",
+        "id": 9,
+        "title": "ßRadio",
+        "counter": 3,
+        "layer": 0
+      },
+      {
+        "type": "feed",
+        "id": 5,
+        "title": "Äpfel",
+        "counter": 1,
+        "layer": 0
+      },
+      {
+        "type": "folder",
+        "title": "News",
+        "counter": 2,
+        "open": false,
+        "counter_visible": true
+      }
+    ],
+    "root_feed_ids": [
+      9,
+      5
+    ],
+    "folders": [
+      {
+        "title": "News",
+        "counter": 2,
+        "feed_ids": [
+          2
+        ]
+      }
+    ],
+    "subscriptions_entry_counter": 28,
+    "subscriptions_entry_counter_text": "28",
+    "filtered_message_visible": true
+  },
+  "dialogs": {
+    "sort": {
+      "title": "Sort",
+      "negative": "Cancel",
+      "options": [
+        {
+          "value": "0",
+          "label": "Sort by counter",
+          "checked": true
+        },
+        {
+          "value": "1",
+          "label": "Sort alphabetically",
+          "checked": false
+        },
+        {
+          "value": "2",
+          "label": "Sort by publication date",
+          "checked": false
+        },
+        {
+          "value": "3",
+          "label": "Sort by number of played episodes",
+          "checked": false
+        }
+      ]
+    },
+    "counter": {
+      "title": "Counter",
+      "negative": "Cancel",
+      "options": [
+        {
+          "value": "1",
+          "label": "Number of episodes in the inbox",
+          "checked": true
+        },
+        {
+          "value": "2",
+          "label": "Number of unplayed episodes",
+          "checked": false
+        },
+        {
+          "value": "4",
+          "label": "Number of downloaded episodes",
+          "checked": false
+        },
+        {
+          "value": "5",
+          "label": "Number of downloaded and unplayed episodes",
+          "checked": false
+        },
+        {
+          "value": "3",
+          "label": "None",
+          "checked": false
+        }
+      ]
+    },
+    "filter": {
+      "rows": [
+        [
+          {
+            "token": "counter_greater_zero",
+            "label": "Counter greater than zero",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "enabled_auto_download",
+            "label": "Auto downloaded",
+            "checked": true
+          },
+          {
+            "token": "disabled_auto_download",
+            "label": "Not auto downloaded",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "enabled_updates",
+            "label": "Kept updated",
+            "checked": false
+          },
+          {
+            "token": "disabled_updates",
+            "label": "Not kept updated",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "episode_notification_enabled",
+            "label": "Notification enabled",
+            "checked": false
+          },
+          {
+            "token": "episode_notification_disabled",
+            "label": "Notification disabled",
+            "checked": false
+          }
+        ]
+      ],
+      "buttons": [
+        "Reset",
+        "Confirm"
+      ]
+    }
+  },
+  "limitations": [
+    "Java HashMap treeified buckets (>=8 colliding tags with capacity>=64) are not modelled",
+    "Character case mappings come from Python's Unicode tables (simple mappings), not Android ICU",
+    "counter_text assumes an en-US default locale for NumberFormat.getInstance()",
+    "Feeds.title COLLATE NOCASE ties keep this host SQLite's order (python_sqlite_version)"
+  ]
+}

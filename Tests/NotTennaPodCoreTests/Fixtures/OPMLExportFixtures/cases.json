@@ -1,0 +1,210 @@
+[
+  {
+    "name": "empty",
+    "feeds": [],
+    "status": "OK\n1790219631762\n1790219631824",
+    "attributes": [],
+    "dateCreated": "24 Sep 26 08:58:51 +0545",
+    "epochSeconds": 1790219631,
+    "independentXML": "valid"
+  },
+  {
+    "name": "states",
+    "feeds": [
+      {
+        "title": "Alpha",
+        "url": "https://example.com/a",
+        "type": "rss",
+        "link": "https://example.com"
+      },
+      {
+        "title": "Preview",
+        "url": "https://example.com/p",
+        "state": 1
+      },
+      {
+        "title": "Archived",
+        "url": "https://example.com/r",
+        "state": 2
+      },
+      {
+        "title": "Beta",
+        "url": "https://example.com/b",
+        "type": "atom"
+      }
+    ],
+    "status": "OK\n1790219631837\n1790219631837",
+    "attributes": [
+      {
+        "text": "Alpha",
+        "title": "Alpha",
+        "type": "rss",
+        "xmlUrl": "https://example.com/a",
+        "htmlUrl": "https://example.com"
+      },
+      {
+        "text": "Beta",
+        "title": "Beta",
+        "type": "atom",
+        "xmlUrl": "https://example.com/b"
+      }
+    ],
+    "dateCreated": "24 Sep 26 08:58:51 +0545",
+    "epochSeconds": 1790219631,
+    "independentXML": "valid"
+  },
+  {
+    "name": "custom-escaping",
+    "feeds": [
+      {
+        "title": "Original Alpha",
+        "customTitle": "Zed & <tags> \"double\" 'single'",
+        "url": "https://example.com/a?x=1&y=%22#part",
+        "link": "https://example.com/?q=<&x=\"",
+        "type": "rss"
+      },
+      {
+        "title": "日本語 café 😀",
+        "customTitle": "",
+        "url": "https://例え.example/声.xml",
+        "type": "atom"
+      },
+      {
+        "title": "Line\nCarriage\rTab\tName",
+        "url": "https://example.com/line",
+        "link": "",
+        "type": ""
+      }
+    ],
+    "status": "OK\n1790219631837\n1790219631838",
+    "attributes": [
+      {
+        "text": "Zed & <tags> \"double\" 'single'",
+        "title": "Zed & <tags> \"double\" 'single'",
+        "type": "rss",
+        "xmlUrl": "https://example.com/a?x=1&y=%22#part",
+        "htmlUrl": "https://example.com/?q=<&x=\""
+      },
+      {
+        "text": "日本語 café 😀",
+        "title": "日本語 café 😀",
+        "type": "atom",
+        "xmlUrl": "https://例え.example/声.xml"
+      },
+      {
+        "text": "Line\nCarriage\rTab\tName",
+        "title": "Line\nCarriage\rTab\tName",
+        "type": "",
+        "xmlUrl": "https://example.com/line",
+        "htmlUrl": ""
+      }
+    ],
+    "dateCreated": "24 Sep 26 08:58:51 +0545",
+    "epochSeconds": 1790219631,
+    "independentXML": "valid"
+  },
+  {
+    "name": "local-private",
+    "feeds": [
+      {
+        "title": "Local folder",
+        "url": "antennapod_local:content://fixture/tree/Music%3APodcasts"
+      },
+      {
+        "title": "Private",
+        "url": "https://synthetic-user:synthetic-pass@example.com/feed?token=fixture-secret",
+        "type": "rss",
+        "username": "not-exported-user",
+        "password": "not-exported-password"
+      },
+      {
+        "title": "Archived local",
+        "url": "antennapod_local:fixture-old",
+        "state": 2
+      }
+    ],
+    "status": "OK\n1790219631838\n1790219631839",
+    "attributes": [
+      {
+        "text": "Local folder",
+        "title": "Local folder",
+        "xmlUrl": "antennapod_local:content://fixture/tree/Music%3APodcasts"
+      },
+      {
+        "text": "Private",
+        "title": "Private",
+        "type": "rss",
+        "xmlUrl": "https://synthetic-user:synthetic-pass@example.com/feed?token=fixture-secret"
+      }
+    ],
+    "dateCreated": "24 Sep 26 08:58:51 +0545",
+    "epochSeconds": 1790219631,
+    "independentXML": "valid"
+  },
+  {
+    "name": "preserve-input-order",
+    "feeds": [
+      {
+        "title": "zeta",
+        "customTitle": "First",
+        "url": "https://example.com/z",
+        "type": "rss"
+      },
+      {
+        "title": "Alpha",
+        "customTitle": "Last",
+        "url": "https://example.com/a",
+        "type": "rss"
+      },
+      {
+        "title": "Bravo",
+        "url": "https://example.com/b",
+        "type": "atom"
+      }
+    ],
+    "status": "OK\n1790219631839\n1790219631839",
+    "attributes": [
+      {
+        "text": "First",
+        "title": "First",
+        "type": "rss",
+        "xmlUrl": "https://example.com/z"
+      },
+      {
+        "text": "Last",
+        "title": "Last",
+        "type": "rss",
+        "xmlUrl": "https://example.com/a"
+      },
+      {
+        "text": "Bravo",
+        "title": "Bravo",
+        "type": "atom",
+        "xmlUrl": "https://example.com/b"
+      }
+    ],
+    "dateCreated": "24 Sep 26 08:58:51 +0545",
+    "epochSeconds": 1790219631,
+    "independentXML": "valid"
+  },
+  {
+    "name": "not-subscribed-invalid",
+    "feeds": [
+      {
+        "title": null,
+        "url": null,
+        "state": 1
+      },
+      {
+        "title": null,
+        "url": null,
+        "state": 2
+      }
+    ],
+    "status": "OK\n1790219631839\n1790219631840",
+    "attributes": [],
+    "dateCreated": "24 Sep 26 08:58:51 +0545",
+    "epochSeconds": 1790219631,
+    "independentXML": "valid"
+  }
+]

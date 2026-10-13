@@ -1,0 +1,1954 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "sourceSHA256": {
+    "reference/AntennaPod/app/src/main/java/de/danoeh/antennapod/ui/cleaner/HtmlToPlainText.java": "e88227f6aad897bb3cf7dd51acf5aa05342d067fc1bc03b8de9cfae96b3803ca",
+    "reference/AntennaPod/app/src/main/java/de/danoeh/antennapod/ui/screen/feed/FeedInfoFragment.java": "74998d6b877b1ff2b6324e5f880ac6fd4fd09f35eb4ef2925c2470eca74ae189",
+    ".work/gradle-home/caches/modules-2/files-2.1/org.jsoup/jsoup/1.15.1/c4e25ce7c04dc4ae8f6db08f2391f38e9111231f/jsoup-1.15.1.jar": "246947b4fa5fb5fcd446c7dae46ab1ff1779b31f6af7a33e1e0aabfbdb6d8749",
+    ".work/gradle-home/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.18.0/fb14946f0e39748a6571de0635acbe44e7885491/commons-lang3-3.18.0.jar": "4eeeae8d20c078abb64b015ec158add383ac581571cddc45c68f0c9ae0230720"
+  },
+  "descriptions": [
+    {
+      "input": null,
+      "expected": ""
+    },
+    {
+      "input": "",
+      "expected": ""
+    },
+    {
+      "input": " ",
+      "expected": " "
+    },
+    {
+      "input": "  Plain text\nsecond line  ",
+      "expected": "  Plain text\nsecond line  "
+    },
+    {
+      "input": "&amp; &lt;no tag&gt;",
+      "expected": "&amp; &lt;no tag&gt;"
+    },
+    {
+      "input": "<!-- comment -->text",
+      "expected": "text"
+    },
+    {
+      "input": "<script>bad()</script><style>b{color:red}</style>Text",
+      "expected": "Text"
+    },
+    {
+      "input": "<p>A<p>B",
+      "expected": "A\n\nB"
+    },
+    {
+      "input": "<h6>Six</h6><h1>One</h1>",
+      "expected": "Six\nOne"
+    },
+    {
+      "input": "<table><tr><td>A</td><td>B</td></tr></table>",
+      "expected": "AB"
+    },
+    {
+      "input": "<a href=\"/relative\">Relative</a>",
+      "expected": "Relative <>"
+    },
+    {
+      "input": "<base href=\"https://example.test/root/\"><a href=\"../other\">Other</a>",
+      "expected": "Other <https://example.test/other>"
+    },
+    {
+      "input": "<a>Missing</a><a href=\"#fragment\">Fragment</a>",
+      "expected": "Missing <>Fragment <>"
+    },
+    {
+      "input": "<a href=\"mailto:a@example.test\">Mail</a>",
+      "expected": "Mail <mailto:a@example.test>"
+    },
+    {
+      "input": "<a href=\"https://example.test/?a=1&amp;b=2\">Link</a>",
+      "expected": "Link <https://example.test/?a=1&b=2>"
+    },
+    {
+      "input": "<p> ​­ end</p>",
+      "expected": "end"
+    },
+    {
+      "input": "<p title=\"x>y\">quoted</p>",
+      "expected": "quoted"
+    },
+    {
+      "input": "<p title='x>y'>single quote</p>",
+      "expected": "single quote"
+    },
+    {
+      "input": "a < b > c",
+      "expected": "a < b > c"
+    },
+    {
+      "input": "<!doctype html><title>Title</title><body>Body</body>",
+      "expected": "TitleBody"
+    },
+    {
+      "input": "<p>مرحبا 😀 é é</p>",
+      "expected": "مرحبا 😀 é é"
+    },
+    {
+      "input": "first<p>alpha  beta\n gamma</p>last",
+      "expected": "first\nalpha beta gamma\nlast"
+    },
+    {
+      "input": "first<p><b>A</b> <i>B</i></p>last",
+      "expected": "first\nA B\nlast"
+    },
+    {
+      "input": "first<p>&amp; &#160; &#x1F600;</p>last",
+      "expected": "first\n& 😀\nlast"
+    },
+    {
+      "input": "first<p></p>last",
+      "expected": "first\n\nlast"
+    },
+    {
+      "input": "first<h1>alpha  beta\n gamma</h1>last",
+      "expected": "first\nalpha beta gamma\nlast"
+    },
+    {
+      "input": "first<h1><b>A</b> <i>B</i></h1>last",
+      "expected": "first\nA B\nlast"
+    },
+    {
+      "input": "first<h1>&amp; &#160; &#x1F600;</h1>last",
+      "expected": "first\n& 😀\nlast"
+    },
+    {
+      "input": "first<h1></h1>last",
+      "expected": "first\n\nlast"
+    },
+    {
+      "input": "first<h2>alpha  beta\n gamma</h2>last",
+      "expected": "first\nalpha beta gamma\nlast"
+    },
+    {
+      "input": "first<h2><b>A</b> <i>B</i></h2>last",
+      "expected": "first\nA B\nlast"
+    },
+    {
+      "input": "first<h2>&amp; &#160; &#x1F600;</h2>last",
+      "expected": "first\n& 😀\nlast"
+    },
+    {
+      "input": "first<h2></h2>last",
+      "expected": "first\n\nlast"
+    },
+    {
+      "input": "first<h3>alpha  beta\n gamma</h3>last",
+      "expected": "first\nalpha beta gamma\nlast"
+    },
+    {
+      "input": "first<h3><b>A</b> <i>B</i></h3>last",
+      "expected": "first\nA B\nlast"
+    },
+    {
+      "input": "first<h3>&amp; &#160; &#x1F600;</h3>last",
+      "expected": "first\n& 😀\nlast"
+    },
+    {
+      "input": "first<h3></h3>last",
+      "expected": "first\n\nlast"
+    },
+    {
+      "input": "first<h4>alpha  beta\n gamma</h4>last",
+      "expected": "first\nalpha beta gamma\nlast"
+    },
+    {
+      "input": "first<h4><b>A</b> <i>B</i></h4>last",
+      "expected": "first\nA B\nlast"
+    },
+    {
+      "input": "first<h4>&amp; &#160; &#x1F600;</h4>last",
+      "expected": "first\n& 😀\nlast"
+    },
+    {
+      "input": "first<h4></h4>last",
+      "expected": "first\n\nlast"
+    },
+    {
+      "input": "first<h5>alpha  beta\n gamma</h5>last",
+      "expected": "first\nalpha beta gamma\nlast"
+    },
+    {
+      "input": "first<h5><b>A</b> <i>B</i></h5>last",
+      "expected": "first\nA B\nlast"
+    },
+    {
+      "input": "first<h5>&amp; &#160; &#x1F600;</h5>last",
+      "expected": "first\n& 😀\nlast"
+    },
+    {
+      "input": "first<h5></h5>last",
+      "expected": "first\n\nlast"
+    },
+    {
+      "input": "first<h6>alpha  beta\n gamma</h6>last",
+      "expected": "firstalpha beta gammalast"
+    },
+    {
+      "input": "first<h6><b>A</b> <i>B</i></h6>last",
+      "expected": "firstA Blast"
+    },
+    {
+      "input": "first<h6>&amp; &#160; &#x1F600;</h6>last",
+      "expected": "first& 😀last"
+    },
+    {
+      "input": "first<h6></h6>last",
+      "expected": "firstlast"
+    },
+    {
+      "input": "first<div>alpha  beta\n gamma</div>last",
+      "expected": "firstalpha beta gammalast"
+    },
+    {
+      "input": "first<div><b>A</b> <i>B</i></div>last",
+      "expected": "firstA Blast"
+    },
+    {
+      "input": "first<div>&amp; &#160; &#x1F600;</div>last",
+      "expected": "first& 😀last"
+    },
+    {
+      "input": "first<div></div>last",
+      "expected": "firstlast"
+    },
+    {
+      "input": "first<li>alpha  beta\n gamma</li>last",
+      "expected": "first\n * alpha beta gammalast"
+    },
+    {
+      "input": "first<li><b>A</b> <i>B</i></li>last",
+      "expected": "first\n * A Blast"
+    },
+    {
+      "input": "first<li>&amp; &#160; &#x1F600;</li>last",
+      "expected": "first\n * & 😀last"
+    },
+    {
+      "input": "first<li></li>last",
+      "expected": "first\n * last"
+    },
+    {
+      "input": "first<dt>alpha  beta\n gamma</dt>last",
+      "expected": "first  alpha beta gamma\nlast"
+    },
+    {
+      "input": "first<dt><b>A</b> <i>B</i></dt>last",
+      "expected": "first  A B\nlast"
+    },
+    {
+      "input": "first<dt>&amp; &#160; &#x1F600;</dt>last",
+      "expected": "first  & 😀\nlast"
+    },
+    {
+      "input": "first<dt></dt>last",
+      "expected": "first  \nlast"
+    },
+    {
+      "input": "first<dd>alpha  beta\n gamma</dd>last",
+      "expected": "firstalpha beta gamma\nlast"
+    },
+    {
+      "input": "first<dd><b>A</b> <i>B</i></dd>last",
+      "expected": "firstA B\nlast"
+    },
+    {
+      "input": "first<dd>&amp; &#160; &#x1F600;</dd>last",
+      "expected": "first& 😀\nlast"
+    },
+    {
+      "input": "first<dd></dd>last",
+      "expected": "first\nlast"
+    },
+    {
+      "input": "first<tr>alpha  beta\n gamma</tr>last",
+      "expected": "firstalpha beta gammalast"
+    },
+    {
+      "input": "first<tr><b>A</b> <i>B</i></tr>last",
+      "expected": "firstA Blast"
+    },
+    {
+      "input": "first<tr>&amp; &#160; &#x1F600;</tr>last",
+      "expected": "first& 😀last"
+    },
+    {
+      "input": "first<tr></tr>last",
+      "expected": "firstlast"
+    },
+    {
+      "input": "first<b>alpha  beta\n gamma</b>last",
+      "expected": "firstalpha beta gammalast"
+    },
+    {
+      "input": "first<b><b>A</b> <i>B</i></b>last",
+      "expected": "firstA Blast"
+    },
+    {
+      "input": "first<b>&amp; &#160; &#x1F600;</b>last",
+      "expected": "first& 😀last"
+    },
+    {
+      "input": "first<b></b>last",
+      "expected": "firstlast"
+    },
+    {
+      "input": "first<em>alpha  beta\n gamma</em>last",
+      "expected": "firstalpha beta gammalast"
+    },
+    {
+      "input": "first<em><b>A</b> <i>B</i></em>last",
+      "expected": "firstA Blast"
+    },
+    {
+      "input": "first<em>&amp; &#160; &#x1F600;</em>last",
+      "expected": "first& 😀last"
+    },
+    {
+      "input": "first<em></em>last",
+      "expected": "firstlast"
+    },
+    {
+      "input": "first<pre>alpha  beta\n gamma</pre>last",
+      "expected": "firstalpha beta gammalast"
+    },
+    {
+      "input": "first<pre><b>A</b> <i>B</i></pre>last",
+      "expected": "firstA Blast"
+    },
+    {
+      "input": "first<pre>&amp; &#160; &#x1F600;</pre>last",
+      "expected": "first& 😀last"
+    },
+    {
+      "input": "first<pre></pre>last",
+      "expected": "firstlast"
+    },
+    {
+      "input": "first<code>alpha  beta\n gamma</code>last",
+      "expected": "firstalpha beta gammalast"
+    },
+    {
+      "input": "first<code><b>A</b> <i>B</i></code>last",
+      "expected": "firstA Blast"
+    },
+    {
+      "input": "first<code>&amp; &#160; &#x1F600;</code>last",
+      "expected": "first& 😀last"
+    },
+    {
+      "input": "first<code></code>last",
+      "expected": "firstlast"
+    },
+    {
+      "input": "<p> A  B </p>",
+      "expected": "A B"
+    },
+    {
+      "input": " raw ",
+      "expected": " raw "
+    },
+    {
+      "input": "<p>\tA\t\tB\t</p>",
+      "expected": "A B"
+    },
+    {
+      "input": "\traw\t",
+      "expected": "\traw\t"
+    },
+    {
+      "input": "<p>\nA\n\nB\n</p>",
+      "expected": "A B"
+    },
+    {
+      "input": "\nraw\n",
+      "expected": "\nraw\n"
+    },
+    {
+      "input": "<p>\r\nA\r\n\r\nB\r\n</p>",
+      "expected": "A B"
+    },
+    {
+      "input": "\r\nraw\r\n",
+      "expected": "\r\nraw\r\n"
+    },
+    {
+      "input": "<p> A  B </p>",
+      "expected": "A B"
+    },
+    {
+      "input": " raw ",
+      "expected": " raw "
+    },
+    {
+      "input": "<p> A  B </p>",
+      "expected": " A  B "
+    },
+    {
+      "input": " raw ",
+      "expected": " raw "
+    },
+    {
+      "input": "<p>​A​​B​</p>",
+      "expected": "AB"
+    },
+    {
+      "input": "​raw​",
+      "expected": "​raw​"
+    },
+    {
+      "input": "<p>­A­­B­</p>",
+      "expected": "AB"
+    },
+    {
+      "input": "­raw­",
+      "expected": "­raw­"
+    }
+  ],
+  "funding": [
+    {
+      "entries": [],
+      "expected": ""
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": ""
+        }
+      ],
+      "expected": "Support this podcast null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://a.test",
+          "content": ""
+        }
+      ],
+      "expected": "Support this podcast https://a.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://a.test",
+          "content": ""
+        },
+        {
+          "url": "https://a.test",
+          "content": "A"
+        },
+        {
+          "url": "https://a.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://a.test",
+          "content": "BB"
+        },
+        {
+          "url": "https://a.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer https://a.test\nLonger https://a.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://a.test",
+          "content": "one"
+        },
+        {
+          "url": "https://b.test",
+          "content": "two"
+        },
+        {
+          "url": "https://a.test",
+          "content": "expanded"
+        }
+      ],
+      "expected": "two https://b.test\nexpanded https://a.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "A"
+        },
+        {
+          "url": null,
+          "content": "BBB"
+        },
+        {
+          "url": null,
+          "content": "CC"
+        }
+      ],
+      "expected": "BBB null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://a.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://a.test",
+          "content": "ab"
+        },
+        {
+          "url": "https://a.test",
+          "content": "é"
+        },
+        {
+          "url": "https://a.test",
+          "content": "é"
+        }
+      ],
+      "expected": "😀 https://a.test\nab https://a.test\né https://a.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "long"
+        },
+        {
+          "url": "https://é.test",
+          "content": "x"
+        }
+      ],
+      "expected": "long https://é.test\nx https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": " https://a.test ",
+          "content": "  label  "
+        }
+      ],
+      "expected": "label    https://a.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "",
+          "content": " "
+        }
+      ],
+      "expected": " "
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": ""
+        },
+        {
+          "url": null,
+          "content": ""
+        }
+      ],
+      "expected": "Support this podcast null\nSupport this podcast null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": ""
+        },
+        {
+          "url": "https://same.test",
+          "content": ""
+        }
+      ],
+      "expected": "Support this podcast https://same.test\nSupport this podcast https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": ""
+        },
+        {
+          "url": "https://é.test",
+          "content": ""
+        }
+      ],
+      "expected": "Support this podcast https://é.test\nSupport this podcast https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": ""
+        },
+        {
+          "url": null,
+          "content": "A"
+        }
+      ],
+      "expected": "A null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": ""
+        },
+        {
+          "url": "https://same.test",
+          "content": "A"
+        }
+      ],
+      "expected": "A https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": ""
+        },
+        {
+          "url": "https://é.test",
+          "content": "A"
+        }
+      ],
+      "expected": "Support this podcast https://é.test\nA https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": ""
+        },
+        {
+          "url": null,
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": ""
+        },
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": ""
+        },
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Support this podcast https://é.test\nLonger https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": ""
+        },
+        {
+          "url": null,
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": ""
+        },
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": ""
+        },
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "Support this podcast https://é.test\n😀 https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": ""
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "é null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": ""
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": ""
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "Support this podcast https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": ""
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "é null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": ""
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": ""
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "Support this podcast https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "A"
+        },
+        {
+          "url": null,
+          "content": ""
+        }
+      ],
+      "expected": "A null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "A"
+        },
+        {
+          "url": "https://same.test",
+          "content": ""
+        }
+      ],
+      "expected": "A https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "A"
+        },
+        {
+          "url": "https://é.test",
+          "content": ""
+        }
+      ],
+      "expected": "A https://é.test\nSupport this podcast https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "A"
+        },
+        {
+          "url": null,
+          "content": "A"
+        }
+      ],
+      "expected": "A null\nA null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "A"
+        },
+        {
+          "url": "https://same.test",
+          "content": "A"
+        }
+      ],
+      "expected": "A https://same.test\nA https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "A"
+        },
+        {
+          "url": "https://é.test",
+          "content": "A"
+        }
+      ],
+      "expected": "A https://é.test\nA https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "A"
+        },
+        {
+          "url": null,
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "A"
+        },
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "A"
+        },
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "A https://é.test\nLonger https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "A"
+        },
+        {
+          "url": null,
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "A"
+        },
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "A"
+        },
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "A https://é.test\n😀 https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "A"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "A null\né null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "A"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "A https://same.test\né https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "A"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "A https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "A"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "é null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "A"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "A"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "A https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "Longer"
+        },
+        {
+          "url": null,
+          "content": ""
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://same.test",
+          "content": ""
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://é.test",
+          "content": ""
+        }
+      ],
+      "expected": "Longer https://é.test\nSupport this podcast https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "Longer"
+        },
+        {
+          "url": null,
+          "content": "A"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://same.test",
+          "content": "A"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://é.test",
+          "content": "A"
+        }
+      ],
+      "expected": "Longer https://é.test\nA https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "Longer"
+        },
+        {
+          "url": null,
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer null\nLonger null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer https://same.test\nLonger https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer https://é.test\nLonger https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "Longer"
+        },
+        {
+          "url": null,
+          "content": "😀"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "Longer https://é.test\n😀 https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "Longer"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "Longer https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "Longer"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "Longer https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "😀"
+        },
+        {
+          "url": null,
+          "content": ""
+        }
+      ],
+      "expected": "😀 null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://same.test",
+          "content": ""
+        }
+      ],
+      "expected": "😀 https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://é.test",
+          "content": ""
+        }
+      ],
+      "expected": "😀 https://é.test\nSupport this podcast https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "😀"
+        },
+        {
+          "url": null,
+          "content": "A"
+        }
+      ],
+      "expected": "😀 null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://same.test",
+          "content": "A"
+        }
+      ],
+      "expected": "😀 https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://é.test",
+          "content": "A"
+        }
+      ],
+      "expected": "😀 https://é.test\nA https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "😀"
+        },
+        {
+          "url": null,
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "😀 https://é.test\nLonger https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "😀"
+        },
+        {
+          "url": null,
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 null\n😀 null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 https://same.test\n😀 https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 https://é.test\n😀 https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "😀"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "😀 null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "😀 https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "😀 https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "😀"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "😀 null\né null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "😀 https://same.test\né https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "😀 https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": ""
+        }
+      ],
+      "expected": "é null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": ""
+        }
+      ],
+      "expected": "é https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": ""
+        }
+      ],
+      "expected": "é https://é.test\nSupport this podcast https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "A"
+        }
+      ],
+      "expected": "é null\nA null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "A"
+        }
+      ],
+      "expected": "é https://same.test\nA https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "A"
+        }
+      ],
+      "expected": "é https://é.test\nA https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "é https://é.test\nLonger https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "😀 https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "é https://é.test\n😀 https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "é null\né null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://same.test\né https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "é null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": ""
+        }
+      ],
+      "expected": "é null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": ""
+        }
+      ],
+      "expected": "é https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": ""
+        }
+      ],
+      "expected": "é https://é.test\nSupport this podcast https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "A"
+        }
+      ],
+      "expected": "é null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "A"
+        }
+      ],
+      "expected": "é https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "A"
+        }
+      ],
+      "expected": "é https://é.test\nA https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "Longer https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "Longer"
+        }
+      ],
+      "expected": "é https://é.test\nLonger https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "😀"
+        }
+      ],
+      "expected": "é null\n😀 null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "é https://same.test\n😀 https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "😀"
+        }
+      ],
+      "expected": "é https://é.test\n😀 https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "é null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://é.test\né https://é.test"
+    },
+    {
+      "entries": [
+        {
+          "url": null,
+          "content": "é"
+        },
+        {
+          "url": null,
+          "content": "é"
+        }
+      ],
+      "expected": "é null\né null"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://same.test",
+          "content": "é"
+        },
+        {
+          "url": "https://same.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://same.test\né https://same.test"
+    },
+    {
+      "entries": [
+        {
+          "url": "https://é.test",
+          "content": "é"
+        },
+        {
+          "url": "https://é.test",
+          "content": "é"
+        }
+      ],
+      "expected": "é https://é.test\né https://é.test"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+Balloon1.5.3 arrow drawable (com.github.skydoves:balloon:1.5.3)
+Designed and developed by 2019 skydoves (Jaewoong Eum).
+Licensed under the Apache License, Version2.0; see Apache-2.0.txt.
+Source: res/drawable/balloon_arrow_drawable.xml from the pinned AAR.
+The original vector path/group transform is converted to a template PDF.

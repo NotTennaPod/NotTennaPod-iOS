@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head><title>M11 journey</title></head>
+  <body>
+    <outline type="rss" text="M11 First" title="M11 First" xmlUrl="http://127.0.0.1:9/m11/first.xml"/>
+    <outline type="rss" text="M11 Second" title="M11 Second" xmlUrl="http://127.0.0.1:9/m11/second.xml"/>
+    <outline type="rss" text="M11 Last" title="M11 Last" xmlUrl="http://127.0.0.1:9/m11/last.xml"/>
+  </body>
+</opml>

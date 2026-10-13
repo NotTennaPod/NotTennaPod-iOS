@@ -1,0 +1,180 @@
+{
+  "source": "synthetic440Hz tone;368 seconds;48000Hz mono;no third-party recording",
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": [
+    {
+      "name": "long.aac",
+      "sha256": "52fd5b535ac5ad96b27180aeb2bf6586bedf2c7a084f34e0e6f6b244d4eeba64",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=368",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k",
+        "-f",
+        "adts"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "363.512212"
+          }
+        ],
+        "format": {
+          "format_name": "aac",
+          "duration": "363.512212",
+          "size": "3082629"
+        }
+      }
+    },
+    {
+      "name": "long.m4a",
+      "sha256": "1275e0bd46e1e89b7dda2679eeaa4cb33385b5df56868c5abb4477ddb01a87e6",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=368",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k",
+        "-movflags",
+        "+faststart"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "368.000000"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "368.000000",
+          "size": "3031670"
+        }
+      }
+    },
+    {
+      "name": "long-tail.m4a",
+      "sha256": "3170a6f8da474441f01dee81a532275fbe0249948f18cd82a4ba9382730cfedd",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=368",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "64k"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "aac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "368.000000"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "368.000000",
+          "size": "3031670"
+        }
+      }
+    },
+    {
+      "name": "long.flac",
+      "sha256": "844503a6a90e3c014bead67f90610b82c021343160a49766dcf9a7d72c9903b1",
+      "arguments": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=48000:duration=368",
+        "-map_metadata",
+        "-1",
+        "-ac",
+        "1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "flac"
+      ],
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "flac",
+            "sample_rate": "48000",
+            "channels": 1,
+            "duration": "368.000000"
+          }
+        ],
+        "format": {
+          "format_name": "flac",
+          "duration": "368.000000",
+          "size": "4837682"
+        }
+      }
+    }
+  ]
+}

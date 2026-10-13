@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "segments": [
+    {
+      "startTime": 0,
+      "endTime": 5,
+      "body": "Welcome to the transcript fixture.",
+      "speaker": "Ada"
+    },
+    {
+      "startTime": 5,
+      "endTime": 10,
+      "body": "Tap a passage to seek to its start.",
+      "speaker": "Ada"
+    },
+    {
+      "startTime": 10,
+      "endTime": 15,
+      "body": "Tap the active passage to pause or play.",
+      "speaker": "Bob"
+    },
+    {
+      "startTime": 15,
+      "endTime": 20,
+      "body": "Long press text to select passages.",
+      "speaker": "Bob"
+    },
+    {
+      "startTime": 20,
+      "endTime": 25,
+      "body": "Copy keeps speaker names and omitted gaps.",
+      "speaker": "Ada"
+    },
+    {
+      "startTime": 25,
+      "endTime": 30,
+      "body": "Refresh loads the current transcript again.",
+      "speaker": "Ada"
+    }
+  ]
+}

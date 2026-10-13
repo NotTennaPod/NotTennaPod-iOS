@@ -1,0 +1,1832 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "source": "reference/AntennaPod/app/src/main/java/de/danoeh/antennapod/ui/share/ShareUtils.java",
+  "sourceSHA256": "bef09e8d9a522a5b73b2b766cceaf86d8ec1e1e794f727fc1f1cf4b4fc2ee0ca",
+  "cases": [
+    {
+      "title": "",
+      "source": "",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title="
+    },
+    {
+      "title": "",
+      "source": "https://example.com/feed",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title="
+    },
+    {
+      "title": "",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title="
+    },
+    {
+      "title": "",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title="
+    },
+    {
+      "title": "",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title="
+    },
+    {
+      "title": "",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title="
+    },
+    {
+      "title": "",
+      "source": "https://user:pass@example.com",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title="
+    },
+    {
+      "title": "",
+      "source": "feed://example.com",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title="
+    },
+    {
+      "title": "",
+      "source": "pcast://example.com",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title="
+    },
+    {
+      "title": "",
+      "source": "https://example.com/htt/https",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title="
+    },
+    {
+      "title": "",
+      "source": "htt htt",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title="
+    },
+    {
+      "title": "",
+      "source": "https://example.com/%20+*~",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title="
+    },
+    {
+      "title": "",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title="
+    },
+    {
+      "title": "",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title="
+    },
+    {
+      "title": "",
+      "source": "\u0000",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title="
+    },
+    {
+      "title": "",
+      "source": "  https://example.com  ",
+      "expected": "\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title="
+    },
+    {
+      "title": "Podcast",
+      "source": "",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "https://example.com/feed",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "https://user:pass@example.com",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "feed://example.com",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "pcast://example.com",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "https://example.com/htt/https",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "htt htt",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "https://example.com/%20+*~",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "\u0000",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=Podcast"
+    },
+    {
+      "title": "Podcast",
+      "source": "  https://example.com  ",
+      "expected": "Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=Podcast"
+    },
+    {
+      "title": "A & B",
+      "source": "",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "https://example.com/feed",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "https://user:pass@example.com",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "feed://example.com",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "pcast://example.com",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "https://example.com/htt/https",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "htt htt",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "https://example.com/%20+*~",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "\u0000",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=A+%26+B"
+    },
+    {
+      "title": "A & B",
+      "source": "  https://example.com  ",
+      "expected": "A & B\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=A+%26+B"
+    },
+    {
+      "title": " spaces  ",
+      "source": "",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "https://example.com/feed",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "https://e\u0301xample.fr/",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "https://user:pass@example.com",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "feed://example.com",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "pcast://example.com",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "https://example.com/htt/https",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "htt htt",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "https://example.com/%20+*~",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "\u0000",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=+spaces++"
+    },
+    {
+      "title": " spaces  ",
+      "source": "  https://example.com  ",
+      "expected": " spaces  \n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=+spaces++"
+    },
+    {
+      "title": "\u00e9",
+      "source": "",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "https://example.com/feed",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "https://user:pass@example.com",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "feed://example.com",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "pcast://example.com",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "https://example.com/htt/https",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "htt htt",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "https://example.com/%20+*~",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "\u0000",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=%C3%A9"
+    },
+    {
+      "title": "\u00e9",
+      "source": "  https://example.com  ",
+      "expected": "\u00e9\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=%C3%A9"
+    },
+    {
+      "title": "e\u0301",
+      "source": "",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "https://example.com/feed",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "https://user:pass@example.com",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "feed://example.com",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "pcast://example.com",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "https://example.com/htt/https",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "htt htt",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "https://example.com/%20+*~",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "\u0000",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=e%CC%81"
+    },
+    {
+      "title": "e\u0301",
+      "source": "  https://example.com  ",
+      "expected": "e\u0301\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=e%CC%81"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "https://example.com/feed",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "https://user:pass@example.com",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "feed://example.com",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "pcast://example.com",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "https://example.com/htt/https",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "htt htt",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "https://example.com/%20+*~",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "\u0000",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\ud83d\ude00 Podcast",
+      "source": "  https://example.com  ",
+      "expected": "\ud83d\ude00 Podcast\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=%F0%9F%98%80+Podcast"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "https://example.com/feed",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "https://user:pass@example.com",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "feed://example.com",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "pcast://example.com",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "https://example.com/htt/https",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "htt htt",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "https://example.com/%20+*~",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "\u0000",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u0645\u0631\u062d\u0628\u0627",
+      "source": "  https://example.com  ",
+      "expected": "\u0645\u0631\u062d\u0628\u0627\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "https://example.com/feed",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "https://user:pass@example.com",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "feed://example.com",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "pcast://example.com",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "https://example.com/htt/https",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "htt htt",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "https://example.com/%20+*~",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "\u0000",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u4e2d\u6587",
+      "source": "  https://example.com  ",
+      "expected": "\u4e2d\u6587\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=%E4%B8%AD%E6%96%87"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "https://example.com/feed",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "https://user:pass@example.com",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "feed://example.com",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "pcast://example.com",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "https://example.com/htt/https",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "htt htt",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "https://example.com/%20+*~",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "\u0000",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "\u65e5\u672c\u8a9e",
+      "source": "  https://example.com  ",
+      "expected": "\u65e5\u672c\u8a9e\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=%E6%97%A5%E6%9C%AC%E8%AA%9E"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "https://example.com/feed",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "https://user:pass@example.com",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "feed://example.com",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "pcast://example.com",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "https://example.com/htt/https",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "htt htt",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "https://example.com/%20+*~",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "\u0000",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=line%0Abreak"
+    },
+    {
+      "title": "line\nbreak",
+      "source": "  https://example.com  ",
+      "expected": "line\nbreak\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=line%0Abreak"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "https://example.com/feed",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "https://user:pass@example.com",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "feed://example.com",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "pcast://example.com",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "https://example.com/htt/https",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "htt htt",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "https://example.com/%20+*~",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "\u0000",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "?/#%+*=~",
+      "source": "  https://example.com  ",
+      "expected": "?/#%+*=~\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=%3F%2F%23%25%2B*%3D%7E"
+    },
+    {
+      "title": "htt https htt",
+      "source": "",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "https://example.com/feed",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "https://user:pass@example.com",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "feed://example.com",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "pcast://example.com",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "https://example.com/htt/https",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "htt htt",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "https://example.com/%20+*~",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "\u0000",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=htt+https+htt"
+    },
+    {
+      "title": "htt https htt",
+      "source": "  https://example.com  ",
+      "expected": "htt https htt\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=htt+https+htt"
+    },
+    {
+      "title": "\u0000",
+      "source": "",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "https://example.com/feed",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "HTTP://EXAMPLE.COM/a",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=HTTP%3A%2F%2FEXAMPLE.COM%2Fa&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "https://\u00e9xample.fr/a b",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%C3%A9xample.fr%2Fa+b&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "https://e\u0301xample.fr/",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fe%CC%81xample.fr%2F&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "http://example.com/a?one=1&b=2#fragment",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Fa%3Fone%3D1%26b%3D2%23fragment&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "https://user:pass@example.com",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fuser%3Apass%40example.com&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "feed://example.com",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=feed%3A%2F%2Fexample.com&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "pcast://example.com",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=pcast%3A%2F%2Fexample.com&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "https://example.com/htt/https",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%68%74%74%2F%68%74%74ps&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "htt htt",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74+%68%74%74&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "https://example.com/%20+*~",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2520%2B*%7E&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "https://\u4f8b\u5b50.\u4e2d\u56fd/\ud83d\ude00",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%E4%BE%8B%E5%AD%90.%E4%B8%AD%E5%9B%BD%2F%F0%9F%98%80&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "https://\u0645\u062b\u0627\u0644.\u0645\u0635\u0631/\u0635\u0648\u062a",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2F%D9%85%D8%AB%D8%A7%D9%84.%D9%85%D8%B5%D8%B1%2F%D8%B5%D9%88%D8%AA&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "\u0000",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%00&title=%00"
+    },
+    {
+      "title": "\u0000",
+      "source": "  https://example.com  ",
+      "expected": "\u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=++%68%74%74ps%3A%2F%2Fexample.com++&title=%00"
+    },
+    {
+      "title": "character \u0000",
+      "source": "https://example.com/\u0000",
+      "expected": "character \u0000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%00&title=character+%00"
+    },
+    {
+      "title": "character \u0001",
+      "source": "https://example.com/\u0001",
+      "expected": "character \u0001\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%01&title=character+%01"
+    },
+    {
+      "title": "character \u0002",
+      "source": "https://example.com/\u0002",
+      "expected": "character \u0002\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%02&title=character+%02"
+    },
+    {
+      "title": "character \u0003",
+      "source": "https://example.com/\u0003",
+      "expected": "character \u0003\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%03&title=character+%03"
+    },
+    {
+      "title": "character \u0004",
+      "source": "https://example.com/\u0004",
+      "expected": "character \u0004\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%04&title=character+%04"
+    },
+    {
+      "title": "character \u0005",
+      "source": "https://example.com/\u0005",
+      "expected": "character \u0005\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%05&title=character+%05"
+    },
+    {
+      "title": "character \u0006",
+      "source": "https://example.com/\u0006",
+      "expected": "character \u0006\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%06&title=character+%06"
+    },
+    {
+      "title": "character \u0007",
+      "source": "https://example.com/\u0007",
+      "expected": "character \u0007\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%07&title=character+%07"
+    },
+    {
+      "title": "character \b",
+      "source": "https://example.com/\b",
+      "expected": "character \b\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%08&title=character+%08"
+    },
+    {
+      "title": "character \t",
+      "source": "https://example.com/\t",
+      "expected": "character \t\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%09&title=character+%09"
+    },
+    {
+      "title": "character \n",
+      "source": "https://example.com/\n",
+      "expected": "character \n\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%0A&title=character+%0A"
+    },
+    {
+      "title": "character \u000b",
+      "source": "https://example.com/\u000b",
+      "expected": "character \u000b\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%0B&title=character+%0B"
+    },
+    {
+      "title": "character \f",
+      "source": "https://example.com/\f",
+      "expected": "character \f\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%0C&title=character+%0C"
+    },
+    {
+      "title": "character \r",
+      "source": "https://example.com/\r",
+      "expected": "character \r\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%0D&title=character+%0D"
+    },
+    {
+      "title": "character \u000e",
+      "source": "https://example.com/\u000e",
+      "expected": "character \u000e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%0E&title=character+%0E"
+    },
+    {
+      "title": "character \u000f",
+      "source": "https://example.com/\u000f",
+      "expected": "character \u000f\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%0F&title=character+%0F"
+    },
+    {
+      "title": "character \u0010",
+      "source": "https://example.com/\u0010",
+      "expected": "character \u0010\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%10&title=character+%10"
+    },
+    {
+      "title": "character \u0011",
+      "source": "https://example.com/\u0011",
+      "expected": "character \u0011\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%11&title=character+%11"
+    },
+    {
+      "title": "character \u0012",
+      "source": "https://example.com/\u0012",
+      "expected": "character \u0012\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%12&title=character+%12"
+    },
+    {
+      "title": "character \u0013",
+      "source": "https://example.com/\u0013",
+      "expected": "character \u0013\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%13&title=character+%13"
+    },
+    {
+      "title": "character \u0014",
+      "source": "https://example.com/\u0014",
+      "expected": "character \u0014\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%14&title=character+%14"
+    },
+    {
+      "title": "character \u0015",
+      "source": "https://example.com/\u0015",
+      "expected": "character \u0015\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%15&title=character+%15"
+    },
+    {
+      "title": "character \u0016",
+      "source": "https://example.com/\u0016",
+      "expected": "character \u0016\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%16&title=character+%16"
+    },
+    {
+      "title": "character \u0017",
+      "source": "https://example.com/\u0017",
+      "expected": "character \u0017\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%17&title=character+%17"
+    },
+    {
+      "title": "character \u0018",
+      "source": "https://example.com/\u0018",
+      "expected": "character \u0018\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%18&title=character+%18"
+    },
+    {
+      "title": "character \u0019",
+      "source": "https://example.com/\u0019",
+      "expected": "character \u0019\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%19&title=character+%19"
+    },
+    {
+      "title": "character \u001a",
+      "source": "https://example.com/\u001a",
+      "expected": "character \u001a\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%1A&title=character+%1A"
+    },
+    {
+      "title": "character \u001b",
+      "source": "https://example.com/\u001b",
+      "expected": "character \u001b\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%1B&title=character+%1B"
+    },
+    {
+      "title": "character \u001c",
+      "source": "https://example.com/\u001c",
+      "expected": "character \u001c\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%1C&title=character+%1C"
+    },
+    {
+      "title": "character \u001d",
+      "source": "https://example.com/\u001d",
+      "expected": "character \u001d\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%1D&title=character+%1D"
+    },
+    {
+      "title": "character \u001e",
+      "source": "https://example.com/\u001e",
+      "expected": "character \u001e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%1E&title=character+%1E"
+    },
+    {
+      "title": "character \u001f",
+      "source": "https://example.com/\u001f",
+      "expected": "character \u001f\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%1F&title=character+%1F"
+    },
+    {
+      "title": "character  ",
+      "source": "https://example.com/ ",
+      "expected": "character  \n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F+&title=character++"
+    },
+    {
+      "title": "character !",
+      "source": "https://example.com/!",
+      "expected": "character !\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%21&title=character+%21"
+    },
+    {
+      "title": "character \"",
+      "source": "https://example.com/\"",
+      "expected": "character \"\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%22&title=character+%22"
+    },
+    {
+      "title": "character #",
+      "source": "https://example.com/#",
+      "expected": "character #\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%23&title=character+%23"
+    },
+    {
+      "title": "character $",
+      "source": "https://example.com/$",
+      "expected": "character $\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%24&title=character+%24"
+    },
+    {
+      "title": "character %",
+      "source": "https://example.com/%",
+      "expected": "character %\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%25&title=character+%25"
+    },
+    {
+      "title": "character &",
+      "source": "https://example.com/&",
+      "expected": "character &\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%26&title=character+%26"
+    },
+    {
+      "title": "character '",
+      "source": "https://example.com/'",
+      "expected": "character '\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%27&title=character+%27"
+    },
+    {
+      "title": "character (",
+      "source": "https://example.com/(",
+      "expected": "character (\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%28&title=character+%28"
+    },
+    {
+      "title": "character )",
+      "source": "https://example.com/)",
+      "expected": "character )\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%29&title=character+%29"
+    },
+    {
+      "title": "character *",
+      "source": "https://example.com/*",
+      "expected": "character *\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F*&title=character+*"
+    },
+    {
+      "title": "character +",
+      "source": "https://example.com/+",
+      "expected": "character +\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2B&title=character+%2B"
+    },
+    {
+      "title": "character ,",
+      "source": "https://example.com/,",
+      "expected": "character ,\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2C&title=character+%2C"
+    },
+    {
+      "title": "character -",
+      "source": "https://example.com/-",
+      "expected": "character -\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F-&title=character+-"
+    },
+    {
+      "title": "character .",
+      "source": "https://example.com/.",
+      "expected": "character .\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F.&title=character+."
+    },
+    {
+      "title": "character /",
+      "source": "https://example.com//",
+      "expected": "character /\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%2F&title=character+%2F"
+    },
+    {
+      "title": "character 0",
+      "source": "https://example.com/0",
+      "expected": "character 0\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F0&title=character+0"
+    },
+    {
+      "title": "character 1",
+      "source": "https://example.com/1",
+      "expected": "character 1\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F1&title=character+1"
+    },
+    {
+      "title": "character 2",
+      "source": "https://example.com/2",
+      "expected": "character 2\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F2&title=character+2"
+    },
+    {
+      "title": "character 3",
+      "source": "https://example.com/3",
+      "expected": "character 3\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F3&title=character+3"
+    },
+    {
+      "title": "character 4",
+      "source": "https://example.com/4",
+      "expected": "character 4\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F4&title=character+4"
+    },
+    {
+      "title": "character 5",
+      "source": "https://example.com/5",
+      "expected": "character 5\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F5&title=character+5"
+    },
+    {
+      "title": "character 6",
+      "source": "https://example.com/6",
+      "expected": "character 6\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F6&title=character+6"
+    },
+    {
+      "title": "character 7",
+      "source": "https://example.com/7",
+      "expected": "character 7\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F7&title=character+7"
+    },
+    {
+      "title": "character 8",
+      "source": "https://example.com/8",
+      "expected": "character 8\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F8&title=character+8"
+    },
+    {
+      "title": "character 9",
+      "source": "https://example.com/9",
+      "expected": "character 9\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F9&title=character+9"
+    },
+    {
+      "title": "character :",
+      "source": "https://example.com/:",
+      "expected": "character :\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%3A&title=character+%3A"
+    },
+    {
+      "title": "character ;",
+      "source": "https://example.com/;",
+      "expected": "character ;\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%3B&title=character+%3B"
+    },
+    {
+      "title": "character <",
+      "source": "https://example.com/<",
+      "expected": "character <\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%3C&title=character+%3C"
+    },
+    {
+      "title": "character =",
+      "source": "https://example.com/=",
+      "expected": "character =\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%3D&title=character+%3D"
+    },
+    {
+      "title": "character >",
+      "source": "https://example.com/>",
+      "expected": "character >\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%3E&title=character+%3E"
+    },
+    {
+      "title": "character ?",
+      "source": "https://example.com/?",
+      "expected": "character ?\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%3F&title=character+%3F"
+    },
+    {
+      "title": "character @",
+      "source": "https://example.com/@",
+      "expected": "character @\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%40&title=character+%40"
+    },
+    {
+      "title": "character A",
+      "source": "https://example.com/A",
+      "expected": "character A\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FA&title=character+A"
+    },
+    {
+      "title": "character B",
+      "source": "https://example.com/B",
+      "expected": "character B\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FB&title=character+B"
+    },
+    {
+      "title": "character C",
+      "source": "https://example.com/C",
+      "expected": "character C\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FC&title=character+C"
+    },
+    {
+      "title": "character D",
+      "source": "https://example.com/D",
+      "expected": "character D\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FD&title=character+D"
+    },
+    {
+      "title": "character E",
+      "source": "https://example.com/E",
+      "expected": "character E\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FE&title=character+E"
+    },
+    {
+      "title": "character F",
+      "source": "https://example.com/F",
+      "expected": "character F\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FF&title=character+F"
+    },
+    {
+      "title": "character G",
+      "source": "https://example.com/G",
+      "expected": "character G\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FG&title=character+G"
+    },
+    {
+      "title": "character H",
+      "source": "https://example.com/H",
+      "expected": "character H\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FH&title=character+H"
+    },
+    {
+      "title": "character I",
+      "source": "https://example.com/I",
+      "expected": "character I\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FI&title=character+I"
+    },
+    {
+      "title": "character J",
+      "source": "https://example.com/J",
+      "expected": "character J\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FJ&title=character+J"
+    },
+    {
+      "title": "character K",
+      "source": "https://example.com/K",
+      "expected": "character K\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FK&title=character+K"
+    },
+    {
+      "title": "character L",
+      "source": "https://example.com/L",
+      "expected": "character L\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FL&title=character+L"
+    },
+    {
+      "title": "character M",
+      "source": "https://example.com/M",
+      "expected": "character M\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FM&title=character+M"
+    },
+    {
+      "title": "character N",
+      "source": "https://example.com/N",
+      "expected": "character N\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FN&title=character+N"
+    },
+    {
+      "title": "character O",
+      "source": "https://example.com/O",
+      "expected": "character O\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FO&title=character+O"
+    },
+    {
+      "title": "character P",
+      "source": "https://example.com/P",
+      "expected": "character P\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FP&title=character+P"
+    },
+    {
+      "title": "character Q",
+      "source": "https://example.com/Q",
+      "expected": "character Q\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FQ&title=character+Q"
+    },
+    {
+      "title": "character R",
+      "source": "https://example.com/R",
+      "expected": "character R\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FR&title=character+R"
+    },
+    {
+      "title": "character S",
+      "source": "https://example.com/S",
+      "expected": "character S\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FS&title=character+S"
+    },
+    {
+      "title": "character T",
+      "source": "https://example.com/T",
+      "expected": "character T\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FT&title=character+T"
+    },
+    {
+      "title": "character U",
+      "source": "https://example.com/U",
+      "expected": "character U\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FU&title=character+U"
+    },
+    {
+      "title": "character V",
+      "source": "https://example.com/V",
+      "expected": "character V\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FV&title=character+V"
+    },
+    {
+      "title": "character W",
+      "source": "https://example.com/W",
+      "expected": "character W\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FW&title=character+W"
+    },
+    {
+      "title": "character X",
+      "source": "https://example.com/X",
+      "expected": "character X\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FX&title=character+X"
+    },
+    {
+      "title": "character Y",
+      "source": "https://example.com/Y",
+      "expected": "character Y\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FY&title=character+Y"
+    },
+    {
+      "title": "character Z",
+      "source": "https://example.com/Z",
+      "expected": "character Z\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2FZ&title=character+Z"
+    },
+    {
+      "title": "character [",
+      "source": "https://example.com/[",
+      "expected": "character [\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%5B&title=character+%5B"
+    },
+    {
+      "title": "character \\",
+      "source": "https://example.com/\\",
+      "expected": "character \\\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%5C&title=character+%5C"
+    },
+    {
+      "title": "character ]",
+      "source": "https://example.com/]",
+      "expected": "character ]\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%5D&title=character+%5D"
+    },
+    {
+      "title": "character ^",
+      "source": "https://example.com/^",
+      "expected": "character ^\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%5E&title=character+%5E"
+    },
+    {
+      "title": "character _",
+      "source": "https://example.com/_",
+      "expected": "character _\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F_&title=character+_"
+    },
+    {
+      "title": "character `",
+      "source": "https://example.com/`",
+      "expected": "character `\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%60&title=character+%60"
+    },
+    {
+      "title": "character a",
+      "source": "https://example.com/a",
+      "expected": "character a\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fa&title=character+a"
+    },
+    {
+      "title": "character b",
+      "source": "https://example.com/b",
+      "expected": "character b\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fb&title=character+b"
+    },
+    {
+      "title": "character c",
+      "source": "https://example.com/c",
+      "expected": "character c\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fc&title=character+c"
+    },
+    {
+      "title": "character d",
+      "source": "https://example.com/d",
+      "expected": "character d\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fd&title=character+d"
+    },
+    {
+      "title": "character e",
+      "source": "https://example.com/e",
+      "expected": "character e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fe&title=character+e"
+    },
+    {
+      "title": "character f",
+      "source": "https://example.com/f",
+      "expected": "character f\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ff&title=character+f"
+    },
+    {
+      "title": "character g",
+      "source": "https://example.com/g",
+      "expected": "character g\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fg&title=character+g"
+    },
+    {
+      "title": "character h",
+      "source": "https://example.com/h",
+      "expected": "character h\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fh&title=character+h"
+    },
+    {
+      "title": "character i",
+      "source": "https://example.com/i",
+      "expected": "character i\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fi&title=character+i"
+    },
+    {
+      "title": "character j",
+      "source": "https://example.com/j",
+      "expected": "character j\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fj&title=character+j"
+    },
+    {
+      "title": "character k",
+      "source": "https://example.com/k",
+      "expected": "character k\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fk&title=character+k"
+    },
+    {
+      "title": "character l",
+      "source": "https://example.com/l",
+      "expected": "character l\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fl&title=character+l"
+    },
+    {
+      "title": "character m",
+      "source": "https://example.com/m",
+      "expected": "character m\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fm&title=character+m"
+    },
+    {
+      "title": "character n",
+      "source": "https://example.com/n",
+      "expected": "character n\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fn&title=character+n"
+    },
+    {
+      "title": "character o",
+      "source": "https://example.com/o",
+      "expected": "character o\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fo&title=character+o"
+    },
+    {
+      "title": "character p",
+      "source": "https://example.com/p",
+      "expected": "character p\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fp&title=character+p"
+    },
+    {
+      "title": "character q",
+      "source": "https://example.com/q",
+      "expected": "character q\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fq&title=character+q"
+    },
+    {
+      "title": "character r",
+      "source": "https://example.com/r",
+      "expected": "character r\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fr&title=character+r"
+    },
+    {
+      "title": "character s",
+      "source": "https://example.com/s",
+      "expected": "character s\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fs&title=character+s"
+    },
+    {
+      "title": "character t",
+      "source": "https://example.com/t",
+      "expected": "character t\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ft&title=character+t"
+    },
+    {
+      "title": "character u",
+      "source": "https://example.com/u",
+      "expected": "character u\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fu&title=character+u"
+    },
+    {
+      "title": "character v",
+      "source": "https://example.com/v",
+      "expected": "character v\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fv&title=character+v"
+    },
+    {
+      "title": "character w",
+      "source": "https://example.com/w",
+      "expected": "character w\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fw&title=character+w"
+    },
+    {
+      "title": "character x",
+      "source": "https://example.com/x",
+      "expected": "character x\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fx&title=character+x"
+    },
+    {
+      "title": "character y",
+      "source": "https://example.com/y",
+      "expected": "character y\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fy&title=character+y"
+    },
+    {
+      "title": "character z",
+      "source": "https://example.com/z",
+      "expected": "character z\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Fz&title=character+z"
+    },
+    {
+      "title": "character {",
+      "source": "https://example.com/{",
+      "expected": "character {\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%7B&title=character+%7B"
+    },
+    {
+      "title": "character |",
+      "source": "https://example.com/|",
+      "expected": "character |\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%7C&title=character+%7C"
+    },
+    {
+      "title": "character }",
+      "source": "https://example.com/}",
+      "expected": "character }\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%7D&title=character+%7D"
+    },
+    {
+      "title": "character ~",
+      "source": "https://example.com/~",
+      "expected": "character ~\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%7E&title=character+%7E"
+    },
+    {
+      "title": "character \u007f",
+      "source": "https://example.com/\u007f",
+      "expected": "character \u007f\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%7F&title=character+%7F"
+    },
+    {
+      "title": "\u00a0",
+      "source": "https://example.com/\u00a0",
+      "expected": "\u00a0\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%C2%A0&title=%C2%A0"
+    },
+    {
+      "title": "\u00ad",
+      "source": "https://example.com/\u00ad",
+      "expected": "\u00ad\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%C2%AD&title=%C2%AD"
+    },
+    {
+      "title": "\u1680",
+      "source": "https://example.com/\u1680",
+      "expected": "\u1680\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%E1%9A%80&title=%E1%9A%80"
+    },
+    {
+      "title": "\u2000",
+      "source": "https://example.com/\u2000",
+      "expected": "\u2000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%E2%80%80&title=%E2%80%80"
+    },
+    {
+      "title": "\u200b",
+      "source": "https://example.com/\u200b",
+      "expected": "\u200b\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%E2%80%8B&title=%E2%80%8B"
+    },
+    {
+      "title": "\u2028",
+      "source": "https://example.com/\u2028",
+      "expected": "\u2028\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%E2%80%A8&title=%E2%80%A8"
+    },
+    {
+      "title": "\u2029",
+      "source": "https://example.com/\u2029",
+      "expected": "\u2029\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%E2%80%A9&title=%E2%80%A9"
+    },
+    {
+      "title": "\u202e",
+      "source": "https://example.com/\u202e",
+      "expected": "\u202e\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%E2%80%AE&title=%E2%80%AE"
+    },
+    {
+      "title": "\u2067",
+      "source": "https://example.com/\u2067",
+      "expected": "\u2067\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%E2%81%A7&title=%E2%81%A7"
+    },
+    {
+      "title": "\u3000",
+      "source": "https://example.com/\u3000",
+      "expected": "\u3000\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%E3%80%80&title=%E3%80%80"
+    },
+    {
+      "title": "\uffff",
+      "source": "https://example.com/\uffff",
+      "expected": "\uffff\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%EF%BF%BF&title=%EF%BF%BF"
+    },
+    {
+      "title": "\ud800\udc00",
+      "source": "https://example.com/\ud800\udc00",
+      "expected": "\ud800\udc00\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%F0%90%80%80&title=%F0%90%80%80"
+    },
+    {
+      "title": "\udbff\udfff",
+      "source": "https://example.com/\udbff\udfff",
+      "expected": "\udbff\udfff\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2F%F4%8F%BF%BF&title=%F4%8F%BF%BF"
+    }
+  ]
+}

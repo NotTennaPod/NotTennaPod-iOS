@@ -1,0 +1,2209 @@
+{
+ "schema": 1,
+ "fixture_now_ms": 1790510400000,
+ "constants": {
+  "PRUNE_AGE_MS": 604800000,
+  "MAINTENANCE_PERIOD_MS": 259200000,
+  "DOWNLOAD_LOG_LIMIT": 200,
+  "BYPASS_WINDOW_S": 300,
+  "LAST_RUN_ATTEMPT": 2,
+  "WM_DEFAULT_BACKOFF_MS": 30000,
+  "WM_MAX_BACKOFF_MS": 18000000,
+  "SYNC_RECENT_MS": 600000,
+  "SYNC_DELAY_IDLE_S": 20,
+  "SYNC_DELAY_ACTIVE_S": 120,
+  "SYNC_BACKOFF_MS": 600000
+ },
+ "download_log": {
+  "now_ms": 1790510400000,
+  "cutoff_ms": 1789905600000,
+  "deleted": [
+   2,
+   5,
+   8,
+   11
+  ],
+  "kept": [
+   1,
+   3,
+   4,
+   6,
+   7,
+   9,
+   10,
+   12
+  ],
+  "visible": [
+   [
+    7
+   ],
+   [
+    12
+   ],
+   [
+    9,
+    10
+   ],
+   [
+    4
+   ],
+   [
+    3
+   ],
+   [
+    1
+   ],
+   [
+    6
+   ]
+  ],
+  "visible_count": 8
+ },
+ "download_log_cap": {
+  "now_ms": 1790510400000,
+  "cutoff_ms": 1789905600000,
+  "deleted": [
+   400,
+   401,
+   402
+  ],
+  "kept": [
+   100,
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110,
+   111,
+   112,
+   113,
+   114,
+   115,
+   116,
+   117,
+   118,
+   119,
+   120,
+   121,
+   122,
+   123,
+   124,
+   125,
+   126,
+   127,
+   128,
+   129,
+   130,
+   131,
+   132,
+   133,
+   134,
+   135,
+   136,
+   137,
+   138,
+   139,
+   140,
+   141,
+   142,
+   143,
+   144,
+   145,
+   146,
+   147,
+   148,
+   149,
+   150,
+   151,
+   152,
+   153,
+   154,
+   155,
+   156,
+   157,
+   158,
+   159,
+   160,
+   161,
+   162,
+   163,
+   164,
+   165,
+   166,
+   167,
+   168,
+   169,
+   170,
+   171,
+   172,
+   173,
+   174,
+   175,
+   176,
+   177,
+   178,
+   179,
+   180,
+   181,
+   182,
+   183,
+   184,
+   185,
+   186,
+   187,
+   188,
+   189,
+   190,
+   191,
+   192,
+   193,
+   194,
+   195,
+   196,
+   197,
+   198,
+   199,
+   200,
+   201,
+   202,
+   203,
+   204,
+   205,
+   206,
+   207,
+   208,
+   209,
+   210,
+   211,
+   212,
+   213,
+   214,
+   215,
+   216,
+   217,
+   218,
+   219,
+   220,
+   221,
+   222,
+   223,
+   224,
+   225,
+   226,
+   227,
+   228,
+   229,
+   230,
+   231,
+   232,
+   233,
+   234,
+   235,
+   236,
+   237,
+   238,
+   239,
+   240,
+   241,
+   242,
+   243,
+   244,
+   245,
+   246,
+   247,
+   248,
+   249,
+   250,
+   251,
+   252,
+   253,
+   254,
+   255,
+   256,
+   257,
+   258,
+   259,
+   260,
+   261,
+   262,
+   263,
+   264,
+   265,
+   266,
+   267,
+   268,
+   269,
+   270,
+   271,
+   272,
+   273,
+   274,
+   275,
+   276,
+   277,
+   278,
+   279,
+   280,
+   281,
+   282,
+   283,
+   284,
+   285,
+   286,
+   287,
+   288,
+   289,
+   290,
+   291,
+   292,
+   293,
+   294,
+   295,
+   296,
+   297,
+   298,
+   299,
+   300,
+   301,
+   302,
+   303,
+   304,
+   305,
+   306
+  ],
+  "visible": [
+   [
+    100
+   ],
+   [
+    101
+   ],
+   [
+    102
+   ],
+   [
+    103
+   ],
+   [
+    104
+   ],
+   [
+    105
+   ],
+   [
+    106
+   ],
+   [
+    107
+   ],
+   [
+    108
+   ],
+   [
+    109
+   ],
+   [
+    110
+   ],
+   [
+    111
+   ],
+   [
+    112
+   ],
+   [
+    113
+   ],
+   [
+    114
+   ],
+   [
+    115
+   ],
+   [
+    116
+   ],
+   [
+    117
+   ],
+   [
+    118
+   ],
+   [
+    119
+   ],
+   [
+    120
+   ],
+   [
+    121
+   ],
+   [
+    122
+   ],
+   [
+    123
+   ],
+   [
+    124
+   ],
+   [
+    125
+   ],
+   [
+    126
+   ],
+   [
+    127
+   ],
+   [
+    128
+   ],
+   [
+    129
+   ],
+   [
+    130
+   ],
+   [
+    131
+   ],
+   [
+    132
+   ],
+   [
+    133
+   ],
+   [
+    134
+   ],
+   [
+    135
+   ],
+   [
+    136
+   ],
+   [
+    137
+   ],
+   [
+    138
+   ],
+   [
+    139
+   ],
+   [
+    140
+   ],
+   [
+    141
+   ],
+   [
+    142
+   ],
+   [
+    143
+   ],
+   [
+    144
+   ],
+   [
+    145
+   ],
+   [
+    146
+   ],
+   [
+    147
+   ],
+   [
+    148
+   ],
+   [
+    149
+   ],
+   [
+    150
+   ],
+   [
+    151
+   ],
+   [
+    152
+   ],
+   [
+    153
+   ],
+   [
+    154
+   ],
+   [
+    155
+   ],
+   [
+    156
+   ],
+   [
+    157
+   ],
+   [
+    158
+   ],
+   [
+    159
+   ],
+   [
+    160
+   ],
+   [
+    161
+   ],
+   [
+    162
+   ],
+   [
+    163
+   ],
+   [
+    164
+   ],
+   [
+    165
+   ],
+   [
+    166
+   ],
+   [
+    167
+   ],
+   [
+    168
+   ],
+   [
+    169
+   ],
+   [
+    170
+   ],
+   [
+    171
+   ],
+   [
+    172
+   ],
+   [
+    173
+   ],
+   [
+    174
+   ],
+   [
+    175
+   ],
+   [
+    176
+   ],
+   [
+    177
+   ],
+   [
+    178
+   ],
+   [
+    179
+   ],
+   [
+    180
+   ],
+   [
+    181
+   ],
+   [
+    182
+   ],
+   [
+    183
+   ],
+   [
+    184
+   ],
+   [
+    185
+   ],
+   [
+    186
+   ],
+   [
+    187
+   ],
+   [
+    188
+   ],
+   [
+    189
+   ],
+   [
+    190
+   ],
+   [
+    191
+   ],
+   [
+    192
+   ],
+   [
+    193
+   ],
+   [
+    194
+   ],
+   [
+    195
+   ],
+   [
+    196
+   ],
+   [
+    197
+   ],
+   [
+    198
+   ],
+   [
+    199
+   ],
+   [
+    200
+   ],
+   [
+    201
+   ],
+   [
+    202
+   ],
+   [
+    203
+   ],
+   [
+    204
+   ],
+   [
+    205
+   ],
+   [
+    206
+   ],
+   [
+    207
+   ],
+   [
+    208
+   ],
+   [
+    209
+   ],
+   [
+    210
+   ],
+   [
+    211
+   ],
+   [
+    212
+   ],
+   [
+    213
+   ],
+   [
+    214
+   ],
+   [
+    215
+   ],
+   [
+    216
+   ],
+   [
+    217
+   ],
+   [
+    218
+   ],
+   [
+    219
+   ],
+   [
+    220
+   ],
+   [
+    221
+   ],
+   [
+    222
+   ],
+   [
+    223
+   ],
+   [
+    224
+   ],
+   [
+    225
+   ],
+   [
+    226
+   ],
+   [
+    227
+   ],
+   [
+    228
+   ],
+   [
+    229
+   ],
+   [
+    230
+   ],
+   [
+    231
+   ],
+   [
+    232
+   ],
+   [
+    233
+   ],
+   [
+    234
+   ],
+   [
+    235
+   ],
+   [
+    236
+   ],
+   [
+    237
+   ],
+   [
+    238
+   ],
+   [
+    239
+   ],
+   [
+    240
+   ],
+   [
+    241
+   ],
+   [
+    242
+   ],
+   [
+    243
+   ],
+   [
+    244
+   ],
+   [
+    245
+   ],
+   [
+    246
+   ],
+   [
+    247
+   ],
+   [
+    248
+   ],
+   [
+    249
+   ],
+   [
+    250
+   ],
+   [
+    251
+   ],
+   [
+    252
+   ],
+   [
+    253
+   ],
+   [
+    254
+   ],
+   [
+    255
+   ],
+   [
+    256
+   ],
+   [
+    257
+   ],
+   [
+    258
+   ],
+   [
+    259
+   ],
+   [
+    260
+   ],
+   [
+    261
+   ],
+   [
+    262
+   ],
+   [
+    263
+   ],
+   [
+    264
+   ],
+   [
+    265
+   ],
+   [
+    266
+   ],
+   [
+    267
+   ],
+   [
+    268
+   ],
+   [
+    269
+   ],
+   [
+    270
+   ],
+   [
+    271
+   ],
+   [
+    272
+   ],
+   [
+    273
+   ],
+   [
+    274
+   ],
+   [
+    275
+   ],
+   [
+    276
+   ],
+   [
+    277
+   ],
+   [
+    278
+   ],
+   [
+    279
+   ],
+   [
+    280
+   ],
+   [
+    281
+   ],
+   [
+    282
+   ],
+   [
+    283
+   ],
+   [
+    284
+   ],
+   [
+    285
+   ],
+   [
+    286
+   ],
+   [
+    287
+   ],
+   [
+    288
+   ],
+   [
+    289
+   ],
+   [
+    290
+   ],
+   [
+    291
+   ],
+   [
+    292
+   ],
+   [
+    293
+   ],
+   [
+    294
+   ],
+   [
+    295
+   ],
+   [
+    296
+   ],
+   [
+    297
+   ],
+   [
+    298
+   ],
+   [
+    299
+   ]
+  ],
+  "visible_count": 200
+ },
+ "log_timeline": {
+  "android_runs": [
+   1789128000000,
+   1789387200000,
+   1789646400000,
+   1789905600000,
+   1790164800000,
+   1790424000000
+  ],
+  "views": [
+   {
+    "t": 1789214400001,
+    "day": 1,
+    "visible_count": 3,
+    "oldest_age_h": 24
+   },
+   {
+    "t": 1789300800001,
+    "day": 2,
+    "visible_count": 5,
+    "oldest_age_h": 48
+   },
+   {
+    "t": 1789387200001,
+    "day": 3,
+    "visible_count": 7,
+    "oldest_age_h": 72
+   },
+   {
+    "t": 1789473600001,
+    "day": 4,
+    "visible_count": 9,
+    "oldest_age_h": 96
+   },
+   {
+    "t": 1789560000001,
+    "day": 5,
+    "visible_count": 11,
+    "oldest_age_h": 120
+   },
+   {
+    "t": 1789646400001,
+    "day": 6,
+    "visible_count": 13,
+    "oldest_age_h": 144
+   },
+   {
+    "t": 1789732800001,
+    "day": 7,
+    "visible_count": 15,
+    "oldest_age_h": 168
+   },
+   {
+    "t": 1789819200001,
+    "day": 8,
+    "visible_count": 17,
+    "oldest_age_h": 192
+   },
+   {
+    "t": 1789905600001,
+    "day": 9,
+    "visible_count": 15,
+    "oldest_age_h": 168
+   },
+   {
+    "t": 1789992000001,
+    "day": 10,
+    "visible_count": 17,
+    "oldest_age_h": 192
+   },
+   {
+    "t": 1790078400001,
+    "day": 11,
+    "visible_count": 19,
+    "oldest_age_h": 216
+   },
+   {
+    "t": 1790164800001,
+    "day": 12,
+    "visible_count": 15,
+    "oldest_age_h": 168
+   },
+   {
+    "t": 1790251200001,
+    "day": 13,
+    "visible_count": 17,
+    "oldest_age_h": 192
+   },
+   {
+    "t": 1790337600001,
+    "day": 14,
+    "visible_count": 19,
+    "oldest_age_h": 216
+   },
+   {
+    "t": 1790424000001,
+    "day": 15,
+    "visible_count": 15,
+    "oldest_age_h": 168
+   },
+   {
+    "t": 1790510400001,
+    "day": 16,
+    "visible_count": 17,
+    "oldest_age_h": 192
+   }
+  ]
+ },
+ "maintenance_due": [
+  {
+   "name": "never_run",
+   "due": true
+  },
+  {
+   "name": "3d_minus_1ms",
+   "due": false
+  },
+  {
+   "name": "exactly_3d",
+   "due": true
+  },
+  {
+   "name": "10d",
+   "due": true
+  },
+  {
+   "name": "clock_rollback",
+   "due": false
+  }
+ ],
+ "constraints": [
+  {
+   "name": "CONNECTED@wifi",
+   "runs": true
+  },
+  {
+   "name": "CONNECTED@wifi_metered",
+   "runs": true
+  },
+  {
+   "name": "CONNECTED@vpn_over_wifi_metered",
+   "runs": true
+  },
+  {
+   "name": "CONNECTED@vpn_over_wifi_unmetered",
+   "runs": true
+  },
+  {
+   "name": "CONNECTED@cellular",
+   "runs": true
+  },
+  {
+   "name": "CONNECTED@cellular_unmetered_plan",
+   "runs": true
+  },
+  {
+   "name": "CONNECTED@ethernet",
+   "runs": true
+  },
+  {
+   "name": "CONNECTED@none",
+   "runs": false
+  },
+  {
+   "name": "UNMETERED@wifi",
+   "runs": true
+  },
+  {
+   "name": "UNMETERED@wifi_metered",
+   "runs": false
+  },
+  {
+   "name": "UNMETERED@vpn_over_wifi_metered",
+   "runs": false
+  },
+  {
+   "name": "UNMETERED@vpn_over_wifi_unmetered",
+   "runs": true
+  },
+  {
+   "name": "UNMETERED@cellular",
+   "runs": false
+  },
+  {
+   "name": "UNMETERED@cellular_unmetered_plan",
+   "runs": false
+  },
+  {
+   "name": "UNMETERED@ethernet",
+   "runs": true
+  },
+  {
+   "name": "UNMETERED@none",
+   "runs": false
+  },
+  {
+   "name": "UNMETERED wifi->cellular mid-transfer",
+   "runs": true,
+   "after_change": "stopped: partial file kept, resumes when satisfied"
+  },
+  {
+   "name": "CONNECTED wifi->cellular mid-transfer",
+   "runs": true,
+   "after_change": "continues"
+  },
+  {
+   "name": "CONNECTED wifi->none mid-transfer",
+   "runs": true,
+   "after_change": "stopped: partial file kept, resumes when satisfied"
+  }
+ ],
+ "download_button": [
+  {
+   "name": "already downloaded",
+   "result": "ignored"
+  },
+  {
+   "name": "already downloading",
+   "result": "ignored"
+  },
+  {
+   "name": "no media",
+   "result": "ignored"
+  },
+  {
+   "name": "wifi, pref off",
+   "toast": false,
+   "result": "download_now",
+   "constraint": "UNMETERED",
+   "bypass_type": 0,
+   "bypass_timer_s": 0
+  },
+  {
+   "name": "ethernet, pref off",
+   "toast": false,
+   "result": "download_now",
+   "constraint": "UNMETERED",
+   "bypass_type": 0,
+   "bypass_timer_s": 0
+  },
+  {
+   "name": "cellular, pref on",
+   "toast": false,
+   "result": "download_now",
+   "constraint": "CONNECTED",
+   "bypass_type": 0,
+   "bypass_timer_s": 0
+  },
+  {
+   "name": "metered wifi, pref on",
+   "toast": false,
+   "result": "download_now",
+   "constraint": "CONNECTED",
+   "bypass_type": 0,
+   "bypass_timer_s": 0
+  },
+  {
+   "name": "cellular, pref off, choose later",
+   "toast": false,
+   "result": "dialog",
+   "dialog_message": "base",
+   "buttons": [
+    "Download later",
+    "Download anyway",
+    "Cancel"
+   ],
+   "after": "download_now",
+   "constraint": "UNMETERED",
+   "bypass_type": 2,
+   "bypass_timer_s": 1790510400
+  },
+  {
+   "name": "cellular, pref off, choose anyway",
+   "toast": false,
+   "result": "dialog",
+   "dialog_message": "base",
+   "buttons": [
+    "Download later",
+    "Download anyway",
+    "Cancel"
+   ],
+   "after": "download_now",
+   "constraint": "CONNECTED",
+   "bypass_type": 1,
+   "bypass_timer_s": 1790510400
+  },
+  {
+   "name": "cellular, pref off, choose cancel",
+   "toast": false,
+   "result": "dialog",
+   "dialog_message": "base",
+   "buttons": [
+    "Download later",
+    "Download anyway",
+    "Cancel"
+   ],
+   "after": "nothing",
+   "bypass_type": 0,
+   "bypass_timer_s": 0
+  },
+  {
+   "name": "metered wifi, pref off -> dialog",
+   "toast": false,
+   "result": "dialog",
+   "dialog_message": "base",
+   "buttons": [
+    "Download later",
+    "Download anyway",
+    "Cancel"
+   ]
+  },
+  {
+   "name": "VPN over metered wifi -> dialog with VPN text",
+   "toast": false,
+   "result": "dialog",
+   "dialog_message": "base+vpn",
+   "buttons": [
+    "Download later",
+    "Download anyway",
+    "Cancel"
+   ]
+  },
+  {
+   "name": "unmetered cellular plan counts as restricted",
+   "toast": false,
+   "result": "dialog",
+   "dialog_message": "base",
+   "buttons": [
+    "Download later",
+    "Download anyway",
+    "Cancel"
+   ]
+  },
+  {
+   "name": "offline, pref off -> dialog (no network counts as metered)",
+   "toast": false,
+   "result": "dialog",
+   "dialog_message": "base",
+   "buttons": [
+    "Download later",
+    "Download anyway",
+    "Cancel"
+   ]
+  },
+  {
+   "name": "offline, pref on -> queued CONNECTED",
+   "toast": false,
+   "result": "download_now",
+   "constraint": "CONNECTED",
+   "bypass_type": 0,
+   "bypass_timer_s": 0
+  },
+  {
+   "name": "anyway 299 s ago -> toast, CONNECTED",
+   "toast": true,
+   "result": "download_now",
+   "constraint": "CONNECTED",
+   "bypass_type": 1,
+   "bypass_timer_s": 1790510101
+  },
+  {
+   "name": "anyway 300 s ago -> window over, dialog",
+   "toast": false,
+   "result": "dialog",
+   "dialog_message": "base",
+   "buttons": [
+    "Download later",
+    "Download anyway",
+    "Cancel"
+   ]
+  },
+  {
+   "name": "later 10 s ago -> no dialog, UNMETERED",
+   "toast": false,
+   "result": "download_now",
+   "constraint": "UNMETERED",
+   "bypass_type": 2,
+   "bypass_timer_s": 1790510390
+  },
+  {
+   "name": "anyway long ago, now on wifi -> still CONNECTED (sticky type)",
+   "toast": false,
+   "result": "download_now",
+   "constraint": "CONNECTED",
+   "bypass_type": 1,
+   "bypass_timer_s": 1790424000
+  },
+  {
+   "name": "anyway, clock rolled back -> negative age still bypasses",
+   "toast": true,
+   "result": "download_now",
+   "constraint": "CONNECTED",
+   "bypass_type": 1,
+   "bypass_timer_s": 1790511000
+  }
+ ],
+ "attempts": [
+  {
+   "name": "success first try",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ]
+  },
+  {
+   "name": "two retryable failures then success (background)",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_IO_WRONG_SIZE",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "retryable",
+     "log_row": "ERROR_CONNECTION_ERROR",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_IO_WRONG_SIZE",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "retryable",
+     "log_row": "ERROR_CONNECTION_ERROR",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ]
+  },
+  {
+   "name": "three retryable failures (foreground)",
+   "title_utf16_len": 37,
+   "truncated": "The Very Long Episo\u2026",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_HTTP_DATA_ERROR",
+     "snackbar": [
+      "Download of \"The Very Long Episo\u2026\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "retryable",
+     "log_row": "ERROR_HTTP_DATA_ERROR",
+     "snackbar": [
+      "Download of \"The Very Long Episo\u2026\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "retryable",
+     "log_row": "ERROR_HTTP_DATA_ERROR",
+     "snackbar": [
+      "Download of \"The Very Long Episo\u2026\" failed.",
+      "Download of \"The Very Long Episo\u2026\" failed."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_HTTP_DATA_ERROR",
+     "snackbar": [
+      "Download of \"The Very Long Episo\u2026\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "retryable",
+     "log_row": "ERROR_HTTP_DATA_ERROR",
+     "snackbar": [
+      "Download of \"The Very Long Episo\u2026\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "retryable",
+     "log_row": "ERROR_HTTP_DATA_ERROR",
+     "snackbar": [
+      "Download of \"The Very Long Episo\u2026\" failed.",
+      "Download of \"The Very Long Episo\u2026\" failed."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ]
+  },
+  {
+   "name": "three retryable failures (background)",
+   "title_utf16_len": 37,
+   "truncated": "The Very Long Episo\u2026",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_UNKNOWN_HOST",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "retryable",
+     "log_row": "ERROR_UNKNOWN_HOST",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "retryable",
+     "log_row": "ERROR_UNKNOWN_HOST",
+     "snackbar": [],
+     "notification": {
+      "title": "Episode download failed",
+      "text": "Tap to view details."
+     },
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_UNKNOWN_HOST",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "retryable",
+     "log_row": "ERROR_UNKNOWN_HOST",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "retryable",
+     "log_row": "ERROR_UNKNOWN_HOST",
+     "snackbar": [],
+     "notification": {
+      "title": "Episode download failed",
+      "text": "Tap to view details."
+     },
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ]
+  },
+  {
+   "name": "fail fast 404 (background)",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "fail_fast",
+     "log_row": "ERROR_NOT_FOUND",
+     "snackbar": [],
+     "notification": {
+      "title": "Episode download failed",
+      "text": "Tap to view details."
+     },
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "fail_fast",
+     "log_row": "ERROR_NOT_FOUND",
+     "snackbar": [],
+     "notification": {
+      "title": "Episode download failed",
+      "text": "Tap to view details."
+     },
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ]
+  },
+  {
+   "name": "fail fast 401 (foreground)",
+   "title_utf16_len": 29,
+   "truncated": "Caf\u00e9 \u2615 show, ep 12\ud83c\u2026",
+   "truncation_splits_surrogate": true,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "fail_fast",
+     "log_row": "ERROR_UNAUTHORIZED",
+     "snackbar": [
+      "Download of \"Caf\u00e9 \u2615 show, ep 12\ud83c\u2026\" failed."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "fail_fast",
+     "log_row": "ERROR_UNAUTHORIZED",
+     "snackbar": [
+      "Download of \"Caf\u00e9 \u2615 show, ep 12\ud83c\u2026\" failed."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ]
+  },
+  {
+   "name": "416 then success",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "http_416",
+     "log_row": null,
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "http_416",
+     "log_row": null,
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ]
+  },
+  {
+   "name": "416 three times (foreground)",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "http_416",
+     "log_row": null,
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "http_416",
+     "log_row": null,
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "http_416",
+     "log_row": null,
+     "snackbar": [
+      "Download of \"Short title\" failed.",
+      "Download of \"Short title\" failed."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "http_416",
+     "log_row": null,
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "http_416",
+     "log_row": null,
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "http_416",
+     "log_row": null,
+     "snackbar": [
+      "Download of \"Short title\" failed.",
+      "Download of \"Short title\" failed."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ]
+  },
+  {
+   "name": "stopped twice (Wi-Fi lost), then one transient error",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "stopped",
+     "log_row": null,
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "rerun-when-constraints-met"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "stopped",
+     "log_row": null,
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "rerun-when-constraints-met"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "retryable",
+     "log_row": "ERROR_IO_WRONG_SIZE",
+     "snackbar": [],
+     "notification": {
+      "title": "Episode download failed",
+      "text": "Tap to view details."
+     },
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "stopped",
+     "log_row": null,
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "rerun-when-constraints-met"
+    },
+    {
+     "run_attempt_count": 0,
+     "outcome": "stopped",
+     "log_row": null,
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "rerun-when-constraints-met"
+    },
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_IO_WRONG_SIZE",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ]
+  },
+  {
+   "name": "stopped then success",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "stopped",
+     "log_row": null,
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "rerun-when-constraints-met"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "stopped",
+     "log_row": null,
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "rerun-when-constraints-met"
+    },
+    {
+     "run_attempt_count": 0,
+     "outcome": "success",
+     "log_row": "SUCCESS",
+     "snackbar": [],
+     "notification": null,
+     "file": "kept",
+     "next": "done:success"
+    }
+   ]
+  },
+  {
+   "name": "not enough space is retried",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_NOT_ENOUGH_SPACE",
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "retryable",
+     "log_row": "ERROR_NOT_ENOUGH_SPACE",
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "retryable",
+     "log_row": "ERROR_NOT_ENOUGH_SPACE",
+     "snackbar": [
+      "Download of \"Short title\" failed.",
+      "Download of \"Short title\" failed."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "retryable",
+     "log_row": "ERROR_NOT_ENOUGH_SPACE",
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:30000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "retryable",
+     "log_row": "ERROR_NOT_ENOUGH_SPACE",
+     "snackbar": [
+      "Download of \"Short title\" failed. Will be retried later."
+     ],
+     "notification": null,
+     "file": "kept",
+     "next": "retry-after-ms:60000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "retryable",
+     "log_row": "ERROR_NOT_ENOUGH_SPACE",
+     "snackbar": [
+      "Download of \"Short title\" failed.",
+      "Download of \"Short title\" failed."
+     ],
+     "notification": null,
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ]
+  },
+  {
+   "name": "malformed Content-Range (downloader exception)",
+   "title_utf16_len": 11,
+   "truncated": "Short title",
+   "truncation_splits_surrogate": false,
+   "android": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "downloader_exception",
+     "log_row": null,
+     "snackbar": [],
+     "notification": {
+      "title": "Episode download failed",
+      "text": "Tap to view details."
+     },
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ],
+   "ios_recommended": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "downloader_exception",
+     "log_row": null,
+     "snackbar": [],
+     "notification": {
+      "title": "Episode download failed",
+      "text": "Tap to view details."
+     },
+     "file": "deleted",
+     "next": "done:failed"
+    }
+   ]
+  }
+ ],
+ "sync_requests": [
+  {
+   "name": "action while idle",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 20,
+   "constraint": "CONNECTED",
+   "status_event": "Sync started",
+   "worker_without_provider": null
+  },
+  {
+   "name": "action while a sync runs",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 120,
+   "constraint": "CONNECTED",
+   "status_event": null,
+   "worker_without_provider": null
+  },
+  {
+   "name": "action without provider",
+   "enqueued": false,
+   "reason": "no provider: action not stored"
+  },
+  {
+   "name": "refresh finished (syncImmediately)",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 0,
+   "constraint": "CONNECTED",
+   "status_event": "Sync started",
+   "worker_without_provider": null
+  },
+  {
+   "name": "syncImmediately while active",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 0,
+   "constraint": "CONNECTED",
+   "status_event": null,
+   "worker_without_provider": null
+  },
+  {
+   "name": "Force full synchronization",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 0,
+   "constraint": "CONNECTED",
+   "status_event": "Sync started",
+   "worker_without_provider": null,
+   "resets": [
+    "last_sync_timestamp",
+    "last_episode_actions_sync_timestamp",
+    "last_sync_attempt_timestamp"
+   ]
+  },
+  {
+   "name": "launch, last attempt 10 min + 1 ms ago",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 20,
+   "constraint": "CONNECTED",
+   "status_event": "Sync started",
+   "worker_without_provider": null
+  },
+  {
+   "name": "launch, last attempt exactly 10 min ago",
+   "enqueued": false,
+   "reason": "synced recently"
+  },
+  {
+   "name": "launch, never synced",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 20,
+   "constraint": "CONNECTED",
+   "status_event": "Sync started",
+   "worker_without_provider": null
+  },
+  {
+   "name": "launch without provider still schedules (worker no-ops)",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 20,
+   "constraint": "CONNECTED",
+   "status_event": "Sync started",
+   "worker_without_provider": "returns success, does nothing"
+  },
+  {
+   "name": "mobile types unset (reader default images only)",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 20,
+   "constraint": "UNMETERED",
+   "status_event": "Sync started",
+   "worker_without_provider": null
+  },
+  {
+   "name": "mobile types without sync",
+   "enqueued": true,
+   "unique_name": "SyncServiceWorkId",
+   "policy": "REPLACE",
+   "initial_delay_s": 20,
+   "constraint": "UNMETERED",
+   "status_event": "Sync started",
+   "worker_without_provider": null
+  }
+ ],
+ "sync_runs": [
+  {
+   "name": "success",
+   "runs": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "success",
+     "last_success": true,
+     "error_feedback": false,
+     "next": "done"
+    }
+   ]
+  },
+  {
+   "name": "server errors x7 then success",
+   "runs": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "sync_exception",
+     "last_success": false,
+     "error_feedback": false,
+     "next": "retry-after-ms:600000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "sync_exception",
+     "last_success": false,
+     "error_feedback": false,
+     "next": "retry-after-ms:1200000"
+    },
+    {
+     "run_attempt_count": 2,
+     "outcome": "sync_exception",
+     "last_success": false,
+     "error_feedback": true,
+     "next": "retry-after-ms:2400000"
+    },
+    {
+     "run_attempt_count": 3,
+     "outcome": "sync_exception",
+     "last_success": false,
+     "error_feedback": false,
+     "next": "retry-after-ms:4800000"
+    },
+    {
+     "run_attempt_count": 4,
+     "outcome": "sync_exception",
+     "last_success": false,
+     "error_feedback": false,
+     "next": "retry-after-ms:9600000"
+    },
+    {
+     "run_attempt_count": 5,
+     "outcome": "sync_exception",
+     "last_success": false,
+     "error_feedback": true,
+     "next": "retry-after-ms:18000000"
+    },
+    {
+     "run_attempt_count": 6,
+     "outcome": "sync_exception",
+     "last_success": false,
+     "error_feedback": false,
+     "next": "retry-after-ms:18000000"
+    },
+    {
+     "run_attempt_count": 7,
+     "outcome": "success",
+     "last_success": true,
+     "error_feedback": false,
+     "next": "done"
+    }
+   ]
+  },
+  {
+   "name": "unexpected exception",
+   "runs": [
+    {
+     "run_attempt_count": 0,
+     "outcome": "sync_exception",
+     "last_success": false,
+     "error_feedback": false,
+     "next": "retry-after-ms:600000"
+    },
+    {
+     "run_attempt_count": 1,
+     "outcome": "other_exception",
+     "last_success": false,
+     "error_feedback": true,
+     "next": "done:failed"
+    }
+   ]
+  }
+ ],
+ "played_actions": [
+  {
+   "name": "pause after listening",
+   "action": {
+    "action": "PLAY",
+    "started": 61,
+    "position": 125,
+    "total": 1800
+   }
+  },
+  {
+   "name": "pause without progress",
+   "action": null
+  },
+  {
+   "name": "completed",
+   "action": {
+    "action": "PLAY",
+    "started": 1700,
+    "position": 1800,
+    "total": 1800
+   }
+  },
+  {
+   "name": "completed with start == position",
+   "action": {
+    "action": "PLAY",
+    "started": 1800,
+    "position": 1800,
+    "total": 1800
+   }
+  },
+  {
+   "name": "negative start",
+   "action": null
+  },
+  {
+   "name": "no provider",
+   "action": null
+  },
+  {
+   "name": "local feed",
+   "action": null
+  },
+  {
+   "name": "not subscribed (preview)",
+   "action": null
+  }
+ ]
+}

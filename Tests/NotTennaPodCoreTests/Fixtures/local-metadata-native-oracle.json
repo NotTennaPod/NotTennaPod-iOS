@@ -1,0 +1,110 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "boundary": "Actual Android API36 MediaMetadataRetriever MediaDataSource callback observations only; descriptor rows are inconclusive and excluded. app_process system-context harness, not LocalFeedUpdater, document providers, date conversion or application UI. Picture hashes come from independent original binary-tag extraction.",
+  "sources": {
+    "Android local-metadata capability capture": "074b1ad3feb5ed9214c5fc466215e56fa246ed2414a04b9cf160277c7bb84abe",
+    "native local audio metadata fixture artwork record": "6081d5b1fb6dacecd366ba95ebb479eb6ea955ed26a4e048af351b5f6fe4ec7d"
+  },
+  "fixtures": [
+    {
+      "title": null,
+      "date": null,
+      "durationMilliseconds": "30041",
+      "mime": "audio/mpeg",
+      "artworkBytes": null,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/playback-30sec.mp3",
+      "sha256": "93209db68e1db6c3fed062b8ae530e1d00eb50d42b8d46e3da72b725ae211271",
+      "artworkSHA256": null
+    },
+    {
+      "title": null,
+      "date": null,
+      "durationMilliseconds": "8000",
+      "mime": "audio/x-wav",
+      "artworkBytes": null,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone.wav",
+      "sha256": "05b58bd38cd184982e473eaaac0a8d819e658a8cb1b3267be248626643b38da7",
+      "artworkSHA256": null
+    },
+    {
+      "title": null,
+      "date": "19040101T000000.000Z",
+      "durationMilliseconds": "8000",
+      "mime": "audio/mp4",
+      "artworkBytes": null,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone.m4a",
+      "sha256": "3f98abf645a3ba431647b4ab477491b7b92d7e3655e25433599860e5f6f82672",
+      "artworkSHA256": null
+    },
+    {
+      "title": null,
+      "date": null,
+      "durationMilliseconds": "8000",
+      "mime": "audio/flac",
+      "artworkBytes": null,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone.flac",
+      "sha256": "74c53b005c0637aaa6843a2197dcf40bc5855b4191f46a47364cc6293af717b9",
+      "artworkSHA256": null
+    },
+    {
+      "title": null,
+      "date": null,
+      "durationMilliseconds": "8000",
+      "mime": "audio/ogg",
+      "artworkBytes": null,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-vorbis.ogg",
+      "sha256": "8570b4d9deaf482cd0a885f12e90304d06bd94b90a3622f830d9bbda6ee024b3",
+      "artworkSHA256": null
+    },
+    {
+      "title": null,
+      "date": null,
+      "durationMilliseconds": "8000",
+      "mime": "audio/ogg",
+      "artworkBytes": null,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-opus.ogg",
+      "sha256": "cb1b669614207c0a3faafcbc2686de15da26104e78f60b661c10bfe64b692dc2",
+      "artworkSHA256": null
+    },
+    {
+      "title": null,
+      "date": null,
+      "durationMilliseconds": "8008",
+      "mime": "video/webm",
+      "artworkBytes": null,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-opus.webm",
+      "sha256": "0f725f2e8d1b5f11718b11840367521865e0f7fe44c3b6ac8aa25ecbe1af7360",
+      "artworkSHA256": null
+    },
+    {
+      "title": "Title",
+      "date": "2021",
+      "durationMilliseconds": "10000",
+      "mime": "audio/ogg",
+      "artworkBytes": 307,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/VorbisDescriptions/auphonic.ogg",
+      "sha256": "33409b2885d4f75c13cd5ad504d8c6f518cd447418041733eadff4ff61c10856",
+      "artworkSHA256": "efece7e0b38d8f9eadaeb3482b71a581e099ddf9febe614aed0fe5d5043e8634"
+    },
+    {
+      "title": "Title",
+      "date": "2021",
+      "durationMilliseconds": "10000",
+      "mime": "audio/ogg",
+      "artworkBytes": 308,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/VorbisDescriptions/auphonic.opus",
+      "sha256": "00011304c5d3bb598112712d45cae33f566724084d3e0b9ec4d579f9e0cd0cc8",
+      "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+    },
+    {
+      "title": "Opus Comment Test",
+      "date": null,
+      "durationMilliseconds": "10000",
+      "mime": "audio/ogg",
+      "artworkBytes": 131217,
+      "path": "Tests/NotTennaPodCoreTests/Fixtures/VorbisDescriptions/opus-comment.opus",
+      "sha256": "ed5b98121f145756682b984cd1f8585f4e0d8f5a37117922542669dccf174de3",
+      "artworkSHA256": "6d28a981e099f02feb2b32a22b1562780f038657731cd860df3c50ca72abe360"
+    }
+  ]
+}

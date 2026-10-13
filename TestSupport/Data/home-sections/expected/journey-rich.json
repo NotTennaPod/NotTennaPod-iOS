@@ -1,0 +1,450 @@
+{
+  "oracle": "HomeSectionsVerification/expected_home.py",
+  "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "database": "TestSupport/Data/home-sections/databases/rich.db",
+  "now_ms": 1790000000000,
+  "python_sqlite_version": "3.53.4",
+  "preferences": {
+    "PrefHomeSectionsString": "",
+    "PrefHomeSectionOrder": "",
+    "ignored_unknown_tags": [],
+    "prefInboxSortedOrder": 2,
+    "prefDownloadSortedOrder": 2,
+    "prefGlobalDefaultSortedOrder": 2,
+    "countAll": false
+  },
+  "welcome": {
+    "total_subscribed_episode_count": 131,
+    "welcome_visible": false,
+    "sections_container_visible": true,
+    "swipe_refresh_visible": true
+  },
+  "visible_section_tags": [
+    "QueueSection",
+    "InboxSection",
+    "EpisodesSurpriseSection",
+    "SubscriptionsSection",
+    "DownloadsSection"
+  ],
+  "sections": [
+    {
+      "tag": "QueueSection",
+      "title": "Continue listening",
+      "more": {
+        "label": "Queue",
+        "target": "QueueFragment"
+      },
+      "presentation": "horizontal_episode_cards",
+      "limit": 8,
+      "empty_text": "You can add episodes by downloading them or long-pressing them and selecting \"Add to queue\".",
+      "item_ids": [
+        2003,
+        2010,
+        2002,
+        2001,
+        2006,
+        2007,
+        2005,
+        2008
+      ],
+      "items": [
+        {
+          "id": 2003,
+          "queue_row": 7,
+          "feed": 3,
+          "resume_key": 1789999990000,
+          "progress_bar": true
+        },
+        {
+          "id": 2010,
+          "queue_row": 10,
+          "feed": 13,
+          "resume_key": 1789992800000,
+          "progress_bar": true
+        },
+        {
+          "id": 2002,
+          "queue_row": 6,
+          "feed": 2,
+          "resume_key": 1789913600000,
+          "progress_bar": true
+        },
+        {
+          "id": 2001,
+          "queue_row": 2,
+          "feed": 1,
+          "resume_key": 1789740800000,
+          "progress_bar": true
+        },
+        {
+          "id": 2006,
+          "queue_row": 1,
+          "feed": 6,
+          "resume_key": 0,
+          "progress_bar": false
+        },
+        {
+          "id": 2007,
+          "queue_row": 3,
+          "feed": 7,
+          "resume_key": 0,
+          "progress_bar": false
+        },
+        {
+          "id": 2005,
+          "queue_row": 4,
+          "feed": 5,
+          "resume_key": 0,
+          "progress_bar": true
+        },
+        {
+          "id": 2008,
+          "queue_row": 5,
+          "feed": 8,
+          "resume_key": 0,
+          "progress_bar": false
+        }
+      ],
+      "empty_label_visible": false,
+      "total_queue_rows": 10
+    },
+    {
+      "tag": "InboxSection",
+      "title": "See what's new",
+      "more": {
+        "label": "Inbox",
+        "target": "InboxFragment"
+      },
+      "presentation": "vertical_episode_rows",
+      "limit": 2,
+      "empty_text": "New episodes will show up here. You can then decide whether you are interested in them.",
+      "sort_code": 2,
+      "sort_sql": "FeedItems.pubDate DESC",
+      "item_ids": [
+        1202,
+        1001
+      ],
+      "new_count": 106,
+      "badge": {
+        "visible": true,
+        "text": "99+"
+      },
+      "empty_label_visible": false,
+      "ties": []
+    },
+    {
+      "tag": "EpisodesSurpriseSection",
+      "title": "Get surprised",
+      "more": {
+        "label": "Episodes",
+        "target": "AllEpisodesFragment"
+      },
+      "presentation": "horizontal_episode_cards",
+      "limit": 8,
+      "empty_text": "You already played all recent episodes. Nothing to be surprised here ;)",
+      "seed": 12345,
+      "candidate_episode_ids_by_feed": {
+        "1": [
+          1001,
+          1011,
+          1021,
+          1031,
+          1041,
+          1051,
+          1061,
+          1071,
+          1081,
+          1091,
+          1101
+        ],
+        "2": [
+          1002,
+          1012,
+          1022,
+          1032,
+          1042,
+          1052,
+          1062,
+          1072,
+          1082,
+          1092,
+          1102
+        ],
+        "3": [
+          1003,
+          1013,
+          1023,
+          1033,
+          1043,
+          1053,
+          1063,
+          1073,
+          1083,
+          1093,
+          1103,
+          2003,
+          3003,
+          4002
+        ],
+        "4": [
+          1004,
+          1014,
+          1024,
+          1034,
+          1044,
+          1054,
+          1064,
+          1074,
+          1084,
+          1094,
+          1104,
+          2004
+        ],
+        "5": [
+          1005,
+          1015,
+          1025,
+          1035,
+          1045,
+          1055,
+          1065,
+          1075,
+          1085,
+          1095,
+          1105,
+          2005,
+          3005
+        ],
+        "6": [
+          1006,
+          1016,
+          1026,
+          1036,
+          1046,
+          1056,
+          1066,
+          1076,
+          1086,
+          1096,
+          2006
+        ],
+        "7": [
+          1007,
+          1017,
+          1027,
+          1037,
+          1047,
+          1057,
+          1067,
+          1077,
+          1087,
+          1097
+        ],
+        "8": [
+          1008,
+          1018,
+          1028,
+          1038,
+          1048,
+          1058,
+          1068,
+          1078,
+          1088,
+          1098,
+          2008
+        ],
+        "9": [
+          1009,
+          1019,
+          1029,
+          1039,
+          1049,
+          1059,
+          1069,
+          1079,
+          1089,
+          1099,
+          2009
+        ],
+        "10": [
+          1010,
+          1020,
+          1030,
+          1040,
+          1050,
+          1060,
+          1070,
+          1080,
+          1090,
+          1100
+        ]
+      },
+      "candidate_count": 114,
+      "feeds_with_candidates": 10,
+      "expected_count": 8,
+      "shuffle_button_visible": true,
+      "empty_label_visible": false,
+      "item_ids": [
+        1054,
+        1069,
+        1005,
+        1020,
+        1001,
+        1016,
+        1012,
+        1027
+      ],
+      "python_recomputation": [
+        1054,
+        1069,
+        1005,
+        1020,
+        1001,
+        1016,
+        1012,
+        1027
+      ],
+      "recomputation_agrees": true,
+      "ties": []
+    },
+    {
+      "tag": "SubscriptionsSection",
+      "title": "Check your classics",
+      "more": {
+        "label": "Subscriptions",
+        "target": "SubscriptionFragment"
+      },
+      "presentation": "horizontal_feed_covers",
+      "limit": 8,
+      "empty_text": null,
+      "include_marked_played": false,
+      "time_from_ms": 1695392000000,
+      "feed_ids": [
+        3,
+        7,
+        1,
+        5,
+        2,
+        8,
+        6,
+        4
+      ],
+      "items": [
+        {
+          "feed_id": 3,
+          "state": 0,
+          "played_seconds": 30000
+        },
+        {
+          "feed_id": 7,
+          "state": 0,
+          "played_seconds": 24000
+        },
+        {
+          "feed_id": 1,
+          "state": 0,
+          "played_seconds": 18600
+        },
+        {
+          "feed_id": 5,
+          "state": 0,
+          "played_seconds": 12060
+        },
+        {
+          "feed_id": 2,
+          "state": 0,
+          "played_seconds": 6120
+        },
+        {
+          "feed_id": 8,
+          "state": 0,
+          "played_seconds": 3000
+        },
+        {
+          "feed_id": 6,
+          "state": 0,
+          "played_seconds": 2400
+        },
+        {
+          "feed_id": 4,
+          "state": 0,
+          "played_seconds": 60
+        }
+      ],
+      "skipped_non_subscribed": [
+        12
+      ],
+      "statistics_group_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12
+      ],
+      "empty_label_visible": false,
+      "strip_empty": false,
+      "ties": []
+    },
+    {
+      "tag": "DownloadsSection",
+      "title": "Manage downloads",
+      "more": {
+        "label": "Downloads",
+        "target": "CompletedDownloadsFragment"
+      },
+      "presentation": "vertical_episode_rows",
+      "limit": 2,
+      "empty_text": "You can download any episode to listen to it offline.",
+      "sort_code": 2,
+      "sort_sql": "FeedItems.pubDate DESC",
+      "item_ids": [
+        4001,
+        4002
+      ],
+      "empty_label_visible": false,
+      "ties": []
+    }
+  ],
+  "configure_dialog": {
+    "title": "Configure home screen",
+    "buttons": {
+      "positive": "OK",
+      "negative": "Cancel",
+      "neutral": "Reset"
+    },
+    "rows": [
+      {
+        "header": "Shown"
+      },
+      {
+        "tag": "QueueSection",
+        "label": "Continue listening"
+      },
+      {
+        "tag": "InboxSection",
+        "label": "See what's new"
+      },
+      {
+        "tag": "EpisodesSurpriseSection",
+        "label": "Get surprised"
+      },
+      {
+        "tag": "SubscriptionsSection",
+        "label": "Check your classics"
+      },
+      {
+        "tag": "DownloadsSection",
+        "label": "Manage downloads"
+      },
+      {
+        "header": "Hidden"
+      }
+    ]
+  }
+}

@@ -1,0 +1,722 @@
+[
+  {
+    "kind": "load",
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "once": false,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "once": true,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "once": false,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "once": true,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "once": false,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "once": true,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "once": false,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "once": true,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "once": false,
+    "blocked": true,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "once": true,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "once": false,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "once": true,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "once": false,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "once": true,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "once": false,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "load",
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "once": true,
+    "blocked": false,
+    "remainingOnce": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": false,
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": false,
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": false,
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": false,
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": false,
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": false,
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": false,
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": false,
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": true,
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": true,
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": true,
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": true,
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": true,
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": true,
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": true,
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 1,
+    "present": true,
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": false,
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": false,
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": false,
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": false,
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": false,
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": false,
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": false,
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": false,
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": true,
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": true,
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": true,
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": true,
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": true,
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "blocked": true
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": true,
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": true,
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 2,
+    "present": true,
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": false,
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": false,
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": false,
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": false,
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": false,
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": false,
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": false,
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": false,
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": true,
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": true,
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": true,
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": true,
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": true,
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "blocked": true
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": true,
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": true,
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 3,
+    "present": true,
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": false,
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": false,
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": false,
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": false,
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": false,
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": false,
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": false,
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": false,
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": true,
+    "remote": false,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": true,
+    "remote": false,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": true,
+    "remote": false,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": true,
+    "remote": false,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": true,
+    "remote": true,
+    "allowed": false,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": true,
+    "remote": true,
+    "allowed": false,
+    "casting": true,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": true,
+    "remote": true,
+    "allowed": true,
+    "casting": false,
+    "blocked": false
+  },
+  {
+    "kind": "play",
+    "state": 4,
+    "present": true,
+    "remote": true,
+    "allowed": true,
+    "casting": true,
+    "blocked": false
+  }
+]

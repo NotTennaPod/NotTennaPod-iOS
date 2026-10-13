@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head><title>M11 retained-state journey</title></head>
+  <body>
+    <outline type="rss" text="Imported global" title="Imported global" xmlUrl="http://127.0.0.1:18771/5C4734B7-61CA-487F-B3AC-5ED0BFAE3208/global.xml"/>
+    <outline type="rss" text="Imported archived" title="Imported archived" xmlUrl="http://127.0.0.1:18771/5C4734B7-61CA-487F-B3AC-5ED0BFAE3208/archived.xml"/>
+    <outline type="rss" text="Imported preview" title="Imported preview" xmlUrl="http://127.0.0.1:18771/5C4734B7-61CA-487F-B3AC-5ED0BFAE3208/preview.xml"/>
+    <outline type="rss" text="M11 New one" title="M11 New one" xmlUrl="http://127.0.0.1:9/m11/new-one.xml"/>
+    <outline type="rss" text="M11 New two" title="M11 New two" xmlUrl="http://127.0.0.1:9/m11/new-two.xml"/>
+  </body>
+</opml>

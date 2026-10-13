@@ -1,0 +1,1286 @@
+{
+ "reference_commit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+ "feeds": [
+  {
+   "id": 3,
+   "title": "Morning News",
+   "custom_title": null
+  },
+  {
+   "id": 17,
+   "title": "alpha Podcast",
+   "custom_title": null
+  },
+  {
+   "id": 20,
+   "title": "Beta Show",
+   "custom_title": null
+  },
+  {
+   "id": 35,
+   "title": "Éclair Radio",
+   "custom_title": null
+  },
+  {
+   "id": 36,
+   "title": "beta show",
+   "custom_title": null
+  },
+  {
+   "id": 51,
+   "title": "zzz Original",
+   "custom_title": "Ideas Weekly"
+  },
+  {
+   "id": 2,
+   "title": "Collision 2",
+   "custom_title": null
+  },
+  {
+   "id": 18,
+   "title": "Collision 18",
+   "custom_title": null
+  },
+  {
+   "id": 34,
+   "title": "Collision 34",
+   "custom_title": null
+  },
+  {
+   "id": 50,
+   "title": "Collision 50",
+   "custom_title": null
+  },
+  {
+   "id": 66,
+   "title": "Collision 66",
+   "custom_title": null
+  },
+  {
+   "id": 82,
+   "title": "Collision 82",
+   "custom_title": null
+  },
+  {
+   "id": 98,
+   "title": "Collision 98",
+   "custom_title": null
+  },
+  {
+   "id": 114,
+   "title": "Collision 114",
+   "custom_title": null
+  },
+  {
+   "id": 130,
+   "title": "Collision 130",
+   "custom_title": null
+  },
+  {
+   "id": 146,
+   "title": "Collision 146",
+   "custom_title": null
+  }
+ ],
+ "episodes": [
+  {
+   "id": 101,
+   "feed_id": 3,
+   "title": "Episode 10",
+   "pub_date_ms": 1767261600000,
+   "has_media": true,
+   "duration_ms": 1800000,
+   "size": 30000000,
+   "link": "https://example.test/news/ep10.mp3"
+  },
+  {
+   "id": 102,
+   "feed_id": 3,
+   "title": "episode 10",
+   "pub_date_ms": 1767261600000,
+   "has_media": true,
+   "duration_ms": 1800000,
+   "size": 29000000,
+   "link": "https://example.test/news/EP10b.mp3"
+  },
+  {
+   "id": 103,
+   "feed_id": 3,
+   "title": "Episode 9",
+   "pub_date_ms": 1767258000000,
+   "has_media": true,
+   "duration_ms": 2400000,
+   "size": 40000000,
+   "link": "https://example.test/news/ep9.mp3"
+  },
+  {
+   "id": 104,
+   "feed_id": 17,
+   "title": "Interview with Ada",
+   "pub_date_ms": 1767268800000,
+   "has_media": true,
+   "duration_ms": 3600000,
+   "size": 60000000,
+   "link": "https://example.test/alpha/interview.mp3"
+  },
+  {
+   "id": 105,
+   "feed_id": 17,
+   "title": "ılık bir sabah",
+   "pub_date_ms": 1767254400000,
+   "has_media": true,
+   "duration_ms": 900000,
+   "size": 15000000,
+   "link": null
+  },
+  {
+   "id": 106,
+   "feed_id": 17,
+   "title": "Zebra crossings",
+   "pub_date_ms": 1767261600000,
+   "has_media": true,
+   "duration_ms": 0,
+   "size": 0,
+   "link": "https://example.test/alpha/zebra.mp3"
+  },
+  {
+   "id": 107,
+   "feed_id": 17,
+   "title": "",
+   "pub_date_ms": 1767265200000,
+   "has_media": true,
+   "duration_ms": 2400000,
+   "size": 41000000,
+   "link": "https://example.test/alpha/untitled.mp3"
+  },
+  {
+   "id": 108,
+   "feed_id": 20,
+   "title": "Éloge",
+   "pub_date_ms": 1767250800000,
+   "has_media": true,
+   "duration_ms": 3600000,
+   "size": 61000000,
+   "link": "https://example.test/beta/eloge.mp3"
+  },
+  {
+   "id": 109,
+   "feed_id": 20,
+   "title": "apple",
+   "pub_date_ms": null,
+   "has_media": true,
+   "duration_ms": 600000,
+   "size": 10000000,
+   "link": "https://example.test/beta/apple.mp3"
+  },
+  {
+   "id": 110,
+   "feed_id": 20,
+   "title": "Bonus",
+   "pub_date_ms": 1767268800000,
+   "has_media": false,
+   "duration_ms": 0,
+   "size": 0,
+   "link": "https://example.test/beta/bonus"
+  },
+  {
+   "id": 111,
+   "feed_id": 35,
+   "title": "Zeta",
+   "pub_date_ms": 1767247200000,
+   "has_media": true,
+   "duration_ms": 1800000,
+   "size": 31000000,
+   "link": "https://example.test/eclair/zeta.mp3"
+  },
+  {
+   "id": 112,
+   "feed_id": 36,
+   "title": "beta show extra",
+   "pub_date_ms": 1767243600000,
+   "has_media": true,
+   "duration_ms": 2400000,
+   "size": 42000000,
+   "link": "https://example.test/beta2/extra.mp3"
+  },
+  {
+   "id": 113,
+   "feed_id": 51,
+   "title": "Ideas 1",
+   "pub_date_ms": 1767240000000,
+   "has_media": true,
+   "duration_ms": 1200000,
+   "size": 20000000,
+   "link": "https://example.test/ideas/1.mp3"
+  },
+  {
+   "id": 114,
+   "feed_id": 51,
+   "title": "Ideas 2",
+   "pub_date_ms": 1767236400000,
+   "has_media": true,
+   "duration_ms": 1200000,
+   "size": 20000000,
+   "link": "https://example.test/ideas/2.mp3"
+  },
+  {
+   "id": 115,
+   "feed_id": 3,
+   "title": "Episode 11",
+   "pub_date_ms": 1767272400000,
+   "has_media": true,
+   "duration_ms": 2700000,
+   "size": 45000000,
+   "link": "https://example.test/news/ep11.mp3"
+  },
+  {
+   "id": 201,
+   "feed_id": 2,
+   "title": "Collision episode 0",
+   "pub_date_ms": 1767297600000,
+   "has_media": true,
+   "duration_ms": 600000,
+   "size": 1000000,
+   "link": "https://example.test/c/0.mp3"
+  },
+  {
+   "id": 202,
+   "feed_id": 18,
+   "title": "Collision episode 1",
+   "pub_date_ms": 1767301200000,
+   "has_media": true,
+   "duration_ms": 660000,
+   "size": 2000000,
+   "link": "https://example.test/c/1.mp3"
+  },
+  {
+   "id": 203,
+   "feed_id": 34,
+   "title": "Collision episode 2",
+   "pub_date_ms": 1767304800000,
+   "has_media": true,
+   "duration_ms": 720000,
+   "size": 3000000,
+   "link": "https://example.test/c/2.mp3"
+  },
+  {
+   "id": 204,
+   "feed_id": 50,
+   "title": "Collision episode 3",
+   "pub_date_ms": 1767308400000,
+   "has_media": true,
+   "duration_ms": 780000,
+   "size": 4000000,
+   "link": "https://example.test/c/3.mp3"
+  },
+  {
+   "id": 205,
+   "feed_id": 66,
+   "title": "Collision episode 4",
+   "pub_date_ms": 1767312000000,
+   "has_media": true,
+   "duration_ms": 840000,
+   "size": 5000000,
+   "link": "https://example.test/c/4.mp3"
+  },
+  {
+   "id": 206,
+   "feed_id": 82,
+   "title": "Collision episode 5",
+   "pub_date_ms": 1767315600000,
+   "has_media": true,
+   "duration_ms": 900000,
+   "size": 6000000,
+   "link": "https://example.test/c/5.mp3"
+  },
+  {
+   "id": 207,
+   "feed_id": 98,
+   "title": "Collision episode 6",
+   "pub_date_ms": 1767319200000,
+   "has_media": true,
+   "duration_ms": 960000,
+   "size": 7000000,
+   "link": "https://example.test/c/6.mp3"
+  },
+  {
+   "id": 208,
+   "feed_id": 114,
+   "title": "Collision episode 7",
+   "pub_date_ms": 1767322800000,
+   "has_media": true,
+   "duration_ms": 1020000,
+   "size": 8000000,
+   "link": "https://example.test/c/7.mp3"
+  },
+  {
+   "id": 209,
+   "feed_id": 130,
+   "title": "Collision episode 8",
+   "pub_date_ms": 1767326400000,
+   "has_media": true,
+   "duration_ms": 1080000,
+   "size": 9000000,
+   "link": "https://example.test/c/8.mp3"
+  },
+  {
+   "id": 210,
+   "feed_id": 146,
+   "title": "Collision episode 9",
+   "pub_date_ms": 1767330000000,
+   "has_media": true,
+   "duration_ms": 1140000,
+   "size": 10000000,
+   "link": "https://example.test/c/9.mp3"
+  }
+ ],
+ "queues": {
+  "base": [
+   106,
+   101,
+   113,
+   104,
+   109,
+   115,
+   102,
+   110,
+   105,
+   111,
+   103,
+   114,
+   108,
+   112,
+   107
+  ],
+  "equal_sizes": [
+   111,
+   113,
+   104,
+   101,
+   108,
+   112
+  ],
+  "collisions": [
+   209,
+   201,
+   205,
+   202,
+   210,
+   203,
+   207,
+   204,
+   208,
+   206
+  ],
+  "all": [
+   106,
+   101,
+   113,
+   104,
+   109,
+   115,
+   102,
+   110,
+   105,
+   111,
+   103,
+   114,
+   108,
+   112,
+   107,
+   209,
+   201,
+   205,
+   202,
+   210,
+   203,
+   207,
+   204,
+   208,
+   206
+  ],
+  "short": [
+   101,
+   104,
+   108,
+   111,
+   113
+  ]
+ },
+ "sort_scenarios": [
+  {
+   "queue": "base",
+   "order": "EPISODE_TITLE_A_Z",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "EPISODE_TITLE_Z_A",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "FEED_TITLE_A_Z",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "FEED_TITLE_Z_A",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "DURATION_SHORT_LONG",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "DURATION_LONG_SHORT",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "DATE_OLD_NEW",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "DATE_NEW_OLD",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "RANDOM",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "SMART_SHUFFLE_OLD_NEW",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "SMART_SHUFFLE_NEW_OLD",
+   "locale": "en-US"
+  },
+  {
+   "queue": "base",
+   "order": "EPISODE_TITLE_A_Z",
+   "locale": "tr-TR"
+  },
+  {
+   "queue": "base",
+   "order": "EPISODE_TITLE_Z_A",
+   "locale": "tr-TR"
+  },
+  {
+   "queue": "base",
+   "order": "FEED_TITLE_A_Z",
+   "locale": "tr-TR"
+  },
+  {
+   "queue": "base",
+   "order": "FEED_TITLE_Z_A",
+   "locale": "tr-TR"
+  },
+  {
+   "queue": "equal_sizes",
+   "order": "SMART_SHUFFLE_OLD_NEW",
+   "locale": "en-US"
+  },
+  {
+   "queue": "equal_sizes",
+   "order": "SMART_SHUFFLE_NEW_OLD",
+   "locale": "en-US"
+  },
+  {
+   "queue": "collisions",
+   "order": "SMART_SHUFFLE_OLD_NEW",
+   "locale": "en-US"
+  },
+  {
+   "queue": "collisions",
+   "order": "SMART_SHUFFLE_NEW_OLD",
+   "locale": "en-US"
+  },
+  {
+   "queue": "all",
+   "order": "SMART_SHUFFLE_OLD_NEW",
+   "locale": "en-US"
+  },
+  {
+   "queue": "all",
+   "order": "SMART_SHUFFLE_NEW_OLD",
+   "locale": "en-US"
+  },
+  {
+   "queue": "all",
+   "order": "DATE_NEW_OLD",
+   "locale": "en-US"
+  },
+  {
+   "queue": "all",
+   "order": "DURATION_SHORT_LONG",
+   "locale": "en-US"
+  },
+  {
+   "queue": "all",
+   "order": "FEED_TITLE_A_Z",
+   "locale": "en-US"
+  }
+ ],
+ "enqueue_cases": [
+  {
+   "name": "empty_back",
+   "queue": [],
+   "location": "BACK",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "empty_playing_back",
+   "queue": [],
+   "location": "BACK",
+   "current": 115,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "empty_front",
+   "queue": [],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "empty_playing_front",
+   "queue": [],
+   "location": "FRONT",
+   "current": 115,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "empty_after_currently_playing",
+   "queue": [],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "empty_playing_after_currently_playing",
+   "queue": [],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 115,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "empty_random",
+   "queue": [],
+   "location": "RANDOM",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "empty_playing_random",
+   "queue": [],
+   "location": "RANDOM",
+   "current": 115,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "back",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "BACK",
+   "current": 108,
+   "downloading": [
+    101
+   ],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "front",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "front_skips_downloading_prefix",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [
+    101,
+    104
+   ],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "front_downloading_not_prefix",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [
+    104
+   ],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "front_all_downloading",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "front_medialess_stops_scan",
+   "queue": [
+    110,
+    101
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [
+    101
+   ],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "after_current_middle",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 108,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "after_current_skips_downloading",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 108,
+   "downloading": [
+    111
+   ],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "after_current_last",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 113,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "after_current_first",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 101,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "after_current_not_in_queue",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 115,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "after_current_not_in_queue_downloading",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 115,
+   "downloading": [
+    101
+   ],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "after_current_nothing_playing",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "after_current_is_downloading_itself",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 104,
+   "downloading": [
+    104,
+    108
+   ],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "random",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "RANDOM",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "batch_back",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "BACK",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103,
+    104,
+    110,
+    115,
+    103,
+    112
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "batch_front",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103,
+    104,
+    110,
+    115,
+    103,
+    112
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "batch_after_current",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 104,
+   "downloading": [],
+   "add": [
+    103,
+    104,
+    110,
+    115,
+    103,
+    112
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "batch_random",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "RANDOM",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103,
+    115
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "batch_all_skipped",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [],
+   "add": [
+    104,
+    110
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "playing_item_added_front",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "FRONT",
+   "current": 115,
+   "downloading": [],
+   "add": [
+    115
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "playing_item_added_after_current",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 115,
+   "downloading": [],
+   "add": [
+    115
+   ],
+   "keep_sorted": false,
+   "keep_sorted_order": "DATE_NEW_OLD"
+  },
+  {
+   "name": "ks_duration_tie_back",
+   "queue": [
+    113,
+    101,
+    111,
+    104,
+    108
+   ],
+   "location": "BACK",
+   "current": null,
+   "downloading": [],
+   "add": [
+    102
+   ],
+   "keep_sorted_order": "DURATION_SHORT_LONG",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_duration_tie_front",
+   "queue": [
+    113,
+    101,
+    111,
+    104,
+    108
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [],
+   "add": [
+    102
+   ],
+   "keep_sorted_order": "DURATION_SHORT_LONG",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_duration_tie_after_current",
+   "queue": [
+    113,
+    101,
+    111,
+    104,
+    108
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 101,
+   "downloading": [],
+   "add": [
+    102
+   ],
+   "keep_sorted_order": "DURATION_SHORT_LONG",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_duration_tie_random",
+   "queue": [
+    113,
+    101,
+    111,
+    104,
+    108
+   ],
+   "location": "RANDOM",
+   "current": null,
+   "downloading": [],
+   "add": [
+    102
+   ],
+   "keep_sorted_order": "DURATION_SHORT_LONG",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_date_new_old_batch",
+   "queue": [
+    104,
+    101,
+    108,
+    111,
+    113
+   ],
+   "location": "AFTER_CURRENTLY_PLAYING",
+   "current": 101,
+   "downloading": [],
+   "add": [
+    103,
+    115,
+    112,
+    106
+   ],
+   "keep_sorted_order": "DATE_NEW_OLD",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_title_front",
+   "queue": [
+    104,
+    101,
+    103,
+    111
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [],
+   "add": [
+    106,
+    102
+   ],
+   "keep_sorted_order": "EPISODE_TITLE_A_Z",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_feed_title_back",
+   "queue": [
+    104,
+    108,
+    112,
+    101
+   ],
+   "location": "BACK",
+   "current": null,
+   "downloading": [],
+   "add": [
+    109,
+    111,
+    113
+   ],
+   "keep_sorted_order": "FEED_TITLE_A_Z",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_random_order_not_resorted",
+   "queue": [
+    101,
+    104,
+    108,
+    111,
+    113
+   ],
+   "location": "FRONT",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103,
+    115
+   ],
+   "keep_sorted_order": "RANDOM",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_smart_shuffle",
+   "queue": [
+    101,
+    102,
+    104,
+    105,
+    108
+   ],
+   "location": "BACK",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103,
+    106,
+    111
+   ],
+   "keep_sorted_order": "SMART_SHUFFLE_OLD_NEW",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_unsorted_queue_resorted_on_add",
+   "queue": [
+    108,
+    113,
+    104,
+    101,
+    111
+   ],
+   "location": "BACK",
+   "current": null,
+   "downloading": [],
+   "add": [
+    103
+   ],
+   "keep_sorted_order": "DURATION_SHORT_LONG",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_unsorted_queue_all_skipped_not_resorted",
+   "queue": [
+    108,
+    113,
+    104,
+    101,
+    111
+   ],
+   "location": "BACK",
+   "current": null,
+   "downloading": [],
+   "add": [
+    104,
+    110
+   ],
+   "keep_sorted_order": "DURATION_SHORT_LONG",
+   "keep_sorted": true
+  },
+  {
+   "name": "ks_playing_item_sorted_like_others",
+   "queue": [
+    113,
+    101,
+    111,
+    104,
+    108
+   ],
+   "location": "FRONT",
+   "current": 115,
+   "downloading": [],
+   "add": [
+    115
+   ],
+   "keep_sorted_order": "DURATION_LONG_SHORT",
+   "keep_sorted": true
+  }
+ ]
+}

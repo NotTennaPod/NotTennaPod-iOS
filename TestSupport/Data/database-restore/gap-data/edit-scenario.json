@@ -1,0 +1,32 @@
+{
+  "description": "GAP-DATA: user actions applied on iOS to the restored Android 3.12.1 emulator library, then exported. The Swift host test performs each step through the store calls the app's controls use; check_edit_roundtrip.py applies the same step to the Android file the way Android 3.12.1 writes it. Times are epoch milliseconds.",
+  "source": "android-3.12.1/emulator-parity-library.db",
+  "steps": [
+    {"action": "removeFromInbox", "episode": 19},
+    {"action": "markPlayed", "episode": 90},
+    {"action": "markUnplayed", "episode": 84},
+    {"action": "markPlayed", "episode": 2},
+    {"action": "addFavorite", "episode": 21},
+    {"action": "addFavorite", "episode": 86},
+    {"action": "addFavorite", "episode": 2},
+    {"action": "removeFavorite", "episode": 86},
+    {"action": "moveInQueue", "episode": 27, "index": 0},
+    {"action": "removeFromQueue", "episode": 23},
+    {"action": "addToQueue", "episode": 29},
+    {"action": "playToEnd", "episode": 1, "position": 30000, "duration": 30000, "sampleAt": 1790300100000, "endAt": 1790300101000},
+    {"action": "playAndPause", "episode": 85, "position": 12000, "duration": 30000, "at": 1790300200000},
+    {"action": "download", "episode": 88, "bytes": 4096, "at": 1790300300000},
+    {"action": "feedPreferences", "feed": 2, "customTitle": "Renamed pagination", "autoDownload": "DISABLED",
+     "keepUpdated": false, "autoDelete": "ALWAYS", "newEpisodesAction": "NOTHING", "volumeAdaptation": "HEAVY_REDUCTION",
+     "skipIntro": 7, "skipEnding": 9, "episodeNotification": true, "includeFilter": "keep",
+     "excludeFilter": "\"not this\"", "minimalDuration": 300},
+    {"action": "episodeFilter", "feed": 2, "values": ["unplayed", "paused"]},
+    {"action": "sortOrder", "feed": 2, "order": "EPISODE_TITLE_A_Z"},
+    {"action": "playbackSpeed", "feed": 2, "speed": 1.75, "skipSilence": "AGGRESSIVE"},
+    {"action": "credentials", "feed": 2, "username": "gap-user", "password": "gap-test-password"},
+    {"action": "tags", "feed": 4, "tags": ["#root", "News"]},
+    {"action": "tags", "feed": 17, "tags": ["News", "Tech"]},
+    {"action": "archive", "feed": 13},
+    {"action": "subscribePreview", "feed": 8}
+  ]
+}

@@ -1,0 +1,734 @@
+{
+  "reference": "AntennaPod 3.12.1 f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "generator": "an independent Python probe of the pinned source (m34-entry-oracle.py)",
+  "cases": [
+    {
+      "group": "urlCheckerTest",
+      "input": "http://example.com",
+      "android": {
+        "url": "http://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://example.com",
+      "android": {
+        "url": "https://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "example.com",
+      "android": {
+        "url": "http://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "feed://example.com",
+      "android": {
+        "url": "http://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "pcast://example.com",
+      "android": {
+        "url": "http://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "itpc://example.com",
+      "android": {
+        "url": "http://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "itpc://https://example.com",
+      "android": {
+        "url": "https://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "\n http://example.com \t",
+      "android": {
+        "url": "http://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "\n example.com \t",
+      "android": {
+        "url": "http://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "antennapod-subscribe://example.com",
+      "android": {
+        "url": "http://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "pcast://https://example.com",
+      "android": {
+        "url": "https://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "antennapod-subscribe://https://example.com",
+      "android": {
+        "url": "https://example.com"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe?url=http://example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe?url=http://example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe?url=http%3A%2F%2Fexample.org%2Fpodcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe?url=http%3A%2F%2Fexample.org%2Fpodcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe?url=example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe?url=example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe/?url=http://example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe/?url=http://example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe/?url=http%3A%2F%2Fexample.org%2Fpodcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe/?url=http%3A%2F%2Fexample.org%2Fpodcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe/?url=example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://antennapod.org/deeplink/subscribe/?url=example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe?url=http://example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe?url=http://example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe?url=http%3A%2F%2Fexample.org%2Fpodcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe?url=http%3A%2F%2Fexample.org%2Fpodcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe?url=example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe?url=example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe/?url=http://example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe/?url=http://example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe/?url=http%3A%2F%2Fexample.org%2Fpodcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe/?url=http%3A%2F%2Fexample.org%2Fpodcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe/?url=example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://antennapod.org/deeplink/subscribe/?url=example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe?url=http://example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe?url=http://example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe?url=http%3A%2F%2Fexample.org%2Fpodcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe?url=http%3A%2F%2Fexample.org%2Fpodcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe?url=example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe?url=example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe/?url=http://example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe/?url=http://example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe/?url=http%3A%2F%2Fexample.org%2Fpodcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe/?url=http%3A%2F%2Fexample.org%2Fpodcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe/?url=example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "https://www.antennapod.org/deeplink/subscribe/?url=example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe?url=http://example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe?url=http://example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe?url=http%3A%2F%2Fexample.org%2Fpodcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe?url=http%3A%2F%2Fexample.org%2Fpodcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe?url=example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe?url=example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe/?url=http://example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe/?url=http://example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe/?url=http%3A%2F%2Fexample.org%2Fpodcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe/?url=http%3A%2F%2Fexample.org%2Fpodcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe/?url=example.org/podcast.rss",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "urlCheckerTest",
+      "input": "http://www.antennapod.org/deeplink/subscribe/?url=example.org/podcast.rss&title=a",
+      "android": {
+        "url": "http://example.org/podcast.rss"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "itpc://127.0.0.1:18774/preview.xml",
+      "android": {
+        "url": "http://127.0.0.1:18774/preview.xml"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "pcast://127.0.0.1:18774/preview.xml",
+      "android": {
+        "url": "http://127.0.0.1:18774/preview.xml"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "feed://127.0.0.1:18774/preview.xml",
+      "android": {
+        "url": "http://127.0.0.1:18774/preview.xml"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "antennapod-subscribe://127.0.0.1:18774/preview.xml",
+      "android": {
+        "url": "http://127.0.0.1:18774/preview.xml"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "itpc://https://example.com/feed.xml",
+      "android": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "pcast://https://example.com/feed.xml",
+      "android": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "feed://https://example.com/feed.xml",
+      "android": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "antennapod-subscribe://https://example.com/feed.xml",
+      "android": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "pcast:example.com/feed",
+      "android": {
+        "url": "http://example.com/feed"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "PCAST://Example.com/Feed",
+      "android": {
+        "url": "http://Example.com/Feed"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "ITPC://example.com/rss?id=1&x=y",
+      "android": {
+        "url": "http://example.com/rss?id=1&x=y"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "feed://example.com/feed?format=rss#top",
+      "android": {
+        "url": "http://example.com/feed?format=rss#top"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "antennapod-subscribe://antennapod.org/deeplink/subscribe?url=https%3A%2F%2Fexample.com%2Ffeed",
+      "android": {
+        "url": "https://example.com/feed"
+      }
+    },
+    {
+      "group": "schemeLink",
+      "input": "antennapod-subscribe://www.subscribeonandroid.com/example.com/feed",
+      "android": {
+        "url": "http://example.com/feed"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "https://example.com/feed.xml",
+      "android": {
+        "url": "https://example.com/feed.xml"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "  https://example.com/feed.xml\n",
+      "android": {
+        "url": "https://example.com/feed.xml"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "example.com/feed.xml",
+      "android": {
+        "url": "http://example.com/feed.xml"
+      },
+      "iosUserDecision": {
+        "url": "http://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Example Show\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed.xml&title=Example+Show",
+      "android": {
+        "url": "https://example.com/feed.xml"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Why? Show #1 & more\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74p%3A%2F%2Fexample.com%2Frss%3Fid%3D5%26x%3Dy&title=Why%3F+Show+%231+%26+more",
+      "android": {
+        "url": "http://example.com/rss?id=5&x=y"
+      },
+      "iosUserDecision": {
+        "url": "http://example.com/rss?id=5&x=y"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Planet Money: The Indicator\n\nhttps://antennapod.org/deeplink/subscribe/?url=%68%74%74ps%3A%2F%2Fexample.com%2Ffeed.xml&title=Planet+Money%3A+The+Indicator",
+      "android": {
+        "androidCrash": "UnsupportedOperationException"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "https://www.subscribeonandroid.com/example.com/feed.xml",
+      "android": {
+        "url": "https://example.com/feed.xml"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "https://antennapod.org/deeplink/subscribe?title=a",
+      "android": {
+        "noPodcast": true
+      },
+      "iosUserDecision": {
+        "noPodcast": true
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "https://antennapod.org/deeplink/subscribe",
+      "android": {
+        "noPodcast": true
+      },
+      "iosUserDecision": {
+        "noPodcast": true
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "https://antennapod.org/deeplink/subscribe?url=",
+      "android": {
+        "url": "http://"
+      },
+      "iosUserDecision": {
+        "url": "http://"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "https://antennapod.org/deeplink/subscribe?url=100%25",
+      "android": {
+        "androidCrash": "IllegalArgumentException"
+      },
+      "iosUserDecision": {
+        "noPodcast": true
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Listen to this https://example.com/feed.xml",
+      "android": {
+        "url": "http://Listen to this https://example.com/feed.xml"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "https://subscribeonandroid.com",
+      "android": {
+        "androidCrash": "StackOverflowError"
+      },
+      "iosUserDecision": {
+        "noPodcast": true
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "itp",
+      "android": {
+        "url": "http://itp"
+      },
+      "iosUserDecision": {
+        "url": "http://itp"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Listen to this: https://example.com/feed.xml",
+      "android": {
+        "url": "http://Listen to this: https://example.com/feed.xml"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Try https://example.com/feed.xml, it is great!",
+      "android": {
+        "url": "http://Try https://example.com/feed.xml, it is great!"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/feed.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Two feeds: https://example.com/first.xml and https://example.com/second.xml",
+      "android": {
+        "url": "http://Two feeds: https://example.com/first.xml and https://example.com/second.xml"
+      },
+      "iosUserDecision": {
+        "url": "https://example.com/first.xml"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "New show (itpc://example.com/rss) via my phone",
+      "android": {
+        "url": "http://New show (itpc://example.com/rss) via my phone"
+      },
+      "iosUserDecision": {
+        "url": "http://example.com/rss"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Subscribe: pcast:example.com/feed today",
+      "android": {
+        "url": "http://Subscribe: pcast:example.com/feed today"
+      },
+      "iosUserDecision": {
+        "url": "http://example.com/feed"
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "Podcast: a show without any link",
+      "android": {
+        "url": "http://Podcast: a show without any link"
+      },
+      "iosUserDecision": {
+        "noPodcast": true
+      }
+    },
+    {
+      "group": "sharedText",
+      "input": "",
+      "android": {
+        "url": "http://"
+      },
+      "iosUserDecision": {
+        "noPodcast": true
+      }
+    }
+  ]
+}

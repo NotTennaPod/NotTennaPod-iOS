@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Shownotes Parity Lab</title>
+    <link>https://example.org/parity</link>
+    <description>Deterministic formatting, links and timestamp interactions.</description>
+    <item>
+      <guid isPermaLink="false">shownotes-empty</guid>
+      <title>Episode without shownotes</title>
+      <pubDate>Fri, 11 Sep 2026 12:00:00 GMT</pubDate>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?notes=empty" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item>
+      <guid isPermaLink="false">shownotes-formatted</guid>
+      <title>Shownotes, links and chapter positions</title>
+      <pubDate>Thu, 10 Sep 2026 12:00:00 GMT</pubDate>
+      <description><![CDATA[<p>Welcome to the shownotes lab.</p><p style="color: red;">Styled <strong>bold</strong> and <em>italic</em> text.</p><p>0:05 Introduction<br>0:15 Second section<br>0:30 End boundary</p><p>www.example.org</p><p><a href="https://example.org" target="_blank">Explicit website</a></p><script>document.body.innerHTML = 'SCRIPT EXECUTED';</script>]]></description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?notes=formatted" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+  </channel>
+</rss>

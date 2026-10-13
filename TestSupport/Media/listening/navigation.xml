@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel><title>Navigation Listening Lab</title><link>https://example.org/navigation</link>
+    <description>Forty stable episodes for repeatable Back and scrolling checks.</description>
+    <itunes:author>AntennaPod Parity</itunes:author>
+    <item><guid isPermaLink="false">navigation-1</guid>
+      <title>Navigation episode 01: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 01.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=1" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-2</guid>
+      <title>Navigation episode 02: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 02.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=2" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-3</guid>
+      <title>Navigation episode 03: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 03.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=3" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-4</guid>
+      <title>Navigation episode 04: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 04.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=4" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-5</guid>
+      <title>Navigation episode 05: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 05.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=5" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-6</guid>
+      <title>Navigation episode 06: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 06.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=6" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-7</guid>
+      <title>Navigation episode 07: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 07.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=7" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-8</guid>
+      <title>Navigation episode 08: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 08.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=8" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-9</guid>
+      <title>Navigation episode 09: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 09.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=9" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-10</guid>
+      <title>Navigation episode 10: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 10.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=10" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-11</guid>
+      <title>Navigation episode 11: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 11.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=11" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-12</guid>
+      <title>Navigation episode 12: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 12.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=12" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-13</guid>
+      <title>Navigation episode 13: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 13.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=13" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-14</guid>
+      <title>Navigation episode 14: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 14.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=14" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-15</guid>
+      <title>Navigation episode 15: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 15.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=15" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-16</guid>
+      <title>Navigation episode 16: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 16.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=16" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-17</guid>
+      <title>Navigation episode 17: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 17.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=17" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-18</guid>
+      <title>Navigation episode 18: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 18.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=18" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-19</guid>
+      <title>Navigation episode 19: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 19.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=19" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-20</guid>
+      <title>Navigation episode 20: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 20.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=20" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-21</guid>
+      <title>Navigation episode 21: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 21.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=21" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-22</guid>
+      <title>Navigation episode 22: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 22.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=22" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-23</guid>
+      <title>Navigation episode 23: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 23.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=23" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-24</guid>
+      <title>Navigation episode 24: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 24.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=24" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-25</guid>
+      <title>Navigation episode 25: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 25.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=25" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-26</guid>
+      <title>Navigation episode 26: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 26.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=26" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-27</guid>
+      <title>Navigation episode 27: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 27.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=27" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-28</guid>
+      <title>Navigation episode 28: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 28.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=28" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-29</guid>
+      <title>Navigation episode 29: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 29.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=29" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-30</guid>
+      <title>Navigation episode 30: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 30.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=30" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-31</guid>
+      <title>Navigation episode 31: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 31.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=31" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-32</guid>
+      <title>Navigation episode 32: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 32.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=32" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-33</guid>
+      <title>Navigation episode 33: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 33.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=33" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-34</guid>
+      <title>Navigation episode 34: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 34.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=34" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-35</guid>
+      <title>Navigation episode 35: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 35.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=35" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-36</guid>
+      <title>Navigation episode 36: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 36.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=36" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-37</guid>
+      <title>Navigation episode 37: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 37.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=37" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-38</guid>
+      <title>Navigation episode 38: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 38.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=38" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-39</guid>
+      <title>Navigation episode 39: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 39.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=39" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item><guid isPermaLink="false">navigation-40</guid>
+      <title>Navigation episode 40: a repeatable feed-list reading position</title>
+      <description>Controlled notes for navigation episode 40.</description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?navigation=40" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+  </channel>
+</rss>

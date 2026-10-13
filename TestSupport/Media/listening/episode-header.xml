@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+<channel><title>Episode Header Lab</title><link>https://example.org/parity</link><description>Header and action testing.</description>
+<item><guid isPermaLink="false">header-media</guid><title>Episode controls and retained shownotes</title><pubDate>Fri, 11 Sep 2026 12:00:00 GMT</pubDate>
+<description><![CDATA[<p>Header shownotes.</p><p>0:05 First section</p><p>0:15 Second section</p><p>Download, play, pause and delete this controlled episode.</p>]]></description>
+<enclosure url="http://127.0.0.1:18765/30sec.mp3?header=1" type="audio/mpeg" length="120017"/><itunes:duration>00:30</itunes:duration></item>
+<item><guid isPermaLink="false">header-text</guid><title>Text-only episode</title><pubDate>Thu, 10 Sep 2026 12:00:00 GMT</pubDate><description><![CDATA[<p>Read this episode without an audio file.</p>]]></description></item>
+</channel></rss>

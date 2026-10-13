@@ -1,0 +1,29 @@
+{
+  "source": "Existing synthetic 440 Hz WebM/Opus tone, first 200 ms remuxed without re-encoding. Startup/final-buffered scheduling fixture, not an Android PCM baseline.",
+  "command": [
+    "ffmpeg",
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-i",
+    "Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-opus.webm",
+    "-t",
+    "0.2",
+    "-map",
+    "0:a:0",
+    "-c:a",
+    "copy",
+    "-map_metadata",
+    "-1",
+    "-fflags",
+    "+bitexact",
+    "-flags:a",
+    "+bitexact",
+    "Tests/NotTennaPodCoreTests/Fixtures/BufferReadiness/short-opus.webm"
+  ],
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "sha256": "4247cfdadfb94cd27278823bec70a14fcf90a831c4823471a61126f3b54f1c82",
+  "bytes": 2663
+}

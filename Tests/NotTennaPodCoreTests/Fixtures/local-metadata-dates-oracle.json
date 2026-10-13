@@ -1,0 +1,1344 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "sources": {
+    "reference/AntennaPod/net/download/service/src/main/java/de/danoeh/antennapod/net/download/service/feed/local/LocalFeedUpdater.java": "fbd9f31581c8ef4ee111358eaf02cc2c8f1dc8d25f00997eae5bc5d93356ce05",
+    "reference/AntennaPod/parser/feed/src/main/java/de/danoeh/antennapod/parser/feed/util/DateUtils.java": "c8d06e56e046908b5466a818cf70b11c61c5d6d7a28491f2f0b1bb76eaa4de6a"
+  },
+  "dateBlockSHA256": "966902fa919dbed8247b3ce3646b123b155074f97f5b78ac86a0f7172a173f27",
+  "commonsLangSHA256": "4eeeae8d20c078abb64b015ec158add383ac581571cddc45c68f0c9ae0230720",
+  "boundary": "Unchanged local date block and complete DateUtils on JBR, pinned Commons Lang3.18.0; only raw-metadata/item/TextUtils/annotation adapters. This is Java conversion, not Android native metadata or UI.",
+  "cases": [
+    {
+      "input": null,
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": null,
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": null,
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": null,
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": null,
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": null,
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2021",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2021",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2021",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2021",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2021",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2021",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-09",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-09",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-09",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-09",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-09",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-09",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "19040101T000000.000Z",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "19040101T000000.000Z",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "19040101T000000.000Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "19040101T000000.000Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "19040101T000000.000Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "19040101T000000.000Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "19040101T000000",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": -2082844800000
+    },
+    {
+      "input": "19040101T000000",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -19217433600000
+    },
+    {
+      "input": "19040101T000000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": -2082816000000
+    },
+    {
+      "input": "19040101T000000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -19217404800000
+    },
+    {
+      "input": "19040101T000000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": -2082877200000
+    },
+    {
+      "input": "19040101T000000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -19217466000000
+    },
+    {
+      "input": "20260914T010203",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "20260914T010203",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345327477000
+    },
+    {
+      "input": "20260914T010203",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789372923000
+    },
+    {
+      "input": "20260914T010203",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345298677000
+    },
+    {
+      "input": "20260914T010203",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789315323000
+    },
+    {
+      "input": "20260914T010203",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345359877000
+    },
+    {
+      "input": "20260914T010203.999Z",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "20260914T010203.999Z",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345327477000
+    },
+    {
+      "input": "20260914T010203.999Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789372923000
+    },
+    {
+      "input": "20260914T010203.999Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345298677000
+    },
+    {
+      "input": "20260914T010203.999Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789315323000
+    },
+    {
+      "input": "20260914T010203.999Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345359877000
+    },
+    {
+      "input": "20260914T010203Z",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "20260914T010203Z",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345327477000
+    },
+    {
+      "input": "20260914T010203Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789372923000
+    },
+    {
+      "input": "20260914T010203Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345298677000
+    },
+    {
+      "input": "20260914T010203Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789315323000
+    },
+    {
+      "input": "20260914T010203Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345359877000
+    },
+    {
+      "input": "20260914T010203+0200",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "20260914T010203+0200",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345327477000
+    },
+    {
+      "input": "20260914T010203+0200",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789372923000
+    },
+    {
+      "input": "20260914T010203+0200",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345298677000
+    },
+    {
+      "input": "20260914T010203+0200",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789315323000
+    },
+    {
+      "input": "20260914T010203+0200",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345359877000
+    },
+    {
+      "input": "20260914T010203garbage",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "20260914T010203garbage",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345327477000
+    },
+    {
+      "input": "20260914T010203garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789372923000
+    },
+    {
+      "input": "20260914T010203garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345298677000
+    },
+    {
+      "input": "20260914T010203garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789315323000
+    },
+    {
+      "input": "20260914T010203garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345359877000
+    },
+    {
+      "input": "20260914T01020",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347720000
+    },
+    {
+      "input": "20260914T01020",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345327480000
+    },
+    {
+      "input": "20260914T01020",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789372920000
+    },
+    {
+      "input": "20260914T01020",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345298680000
+    },
+    {
+      "input": "20260914T01020",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789315320000
+    },
+    {
+      "input": "20260914T01020",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345359880000
+    },
+    {
+      "input": "20260914T0102",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914T0102",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914T0102",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914T0102",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914T0102",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914T0102",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914T0102034",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347754000
+    },
+    {
+      "input": "20260914T0102034",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345327446000
+    },
+    {
+      "input": "20260914T0102034",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789372954000
+    },
+    {
+      "input": "20260914T0102034",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345298646000
+    },
+    {
+      "input": "20260914T0102034",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789315354000
+    },
+    {
+      "input": "20260914T0102034",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345359846000
+    },
+    {
+      "input": "20260914t010203",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914t010203",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914t010203",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914t010203",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914t010203",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20260914t010203",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "20261301T000000",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1798761600000
+    },
+    {
+      "input": "20261301T000000",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15335913600000
+    },
+    {
+      "input": "20261301T000000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1798790400000
+    },
+    {
+      "input": "20261301T000000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15335884800000
+    },
+    {
+      "input": "20261301T000000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1798729200000
+    },
+    {
+      "input": "20261301T000000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15335946000000
+    },
+    {
+      "input": "20260230T000000",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1772409600000
+    },
+    {
+      "input": "20260230T000000",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15362265600000
+    },
+    {
+      "input": "20260230T000000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1772438400000
+    },
+    {
+      "input": "20260230T000000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15362236800000
+    },
+    {
+      "input": "20260230T000000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1772377200000
+    },
+    {
+      "input": "20260230T000000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15362298000000
+    },
+    {
+      "input": "20260914T250061",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789434061000
+    },
+    {
+      "input": "20260914T250061",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345241139000
+    },
+    {
+      "input": "20260914T250061",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789459261000
+    },
+    {
+      "input": "20260914T250061",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345212339000
+    },
+    {
+      "input": "20260914T250061",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789401661000
+    },
+    {
+      "input": "20260914T250061",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15345273539000
+    },
+    {
+      "input": "20260308T023000",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1772937000000
+    },
+    {
+      "input": "20260308T023000",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15361738200000
+    },
+    {
+      "input": "20260308T023000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1772965800000
+    },
+    {
+      "input": "20260308T023000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15361709400000
+    },
+    {
+      "input": "20260308T023000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1772904600000
+    },
+    {
+      "input": "20260308T023000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15361770600000
+    },
+    {
+      "input": "20261101T013000",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1793496600000
+    },
+    {
+      "input": "20261101T013000",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15341178600000
+    },
+    {
+      "input": "20261101T013000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1793525400000
+    },
+    {
+      "input": "20261101T013000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15341149800000
+    },
+    {
+      "input": "20261101T013000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1793464200000
+    },
+    {
+      "input": "20261101T013000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": -15341211000000
+    },
+    {
+      "input": "2026-09-14T01:02:03Z",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03Z",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03.999Z",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723999
+    },
+    {
+      "input": "2026-09-14T01:02:03.999Z",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723999
+    },
+    {
+      "input": "2026-09-14T01:02:03.999Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723999
+    },
+    {
+      "input": "2026-09-14T01:02:03.999Z",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723999
+    },
+    {
+      "input": "2026-09-14T01:02:03.999Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723999
+    },
+    {
+      "input": "2026-09-14T01:02:03.999Z",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723999
+    },
+    {
+      "input": "2026-09-14T01:02:03+02:00",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "2026-09-14T01:02:03+02:00",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "2026-09-14T01:02:03+02:00",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "2026-09-14T01:02:03+02:00",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "2026-09-14T01:02:03+02:00",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "2026-09-14T01:02:03+02:00",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "2026-09-14T01:02:03",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14T01:02:03",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "2026-09-14",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026-09-14",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026-09-14",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026-09-14",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026-09-14",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026-09-14",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026/09/14",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026/09/14",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026/09/14",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026/09/14",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026/09/14",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026/09/14",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": " 2026-09-14 ",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": " 2026-09-14 ",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": " 2026-09-14 ",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": " 2026-09-14 ",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": " 2026-09-14 ",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": " 2026-09-14 ",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344000000
+    },
+    {
+      "input": "2026-02-30",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-02-30",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-02-30",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-02-30",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-02-30",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "2026-02-30",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 CET",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344123000
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 CET",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344123000
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 CET",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344123000
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 CET",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344123000
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 CET",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789344123000
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 CET",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789344123000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 CEST",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 CEST",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 CEST",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 CEST",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 CEST",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 CEST",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789340523000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000 garbage",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000 garbage",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000 garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000 garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000 garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sep 2026 01:02:03 +0000 garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "bad",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "bad",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "bad",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "bad",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "bad",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "bad",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "null",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "null",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "null",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "null",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "null",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "null",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "Monday, 14 September 2026 01:02:03 +0000 garbage",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Monday, 14 September 2026 01:02:03 +0000 garbage",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Monday, 14 September 2026 01:02:03 +0000 garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Monday, 14 September 2026 01:02:03 +0000 garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Monday, 14 September 2026 01:02:03 +0000 garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Monday, 14 September 2026 01:02:03 +0000 garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "mon, 14 sep 2026 01:02:03 GMT garbage",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "mon, 14 sep 2026 01:02:03 GMT garbage",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "mon, 14 sep 2026 01:02:03 GMT garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "mon, 14 sep 2026 01:02:03 GMT garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "mon, 14 sep 2026 01:02:03 GMT garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "mon, 14 sep 2026 01:02:03 GMT garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": 1789347723000
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 +0000 garbage",
+      "timeZone": "UTC",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 +0000 garbage",
+      "timeZone": "UTC",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 +0000 garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 +0000 garbage",
+      "timeZone": "America/Los_Angeles",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 +0000 garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "en-US",
+      "expectedEpochMilliseconds": null
+    },
+    {
+      "input": "Mon, 14 Sept 2026 01:02:03 +0000 garbage",
+      "timeZone": "Asia/Tokyo",
+      "locale": "th-TH",
+      "expectedEpochMilliseconds": null
+    }
+  ]
+}

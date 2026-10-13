@@ -1,0 +1,697 @@
+{
+  "source": "synthetic tones with a slow envelope and seeded noise; no recordings",
+  "ffmpeg": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": [
+    {
+      "name": "stereo-mono-stereo.mp3",
+      "sha256": "93be479f8b0620933ae3302d7d1ea21eb43db0cd403885320e36495665f0a417",
+      "segments": [
+        {
+          "byteOffset": 0,
+          "byteCount": 32600,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [
+            300,
+            700
+          ],
+          "seconds": 2.0,
+          "seed": 101,
+          "markersSeconds": [],
+          "mpegFrames": 78,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "128k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 32600,
+          "byteCount": 12329,
+          "sampleRate": 44100,
+          "channels": 1,
+          "tonesHz": [
+            1000
+          ],
+          "seconds": 1.5,
+          "seed": 102,
+          "markersSeconds": [],
+          "mpegFrames": 59,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "64k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 44929,
+          "byteCount": 32600,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [
+            450,
+            900
+          ],
+          "seconds": 2.0,
+          "seed": 103,
+          "markersSeconds": [],
+          "mpegFrames": 78,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "128k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mono-stereo-mono.mp3",
+      "sha256": "e1d375e179429469ad901697999f66cca58e23bce5e5df9ad298d50078916427",
+      "segments": [
+        {
+          "byteOffset": 0,
+          "byteCount": 16300,
+          "sampleRate": 44100,
+          "channels": 1,
+          "tonesHz": [
+            500
+          ],
+          "seconds": 2.0,
+          "seed": 104,
+          "markersSeconds": [],
+          "mpegFrames": 78,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "64k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 16300,
+          "byteCount": 24659,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [
+            1200,
+            2400
+          ],
+          "seconds": 1.5,
+          "seed": 105,
+          "markersSeconds": [],
+          "mpegFrames": 59,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "128k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 40959,
+          "byteCount": 16300,
+          "sampleRate": 44100,
+          "channels": 1,
+          "tonesHz": [
+            500
+          ],
+          "seconds": 2.0,
+          "seed": 106,
+          "markersSeconds": [],
+          "mpegFrames": 78,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "64k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "low-high-low.mp3",
+      "sha256": "1c77a7f8a8cc5e864a4588955027799b9230973087ac0647f20e07ed1a827bcc",
+      "segments": [
+        {
+          "byteOffset": 0,
+          "byteCount": 12382,
+          "sampleRate": 22050,
+          "channels": 1,
+          "tonesHz": [
+            800
+          ],
+          "seconds": 2.0,
+          "seed": 107,
+          "markersSeconds": [],
+          "mpegFrames": 79,
+          "framesPerPacket": 576,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "48k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 12382,
+          "byteCount": 18432,
+          "sampleRate": 48000,
+          "channels": 1,
+          "tonesHz": [
+            1500
+          ],
+          "seconds": 1.5,
+          "seed": 108,
+          "markersSeconds": [],
+          "mpegFrames": 64,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "96k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 30814,
+          "byteCount": 12382,
+          "sampleRate": 22050,
+          "channels": 1,
+          "tonesHz": [
+            800
+          ],
+          "seconds": 2.0,
+          "seed": 109,
+          "markersSeconds": [],
+          "mpegFrames": 79,
+          "framesPerPacket": 576,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "48k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "high-low-high.mp3",
+      "sha256": "179df2dcd0fd9e07144da3ae31fce833f6566dc2877077b665021df2840d1da0",
+      "segments": [
+        {
+          "byteOffset": 0,
+          "byteCount": 32640,
+          "sampleRate": 48000,
+          "channels": 2,
+          "tonesHz": [
+            600,
+            1100
+          ],
+          "seconds": 2.0,
+          "seed": 110,
+          "markersSeconds": [],
+          "mpegFrames": 85,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "128k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 32640,
+          "byteCount": 6336,
+          "sampleRate": 16000,
+          "channels": 1,
+          "tonesHz": [
+            900
+          ],
+          "seconds": 1.5,
+          "seed": 111,
+          "markersSeconds": [],
+          "mpegFrames": 44,
+          "framesPerPacket": 576,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "32k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 38976,
+          "byteCount": 32640,
+          "sampleRate": 48000,
+          "channels": 2,
+          "tonesHz": [
+            600,
+            1100
+          ],
+          "seconds": 2.0,
+          "seed": 112,
+          "markersSeconds": [],
+          "mpegFrames": 85,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "128k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "converted-chain.mp3",
+      "sha256": "446004c1de2e9f4f1aa80337fd4e4c27c31cf5e0ab68107cf2601f47a5891857",
+      "segments": [
+        {
+          "byteOffset": 0,
+          "byteCount": 10031,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [],
+          "seconds": 0.6,
+          "seed": 113,
+          "markersSeconds": [
+            0.06,
+            0.5599999999999999
+          ],
+          "mpegFrames": 24,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "128k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 10031,
+          "byteCount": 6144,
+          "sampleRate": 48000,
+          "channels": 2,
+          "tonesHz": [],
+          "seconds": 0.35,
+          "seed": 114,
+          "markersSeconds": [
+            0.06,
+            0.31
+          ],
+          "mpegFrames": 16,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "128k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 16175,
+          "byteCount": 3072,
+          "sampleRate": 48000,
+          "channels": 1,
+          "tonesHz": [],
+          "seconds": 0.35,
+          "seed": 115,
+          "markersSeconds": [
+            0.06,
+            0.31
+          ],
+          "mpegFrames": 16,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "64k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 19247,
+          "byteCount": 2508,
+          "sampleRate": 22050,
+          "channels": 1,
+          "tonesHz": [],
+          "seconds": 0.35,
+          "seed": 116,
+          "markersSeconds": [
+            0.06,
+            0.31
+          ],
+          "mpegFrames": 16,
+          "framesPerPacket": 576,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "48k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 21755,
+          "byteCount": 1584,
+          "sampleRate": 16000,
+          "channels": 1,
+          "tonesHz": [],
+          "seconds": 0.3,
+          "seed": 117,
+          "markersSeconds": [
+            0.06,
+            0.26
+          ],
+          "mpegFrames": 11,
+          "framesPerPacket": 576,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "32k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        },
+        {
+          "byteOffset": 23339,
+          "byteCount": 10031,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [],
+          "seconds": 0.6,
+          "seed": 118,
+          "markersSeconds": [
+            0.06,
+            0.5599999999999999
+          ],
+          "mpegFrames": 24,
+          "framesPerPacket": 1152,
+          "arguments": [
+            "-map_metadata",
+            "-1",
+            "-fflags",
+            "+bitexact",
+            "-flags:a",
+            "+bitexact",
+            "-c:a",
+            "libmp3lame",
+            "-b:a",
+            "128k",
+            "-write_xing",
+            "0",
+            "-id3v2_version",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dai_mono.mp3",
+      "sha256": "fbd2ae0c56b5aa6dbcacff10f1b297e92d2b2c333749e945280c8fce887a04fc",
+      "source": "SyntheticSpeech/make-speech-fixtures.sh, unchanged",
+      "segments": [
+        {
+          "byteOffset": 0,
+          "byteCount": 160496,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [],
+          "mpegFrames": 384,
+          "framesPerPacket": 1152
+        },
+        {
+          "byteOffset": 160496,
+          "byteCount": 40333,
+          "sampleRate": 44100,
+          "channels": 1,
+          "tonesHz": [
+            440
+          ],
+          "mpegFrames": 193,
+          "framesPerPacket": 1152
+        },
+        {
+          "byteOffset": 200829,
+          "byteCount": 160496,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [],
+          "mpegFrames": 384,
+          "framesPerPacket": 1152
+        }
+      ]
+    },
+    {
+      "name": "dai_48k.mp3",
+      "sha256": "1a4a1b638fa80474d7bb85d123ad247bf02190062a449577d44e135130295ef0",
+      "source": "SyntheticSpeech/make-speech-fixtures.sh, unchanged",
+      "segments": [
+        {
+          "byteOffset": 0,
+          "byteCount": 160496,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [],
+          "mpegFrames": 384,
+          "framesPerPacket": 1152
+        },
+        {
+          "byteOffset": 160496,
+          "byteCount": 80640,
+          "sampleRate": 48000,
+          "channels": 2,
+          "tonesHz": [
+            660,
+            660
+          ],
+          "mpegFrames": 210,
+          "framesPerPacket": 1152
+        },
+        {
+          "byteOffset": 241136,
+          "byteCount": 160496,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [],
+          "mpegFrames": 384,
+          "framesPerPacket": 1152
+        }
+      ]
+    },
+    {
+      "name": "dai_monoshow_stereoad.mp3",
+      "sha256": "bb1147c3e76ad497ea2b0835826f7f0384d3fbf997d23cce67423ec4d3e6f8b8",
+      "source": "SyntheticSpeech/make-speech-fixtures.sh, unchanged",
+      "segments": [
+        {
+          "byteOffset": 0,
+          "byteCount": 80248,
+          "sampleRate": 44100,
+          "channels": 1,
+          "tonesHz": [],
+          "mpegFrames": 384,
+          "framesPerPacket": 1152
+        },
+        {
+          "byteOffset": 80248,
+          "byteCount": 80666,
+          "sampleRate": 44100,
+          "channels": 2,
+          "tonesHz": [
+            440,
+            440
+          ],
+          "mpegFrames": 193,
+          "framesPerPacket": 1152
+        },
+        {
+          "byteOffset": 160914,
+          "byteCount": 80248,
+          "sampleRate": 44100,
+          "channels": 1,
+          "tonesHz": [],
+          "mpegFrames": 384,
+          "framesPerPacket": 1152
+        }
+      ]
+    }
+  ]
+}

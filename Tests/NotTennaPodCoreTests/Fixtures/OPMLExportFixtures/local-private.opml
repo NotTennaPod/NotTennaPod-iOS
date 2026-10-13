@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
+<opml version="2.0">
+  <head>
+    <title>AntennaPod Subscriptions</title>
+    <dateCreated>24 Sep 26 08:58:51 +0545</dateCreated>
+  </head>
+  <body>
+    <outline text="Local folder" title="Local folder" xmlUrl="antennapod_local:content://fixture/tree/Music%3APodcasts" />
+    <outline text="Private" title="Private" type="rss" xmlUrl="https://synthetic-user:synthetic-pass&#64;example.com/feed?token=fixture-secret" />
+  </body>
+</opml>

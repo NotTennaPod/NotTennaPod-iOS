@@ -1,0 +1,6394 @@
+{
+ "source_pin": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+ "items": [
+  {
+   "id": 11,
+   "state": "NEW",
+   "has_media": true,
+   "media_id": 411
+  },
+  {
+   "id": 12,
+   "state": "UNPLAYED",
+   "has_media": true,
+   "queued": true,
+   "favorite": true,
+   "media_id": 412,
+   "history_ms": 1767227400000
+  },
+  {
+   "id": 13,
+   "state": "PLAYED",
+   "has_media": true,
+   "queued": true,
+   "downloaded": true,
+   "media_id": 413,
+   "history_ms": 1767231000000
+  },
+  {
+   "id": 14,
+   "state": "UNPLAYED",
+   "has_media": false
+  },
+  {
+   "id": 15,
+   "state": "UNPLAYED",
+   "has_media": true,
+   "downloaded": true,
+   "local_feed": true,
+   "media_id": 415
+  },
+  {
+   "id": 16,
+   "state": "PLAYED",
+   "has_media": true,
+   "favorite": true,
+   "media_id": 416,
+   "history_ms": 1767226200000
+  },
+  {
+   "id": 17,
+   "state": "NEW",
+   "has_media": true,
+   "queued": true,
+   "downloaded": true,
+   "media_id": 417
+  },
+  {
+   "id": 18,
+   "state": "UNPLAYED",
+   "has_media": true,
+   "queued": true,
+   "media_id": 418
+  }
+ ],
+ "queue_ids": [
+  13,
+  18,
+  12,
+  17
+ ],
+ "screen_filters": [
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ]
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ]
+  },
+  {
+   "screen": "episodes",
+   "filter": []
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ]
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ]
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ]
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ]
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ]
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ]
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ]
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ]
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ]
+  },
+  {
+   "screen": "history",
+   "filter": []
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ]
+  },
+  {
+   "screen": "feed",
+   "filter": []
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ]
+  }
+ ],
+ "outcome_cases": [
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "queue",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "inbox",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "unplayed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "played"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "new"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "not_favorite"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "episodes",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "downloads",
+   "filter": [
+    "downloaded"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "REMOVE_FROM_HISTORY",
+   "item": 12
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "REMOVE_FROM_HISTORY",
+   "item": 13
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "REMOVE_FROM_HISTORY",
+   "item": 16
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "history",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_FAVORITES",
+   "item": 11
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_FAVORITES",
+   "item": 12
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_FAVORITES",
+   "item": 13
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_FAVORITES",
+   "item": 14
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_FAVORITES",
+   "item": 15
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_FAVORITES",
+   "item": 16
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_FAVORITES",
+   "item": 17
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "REMOVE_FROM_FAVORITES",
+   "item": 18
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "favorites",
+   "filter": [
+    "is_favorite",
+    "include_subscribed",
+    "include_archived",
+    "include_not_subscribed"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [],
+   "action": "MARK_PLAYED",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "ADD_TO_QUEUE",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "START_DOWNLOAD",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "REMOVE_FROM_INBOX",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "DELETE",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_FAV",
+   "item": 18
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 11
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 12
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 13
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 14
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 15
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 16
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 17
+  },
+  {
+   "screen": "feed",
+   "filter": [
+    "unplayed",
+    "not_queued"
+   ],
+   "action": "MARK_PLAYED",
+   "item": 18
+  }
+ ],
+ "parse_cases": [
+  null,
+  "",
+  "REMOVE_FROM_QUEUE,REMOVE_FROM_QUEUE",
+  "DELETE,MARK_PLAYED",
+  "REMOVE_FROM_HISTORY,ADD_TO_QUEUE",
+  "MARK_PLAYED",
+  "MARK_PLAYED,",
+  ",MARK_PLAYED",
+  "DELETE,MARK_PLAYED,",
+  "DELETE,MARK_PLAYED,,",
+  "DELETE,MARK_PLAYED,START_DOWNLOAD",
+  "delete,MARK_PLAYED",
+  " DELETE,MARK_PLAYED",
+  "TOGGLE_PLAYED,DELETE",
+  "SHOW_FIRST_SWIPE_DIALOG,DELETE",
+  ",",
+  "REMOVE_FROM_QUEUE,,REMOVE_FROM_QUEUE"
+ ],
+ "dialog_cases": [
+  {
+   "name": "queue_unset_cancel",
+   "tag": "QueueFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "R",
+    "CANCEL"
+   ]
+  },
+  {
+   "name": "queue_unset_confirm_defaults",
+   "tag": "QueueFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "inbox_unset_cancel",
+   "tag": "NewEpisodesFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "R",
+    "CANCEL"
+   ]
+  },
+  {
+   "name": "inbox_unset_confirm_defaults",
+   "tag": "NewEpisodesFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "episodes_unset_cancel",
+   "tag": "EpisodesFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "R",
+    "CANCEL"
+   ]
+  },
+  {
+   "name": "episodes_unset_confirm_defaults",
+   "tag": "EpisodesFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "downloads_unset_cancel",
+   "tag": "DownloadsFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "R",
+    "CANCEL"
+   ]
+  },
+  {
+   "name": "downloads_unset_confirm_defaults",
+   "tag": "DownloadsFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "history_unset_cancel",
+   "tag": "PlaybackHistoryFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "R",
+    "CANCEL"
+   ]
+  },
+  {
+   "name": "history_unset_confirm_defaults",
+   "tag": "PlaybackHistoryFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "favorites_unset_cancel",
+   "tag": "FavoritesFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "R",
+    "CANCEL"
+   ]
+  },
+  {
+   "name": "favorites_unset_confirm_defaults",
+   "tag": "FavoritesFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "feed_unset_cancel",
+   "tag": "ItemlistFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "R",
+    "CANCEL"
+   ]
+  },
+  {
+   "name": "feed_unset_confirm_defaults",
+   "tag": "ItemlistFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "queue_pick_left_favorite_disable_confirm",
+   "tag": "QueueFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "L3",
+    "L",
+    "S0",
+    "OK"
+   ]
+  },
+  {
+   "name": "queue_stored_disabled_reopen",
+   "tag": "QueueFragment",
+   "stored_actions": "DELETE,MARK_PLAYED",
+   "stored_enabled": false,
+   "script": [
+    "R",
+    "L",
+    "S1",
+    "OK"
+   ]
+  },
+  {
+   "name": "queue_pick_then_cancel",
+   "tag": "QueueFragment",
+   "stored_actions": "REMOVE_FROM_QUEUE,REMOVE_FROM_QUEUE",
+   "stored_enabled": true,
+   "script": [
+    "R",
+    "R1",
+    "L4",
+    "CANCEL"
+   ]
+  },
+  {
+   "name": "history_pick_right_toggle_confirm",
+   "tag": "PlaybackHistoryFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "R",
+    "R5",
+    "R",
+    "OK"
+   ]
+  },
+  {
+   "name": "history_pick_left_add_to_queue_confirm",
+   "tag": "PlaybackHistoryFragment",
+   "stored_actions": "REMOVE_FROM_HISTORY,REMOVE_FROM_HISTORY",
+   "stored_enabled": true,
+   "script": [
+    "L0",
+    "OK"
+   ]
+  },
+  {
+   "name": "inbox_stored_confirm_unchanged",
+   "tag": "NewEpisodesFragment",
+   "stored_actions": "MARK_FAV,START_DOWNLOAD",
+   "stored_enabled": true,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "feed_pick_both_confirm",
+   "tag": "ItemlistFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "script": [
+    "L",
+    "L2",
+    "R",
+    "R5",
+    "OK"
+   ]
+  },
+  {
+   "name": "queue_invalid_stored_value",
+   "tag": "QueueFragment",
+   "stored_actions": "FOO,BAR",
+   "stored_enabled": null,
+   "script": [
+    "OK"
+   ]
+  },
+  {
+   "name": "queue_stored_action_outside_picker",
+   "tag": "QueueFragment",
+   "stored_actions": "REMOVE_FROM_HISTORY,ADD_TO_QUEUE",
+   "stored_enabled": null,
+   "script": [
+    "R",
+    "L",
+    "OK"
+   ]
+  }
+ ],
+ "swipe_cases": [
+  {
+   "name": "queue_first_use_right",
+   "tag": "QueueFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "dir": "RIGHT",
+   "item": 18
+  },
+  {
+   "name": "queue_first_use_left_locked_irrelevant",
+   "tag": "QueueFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "dir": "LEFT",
+   "item": 13
+  },
+  {
+   "name": "queue_disabled_unset",
+   "tag": "QueueFragment",
+   "stored_actions": null,
+   "stored_enabled": false,
+   "dir": "RIGHT",
+   "item": 18
+  },
+  {
+   "name": "queue_disabled_configured",
+   "tag": "QueueFragment",
+   "stored_actions": "REMOVE_FROM_QUEUE,MARK_FAV",
+   "stored_enabled": false,
+   "dir": "RIGHT",
+   "item": 18
+  },
+  {
+   "name": "queue_configured_right",
+   "tag": "QueueFragment",
+   "stored_actions": "REMOVE_FROM_QUEUE,MARK_FAV",
+   "stored_enabled": true,
+   "dir": "RIGHT",
+   "item": 18
+  },
+  {
+   "name": "queue_configured_left",
+   "tag": "QueueFragment",
+   "stored_actions": "REMOVE_FROM_QUEUE,MARK_FAV",
+   "stored_enabled": true,
+   "dir": "LEFT",
+   "item": 18
+  },
+  {
+   "name": "history_first_use",
+   "tag": "PlaybackHistoryFragment",
+   "stored_actions": null,
+   "stored_enabled": null,
+   "dir": "LEFT",
+   "item": 12
+  },
+  {
+   "name": "history_configured_right",
+   "tag": "PlaybackHistoryFragment",
+   "stored_actions": "REMOVE_FROM_HISTORY,MARK_PLAYED",
+   "stored_enabled": null,
+   "dir": "RIGHT",
+   "item": 12
+  },
+  {
+   "name": "history_configured_left",
+   "tag": "PlaybackHistoryFragment",
+   "stored_actions": "REMOVE_FROM_HISTORY,MARK_PLAYED",
+   "stored_enabled": null,
+   "dir": "LEFT",
+   "item": 12
+  },
+  {
+   "name": "history_disabled",
+   "tag": "PlaybackHistoryFragment",
+   "stored_actions": null,
+   "stored_enabled": false,
+   "dir": "LEFT",
+   "item": 12
+  },
+  {
+   "name": "inbox_malformed_is_first_use",
+   "tag": "NewEpisodesFragment",
+   "stored_actions": "ADD_TO_QUEUE",
+   "stored_enabled": null,
+   "dir": "RIGHT",
+   "item": 11
+  },
+  {
+   "name": "downloads_configured_left",
+   "tag": "DownloadsFragment",
+   "stored_actions": "ADD_TO_QUEUE,DELETE",
+   "stored_enabled": null,
+   "dir": "LEFT",
+   "item": 13
+  }
+ ],
+ "queue_base": [
+  21,
+  22,
+  23,
+  24,
+  25
+ ],
+ "queue_sequences": [
+  {
+   "name": "middle_undo",
+   "swiped": 23,
+   "between": [],
+   "undo": true
+  },
+  {
+   "name": "first_undo",
+   "swiped": 21,
+   "between": [],
+   "undo": true
+  },
+  {
+   "name": "last_undo",
+   "swiped": 25,
+   "between": [],
+   "undo": true
+  },
+  {
+   "name": "no_undo",
+   "swiped": 23,
+   "between": [],
+   "undo": false
+  },
+  {
+   "name": "undo_after_earlier_removed",
+   "swiped": 23,
+   "between": [
+    [
+     "remove",
+     21
+    ]
+   ],
+   "undo": true
+  },
+  {
+   "name": "undo_after_append",
+   "swiped": 23,
+   "between": [
+    [
+     "append",
+     26
+    ]
+   ],
+   "undo": true
+  },
+  {
+   "name": "undo_after_readded",
+   "swiped": 23,
+   "between": [
+    [
+     "append",
+     23
+    ]
+   ],
+   "undo": true
+  },
+  {
+   "name": "undo_index_beyond_queue",
+   "swiped": 25,
+   "between": [
+    [
+     "remove",
+     21
+    ],
+    [
+     "remove",
+     22
+    ]
+   ],
+   "undo": true
+  },
+  {
+   "name": "undo_after_clear",
+   "swiped": 23,
+   "between": [
+    [
+     "clear"
+    ]
+   ],
+   "undo": true
+  },
+  {
+   "name": "undo_last_after_one_removed",
+   "swiped": 25,
+   "between": [
+    [
+     "remove",
+     22
+    ]
+   ],
+   "undo": true
+  }
+ ],
+ "history_rows": [
+  {
+   "item_id": 31,
+   "media_id": 505,
+   "history_ms": 1767228600000
+  },
+  {
+   "item_id": 32,
+   "media_id": 501,
+   "history_ms": 1767228000000
+  },
+  {
+   "item_id": 33,
+   "media_id": 503,
+   "history_ms": 1767228000000
+  },
+  {
+   "item_id": 34,
+   "media_id": 502,
+   "history_ms": 1767226200000
+  },
+  {
+   "item_id": 35,
+   "media_id": 504,
+   "history_ms": 0
+  },
+  {
+   "item_id": 36,
+   "media_id": 506,
+   "history_ms": 1767229200000
+  }
+ ],
+ "history_sequences": [
+  {
+   "name": "remove_tied_first_undo",
+   "swiped": 32,
+   "played_meanwhile_ms": null,
+   "undo": true
+  },
+  {
+   "name": "remove_tied_second_no_undo",
+   "swiped": 33,
+   "played_meanwhile_ms": null,
+   "undo": false
+  },
+  {
+   "name": "remove_newest_undo",
+   "swiped": 36,
+   "played_meanwhile_ms": null,
+   "undo": true
+  },
+  {
+   "name": "remove_then_played_again_undo",
+   "swiped": 34,
+   "played_meanwhile_ms": 1767229800000,
+   "undo": true
+  },
+  {
+   "name": "remove_then_played_again_no_undo",
+   "swiped": 34,
+   "played_meanwhile_ms": 1767229800000,
+   "undo": false
+  }
+ ],
+ "played_duration_example": {
+  "db_ms": 900000,
+  "row_ms": 600000
+ }
+}

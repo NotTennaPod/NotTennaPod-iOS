@@ -1,0 +1,3319 @@
+{
+ "reference_commit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+ "result": "consistent",
+ "databases": {
+  "main": {
+   "years": {
+    "sql": "SELECT SUM(played_duration) AS total_duration, strftime('%m', datetime(last_played_time/1000, 'unixepoch')) AS month, strftime('%Y', datetime(last_played_time/1000, 'unixepoch')) AS year FROM FeedMedia WHERE last_played_time > 0 AND played_duration > 0 GROUP BY year, month ORDER BY year, month",
+    "sql_matches_independent": true,
+    "monthly": [
+     {
+      "year": 2022,
+      "month": 11,
+      "time_played_ms": 9000000
+     },
+     {
+      "year": 2022,
+      "month": 12,
+      "time_played_ms": 2700000
+     },
+     {
+      "year": 2024,
+      "month": 2,
+      "time_played_ms": 10800000
+     },
+     {
+      "year": 2024,
+      "month": 12,
+      "time_played_ms": 3600000
+     },
+     {
+      "year": 2025,
+      "month": 1,
+      "time_played_ms": 5400000
+     },
+     {
+      "year": 2025,
+      "month": 2,
+      "time_played_ms": 2400000
+     },
+     {
+      "year": 2025,
+      "month": 3,
+      "time_played_ms": 3000000
+     },
+     {
+      "year": 2025,
+      "month": 6,
+      "time_played_ms": 44100000
+     },
+     {
+      "year": 2026,
+      "month": 7,
+      "time_played_ms": 1200000
+     },
+     {
+      "year": 2026,
+      "month": 9,
+      "time_played_ms": 3600000
+     }
+    ],
+    "chart_months": [
+     {
+      "year": 2022,
+      "month": 11,
+      "time_played_ms": 9000000
+     },
+     {
+      "year": 2022,
+      "month": 12,
+      "time_played_ms": 2700000
+     },
+     {
+      "year": 2023,
+      "month": 1,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 2,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 3,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 4,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 5,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 6,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 7,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 8,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 9,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 10,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 11,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2023,
+      "month": 12,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 1,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 2,
+      "time_played_ms": 10800000
+     },
+     {
+      "year": 2024,
+      "month": 3,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 4,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 5,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 6,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 7,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 8,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 9,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 10,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 11,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2024,
+      "month": 12,
+      "time_played_ms": 3600000
+     },
+     {
+      "year": 2025,
+      "month": 1,
+      "time_played_ms": 5400000
+     },
+     {
+      "year": 2025,
+      "month": 2,
+      "time_played_ms": 2400000
+     },
+     {
+      "year": 2025,
+      "month": 3,
+      "time_played_ms": 3000000
+     },
+     {
+      "year": 2025,
+      "month": 4,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2025,
+      "month": 5,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2025,
+      "month": 6,
+      "time_played_ms": 44100000
+     },
+     {
+      "year": 2025,
+      "month": 7,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2025,
+      "month": 8,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2025,
+      "month": 9,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2025,
+      "month": 10,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2025,
+      "month": 11,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2025,
+      "month": 12,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2026,
+      "month": 1,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2026,
+      "month": 2,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2026,
+      "month": 3,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2026,
+      "month": 4,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2026,
+      "month": 5,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2026,
+      "month": 6,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2026,
+      "month": 7,
+      "time_played_ms": 1200000
+     },
+     {
+      "year": 2026,
+      "month": 8,
+      "time_played_ms": 0
+     },
+     {
+      "year": 2026,
+      "month": 9,
+      "time_played_ms": 3600000
+     }
+    ],
+    "year_rows": [
+     {
+      "year": 2026,
+      "time_played_ms": 4800000,
+      "year_text": "2026 ",
+      "hours_text": "1.3 hours"
+     },
+     {
+      "year": 2025,
+      "time_played_ms": 54900000,
+      "year_text": "2025 ",
+      "hours_text": "15.3 hours"
+     },
+     {
+      "year": 2024,
+      "time_played_ms": 14400000,
+      "year_text": "2024 ",
+      "hours_text": "4.0 hours"
+     },
+     {
+      "year": 2022,
+      "time_played_ms": 11700000,
+      "year_text": "2022 ",
+      "hours_text": "3.3 hours"
+     }
+    ],
+    "chart": {
+     "canvas": [
+      1000.0,
+      200.0
+     ],
+     "bar_area_height": 180.0,
+     "max_value_ms": 44100000,
+     "bars": [
+      {
+       "index": 0,
+       "year": 2022,
+       "month": 11,
+       "time_played_ms": 9000000,
+       "color": "accent",
+       "height_fraction": 0.204082,
+       "left": 69.388,
+       "right": 87.806,
+       "top": 143.265
+      },
+      {
+       "index": 1,
+       "year": 2022,
+       "month": 12,
+       "time_played_ms": 2700000,
+       "color": "accent",
+       "height_fraction": 0.061224,
+       "left": 88.776,
+       "right": 107.194,
+       "top": 168.98
+      },
+      {
+       "index": 2,
+       "year": 2023,
+       "month": 1,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 108.163,
+       "right": 126.582,
+       "top": 179.1
+      },
+      {
+       "index": 3,
+       "year": 2023,
+       "month": 2,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 127.551,
+       "right": 145.969,
+       "top": 179.1
+      },
+      {
+       "index": 4,
+       "year": 2023,
+       "month": 3,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 146.939,
+       "right": 165.357,
+       "top": 179.1
+      },
+      {
+       "index": 5,
+       "year": 2023,
+       "month": 4,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 166.327,
+       "right": 184.745,
+       "top": 179.1
+      },
+      {
+       "index": 6,
+       "year": 2023,
+       "month": 5,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 185.714,
+       "right": 204.133,
+       "top": 179.1
+      },
+      {
+       "index": 7,
+       "year": 2023,
+       "month": 6,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 205.102,
+       "right": 223.52,
+       "top": 179.1
+      },
+      {
+       "index": 8,
+       "year": 2023,
+       "month": 7,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 224.49,
+       "right": 242.908,
+       "top": 179.1
+      },
+      {
+       "index": 9,
+       "year": 2023,
+       "month": 8,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 243.878,
+       "right": 262.296,
+       "top": 179.1
+      },
+      {
+       "index": 10,
+       "year": 2023,
+       "month": 9,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 263.265,
+       "right": 281.684,
+       "top": 179.1
+      },
+      {
+       "index": 11,
+       "year": 2023,
+       "month": 10,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 282.653,
+       "right": 301.071,
+       "top": 179.1
+      },
+      {
+       "index": 12,
+       "year": 2023,
+       "month": 11,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 302.041,
+       "right": 320.459,
+       "top": 179.1
+      },
+      {
+       "index": 13,
+       "year": 2023,
+       "month": 12,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 321.429,
+       "right": 339.847,
+       "top": 179.1
+      },
+      {
+       "index": 14,
+       "year": 2024,
+       "month": 1,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 340.816,
+       "right": 359.235,
+       "top": 179.1
+      },
+      {
+       "index": 15,
+       "year": 2024,
+       "month": 2,
+       "time_played_ms": 10800000,
+       "color": "accent",
+       "height_fraction": 0.244898,
+       "left": 360.204,
+       "right": 378.622,
+       "top": 135.918
+      },
+      {
+       "index": 16,
+       "year": 2024,
+       "month": 3,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 379.592,
+       "right": 398.01,
+       "top": 179.1
+      },
+      {
+       "index": 17,
+       "year": 2024,
+       "month": 4,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 398.98,
+       "right": 417.398,
+       "top": 179.1
+      },
+      {
+       "index": 18,
+       "year": 2024,
+       "month": 5,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 418.367,
+       "right": 436.786,
+       "top": 179.1
+      },
+      {
+       "index": 19,
+       "year": 2024,
+       "month": 6,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 437.755,
+       "right": 456.173,
+       "top": 179.1
+      },
+      {
+       "index": 20,
+       "year": 2024,
+       "month": 7,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 457.143,
+       "right": 475.561,
+       "top": 179.1
+      },
+      {
+       "index": 21,
+       "year": 2024,
+       "month": 8,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 476.531,
+       "right": 494.949,
+       "top": 179.1
+      },
+      {
+       "index": 22,
+       "year": 2024,
+       "month": 9,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 495.918,
+       "right": 514.337,
+       "top": 179.1
+      },
+      {
+       "index": 23,
+       "year": 2024,
+       "month": 10,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 515.306,
+       "right": 533.724,
+       "top": 179.1
+      },
+      {
+       "index": 24,
+       "year": 2024,
+       "month": 11,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 534.694,
+       "right": 553.112,
+       "top": 179.1
+      },
+      {
+       "index": 25,
+       "year": 2024,
+       "month": 12,
+       "time_played_ms": 3600000,
+       "color": "accent",
+       "height_fraction": 0.081633,
+       "left": 554.082,
+       "right": 572.5,
+       "top": 165.306
+      },
+      {
+       "index": 26,
+       "year": 2025,
+       "month": 1,
+       "time_played_ms": 5400000,
+       "color": "purple",
+       "height_fraction": 0.122449,
+       "left": 573.469,
+       "right": 591.888,
+       "top": 157.959
+      },
+      {
+       "index": 27,
+       "year": 2025,
+       "month": 2,
+       "time_played_ms": 2400000,
+       "color": "purple",
+       "height_fraction": 0.054422,
+       "left": 592.857,
+       "right": 611.276,
+       "top": 170.204
+      },
+      {
+       "index": 28,
+       "year": 2025,
+       "month": 3,
+       "time_played_ms": 3000000,
+       "color": "purple",
+       "height_fraction": 0.068027,
+       "left": 612.245,
+       "right": 630.663,
+       "top": 167.755
+      },
+      {
+       "index": 29,
+       "year": 2025,
+       "month": 4,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 631.633,
+       "right": 650.051,
+       "top": 179.1
+      },
+      {
+       "index": 30,
+       "year": 2025,
+       "month": 5,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 651.02,
+       "right": 669.439,
+       "top": 179.1
+      },
+      {
+       "index": 31,
+       "year": 2025,
+       "month": 6,
+       "time_played_ms": 44100000,
+       "color": "purple",
+       "height_fraction": 1.0,
+       "left": 670.408,
+       "right": 688.827,
+       "top": 0.0
+      },
+      {
+       "index": 32,
+       "year": 2025,
+       "month": 7,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 689.796,
+       "right": 708.214,
+       "top": 179.1
+      },
+      {
+       "index": 33,
+       "year": 2025,
+       "month": 8,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 709.184,
+       "right": 727.602,
+       "top": 179.1
+      },
+      {
+       "index": 34,
+       "year": 2025,
+       "month": 9,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 728.571,
+       "right": 746.99,
+       "top": 179.1
+      },
+      {
+       "index": 35,
+       "year": 2025,
+       "month": 10,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 747.959,
+       "right": 766.378,
+       "top": 179.1
+      },
+      {
+       "index": 36,
+       "year": 2025,
+       "month": 11,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 767.347,
+       "right": 785.765,
+       "top": 179.1
+      },
+      {
+       "index": 37,
+       "year": 2025,
+       "month": 12,
+       "time_played_ms": 0,
+       "color": "purple",
+       "height_fraction": 0.005,
+       "left": 786.735,
+       "right": 805.153,
+       "top": 179.1
+      },
+      {
+       "index": 38,
+       "year": 2026,
+       "month": 1,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 806.122,
+       "right": 824.541,
+       "top": 179.1
+      },
+      {
+       "index": 39,
+       "year": 2026,
+       "month": 2,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 825.51,
+       "right": 843.929,
+       "top": 179.1
+      },
+      {
+       "index": 40,
+       "year": 2026,
+       "month": 3,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 844.898,
+       "right": 863.316,
+       "top": 179.1
+      },
+      {
+       "index": 41,
+       "year": 2026,
+       "month": 4,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 864.286,
+       "right": 882.704,
+       "top": 179.1
+      },
+      {
+       "index": 42,
+       "year": 2026,
+       "month": 5,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 883.673,
+       "right": 902.092,
+       "top": 179.1
+      },
+      {
+       "index": 43,
+       "year": 2026,
+       "month": 6,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 903.061,
+       "right": 921.48,
+       "top": 179.1
+      },
+      {
+       "index": 44,
+       "year": 2026,
+       "month": 7,
+       "time_played_ms": 1200000,
+       "color": "accent",
+       "height_fraction": 0.027211,
+       "left": 922.449,
+       "right": 940.867,
+       "top": 175.102
+      },
+      {
+       "index": 45,
+       "year": 2026,
+       "month": 8,
+       "time_played_ms": 0,
+       "color": "accent",
+       "height_fraction": 0.005,
+       "left": 941.837,
+       "right": 960.255,
+       "top": 179.1
+      },
+      {
+       "index": 46,
+       "year": 2026,
+       "month": 9,
+       "time_played_ms": 3600000,
+       "color": "accent",
+       "height_fraction": 0.081633,
+       "left": 961.224,
+       "right": 979.643,
+       "top": 165.306
+      }
+     ],
+     "year_labels": [
+      {
+       "index": 2,
+       "text": "2023",
+       "x": 127.551,
+       "y": 196.0
+      },
+      {
+       "index": 14,
+       "text": "2024",
+       "x": 360.204,
+       "y": 196.0
+      },
+      {
+       "index": 26,
+       "text": "2025",
+       "x": 592.857,
+       "y": 196.0
+      },
+      {
+       "index": 38,
+       "text": "2026",
+       "x": 825.51,
+       "y": 196.0
+      }
+     ],
+     "january_separators": [
+      {
+       "index": 2,
+       "x": 108.163
+      },
+      {
+       "index": 14,
+       "x": 340.816
+      },
+      {
+       "index": 26,
+       "x": 573.469
+      },
+      {
+       "index": 38,
+       "x": 806.122
+      }
+     ],
+     "grid_lines": [
+      {
+       "label": "10",
+       "value_ms": 36000000,
+       "y": 33.061,
+       "height_fraction": 0.816327
+      },
+      {
+       "label": "5",
+       "value_ms": 18000000,
+       "y": 106.531,
+       "height_fraction": 0.408163
+      }
+     ]
+    },
+    "total_all_years_ms": 85800000
+   },
+   "downloads": {
+    "download_inputs": [
+     {
+      "item_id": 101,
+      "feed_id": 1,
+      "feed_state": 0,
+      "filesize": 52428800
+     },
+     {
+      "item_id": 102,
+      "feed_id": 1,
+      "feed_state": 0,
+      "filesize": 31457280
+     },
+     {
+      "item_id": 103,
+      "feed_id": 1,
+      "feed_state": 0,
+      "filesize": 1048576
+     },
+     {
+      "item_id": 201,
+      "feed_id": 2,
+      "feed_state": 0,
+      "filesize": 734003200
+     },
+     {
+      "item_id": 202,
+      "feed_id": 2,
+      "feed_state": 0,
+      "filesize": 250000000
+     },
+     {
+      "item_id": 301,
+      "feed_id": 3,
+      "feed_state": 2,
+      "filesize": 120000000
+     },
+     {
+      "item_id": 401,
+      "feed_id": 4,
+      "feed_state": 1,
+      "filesize": 500000000
+     },
+     {
+      "item_id": 701,
+      "feed_id": 7,
+      "feed_state": 0,
+      "filesize": 45000000
+     },
+     {
+      "item_id": 801,
+      "feed_id": 8,
+      "feed_state": 0,
+      "filesize": 45000000
+     },
+     {
+      "item_id": 901,
+      "feed_id": 9,
+      "feed_state": 0,
+      "filesize": 901
+     }
+    ],
+    "sql_group_order": [
+     1,
+     2,
+     3,
+     6,
+     7,
+     8,
+     9
+    ],
+    "sql_matches_independent": true,
+    "tie_groups": [
+     {
+      "total_download_size": 45000000,
+      "feed_ids_in_display_order": [
+       7,
+       8
+      ]
+     }
+    ],
+    "num_episodes_by_feed": {
+     "2": 3,
+     "3": 1,
+     "1": 8,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "6": 2
+    },
+    "header_value_text": "1.3 GB",
+    "header_value_bytes_float_sum": 1278938752,
+    "exact_total_bytes": 1278938757,
+    "header_caption": "Total size of 9 episodes on the device",
+    "downloaded_episodes": 9,
+    "rows": [
+     {
+      "feed_id": 2,
+      "title": "My Beta",
+      "total_download_size": 984003200,
+      "episodes_download_count": 2,
+      "value_text": "0.98 GB • 2 episodes",
+      "chip_color": "#FF3775E6",
+      "chip_color_index": 0
+     },
+     {
+      "feed_id": 3,
+      "title": "Gamma Talk",
+      "total_download_size": 120000000,
+      "episodes_download_count": 1,
+      "value_text": "120 MB • 1 episode",
+      "chip_color": "#FFE51C23",
+      "chip_color_index": 1
+     },
+     {
+      "feed_id": 1,
+      "title": "Alpha Weekly",
+      "total_download_size": 84934656,
+      "episodes_download_count": 3,
+      "value_text": "85 MB • 3 episodes",
+      "chip_color": "#FFFF9800",
+      "chip_color_index": 2
+     },
+     {
+      "feed_id": 7,
+      "title": "Theta Tie",
+      "total_download_size": 45000000,
+      "episodes_download_count": 1,
+      "value_text": "45 MB • 1 episode",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     },
+     {
+      "feed_id": 8,
+      "title": "Eta Tie",
+      "total_download_size": 45000000,
+      "episodes_download_count": 1,
+      "value_text": "45 MB • 1 episode",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     },
+     {
+      "feed_id": 9,
+      "title": "Iota Small",
+      "total_download_size": 901,
+      "episodes_download_count": 1,
+      "value_text": "0.90 kB • 1 episode",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     },
+     {
+      "feed_id": 6,
+      "title": "Zeta Undownloaded",
+      "total_download_size": 0,
+      "episodes_download_count": 0,
+      "value_text": "0 B • 0 episodes",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     }
+    ],
+    "pie": {
+     "sum": 1278938752.0,
+     "percentages": [
+      0.76939,
+      0.093828,
+      0.06641,
+      0.035185,
+      0.035185,
+      1e-06,
+      0.0
+     ],
+     "arcs": [
+      {
+       "index": 0,
+       "color": "#FF3775E6",
+       "start": 181.5,
+       "sweep": 134.6821
+      },
+      {
+       "index": 1,
+       "color": "#FFE51C23",
+       "start": 319.1821,
+       "sweep": 13.6075
+      },
+      {
+       "index": 2,
+       "color": "#FFFF9800",
+       "start": 335.7896,
+       "sweep": 8.7546
+      },
+      {
+       "index": null,
+       "color": "#FF888888",
+       "start": 347.5442,
+       "sweep": 10.9558
+      }
+     ]
+    }
+   }
+  },
+  "after_reset": {
+   "years": {
+    "sql": "SELECT SUM(played_duration) AS total_duration, strftime('%m', datetime(last_played_time/1000, 'unixepoch')) AS month, strftime('%Y', datetime(last_played_time/1000, 'unixepoch')) AS year FROM FeedMedia WHERE last_played_time > 0 AND played_duration > 0 GROUP BY year, month ORDER BY year, month",
+    "sql_matches_independent": true,
+    "monthly": [],
+    "chart_months": [],
+    "year_rows": [
+     {
+      "year": 0,
+      "time_played_ms": 0,
+      "year_text": "0 ",
+      "hours_text": "0.0 hours"
+     }
+    ],
+    "chart": {
+     "canvas": [
+      1000.0,
+      200.0
+     ],
+     "bar_area_height": 180.0,
+     "max_value_ms": 1,
+     "bars": [],
+     "year_labels": [],
+     "january_separators": [],
+     "grid_lines": [
+      {
+       "label": "0",
+       "value_ms": 0,
+       "y": 180.0,
+       "height_fraction": 0.0
+      },
+      {
+       "label": "0",
+       "value_ms": 0,
+       "y": 180.0,
+       "height_fraction": 0.0
+      }
+     ]
+    },
+    "total_all_years_ms": 0,
+    "android_glitch": "empty input still yields one year row for year 0 (YSLA:66-67, 92-95)",
+    "recommended": {
+     "rule": "no listening -> no year rows (chart header only)",
+     "year_rows": []
+    }
+   },
+   "downloads": {
+    "download_inputs": [
+     {
+      "item_id": 101,
+      "feed_id": 1,
+      "feed_state": 0,
+      "filesize": 52428800
+     },
+     {
+      "item_id": 102,
+      "feed_id": 1,
+      "feed_state": 0,
+      "filesize": 31457280
+     },
+     {
+      "item_id": 103,
+      "feed_id": 1,
+      "feed_state": 0,
+      "filesize": 1048576
+     },
+     {
+      "item_id": 201,
+      "feed_id": 2,
+      "feed_state": 0,
+      "filesize": 734003200
+     },
+     {
+      "item_id": 202,
+      "feed_id": 2,
+      "feed_state": 0,
+      "filesize": 250000000
+     },
+     {
+      "item_id": 301,
+      "feed_id": 3,
+      "feed_state": 2,
+      "filesize": 120000000
+     },
+     {
+      "item_id": 401,
+      "feed_id": 4,
+      "feed_state": 1,
+      "filesize": 500000000
+     },
+     {
+      "item_id": 701,
+      "feed_id": 7,
+      "feed_state": 0,
+      "filesize": 45000000
+     },
+     {
+      "item_id": 801,
+      "feed_id": 8,
+      "feed_state": 0,
+      "filesize": 45000000
+     },
+     {
+      "item_id": 901,
+      "feed_id": 9,
+      "feed_state": 0,
+      "filesize": 901
+     }
+    ],
+    "sql_group_order": [
+     1,
+     2,
+     3,
+     6,
+     7,
+     8,
+     9
+    ],
+    "sql_matches_independent": true,
+    "tie_groups": [
+     {
+      "total_download_size": 45000000,
+      "feed_ids_in_display_order": [
+       7,
+       8
+      ]
+     }
+    ],
+    "num_episodes_by_feed": {
+     "2": 3,
+     "3": 1,
+     "1": 8,
+     "7": 1,
+     "8": 1,
+     "9": 1,
+     "6": 2
+    },
+    "header_value_text": "1.3 GB",
+    "header_value_bytes_float_sum": 1278938752,
+    "exact_total_bytes": 1278938757,
+    "header_caption": "Total size of 9 episodes on the device",
+    "downloaded_episodes": 9,
+    "rows": [
+     {
+      "feed_id": 2,
+      "title": "My Beta",
+      "total_download_size": 984003200,
+      "episodes_download_count": 2,
+      "value_text": "0.98 GB • 2 episodes",
+      "chip_color": "#FF3775E6",
+      "chip_color_index": 0
+     },
+     {
+      "feed_id": 3,
+      "title": "Gamma Talk",
+      "total_download_size": 120000000,
+      "episodes_download_count": 1,
+      "value_text": "120 MB • 1 episode",
+      "chip_color": "#FFE51C23",
+      "chip_color_index": 1
+     },
+     {
+      "feed_id": 1,
+      "title": "Alpha Weekly",
+      "total_download_size": 84934656,
+      "episodes_download_count": 3,
+      "value_text": "85 MB • 3 episodes",
+      "chip_color": "#FFFF9800",
+      "chip_color_index": 2
+     },
+     {
+      "feed_id": 7,
+      "title": "Theta Tie",
+      "total_download_size": 45000000,
+      "episodes_download_count": 1,
+      "value_text": "45 MB • 1 episode",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     },
+     {
+      "feed_id": 8,
+      "title": "Eta Tie",
+      "total_download_size": 45000000,
+      "episodes_download_count": 1,
+      "value_text": "45 MB • 1 episode",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     },
+     {
+      "feed_id": 9,
+      "title": "Iota Small",
+      "total_download_size": 901,
+      "episodes_download_count": 1,
+      "value_text": "0.90 kB • 1 episode",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     },
+     {
+      "feed_id": 6,
+      "title": "Zeta Undownloaded",
+      "total_download_size": 0,
+      "episodes_download_count": 0,
+      "value_text": "0 B • 0 episodes",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     }
+    ],
+    "pie": {
+     "sum": 1278938752.0,
+     "percentages": [
+      0.76939,
+      0.093828,
+      0.06641,
+      0.035185,
+      0.035185,
+      1e-06,
+      0.0
+     ],
+     "arcs": [
+      {
+       "index": 0,
+       "color": "#FF3775E6",
+       "start": 181.5,
+       "sweep": 134.6821
+      },
+      {
+       "index": 1,
+       "color": "#FFE51C23",
+       "start": 319.1821,
+       "sweep": 13.6075
+      },
+      {
+       "index": 2,
+       "color": "#FFFF9800",
+       "start": 335.7896,
+       "sweep": 8.7546
+      },
+      {
+       "index": null,
+       "color": "#FF888888",
+       "start": 347.5442,
+       "sweep": 10.9558
+      }
+     ]
+    }
+   }
+  },
+  "empty": {
+   "years": {
+    "sql": "SELECT SUM(played_duration) AS total_duration, strftime('%m', datetime(last_played_time/1000, 'unixepoch')) AS month, strftime('%Y', datetime(last_played_time/1000, 'unixepoch')) AS year FROM FeedMedia WHERE last_played_time > 0 AND played_duration > 0 GROUP BY year, month ORDER BY year, month",
+    "sql_matches_independent": true,
+    "monthly": [],
+    "chart_months": [],
+    "year_rows": [
+     {
+      "year": 0,
+      "time_played_ms": 0,
+      "year_text": "0 ",
+      "hours_text": "0.0 hours"
+     }
+    ],
+    "chart": {
+     "canvas": [
+      1000.0,
+      200.0
+     ],
+     "bar_area_height": 180.0,
+     "max_value_ms": 1,
+     "bars": [],
+     "year_labels": [],
+     "january_separators": [],
+     "grid_lines": [
+      {
+       "label": "0",
+       "value_ms": 0,
+       "y": 180.0,
+       "height_fraction": 0.0
+      },
+      {
+       "label": "0",
+       "value_ms": 0,
+       "y": 180.0,
+       "height_fraction": 0.0
+      }
+     ]
+    },
+    "total_all_years_ms": 0,
+    "android_glitch": "empty input still yields one year row for year 0 (YSLA:66-67, 92-95)",
+    "recommended": {
+     "rule": "no listening -> no year rows (chart header only)",
+     "year_rows": []
+    }
+   },
+   "downloads": {
+    "download_inputs": [],
+    "sql_group_order": [],
+    "sql_matches_independent": true,
+    "tie_groups": [],
+    "num_episodes_by_feed": {},
+    "header_value_text": "0 B",
+    "header_value_bytes_float_sum": 0,
+    "exact_total_bytes": 0,
+    "header_caption": "Total size of 0 episodes on the device",
+    "downloaded_episodes": 0,
+    "rows": [],
+    "pie": {
+     "sum": 0.0,
+     "percentages": [],
+     "arcs": [
+      {
+       "index": null,
+       "color": "#FF888888",
+       "start": 183.0,
+       "sweep": 175.5
+      }
+     ]
+    }
+   }
+  },
+  "malformed": {
+   "years": {
+    "sql": "SELECT SUM(played_duration) AS total_duration, strftime('%m', datetime(last_played_time/1000, 'unixepoch')) AS month, strftime('%Y', datetime(last_played_time/1000, 'unixepoch')) AS year FROM FeedMedia WHERE last_played_time > 0 AND played_duration > 0 GROUP BY year, month ORDER BY year, month",
+    "sql_matches_independent": true,
+    "android": {
+     "load_error": "NumberFormatException: Integer.parseInt(null) (DBR:566-567)",
+     "visible": "progress indicator forever; no chart, no rows (YearsStatisticsFragment:88-95)"
+    },
+    "recommended": {
+     "rule": "rows whose date SQLite cannot place (year > 9999) are left out",
+     "monthly": [
+      {
+       "year": 2026,
+       "month": 5,
+       "time_played_ms": 1800000
+      }
+     ],
+     "chart_months": [
+      {
+       "year": 2026,
+       "month": 5,
+       "time_played_ms": 1800000
+      }
+     ],
+     "year_rows": [
+      {
+       "year": 2026,
+       "time_played_ms": 1800000,
+       "year_text": "2026 ",
+       "hours_text": "0.5 hours"
+      }
+     ],
+     "chart": {
+      "canvas": [
+       1000.0,
+       200.0
+      ],
+      "bar_area_height": 180.0,
+      "max_value_ms": 1800000,
+      "bars": [
+       {
+        "index": 0,
+        "year": 2026,
+        "month": 5,
+        "time_played_ms": 1800000,
+        "color": "accent",
+        "height_fraction": 1.0,
+        "left": 366.667,
+        "right": 667.5,
+        "top": 0.0
+       }
+      ],
+      "year_labels": [],
+      "january_separators": [],
+      "grid_lines": [
+       {
+        "label": "0",
+        "value_ms": 0,
+        "y": 180.0,
+        "height_fraction": 0.0
+       },
+       {
+        "label": "0",
+        "value_ms": 0,
+        "y": 180.0,
+        "height_fraction": 0.0
+       }
+      ]
+     }
+    }
+   },
+   "downloads": {
+    "download_inputs": [],
+    "sql_group_order": [
+     1
+    ],
+    "sql_matches_independent": true,
+    "tie_groups": [],
+    "num_episodes_by_feed": {
+     "1": 2
+    },
+    "header_value_text": "0 B",
+    "header_value_bytes_float_sum": 0,
+    "exact_total_bytes": 0,
+    "header_caption": "Total size of 0 episodes on the device",
+    "downloaded_episodes": 0,
+    "rows": [
+     {
+      "feed_id": 1,
+      "title": "Alpha Weekly",
+      "total_download_size": 0,
+      "episodes_download_count": 0,
+      "value_text": "0 B • 0 episodes",
+      "chip_color": "#FF888888",
+      "chip_color_index": null
+     }
+    ],
+    "pie": {
+     "sum": 0.0,
+     "percentages": [
+      0.0
+     ],
+     "arcs": [
+      {
+       "index": null,
+       "color": "#FF888888",
+       "start": 183.0,
+       "sweep": 175.5
+      }
+     ]
+    }
+   }
+  }
+ },
+ "chart_scenarios": [
+  {
+   "name": "empty",
+   "monthly": [],
+   "chart_months": [],
+   "year_rows": [
+    {
+     "year": 0,
+     "time_played_ms": 0,
+     "year_text": "0 ",
+     "hours_text": "0.0 hours"
+    }
+   ],
+   "chart": {
+    "canvas": [
+     1000.0,
+     200.0
+    ],
+    "bar_area_height": 180.0,
+    "max_value_ms": 1,
+    "bars": [],
+    "year_labels": [],
+    "january_separators": [],
+    "grid_lines": [
+     {
+      "label": "0",
+      "value_ms": 0,
+      "y": 180.0,
+      "height_fraction": 0.0
+     },
+     {
+      "label": "0",
+      "value_ms": 0,
+      "y": 180.0,
+      "height_fraction": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "name": "single_month_under_10h",
+   "monthly": [
+    {
+     "year": 2026,
+     "month": 5,
+     "time_played_ms": 1800000
+    }
+   ],
+   "chart_months": [
+    {
+     "year": 2026,
+     "month": 5,
+     "time_played_ms": 1800000
+    }
+   ],
+   "year_rows": [
+    {
+     "year": 2026,
+     "time_played_ms": 1800000,
+     "year_text": "2026 ",
+     "hours_text": "0.5 hours"
+    }
+   ],
+   "chart": {
+    "canvas": [
+     1000.0,
+     200.0
+    ],
+    "bar_area_height": 180.0,
+    "max_value_ms": 1800000,
+    "bars": [
+     {
+      "index": 0,
+      "year": 2026,
+      "month": 5,
+      "time_played_ms": 1800000,
+      "color": "accent",
+      "height_fraction": 1.0,
+      "left": 366.667,
+      "right": 667.5,
+      "top": 0.0
+     }
+    ],
+    "year_labels": [],
+    "january_separators": [],
+    "grid_lines": [
+     {
+      "label": "0",
+      "value_ms": 0,
+      "y": 180.0,
+      "height_fraction": 0.0
+     },
+     {
+      "label": "0",
+      "value_ms": 0,
+      "y": 180.0,
+      "height_fraction": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "name": "first_year_five_months",
+   "monthly": [
+    {
+     "year": 2025,
+     "month": 8,
+     "time_played_ms": 7200000
+    },
+    {
+     "year": 2025,
+     "month": 9,
+     "time_played_ms": 10800000
+    },
+    {
+     "year": 2025,
+     "month": 10,
+     "time_played_ms": 3600000
+    },
+    {
+     "year": 2025,
+     "month": 11,
+     "time_played_ms": 14400000
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "time_played_ms": 18000000
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "time_played_ms": 21600000
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "time_played_ms": 25200000
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "time_played_ms": 28800000
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "time_played_ms": 32400000
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "time_played_ms": 36000000
+    }
+   ],
+   "chart_months": [
+    {
+     "year": 2025,
+     "month": 8,
+     "time_played_ms": 7200000
+    },
+    {
+     "year": 2025,
+     "month": 9,
+     "time_played_ms": 10800000
+    },
+    {
+     "year": 2025,
+     "month": 10,
+     "time_played_ms": 3600000
+    },
+    {
+     "year": 2025,
+     "month": 11,
+     "time_played_ms": 14400000
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "time_played_ms": 18000000
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "time_played_ms": 21600000
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "time_played_ms": 25200000
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "time_played_ms": 28800000
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "time_played_ms": 32400000
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "time_played_ms": 36000000
+    }
+   ],
+   "year_rows": [
+    {
+     "year": 2026,
+     "time_played_ms": 144000000,
+     "year_text": "2026 ",
+     "hours_text": "40.0 hours"
+    },
+    {
+     "year": 2025,
+     "time_played_ms": 54000000,
+     "year_text": "2025 ",
+     "hours_text": "15.0 hours"
+    }
+   ],
+   "chart": {
+    "canvas": [
+     1000.0,
+     200.0
+    ],
+    "bar_area_height": 180.0,
+    "max_value_ms": 36000000,
+    "bars": [
+     {
+      "index": 0,
+      "year": 2025,
+      "month": 8,
+      "time_played_ms": 7200000,
+      "color": "purple",
+      "height_fraction": 0.2,
+      "left": 129.167,
+      "right": 204.375,
+      "top": 144.0
+     },
+     {
+      "index": 1,
+      "year": 2025,
+      "month": 9,
+      "time_played_ms": 10800000,
+      "color": "purple",
+      "height_fraction": 0.3,
+      "left": 208.333,
+      "right": 283.542,
+      "top": 126.0
+     },
+     {
+      "index": 2,
+      "year": 2025,
+      "month": 10,
+      "time_played_ms": 3600000,
+      "color": "purple",
+      "height_fraction": 0.1,
+      "left": 287.5,
+      "right": 362.708,
+      "top": 162.0
+     },
+     {
+      "index": 3,
+      "year": 2025,
+      "month": 11,
+      "time_played_ms": 14400000,
+      "color": "purple",
+      "height_fraction": 0.4,
+      "left": 366.667,
+      "right": 441.875,
+      "top": 108.0
+     },
+     {
+      "index": 4,
+      "year": 2025,
+      "month": 12,
+      "time_played_ms": 18000000,
+      "color": "purple",
+      "height_fraction": 0.5,
+      "left": 445.833,
+      "right": 521.042,
+      "top": 90.0
+     },
+     {
+      "index": 5,
+      "year": 2026,
+      "month": 1,
+      "time_played_ms": 21600000,
+      "color": "accent",
+      "height_fraction": 0.6,
+      "left": 525.0,
+      "right": 600.208,
+      "top": 72.0
+     },
+     {
+      "index": 6,
+      "year": 2026,
+      "month": 2,
+      "time_played_ms": 25200000,
+      "color": "accent",
+      "height_fraction": 0.7,
+      "left": 604.167,
+      "right": 679.375,
+      "top": 54.0
+     },
+     {
+      "index": 7,
+      "year": 2026,
+      "month": 3,
+      "time_played_ms": 28800000,
+      "color": "accent",
+      "height_fraction": 0.8,
+      "left": 683.333,
+      "right": 758.542,
+      "top": 36.0
+     },
+     {
+      "index": 8,
+      "year": 2026,
+      "month": 4,
+      "time_played_ms": 32400000,
+      "color": "accent",
+      "height_fraction": 0.9,
+      "left": 762.5,
+      "right": 837.708,
+      "top": 18.0
+     },
+     {
+      "index": 9,
+      "year": 2026,
+      "month": 5,
+      "time_played_ms": 36000000,
+      "color": "accent",
+      "height_fraction": 1.0,
+      "left": 841.667,
+      "right": 916.875,
+      "top": 0.0
+     }
+    ],
+    "year_labels": [
+     {
+      "index": 0,
+      "text": "2025",
+      "x": 208.333,
+      "y": 196.0
+     },
+     {
+      "index": 5,
+      "text": "2026",
+      "x": 604.167,
+      "y": 196.0
+     }
+    ],
+    "january_separators": [
+     {
+      "index": 5,
+      "x": 525.0
+     }
+    ],
+    "grid_lines": [
+     {
+      "label": "10",
+      "value_ms": 36000000,
+      "y": 0.0,
+      "height_fraction": 1.0
+     },
+     {
+      "label": "5",
+      "value_ms": 18000000,
+      "y": 90.0,
+      "height_fraction": 0.5
+     }
+    ]
+   }
+  },
+  {
+   "name": "january_start_six_months",
+   "monthly": [
+    {
+     "year": 2024,
+     "month": 1,
+     "time_played_ms": 90000000
+    },
+    {
+     "year": 2024,
+     "month": 6,
+     "time_played_ms": 43200000
+    },
+    {
+     "year": 2025,
+     "month": 1,
+     "time_played_ms": 10800000
+    },
+    {
+     "year": 2025,
+     "month": 2,
+     "time_played_ms": 3600000
+    }
+   ],
+   "chart_months": [
+    {
+     "year": 2024,
+     "month": 1,
+     "time_played_ms": 90000000
+    },
+    {
+     "year": 2024,
+     "month": 2,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 3,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 4,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 5,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 6,
+     "time_played_ms": 43200000
+    },
+    {
+     "year": 2024,
+     "month": 7,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 8,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 9,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 10,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 11,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 12,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 1,
+     "time_played_ms": 10800000
+    },
+    {
+     "year": 2025,
+     "month": 2,
+     "time_played_ms": 3600000
+    }
+   ],
+   "year_rows": [
+    {
+     "year": 2025,
+     "time_played_ms": 14400000,
+     "year_text": "2025 ",
+     "hours_text": "4.0 hours"
+    },
+    {
+     "year": 2024,
+     "time_played_ms": 133200000,
+     "year_text": "2024 ",
+     "hours_text": "37.0 hours"
+    }
+   ],
+   "chart": {
+    "canvas": [
+     1000.0,
+     200.0
+    ],
+    "bar_area_height": 180.0,
+    "max_value_ms": 90000000,
+    "bars": [
+     {
+      "index": 0,
+      "year": 2024,
+      "month": 1,
+      "time_played_ms": 90000000,
+      "color": "purple",
+      "height_fraction": 1.0,
+      "left": 109.375,
+      "right": 165.781,
+      "top": 0.0
+     },
+     {
+      "index": 1,
+      "year": 2024,
+      "month": 2,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 168.75,
+      "right": 225.156,
+      "top": 179.1
+     },
+     {
+      "index": 2,
+      "year": 2024,
+      "month": 3,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 228.125,
+      "right": 284.531,
+      "top": 179.1
+     },
+     {
+      "index": 3,
+      "year": 2024,
+      "month": 4,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 287.5,
+      "right": 343.906,
+      "top": 179.1
+     },
+     {
+      "index": 4,
+      "year": 2024,
+      "month": 5,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 346.875,
+      "right": 403.281,
+      "top": 179.1
+     },
+     {
+      "index": 5,
+      "year": 2024,
+      "month": 6,
+      "time_played_ms": 43200000,
+      "color": "purple",
+      "height_fraction": 0.48,
+      "left": 406.25,
+      "right": 462.656,
+      "top": 93.6
+     },
+     {
+      "index": 6,
+      "year": 2024,
+      "month": 7,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 465.625,
+      "right": 522.031,
+      "top": 179.1
+     },
+     {
+      "index": 7,
+      "year": 2024,
+      "month": 8,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 525.0,
+      "right": 581.406,
+      "top": 179.1
+     },
+     {
+      "index": 8,
+      "year": 2024,
+      "month": 9,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 584.375,
+      "right": 640.781,
+      "top": 179.1
+     },
+     {
+      "index": 9,
+      "year": 2024,
+      "month": 10,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 643.75,
+      "right": 700.156,
+      "top": 179.1
+     },
+     {
+      "index": 10,
+      "year": 2024,
+      "month": 11,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 703.125,
+      "right": 759.531,
+      "top": 179.1
+     },
+     {
+      "index": 11,
+      "year": 2024,
+      "month": 12,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 762.5,
+      "right": 818.906,
+      "top": 179.1
+     },
+     {
+      "index": 12,
+      "year": 2025,
+      "month": 1,
+      "time_played_ms": 10800000,
+      "color": "accent",
+      "height_fraction": 0.12,
+      "left": 821.875,
+      "right": 878.281,
+      "top": 158.4
+     },
+     {
+      "index": 13,
+      "year": 2025,
+      "month": 2,
+      "time_played_ms": 3600000,
+      "color": "accent",
+      "height_fraction": 0.04,
+      "left": 881.25,
+      "right": 937.656,
+      "top": 172.8
+     }
+    ],
+    "year_labels": [
+     {
+      "index": 0,
+      "text": "2024",
+      "x": 168.75,
+      "y": 196.0
+     }
+    ],
+    "january_separators": [
+     {
+      "index": 0,
+      "x": 109.375
+     },
+     {
+      "index": 12,
+      "x": 821.875
+     }
+    ],
+    "grid_lines": [
+     {
+      "label": "20",
+      "value_ms": 72000000,
+      "y": 36.0,
+      "height_fraction": 0.8
+     },
+     {
+      "label": "10",
+      "value_ms": 36000000,
+      "y": 108.0,
+      "height_fraction": 0.4
+     }
+    ]
+   }
+  },
+  {
+   "name": "last_year_change_near_end",
+   "monthly": [
+    {
+     "year": 2025,
+     "month": 3,
+     "time_played_ms": 3600000
+    },
+    {
+     "year": 2025,
+     "month": 10,
+     "time_played_ms": 7200000
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "time_played_ms": 162000000
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "time_played_ms": 3600000
+    }
+   ],
+   "chart_months": [
+    {
+     "year": 2025,
+     "month": 3,
+     "time_played_ms": 3600000
+    },
+    {
+     "year": 2025,
+     "month": 4,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 5,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 6,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 7,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 8,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 9,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 10,
+     "time_played_ms": 7200000
+    },
+    {
+     "year": 2025,
+     "month": 11,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "time_played_ms": 162000000
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "time_played_ms": 3600000
+    }
+   ],
+   "year_rows": [
+    {
+     "year": 2026,
+     "time_played_ms": 165600000,
+     "year_text": "2026 ",
+     "hours_text": "46.0 hours"
+    },
+    {
+     "year": 2025,
+     "time_played_ms": 10800000,
+     "year_text": "2025 ",
+     "hours_text": "3.0 hours"
+    }
+   ],
+   "chart": {
+    "canvas": [
+     1000.0,
+     200.0
+    ],
+    "bar_area_height": 180.0,
+    "max_value_ms": 162000000,
+    "bars": [
+     {
+      "index": 0,
+      "year": 2025,
+      "month": 3,
+      "time_played_ms": 3600000,
+      "color": "purple",
+      "height_fraction": 0.022222,
+      "left": 117.857,
+      "right": 182.321,
+      "top": 176.0
+     },
+     {
+      "index": 1,
+      "year": 2025,
+      "month": 4,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 185.714,
+      "right": 250.179,
+      "top": 179.1
+     },
+     {
+      "index": 2,
+      "year": 2025,
+      "month": 5,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 253.571,
+      "right": 318.036,
+      "top": 179.1
+     },
+     {
+      "index": 3,
+      "year": 2025,
+      "month": 6,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 321.429,
+      "right": 385.893,
+      "top": 179.1
+     },
+     {
+      "index": 4,
+      "year": 2025,
+      "month": 7,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 389.286,
+      "right": 453.75,
+      "top": 179.1
+     },
+     {
+      "index": 5,
+      "year": 2025,
+      "month": 8,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 457.143,
+      "right": 521.607,
+      "top": 179.1
+     },
+     {
+      "index": 6,
+      "year": 2025,
+      "month": 9,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 525.0,
+      "right": 589.464,
+      "top": 179.1
+     },
+     {
+      "index": 7,
+      "year": 2025,
+      "month": 10,
+      "time_played_ms": 7200000,
+      "color": "purple",
+      "height_fraction": 0.044444,
+      "left": 592.857,
+      "right": 657.321,
+      "top": 172.0
+     },
+     {
+      "index": 8,
+      "year": 2025,
+      "month": 11,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 660.714,
+      "right": 725.179,
+      "top": 179.1
+     },
+     {
+      "index": 9,
+      "year": 2025,
+      "month": 12,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 728.571,
+      "right": 793.036,
+      "top": 179.1
+     },
+     {
+      "index": 10,
+      "year": 2026,
+      "month": 1,
+      "time_played_ms": 162000000,
+      "color": "accent",
+      "height_fraction": 1.0,
+      "left": 796.429,
+      "right": 860.893,
+      "top": 0.0
+     },
+     {
+      "index": 11,
+      "year": 2026,
+      "month": 2,
+      "time_played_ms": 3600000,
+      "color": "accent",
+      "height_fraction": 0.022222,
+      "left": 864.286,
+      "right": 928.75,
+      "top": 176.0
+     }
+    ],
+    "year_labels": [
+     {
+      "index": 0,
+      "text": "2025",
+      "x": 185.714,
+      "y": 196.0
+     }
+    ],
+    "january_separators": [
+     {
+      "index": 10,
+      "x": 796.429
+     }
+    ],
+    "grid_lines": [
+     {
+      "label": "40",
+      "value_ms": 144000000,
+      "y": 20.0,
+      "height_fraction": 0.888889
+     },
+     {
+      "label": "20",
+      "value_ms": 72000000,
+      "y": 100.0,
+      "height_fraction": 0.444444
+     }
+    ]
+   }
+  },
+  {
+   "name": "three_years_30h",
+   "monthly": [
+    {
+     "year": 2023,
+     "month": 11,
+     "time_played_ms": 108000000
+    },
+    {
+     "year": 2024,
+     "month": 7,
+     "time_played_ms": 54000000
+    },
+    {
+     "year": 2025,
+     "month": 7,
+     "time_played_ms": 1
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "time_played_ms": 107940000
+    }
+   ],
+   "chart_months": [
+    {
+     "year": 2023,
+     "month": 11,
+     "time_played_ms": 108000000
+    },
+    {
+     "year": 2023,
+     "month": 12,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 1,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 2,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 3,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 4,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 5,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 6,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 7,
+     "time_played_ms": 54000000
+    },
+    {
+     "year": 2024,
+     "month": 8,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 9,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 10,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 11,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2024,
+     "month": 12,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 1,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 2,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 3,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 4,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 5,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 6,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 7,
+     "time_played_ms": 1
+    },
+    {
+     "year": 2025,
+     "month": 8,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 9,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 10,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 11,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "time_played_ms": 0
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "time_played_ms": 107940000
+    }
+   ],
+   "year_rows": [
+    {
+     "year": 2026,
+     "time_played_ms": 107940000,
+     "year_text": "2026 ",
+     "hours_text": "30.0 hours"
+    },
+    {
+     "year": 2025,
+     "time_played_ms": 1,
+     "year_text": "2025 ",
+     "hours_text": "0.0 hours"
+    },
+    {
+     "year": 2024,
+     "time_played_ms": 54000000,
+     "year_text": "2024 ",
+     "hours_text": "15.0 hours"
+    },
+    {
+     "year": 2023,
+     "time_played_ms": 108000000,
+     "year_text": "2023 ",
+     "hours_text": "30.0 hours"
+    }
+   ],
+   "chart": {
+    "canvas": [
+     1000.0,
+     200.0
+    ],
+    "bar_area_height": 180.0,
+    "max_value_ms": 108000000,
+    "bars": [
+     {
+      "index": 0,
+      "year": 2023,
+      "month": 11,
+      "time_played_ms": 108000000,
+      "color": "accent",
+      "height_fraction": 1.0,
+      "left": 81.667,
+      "right": 111.75,
+      "top": 0.0
+     },
+     {
+      "index": 1,
+      "year": 2023,
+      "month": 12,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 113.333,
+      "right": 143.417,
+      "top": 179.1
+     },
+     {
+      "index": 2,
+      "year": 2024,
+      "month": 1,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 145.0,
+      "right": 175.083,
+      "top": 179.1
+     },
+     {
+      "index": 3,
+      "year": 2024,
+      "month": 2,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 176.667,
+      "right": 206.75,
+      "top": 179.1
+     },
+     {
+      "index": 4,
+      "year": 2024,
+      "month": 3,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 208.333,
+      "right": 238.417,
+      "top": 179.1
+     },
+     {
+      "index": 5,
+      "year": 2024,
+      "month": 4,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 240.0,
+      "right": 270.083,
+      "top": 179.1
+     },
+     {
+      "index": 6,
+      "year": 2024,
+      "month": 5,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 271.667,
+      "right": 301.75,
+      "top": 179.1
+     },
+     {
+      "index": 7,
+      "year": 2024,
+      "month": 6,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 303.333,
+      "right": 333.417,
+      "top": 179.1
+     },
+     {
+      "index": 8,
+      "year": 2024,
+      "month": 7,
+      "time_played_ms": 54000000,
+      "color": "purple",
+      "height_fraction": 0.5,
+      "left": 335.0,
+      "right": 365.083,
+      "top": 90.0
+     },
+     {
+      "index": 9,
+      "year": 2024,
+      "month": 8,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 366.667,
+      "right": 396.75,
+      "top": 179.1
+     },
+     {
+      "index": 10,
+      "year": 2024,
+      "month": 9,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 398.333,
+      "right": 428.417,
+      "top": 179.1
+     },
+     {
+      "index": 11,
+      "year": 2024,
+      "month": 10,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 430.0,
+      "right": 460.083,
+      "top": 179.1
+     },
+     {
+      "index": 12,
+      "year": 2024,
+      "month": 11,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 461.667,
+      "right": 491.75,
+      "top": 179.1
+     },
+     {
+      "index": 13,
+      "year": 2024,
+      "month": 12,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 493.333,
+      "right": 523.417,
+      "top": 179.1
+     },
+     {
+      "index": 14,
+      "year": 2025,
+      "month": 1,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 525.0,
+      "right": 555.083,
+      "top": 179.1
+     },
+     {
+      "index": 15,
+      "year": 2025,
+      "month": 2,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 556.667,
+      "right": 586.75,
+      "top": 179.1
+     },
+     {
+      "index": 16,
+      "year": 2025,
+      "month": 3,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 588.333,
+      "right": 618.417,
+      "top": 179.1
+     },
+     {
+      "index": 17,
+      "year": 2025,
+      "month": 4,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 620.0,
+      "right": 650.083,
+      "top": 179.1
+     },
+     {
+      "index": 18,
+      "year": 2025,
+      "month": 5,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 651.667,
+      "right": 681.75,
+      "top": 179.1
+     },
+     {
+      "index": 19,
+      "year": 2025,
+      "month": 6,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 683.333,
+      "right": 713.417,
+      "top": 179.1
+     },
+     {
+      "index": 20,
+      "year": 2025,
+      "month": 7,
+      "time_played_ms": 1,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 715.0,
+      "right": 745.083,
+      "top": 179.1
+     },
+     {
+      "index": 21,
+      "year": 2025,
+      "month": 8,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 746.667,
+      "right": 776.75,
+      "top": 179.1
+     },
+     {
+      "index": 22,
+      "year": 2025,
+      "month": 9,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 778.333,
+      "right": 808.417,
+      "top": 179.1
+     },
+     {
+      "index": 23,
+      "year": 2025,
+      "month": 10,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 810.0,
+      "right": 840.083,
+      "top": 179.1
+     },
+     {
+      "index": 24,
+      "year": 2025,
+      "month": 11,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 841.667,
+      "right": 871.75,
+      "top": 179.1
+     },
+     {
+      "index": 25,
+      "year": 2025,
+      "month": 12,
+      "time_played_ms": 0,
+      "color": "accent",
+      "height_fraction": 0.005,
+      "left": 873.333,
+      "right": 903.417,
+      "top": 179.1
+     },
+     {
+      "index": 26,
+      "year": 2026,
+      "month": 1,
+      "time_played_ms": 0,
+      "color": "purple",
+      "height_fraction": 0.005,
+      "left": 905.0,
+      "right": 935.083,
+      "top": 179.1
+     },
+     {
+      "index": 27,
+      "year": 2026,
+      "month": 2,
+      "time_played_ms": 107940000,
+      "color": "purple",
+      "height_fraction": 0.999444,
+      "left": 936.667,
+      "right": 966.75,
+      "top": 0.1
+     }
+    ],
+    "year_labels": [
+     {
+      "index": 2,
+      "text": "2024",
+      "x": 176.667,
+      "y": 196.0
+     },
+     {
+      "index": 14,
+      "text": "2025",
+      "x": 556.667,
+      "y": 196.0
+     }
+    ],
+    "january_separators": [
+     {
+      "index": 2,
+      "x": 145.0
+     },
+     {
+      "index": 14,
+      "x": 525.0
+     },
+     {
+      "index": 26,
+      "x": 905.0
+     }
+    ],
+    "grid_lines": [
+     {
+      "label": "30",
+      "value_ms": 108000000,
+      "y": 0.0,
+      "height_fraction": 1.0
+     },
+     {
+      "label": "15",
+      "value_ms": 54000000,
+      "y": 90.0,
+      "height_fraction": 0.5
+     }
+    ]
+   }
+  }
+ ],
+ "pie_scenarios": [
+  {
+   "name": "all_zero",
+   "values": [
+    0,
+    0,
+    0
+   ],
+   "sum": 0.0,
+   "percentages": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "colors": [
+    "#FF888888",
+    "#FF888888",
+    "#FF888888"
+   ],
+   "arcs": [
+    {
+     "index": null,
+     "color": "#FF888888",
+     "start": 183.0,
+     "sweep": 175.5
+    }
+   ]
+  },
+  {
+   "name": "exactly_four_percent",
+   "values": [
+    96,
+    4
+   ],
+   "sum": 100.0,
+   "percentages": [
+    0.96,
+    0.04
+   ],
+   "colors": [
+    "#FF3775E6",
+    "#FF888888"
+   ],
+   "arcs": [
+    {
+     "index": 0,
+     "color": "#FF3775E6",
+     "start": 181.5,
+     "sweep": 168.42
+    },
+    {
+     "index": null,
+     "color": "#FF888888",
+     "start": 352.92,
+     "sweep": 5.58
+    }
+   ]
+  },
+  {
+   "name": "seventeen_equal_slices",
+   "values": [
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000,
+    1000
+   ],
+   "sum": 17000.0,
+   "percentages": [
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824,
+    0.058824
+   ],
+   "colors": [
+    "#FF3775E6",
+    "#FFE51C23",
+    "#FFFF9800",
+    "#FF259B24",
+    "#FF9C27B0",
+    "#FF0099C6",
+    "#FFDD4477",
+    "#FF66AA00",
+    "#FFB82E2E",
+    "#FF316395",
+    "#FF994499",
+    "#FF22AA99",
+    "#FFAAAA11",
+    "#FF6633CC",
+    "#FF0073E6",
+    "#FF3775E6",
+    "#FFE51C23"
+   ],
+   "arcs": [
+    {
+     "index": 0,
+     "color": "#FF3775E6",
+     "start": 181.5,
+     "sweep": 8.9118
+    },
+    {
+     "index": 1,
+     "color": "#FFE51C23",
+     "start": 193.4118,
+     "sweep": 7.4118
+    },
+    {
+     "index": 2,
+     "color": "#FFFF9800",
+     "start": 203.8235,
+     "sweep": 7.4118
+    },
+    {
+     "index": 3,
+     "color": "#FF259B24",
+     "start": 214.2353,
+     "sweep": 7.4118
+    },
+    {
+     "index": 4,
+     "color": "#FF9C27B0",
+     "start": 224.647,
+     "sweep": 7.4118
+    },
+    {
+     "index": 5,
+     "color": "#FF0099C6",
+     "start": 235.0588,
+     "sweep": 7.4118
+    },
+    {
+     "index": 6,
+     "color": "#FFDD4477",
+     "start": 245.4706,
+     "sweep": 7.4118
+    },
+    {
+     "index": 7,
+     "color": "#FF66AA00",
+     "start": 255.8823,
+     "sweep": 7.4118
+    },
+    {
+     "index": 8,
+     "color": "#FFB82E2E",
+     "start": 266.2941,
+     "sweep": 7.4118
+    },
+    {
+     "index": 9,
+     "color": "#FF316395",
+     "start": 276.7058,
+     "sweep": 7.4118
+    },
+    {
+     "index": 10,
+     "color": "#FF994499",
+     "start": 287.1176,
+     "sweep": 7.4118
+    },
+    {
+     "index": 11,
+     "color": "#FF22AA99",
+     "start": 297.5294,
+     "sweep": 7.4118
+    },
+    {
+     "index": 12,
+     "color": "#FFAAAA11",
+     "start": 307.9412,
+     "sweep": 7.4118
+    },
+    {
+     "index": 13,
+     "color": "#FF6633CC",
+     "start": 318.3529,
+     "sweep": 7.4118
+    },
+    {
+     "index": 14,
+     "color": "#FF0073E6",
+     "start": 328.7647,
+     "sweep": 7.4118
+    },
+    {
+     "index": 15,
+     "color": "#FF3775E6",
+     "start": 339.1765,
+     "sweep": 7.4118
+    },
+    {
+     "index": 16,
+     "color": "#FFE51C23",
+     "start": 349.5883,
+     "sweep": 7.4118
+    }
+   ]
+  },
+  {
+   "name": "one_feed",
+   "values": [
+    123456789
+   ],
+   "sum": 123456792.0,
+   "percentages": [
+    1.0
+   ],
+   "colors": [
+    "#FF3775E6"
+   ],
+   "arcs": [
+    {
+     "index": 0,
+     "color": "#FF3775E6",
+     "start": 181.5,
+     "sweep": 175.5
+    }
+   ]
+  },
+  {
+   "name": "empty",
+   "values": [],
+   "sum": 0.0,
+   "percentages": [],
+   "colors": [],
+   "arcs": [
+    {
+     "index": null,
+     "color": "#FF888888",
+     "start": 183.0,
+     "sweep": 175.5
+    }
+   ]
+  }
+ ],
+ "format_check": {
+  "capture": "Android 3.12.1 runtime capture of the statistics cards' formats",
+  "en_us_sizes_compared": 68,
+  "en_us_durations_compared": 68,
+  "mismatches": []
+ }
+}

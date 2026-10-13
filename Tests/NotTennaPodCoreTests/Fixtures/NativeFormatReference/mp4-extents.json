@@ -1,0 +1,423 @@
+{
+  "runID": "c875ac2c-21c6-44f6-9678-caacacd6cc83",
+  "device": "google\/sdk_gphone64_arm64\/emu64a:16\/BE2A.250530.026.F3\/13894323:userdebug\/dev-keys",
+  "complete": true,
+  "cases": [
+    {
+      "name": "tone-large-tail.m4a",
+      "knownLength": true,
+      "truncated": false,
+      "size": 2163881,
+      "sha256": "536390e5ae0ce280f75e49fa69d0d51cf7c5e752728f20c075e1369a99192d09",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 44,
+              "secondTimeUs": 1,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 8061,
+              "secondTimeUs": 999999,
+              "secondPosition": 8061
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 31305,
+              "secondTimeUs": 3883000,
+              "secondPosition": 31305
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 32160,
+              "secondTimeUs": 4000000,
+              "secondPosition": 32160
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 64183,
+              "secondTimeUs": 7990000,
+              "secondPosition": 64183
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 8000000,
+              "secondPosition": 64350
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 20000000,
+              "secondPosition": 64350
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0,
+        2161659,
+        44
+      ],
+      "readBytes": 66729,
+      "iterations": 379,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 8000000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone-large-tail.m4a",
+      "knownLength": false,
+      "truncated": false,
+      "size": 2163881,
+      "sha256": "536390e5ae0ce280f75e49fa69d0d51cf7c5e752728f20c075e1369a99192d09",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 44,
+              "secondTimeUs": 1,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 8061,
+              "secondTimeUs": 999999,
+              "secondPosition": 8061
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 31305,
+              "secondTimeUs": 3883000,
+              "secondPosition": 31305
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 32160,
+              "secondTimeUs": 4000000,
+              "secondPosition": 32160
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 64183,
+              "secondTimeUs": 7990000,
+              "secondPosition": 64183
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 8000000,
+              "secondPosition": 64350
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 20000000,
+              "secondPosition": 64350
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0,
+        2161659,
+        44
+      ],
+      "readBytes": 66729,
+      "iterations": 379,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 8000000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone-extended-tail.m4a",
+      "knownLength": true,
+      "truncated": false,
+      "size": 2163897,
+      "sha256": "165bc69441a710985fd5442265efa7951caaced660554a7794f9c71c11d12c4e",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 44,
+              "secondTimeUs": 1,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 8061,
+              "secondTimeUs": 999999,
+              "secondPosition": 8061
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 31305,
+              "secondTimeUs": 3883000,
+              "secondPosition": 31305
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 32160,
+              "secondTimeUs": 4000000,
+              "secondPosition": 32160
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 64183,
+              "secondTimeUs": 7990000,
+              "secondPosition": 64183
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 8000000,
+              "secondPosition": 64350
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 20000000,
+              "secondPosition": 64350
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0,
+        2161675,
+        44
+      ],
+      "readBytes": 131208,
+      "iterations": 379,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 8000000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone-extended-tail.m4a",
+      "knownLength": false,
+      "truncated": false,
+      "size": 2163897,
+      "sha256": "165bc69441a710985fd5442265efa7951caaced660554a7794f9c71c11d12c4e",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 44,
+              "secondTimeUs": 1,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 8061,
+              "secondTimeUs": 999999,
+              "secondPosition": 8061
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 31305,
+              "secondTimeUs": 3883000,
+              "secondPosition": 31305
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 32160,
+              "secondTimeUs": 4000000,
+              "secondPosition": 32160
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 64183,
+              "secondTimeUs": 7990000,
+              "secondPosition": 64183
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 8000000,
+              "secondPosition": 64350
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 20000000,
+              "secondPosition": 64350
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0,
+        2161675,
+        44
+      ],
+      "readBytes": 131208,
+      "iterations": 379,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 8000000
+          }
+        }
+      ]
+    }
+  ]
+}

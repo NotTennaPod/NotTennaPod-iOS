@@ -1,0 +1,1093 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "sourceSHA256": "16fc3eb5877716bc6cbe585d76deb75c0f3a43486976136296163763e423564b",
+  "methods": {
+    "lazy": "5011175fb9a48ae338c33a143e2fab73421e2c19e4a9d6dcdbbab9e2cd3dba71",
+    "check": "8a790e67a1f47ef39e93b34c0483af584fdb804a2bde5d97763185479e3fdb59",
+    "available": "44e6ea30847c2c54a6d529f64f7a80c42c83104c2e3c9616eb6745f360941f78",
+    "downloaded": "60c074f7a596ad3eb34eb3e5f787dc9c4c1d9ac6a808a36ca9cb1d4afbf73395"
+  },
+  "boundary": "Unchanged FeedMedia lazy/check/availability/downloaded methods on JBR. Counted native-retriever adapter; no real media, Android UI or database execution.",
+  "cases": [
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 1
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 1
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 1
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 1
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 1
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 1
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 1
+    },
+    {
+      "known": null,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 1
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": false,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": false,
+      "second": false,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": -1,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 0,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": null,
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": null,
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": null,
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": null,
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": "",
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": "",
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": "",
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": "",
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": false,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": false,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": true,
+      "failure": false,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    },
+    {
+      "known": true,
+      "downloadDate": 1,
+      "path": "/media",
+      "picture": true,
+      "failure": true,
+      "expected": true,
+      "second": true,
+      "reads": 0
+    }
+  ]
+}

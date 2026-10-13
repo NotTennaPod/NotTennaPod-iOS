@@ -1,0 +1,147 @@
+{
+  "source": "synthetic chirp plus seeded low-passed noise; no recordings",
+  "seconds": 6.0,
+  "ffmpeg": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": [
+    {
+      "name": "marker-8k-mono.mp3",
+      "sha256": "296276ed0b3b5eaddb4728b7de794816a722b41be35cae3d88992ad269b7f161",
+      "seed": 1,
+      "sampleRate": 8000,
+      "channels": 1,
+      "arguments": [
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libmp3lame",
+        "-b:a",
+        "16k"
+      ],
+      "framesPerPacket": 576,
+      "audioFrames": 86,
+      "header": {
+        "marker": "Info",
+        "hasTable": true,
+        "encoderDelay": 576,
+        "encoderPadding": 960
+      },
+      "framesUsingReservoir": 85
+    },
+    {
+      "name": "marker-16k-mono.mp3",
+      "sha256": "90023a341e11d55491584acb2fcfe2a0e2bb5f5656045e49ca3392137868d548",
+      "seed": 2,
+      "sampleRate": 16000,
+      "channels": 1,
+      "arguments": [
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libmp3lame",
+        "-b:a",
+        "32k"
+      ],
+      "framesPerPacket": 576,
+      "audioFrames": 169,
+      "header": {
+        "marker": "Info",
+        "hasTable": true,
+        "encoderDelay": 576,
+        "encoderPadding": 768
+      },
+      "framesUsingReservoir": 168
+    },
+    {
+      "name": "marker-22k-stereo-vbr.mp3",
+      "sha256": "9990022f210fc75edcd676c62c5abb224ca44f6d7623c3b1d0ee4178d8a54388",
+      "seed": 3,
+      "sampleRate": 22050,
+      "channels": 2,
+      "arguments": [
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libmp3lame",
+        "-q:a",
+        "8"
+      ],
+      "framesPerPacket": 576,
+      "audioFrames": 232,
+      "header": {
+        "marker": "Xing",
+        "hasTable": true,
+        "encoderDelay": 576,
+        "encoderPadding": 756
+      },
+      "framesUsingReservoir": 231
+    },
+    {
+      "name": "marker-44k-stereo-vbr.mp3",
+      "sha256": "d7c975710274e1bc2e82c568e091210b605f7d2ad5d7b1fbe6b76508347b0e60",
+      "seed": 4,
+      "sampleRate": 44100,
+      "channels": 2,
+      "arguments": [
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libmp3lame",
+        "-q:a",
+        "7"
+      ],
+      "framesPerPacket": 1152,
+      "audioFrames": 231,
+      "header": {
+        "marker": "Xing",
+        "hasTable": true,
+        "encoderDelay": 576,
+        "encoderPadding": 936
+      },
+      "framesUsingReservoir": 230
+    },
+    {
+      "name": "marker-48k-mono.mp3",
+      "sha256": "1df57966d11f7aa223a0f9080762ec73a915180256064bb4987969698d887cdb",
+      "seed": 5,
+      "sampleRate": 48000,
+      "channels": 1,
+      "arguments": [
+        "-map_metadata",
+        "-1",
+        "-fflags",
+        "+bitexact",
+        "-flags:a",
+        "+bitexact",
+        "-c:a",
+        "libmp3lame",
+        "-b:a",
+        "64k"
+      ],
+      "framesPerPacket": 1152,
+      "audioFrames": 251,
+      "header": {
+        "marker": "Info",
+        "hasTable": true,
+        "encoderDelay": 576,
+        "encoderPadding": 576
+      },
+      "framesUsingReservoir": 250
+    }
+  ]
+}

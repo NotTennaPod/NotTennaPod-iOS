@@ -1,0 +1,127 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "density": 2.625,
+  "width": 1080,
+  "fontSize": 14,
+  "fontUnits": 2048,
+  "fontAscent": 1900,
+  "fontDescent": 500,
+  "fontTop": 2163,
+  "fontBottom": 555,
+  "cases": [
+    {
+      "capture": "03-stream-prompt",
+      "xmlSHA256": "60322f8fcbfb1b2ad525504ca75eeb93eb4648d8fa456ecb7aa0f2c03f20dc34",
+      "offerStreaming": true,
+      "anchorBottom": 586,
+      "bounds": {
+        "card": [
+          26,
+          586,
+          1054,
+          944
+        ],
+        "message": [
+          68,
+          628,
+          1012,
+          765
+        ],
+        "no": [
+          550,
+          776,
+          781,
+          902
+        ],
+        "yes": [
+          781,
+          776,
+          1012,
+          902
+        ],
+        "arrow": [
+          265,
+          555,
+          297,
+          587
+        ]
+      }
+    },
+    {
+      "capture": "08-confirmed-before-back",
+      "xmlSHA256": "60322f8fcbfb1b2ad525504ca75eeb93eb4648d8fa456ecb7aa0f2c03f20dc34",
+      "offerStreaming": true,
+      "anchorBottom": 586,
+      "bounds": {
+        "card": [
+          26,
+          586,
+          1054,
+          944
+        ],
+        "message": [
+          68,
+          628,
+          1012,
+          765
+        ],
+        "no": [
+          550,
+          776,
+          781,
+          902
+        ],
+        "yes": [
+          781,
+          776,
+          1012,
+          902
+        ],
+        "arrow": [
+          265,
+          555,
+          297,
+          587
+        ]
+      }
+    },
+    {
+      "capture": "11-download-prompt",
+      "xmlSHA256": "7ceee136218314b396e2475b8821ed794b2cf298a31b877a40296da5c9622a94",
+      "offerStreaming": false,
+      "anchorBottom": 586,
+      "bounds": {
+        "card": [
+          26,
+          586,
+          1054,
+          944
+        ],
+        "message": [
+          68,
+          628,
+          1012,
+          765
+        ],
+        "no": [
+          550,
+          776,
+          781,
+          902
+        ],
+        "yes": [
+          781,
+          776,
+          1012,
+          902
+        ],
+        "arrow": [
+          784,
+          555,
+          816,
+          587
+        ]
+      }
+    }
+  ]
+}

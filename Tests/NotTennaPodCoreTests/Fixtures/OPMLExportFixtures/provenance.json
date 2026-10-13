@@ -1,0 +1,41 @@
+{
+  "commands": [
+    [
+      "javac",
+      "-encoding",
+      "UTF-8",
+      "-cp",
+      ".work/opml-export/a2/oracle/kxml2.jar",
+      "-d",
+      ".work/opml-export/a2/oracle/classes",
+      ".work/opml-export/a2/oracle/src/DateProbe.java",
+      ".work/opml-export/a2/oracle/src/Probe.java",
+      ".work/opml-export/a2/oracle/src/android/util/Log.java",
+      ".work/opml-export/a2/oracle/src/android/util/Xml.java",
+      ".work/opml-export/a2/oracle/src/de/danoeh/antennapod/model/feed/Feed.java",
+      ".work/opml-export/a2/oracle/src/de/danoeh/antennapod/storage/importexport/OpmlSymbols.java",
+      ".work/opml-export/a2/oracle/src/de/danoeh/antennapod/storage/importexport/OpmlWriter.java"
+    ],
+    [
+      "java",
+      "-Duser.timezone=Asia/Kathmandu",
+      "-cp",
+      ".work/opml-export/a2/oracle/classes:.work/opml-export/a2/oracle/kxml2.jar",
+      "Probe",
+      ".work/opml-export/a2/oracle/raw"
+    ],
+    [
+      "java",
+      "-cp",
+      ".work/opml-export/a2/oracle/classes:.work/opml-export/a2/oracle/kxml2.jar",
+      "DateProbe"
+    ]
+  ],
+  "serializer": "Cached upstream KXml2 2.3.0, not verified Android platform fork",
+  "model": "Minimal data adapter; title fallback copied from pinned source; no DBReader execution",
+  "source": {
+    "OpmlWriter.java": "a8ac38eba604d0e5c22c428aacbfada847214ac93226dd041c31ae599a5d4860",
+    "OpmlSymbols.java": "119ddd65a9f0441e4bf8b91ec6131a403ff9facdc8c0dc85b4fb9208779f7c1a"
+  },
+  "jarSHA256": "f264dd9f79a1fde10ce5ecc53221eff24be4c9331c830b7d52f2f08a7b633de2"
+}

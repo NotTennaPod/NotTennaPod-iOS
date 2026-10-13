@@ -1,0 +1,34 @@
+{
+  "now_ms": 1790000000000,
+  "schema_from": "TestSupport/Data/database-restore/android-3.12.1/first-journey-downloaded.db",
+  "fixtures": {
+    "mixed": {
+      "path": "TestSupport/Data/subscriptions-screen/databases/mixed.db",
+      "user_version": 3110000,
+      "feeds": 20,
+      "items": 59,
+      "doc": "Subscribed counters NEW/UNPLAYED/DOWNLOADED/DOWNLOADED_UNPLAYED and played (read=1) count:\n1 alpha 2/3/0/0 p1 | 2 Alpha 2/3/1/1 p0 | 3 ALPHA 2/2/2/0 p2 | 4 Zebra 5/5/0/0 p0 |\n5 Äpfel 1/1/1/1 p1 | 6 apfel 1/4/0/0 p0 | 7 İstanbul 0/0/0/0 p3 | 8 istanbul 0/1/1/1 p0 |\n9 ßRadio 3/3/0/0 p0 (all pubDates NULL) | 10 ssradio 3/3/3/3 p0 | 11 custom 'Aardvark custom'\n1/1/0/0 | 12 empty custom title 0/0/1/0 p1 | 13 emoji 2/2/0/0 | 14 fullwidth 2/2/0/0 |\n18 no episodes | 19 Tech Talk 0/1/0/0 p1 | 20 four media-less NEW items 4/4/0/0.\n15/16 archived (2) and 17 preview (1) have NEW/downloaded episodes but never get counters.\nTags: 2 {News}, 3 {news,#root}, 8 {Tech,#root}, 15 {News}, 19 {Tech}; others root."
+    },
+    "nulltitle": {
+      "path": "TestSupport/Data/subscriptions-screen/databases/nulltitle.db",
+      "user_version": 3110000,
+      "feeds": 4,
+      "items": 11,
+      "doc": "no feeds"
+    },
+    "archiveonly": {
+      "path": "TestSupport/Data/subscriptions-screen/databases/archiveonly.db",
+      "user_version": 3110000,
+      "feeds": 3,
+      "items": 6,
+      "doc": "no feeds"
+    },
+    "empty": {
+      "path": "TestSupport/Data/subscriptions-screen/databases/empty.db",
+      "user_version": 3110000,
+      "feeds": 0,
+      "items": 0,
+      "doc": "no feeds"
+    }
+  }
+}

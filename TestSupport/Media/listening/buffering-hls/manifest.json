@@ -1,0 +1,42 @@
+{
+  "source": "Tests/NotTennaPodCoreTests/Fixtures/playback-30sec.mp3",
+  "sourceSHA256": "93209db68e1db6c3fed062b8ae530e1d00eb50d42b8d46e3da72b725ae211271",
+  "command": [
+    "ffmpeg",
+    "-hide_banner",
+    "-y",
+    "-i",
+    "Tests/NotTennaPodCoreTests/Fixtures/playback-30sec.mp3",
+    "-c:a",
+    "aac",
+    "-b:a",
+    "64k",
+    "-hls_time",
+    "2",
+    "-hls_playlist_type",
+    "vod",
+    "-hls_segment_filename",
+    "TestSupport/Media/listening/buffering-hls/part%02d.ts",
+    "TestSupport/Media/listening/buffering-hls/index.m3u8"
+  ],
+  "ffmpegVersion": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": {
+    "part09.ts": "e016a58f33e0add295d12db89dff9930beaa0e584365644b9b93a2e11c1a61e2",
+    "part08.ts": "a1f1e82a1bef8de97a98f72991f7a7a79db864824eec91a438c855be9052e9ec",
+    "part07.ts": "d031c828d1408faa20ab94e9236b9d8255dcbfc0377b97a4b6421b427e881a64",
+    "part03.ts": "f0f7a994aded1547ba769bac3403bca4ebe27038d29415f7888f3b11a644c843",
+    "part13.ts": "7de07d60f538e8395d5ef75fd6cb14e767ac174a88168cb8ff5998fc4e70fc29",
+    "part02.ts": "f72df35e24274bb1473a0a8ddb03492c8fca69053a5ee5952a1b6ce9097741c4",
+    "part12.ts": "d049ac765331282d62c1ec11b2287711d309c6f2014d067f23813ee0c2d3e6f1",
+    "part06.ts": "8b637d43f951401ed54c7dccba680321befa7c5121b8023dc3b654743a273ff3",
+    "index.m3u8": "0f99e7f5b7748c840b4db1e993ed10fd36d4cd8253908cfa8fcb06f19286ffc4",
+    "part01.ts": "1cd926df6a030e43aa05bbbbb94213579b4dbff1c59852adb325f0f938efe5cf",
+    "part11.ts": "a85d5c3b6b82a77d4e71e273416632256758bd8b610e0eb00f240e8391f51474",
+    "part05.ts": "7fb4a4e249181d81afe70817e7e396600171dae1106d63413224f29d9df3f89d",
+    "part15.ts": "8e44fa45cbf3222310107fbd68c11bd61154281c54bac80f99fa2664532b154c",
+    "part04.ts": "d29ab212a21012a5d94ba1288878255287f094bcf3035b455fe6f94c2a00fcc4",
+    "part14.ts": "0a5dc5e9b8b80dea09ca047fd5b8d58c7a7e24bfeb40c215733b4adc848e4af8",
+    "part00.ts": "2028a0ff26f8ed1ec8e1e4ab4a614251bf3bbe3463af848b3f757b4ed0d0acfb",
+    "part10.ts": "6024ad186ae805ce8226db043f27db8a4f64332236ba110d9ce06a318ac0e9de"
+  }
+}

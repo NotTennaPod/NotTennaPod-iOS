@@ -1,0 +1,95 @@
+{
+  "hosts": [
+    {
+      "host": "",
+      "valid": false
+    },
+    {
+      "host": "localhost",
+      "valid": true
+    },
+    {
+      "host": "LOCALHOST",
+      "valid": false
+    },
+    {
+      "host": "127.0.0.1",
+      "valid": true
+    },
+    {
+      "host": "255.255.255.255",
+      "valid": true
+    },
+    {
+      "host": "256.1.1.1",
+      "valid": false
+    },
+    {
+      "host": "001.002.003.004",
+      "valid": true
+    },
+    {
+      "host": "::1",
+      "valid": false
+    },
+    {
+      "host": "[::1]",
+      "valid": false
+    },
+    {
+      "host": "example.com",
+      "valid": true
+    },
+    {
+      "host": "example",
+      "valid": false
+    },
+    {
+      "host": "a.b",
+      "valid": false
+    },
+    {
+      "host": "a.12",
+      "valid": false
+    },
+    {
+      "host": "example.com.",
+      "valid": false
+    },
+    {
+      "host": "-x.example",
+      "valid": false
+    },
+    {
+      "host": "x-.example",
+      "valid": false
+    },
+    {
+      "host": "a_b.example",
+      "valid": true
+    },
+    {
+      "host": "例え.テスト",
+      "valid": true
+    },
+    {
+      "host": "xn--r8jz45g.xn--zckzah",
+      "valid": true
+    },
+    {
+      "host": " example.com",
+      "valid": false
+    },
+    {
+      "host": "http:\/\/example.com",
+      "valid": false
+    },
+    {
+      "host": "example.com:8080",
+      "valid": false
+    }
+  ],
+  "domainPattern": "(([a-zA-Z0-9[ -퟿豈-﷏ﷰ-￯𐀀-🿽𠀀-𯿽𰀀-𿿽񀀀-񏿽񐀀-񟿽񠀀-񯿽񰀀-񿿽򀀀-򏿽򐀀-򟿽򠀀-򯿽򰀀-򿿽󀀀-󏿽󐀀-󟿽󡀀-󯿽&&[^ [ - ]   　]]](?:[a-zA-Z0-9[ -퟿豈-﷏ﷰ-￯𐀀-🿽𠀀-𯿽𰀀-𿿽񀀀-񏿽񐀀-񟿽񠀀-񯿽񰀀-񿿽򀀀-򏿽򐀀-򟿽򠀀-򯿽򰀀-򿿽󀀀-󏿽󐀀-󟿽󡀀-󯿽&&[^ [ - ]   　]]_\\-]{0,61}[a-zA-Z0-9[ -퟿豈-﷏ﷰ-￯𐀀-🿽𠀀-𯿽𰀀-𿿽񀀀-񏿽񐀀-񟿽񠀀-񯿽񰀀-񿿽򀀀-򏿽򐀀-򟿽򠀀-򯿽򰀀-򿿽󀀀-󏿽󐀀-󟿽󡀀-󯿽&&[^ [ - ]   　]]]){0,1}\\.)+(xn\\-\\-[\\w\\-]{0,58}\\w|[a-zA-Z[ -퟿豈-﷏ﷰ-￯𐀀-🿽𠀀-𯿽𰀀-𿿽񀀀-񏿽񐀀-񟿽񠀀-񯿽񰀀-񿿽򀀀-򏿽򐀀-򟿽򠀀-򯿽򰀀-򿿽󀀀-󏿽󐀀-󟿽󡀀-󯿽&&[^ [ - ]   　]]]{2,63})|((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9])))",
+  "overflowPassesValidationButDirectOKThrows": true,
+  "resetPersistedHTTPWithEmptyFields": true
+}

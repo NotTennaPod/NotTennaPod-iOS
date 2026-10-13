@@ -1,0 +1,15 @@
+PodcastLoudnessCompressor.swift adapts the Android Open Source Project's
+AdaptiveDynamicRangeCompression and logarithm approximation.
+Copyright (C) 2013 The Android Open Source Project.
+Licensed under the Apache License, Version 2.0 (see Apache-2.0.txt).
+
+Source: platform/frameworks/av, commit4b2111885ff934799e70eddae2527a9848c3be29 (android16-release),
+media/libeffects/loudness/dsp/core/dynamic_range_compression.{h,cpp}
+https://android.googlesource.com/platform/frameworks/av/+/4b2111885ff934799e70eddae2527a9848c3be29/media/libeffects/loudness/dsp/core/
+
+Changes: expressed in Swift; accepts a frame peak and returns one linked-channel
+multiplier; uses normalized samples at its interface; source attenuation and
+boost selection are represented by FeedVolumeAdaptation.
+
+The history-dependent interpolation interval defect is corrected; intended knee
+table values are interpolated deterministically.

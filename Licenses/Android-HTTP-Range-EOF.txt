@@ -1,0 +1,13 @@
+HTTPMediaRangeEnd and HTTPCodecByteInput's exact range-EOF branch follow the
+position/document-size rule of AndroidX Media3 1.10.0:
+  androidx/media3/datasource/DefaultHttpDataSource.java
+  androidx/media3/datasource/HttpUtil.java
+
+Copyright The Android Open Source Project
+Licensed under the Apache License, Version 2.0.
+See Apache-2.0.txt for the license text.
+
+Source archive: media3-datasource-1.10.0-sources.jar
+SHA256: bf5bc232562a360a2f3170889a02ec2813f15efa2f46b142859dc62f6fb4847c
+Adaptation: Swift HTTP range-end validation and response ownership. Existing
+representation, cancellation and byte-coverage checks remain in place.

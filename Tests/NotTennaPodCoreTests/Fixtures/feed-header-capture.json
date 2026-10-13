@@ -1,0 +1,56 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "source": "Android 3.12.1 first-journey capture, screen 07-subscribed",
+  "captureHashes": {
+    "screen.png": "edefa7d37f3b1d1434ac50fa45db43331f2546d14f2fb7ef9f6389a504696cfd",
+    "hierarchy.xml": "e971588647a7827b215bca31ebba3c4e69189cab9e711f11e53318065d5a999a"
+  },
+  "density": 2.625,
+  "widthPixels": 1080,
+  "heightPixels": 410,
+  "frames": {
+    "cover": [
+      42,
+      21,
+      326,
+      326
+    ],
+    "actionStrip": [
+      0,
+      284,
+      1080,
+      126
+    ],
+    "info": [
+      378,
+      284,
+      126,
+      126
+    ],
+    "filter": [
+      504,
+      284,
+      126,
+      126
+    ],
+    "settings": [
+      630,
+      284,
+      126,
+      126
+    ],
+    "title": [
+      410,
+      113,
+      628,
+      78
+    ],
+    "author": [
+      410,
+      191,
+      628,
+      51
+    ]
+  },
+  "scope": "Original subscribed phone header only; source XML is the specification for uncaptured variants."
+}

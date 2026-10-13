@@ -1,0 +1,181 @@
+{
+  "files": [
+    {
+      "name": "lc-gapless.m4a",
+      "sha256": "175aaa4ac79a46596dd62724e69f70335e42c37cfc43a5a5803b0f361f4b103d",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          4000,
+          512
+        ]
+      ],
+      "smpb": null
+    },
+    {
+      "name": "lc-gapless-tag.m4a",
+      "sha256": "5f506332cc59f8f9f7b8c634ea404f9c802ce9177579aa60440dd21ee930ff24",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          4000,
+          512
+        ]
+      ],
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    },
+    {
+      "name": "lc-tag-only.m4a",
+      "sha256": "0a4472e58b88659fc53e74e46ba01e812849266c60f7a6971ed17e3308029ae1",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": null,
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    },
+    {
+      "name": "lc-clip-tag.m4a",
+      "sha256": "12de96cd132d57c2728a26025d0c435f9e5ff77d46489e9b4fc66b71f2e44c19",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          48000
+        ]
+      ],
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-gapless.m4a",
+      "sha256": "74c033702265a06e04e77413af018aa6488bc7f0d500b5f84212d2c986b8a202",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          4000,
+          512
+        ]
+      ],
+      "smpb": null
+    },
+    {
+      "name": "he-gapless-tag.m4a",
+      "sha256": "8053935a3e5aaf3079ff2a1b12d3bb436890c28de546df48f2996e3763b56824",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          4000,
+          512
+        ]
+      ],
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-tag-only.m4a",
+      "sha256": "05303d4ae42f335faa589726bbd2784f67345b8097c933101d8f6f6c88a1e522",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": null,
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-clip-tag.m4a",
+      "sha256": "ab2c9944f796d58d773f6952ea765891188d9642212bf476519c460b1d6d8aa2",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          48000
+        ]
+      ],
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-gapless.m4a",
+      "sha256": "1ba28f13f16843704bf21ef4e9c880ebf5d3592662a04205a93f9d07ebb874ff",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          4000,
+          512
+        ]
+      ],
+      "smpb": null
+    },
+    {
+      "name": "hev2-gapless-tag.m4a",
+      "sha256": "3135d8c2ad7885900f41dfed8aa5b9e6540720d7d86686fa961860f906a1c07a",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          4000,
+          512
+        ]
+      ],
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-tag-only.m4a",
+      "sha256": "c614ccef268b32e2429fae1a9e31896b214c8dd36bde22771d65298ab70ab62d",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": null,
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-clip-tag.m4a",
+      "sha256": "78da3ae4759a65f46ef3c4690ace2901f2a2c613d4cca559f762fd8d99b7d4a6",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          48000
+        ]
+      ],
+      "smpb": " 00000000 00000064 000000C8 0000000000000000"
+    }
+  ]
+}

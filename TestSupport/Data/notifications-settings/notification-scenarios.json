@@ -1,0 +1,658 @@
+{
+ "download_scenarios": [
+  {
+   "name": "http401_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:401",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http403_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:403",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http404_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http410_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:410",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http404_foreground",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "http404_background_no_permission",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": false,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "io_blocked_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "error:ERROR_IO_BLOCKED",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http500_background_x3",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:500",
+     "foreground": false
+    },
+    {
+     "outcome": "http:500",
+     "foreground": false
+    },
+    {
+     "outcome": "http:500",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http500_foreground_x3",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:500",
+     "foreground": true
+    },
+    {
+     "outcome": "http:500",
+     "foreground": true
+    },
+    {
+     "outcome": "http:500",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "http500_fg_bg_bg",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:500",
+     "foreground": true
+    },
+    {
+     "outcome": "http:500",
+     "foreground": false
+    },
+    {
+     "outcome": "http:500",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http500_bg_bg_fg",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:500",
+     "foreground": false
+    },
+    {
+     "outcome": "http:500",
+     "foreground": false
+    },
+    {
+     "outcome": "http:500",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "http500_bg_no_permission_x3",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": false,
+   "runs": [
+    {
+     "outcome": "http:500",
+     "foreground": false
+    },
+    {
+     "outcome": "http:500",
+     "foreground": false
+    },
+    {
+     "outcome": "http:500",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http503_then_success",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:503",
+     "foreground": false
+    },
+    {
+     "outcome": "success",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "connection_error_background_x3",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "error:ERROR_CONNECTION_ERROR",
+     "foreground": false
+    },
+    {
+     "outcome": "error:ERROR_CONNECTION_ERROR",
+     "foreground": false
+    },
+    {
+     "outcome": "error:ERROR_CONNECTION_ERROR",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "unknown_host_foreground_then_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "error:ERROR_UNKNOWN_HOST",
+     "foreground": true
+    },
+    {
+     "outcome": "error:ERROR_UNKNOWN_HOST",
+     "foreground": true
+    },
+    {
+     "outcome": "error:ERROR_UNKNOWN_HOST",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "not_enough_space_mixed",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "error:ERROR_NOT_ENOUGH_SPACE",
+     "foreground": false
+    },
+    {
+     "outcome": "error:ERROR_NOT_ENOUGH_SPACE",
+     "foreground": true
+    },
+    {
+     "outcome": "error:ERROR_NOT_ENOUGH_SPACE",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "http416_background_x3",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:416",
+     "foreground": false
+    },
+    {
+     "outcome": "http:416",
+     "foreground": false
+    },
+    {
+     "outcome": "http:416",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "http416_then_404_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:416",
+     "foreground": false
+    },
+    {
+     "outcome": "http:404",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "downloader_throws_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "throw",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "downloader_throws_foreground",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "throw",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "cancelled",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "cancel",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "success_background",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "success",
+     "foreground": false
+    }
+   ]
+  },
+  {
+   "name": "success_foreground",
+   "title": "Episode 404",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "success",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "title_20_units",
+   "title": "Twenty characters!!!",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "title_21_units",
+   "title": "Twenty-one characters",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "title_long",
+   "title": "The Very Long Episode Title About Everything",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:500",
+     "foreground": true
+    },
+    {
+     "outcome": "http:500",
+     "foreground": true
+    },
+    {
+     "outcome": "http:500",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "title_null_uses_url",
+   "title": null,
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "title_emoji_after_cut",
+   "title": "Weekly news roundup\ud83c\udfa7 part 2",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "title_emoji_at_cut",
+   "title": "Weekly news round \ud83c\udfa7 part 2",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "title_combining_split",
+   "title": "Episodes about cafe\u0301s and more",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": true
+    }
+   ]
+  },
+  {
+   "name": "title_rtl",
+   "title": "\u05e4\u05e8\u05e7 \u05e8\u05d0\u05e9\u05d5\u05df \u05e2\u05dc \u05d4\u05e2\u05d5\u05dc\u05dd \u05d4\u05d2\u05d3\u05d5\u05dc",
+   "download_url": "https://example.test/audio/very-long-episode-file-name.mp3",
+   "permission": true,
+   "runs": [
+    {
+     "outcome": "http:404",
+     "foreground": true
+    }
+   ]
+  }
+ ],
+ "sync_scenarios": [
+  {
+   "name": "sdk25_pref_on_fg_perm",
+   "sdk": 25,
+   "pref": true,
+   "foreground": true,
+   "permission": true,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk25_pref_on_fg_noperm",
+   "sdk": 25,
+   "pref": true,
+   "foreground": true,
+   "permission": false,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk25_pref_on_bg_perm",
+   "sdk": 25,
+   "pref": true,
+   "foreground": false,
+   "permission": true,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk25_pref_on_bg_noperm",
+   "sdk": 25,
+   "pref": true,
+   "foreground": false,
+   "permission": false,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk25_pref_off_fg_perm",
+   "sdk": 25,
+   "pref": false,
+   "foreground": true,
+   "permission": true,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk25_pref_off_fg_noperm",
+   "sdk": 25,
+   "pref": false,
+   "foreground": true,
+   "permission": false,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk25_pref_off_bg_perm",
+   "sdk": 25,
+   "pref": false,
+   "foreground": false,
+   "permission": true,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk25_pref_off_bg_noperm",
+   "sdk": 25,
+   "pref": false,
+   "foreground": false,
+   "permission": false,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_pref_on_fg_perm",
+   "sdk": 36,
+   "pref": true,
+   "foreground": true,
+   "permission": true,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_pref_on_fg_noperm",
+   "sdk": 36,
+   "pref": true,
+   "foreground": true,
+   "permission": false,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_pref_on_bg_perm",
+   "sdk": 36,
+   "pref": true,
+   "foreground": false,
+   "permission": true,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_pref_on_bg_noperm",
+   "sdk": 36,
+   "pref": true,
+   "foreground": false,
+   "permission": false,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_pref_off_fg_perm",
+   "sdk": 36,
+   "pref": false,
+   "foreground": true,
+   "permission": true,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_pref_off_fg_noperm",
+   "sdk": 36,
+   "pref": false,
+   "foreground": true,
+   "permission": false,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_pref_off_bg_perm",
+   "sdk": 36,
+   "pref": false,
+   "foreground": false,
+   "permission": true,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_pref_off_bg_noperm",
+   "sdk": 36,
+   "pref": false,
+   "foreground": false,
+   "permission": false,
+   "message": "HTTP 401 Unauthorized"
+  },
+  {
+   "name": "sdk36_null_message_bg",
+   "sdk": 36,
+   "pref": true,
+   "foreground": false,
+   "permission": true,
+   "message": null
+  },
+  {
+   "name": "sdk36_null_message_fg",
+   "sdk": 36,
+   "pref": true,
+   "foreground": true,
+   "permission": true,
+   "message": null
+  }
+ ],
+ "sync_attempt_series": [
+  {
+   "exception": "SyncServiceException",
+   "attempts": 9
+  },
+  {
+   "exception": "IOException",
+   "attempts": 3
+  }
+ ],
+ "settings_screens": [
+  {
+   "name": "logged_out_defaults",
+   "provider_connected": false,
+   "prefs": {}
+  },
+  {
+   "name": "logged_in_defaults",
+   "provider_connected": true,
+   "prefs": {}
+  },
+  {
+   "name": "logged_in_both_off",
+   "provider_connected": true,
+   "prefs": {
+    "prefShowDownloadReport": false,
+    "pref_gpodnet_notifications": false
+   }
+  },
+  {
+   "name": "logout_resets_sync_pref",
+   "provider_connected": false,
+   "prefs": {
+    "prefShowDownloadReport": false,
+    "pref_gpodnet_notifications": false
+   },
+   "event": "logout"
+  },
+  {
+   "name": "login_resets_sync_pref",
+   "provider_connected": true,
+   "prefs": {
+    "prefShowDownloadReport": false,
+    "pref_gpodnet_notifications": false
+   },
+   "event": "login"
+  }
+ ]
+}

@@ -1,0 +1,1247 @@
+{
+ "source": {
+  "reference_commit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "sha256": {
+   "app/src/main/java/de/danoeh/antennapod/ui/screen/preferences/MainPreferencesFragment.java": "f129bf0d637bec8a0abce04d69a0e82f8a807360552382f9262002f0b06c4131",
+   "ui/preferences/src/main/res/xml/preferences.xml": "bd3191593331c58836c6ffc2a7c08f14bef9157b39aa2502c98c232d623dfb65",
+   "ui/i18n/src/main/res/values/strings.xml": "fbe52dcd492a8d059b039c0a7ac02baba79b2d4017b1cc9b1335270de5484fdc"
+  }
+ },
+ "rule": {
+  "official_hashes": [
+   1790437538,
+   -1190467065
+  ],
+  "debug_hash": -1190467065,
+  "official_package_hashes": {
+   "de.danoeh.antennapod": 1790437538,
+   "de.danoeh.antennapod.debug": -1190467065
+  },
+  "unofficial_notice": {
+   "summary": "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL).",
+   "icon": "ic_info_white",
+   "icon_color_filter": {
+    "color": "#CC0000",
+    "mode": "MULTIPLY"
+   },
+   "explicit_order": null,
+   "hides_keys": [
+    "project"
+   ],
+   "added_to_parent_of": "project",
+   "line": 51
+  },
+  "debug_notice": {
+   "summary": "This is a development version of AntennaPod and not meant for daily use",
+   "icon": "ic_info_white",
+   "icon_color_filter": {
+    "color": "#CC0000",
+    "mode": "MULTIPLY"
+   },
+   "explicit_order": -1,
+   "hides_keys": [],
+   "added_to_parent_of": "project",
+   "line": 62
+  },
+  "click_actions": {
+   "prefScreenInterface": {
+    "type": "open_screen",
+    "target": "preferences_user_interface",
+    "line": 74
+   },
+   "prefScreenPlayback": {
+    "type": "open_screen",
+    "target": "preferences_playback",
+    "line": 78
+   },
+   "prefScreenDownloads": {
+    "type": "open_screen",
+    "target": "preferences_downloads",
+    "line": 82
+   },
+   "prefScreenSynchronization": {
+    "type": "open_screen",
+    "target": "preferences_synchronization",
+    "line": 86
+   },
+   "prefScreenImportExport": {
+    "type": "open_screen",
+    "target": "preferences_import_export",
+    "line": 90
+   },
+   "notifications": {
+    "type": "open_screen",
+    "target": "preferences_notifications",
+    "line": 94
+   },
+   "prefAbout": {
+    "type": "push_fragment",
+    "target": "AboutFragment",
+    "line": 98
+   },
+   "prefDocumentation": {
+    "type": "open_browser",
+    "target": "https://antennapod.org/documentation/",
+    "line": 106
+   },
+   "prefViewForum": {
+    "type": "open_browser",
+    "target": "https://forum.antennapod.org/",
+    "line": 110
+   },
+   "prefContribute": {
+    "type": "open_browser",
+    "target": "https://antennapod.org/contribute/",
+    "line": 114
+   },
+   "prefSendBugReport": {
+    "type": "push_fragment",
+    "target": "BugReportFragment",
+    "line": 118
+   }
+  }
+ },
+ "cases": [
+  {
+   "label": "official release (play and free flavors)",
+   "package": "de.danoeh.antennapod",
+   "java_hash": 1790437538,
+   "branch": "official",
+   "rows": [
+    {
+     "position": 1,
+     "kind": "search",
+     "key": "searchPreference",
+     "title": null,
+     "summary": "Search…",
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 2,
+     "kind": "preference",
+     "key": "prefScreenInterface",
+     "title": "User interface",
+     "summary": "Appearance, subscriptions, lockscreen",
+     "icon": "ic_appearance",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_user_interface"
+     }
+    },
+    {
+     "position": 3,
+     "kind": "preference",
+     "key": "prefScreenPlayback",
+     "title": "Playback",
+     "summary": "Headphone controls, Skip intervals, Queue",
+     "icon": "ic_play_24dp",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_playback"
+     }
+    },
+    {
+     "position": 4,
+     "kind": "preference",
+     "key": "prefScreenDownloads",
+     "title": "Downloads",
+     "summary": "Update interval, Mobile data, Automatic download, Automatic deletion",
+     "icon": "ic_download",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_downloads"
+     }
+    },
+    {
+     "position": 5,
+     "kind": "preference",
+     "key": "prefScreenSynchronization",
+     "title": "Synchronization",
+     "summary": "Synchronize with other devices",
+     "icon": "ic_cloud",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_synchronization"
+     }
+    },
+    {
+     "position": 6,
+     "kind": "preference",
+     "key": "prefScreenImportExport",
+     "title": "Backup & restore",
+     "summary": "Move subscriptions and queue to another device",
+     "icon": "ic_storage",
+     "icon_color_filter": null,
+     "order": 5,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_import_export"
+     }
+    },
+    {
+     "position": 7,
+     "kind": "preference",
+     "key": "notifications",
+     "title": "Notifications",
+     "summary": null,
+     "icon": "ic_notifications",
+     "icon_color_filter": null,
+     "order": 6,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_notifications"
+     }
+    },
+    {
+     "position": 8,
+     "kind": "category",
+     "key": "project",
+     "title": "Project",
+     "summary": null,
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 7,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 9,
+     "kind": "preference",
+     "key": "prefDocumentation",
+     "title": "Documentation & support",
+     "summary": null,
+     "icon": "ic_questionmark",
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": "project",
+     "action": {
+      "type": "open_browser",
+      "target": "https://antennapod.org/documentation/"
+     }
+    },
+    {
+     "position": 10,
+     "kind": "preference",
+     "key": "prefViewForum",
+     "title": "User forum",
+     "summary": null,
+     "icon": "ic_chat",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": "project",
+     "action": {
+      "type": "open_browser",
+      "target": "https://forum.antennapod.org/"
+     }
+    },
+    {
+     "position": 11,
+     "kind": "preference",
+     "key": "prefContribute",
+     "title": "Contribute",
+     "summary": null,
+     "icon": "ic_contribute",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": "project",
+     "action": {
+      "type": "open_browser",
+      "target": "https://antennapod.org/contribute/"
+     }
+    },
+    {
+     "position": 12,
+     "kind": "preference",
+     "key": "prefSendBugReport",
+     "title": "Report bug",
+     "summary": null,
+     "icon": "ic_bug",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": "project",
+     "action": {
+      "type": "push_fragment",
+      "target": "BugReportFragment"
+     }
+    },
+    {
+     "position": 13,
+     "kind": "preference",
+     "key": "prefAbout",
+     "title": "About",
+     "summary": null,
+     "icon": "ic_info",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": "project",
+     "action": {
+      "type": "push_fragment",
+      "target": "AboutFragment"
+     }
+    }
+   ],
+   "project_category_visible": true,
+   "reachable_project_rows": [
+    "prefDocumentation",
+    "prefViewForum",
+    "prefContribute",
+    "prefSendBugReport",
+    "prefAbout"
+   ],
+   "row_titles_or_text": [
+    "Search…",
+    "User interface",
+    "Playback",
+    "Downloads",
+    "Synchronization",
+    "Backup & restore",
+    "Notifications",
+    "Project",
+    "Documentation & support",
+    "User forum",
+    "Contribute",
+    "Report bug",
+    "About"
+   ]
+  },
+  {
+   "label": "official debug build (applicationIdSuffix .debug)",
+   "package": "de.danoeh.antennapod.debug",
+   "java_hash": -1190467065,
+   "branch": "debug",
+   "rows": [
+    {
+     "position": 1,
+     "kind": "notice",
+     "key": null,
+     "title": null,
+     "summary": "This is a development version of AntennaPod and not meant for daily use",
+     "icon": "ic_info_white",
+     "icon_color_filter": {
+      "color": "#CC0000",
+      "mode": "MULTIPLY"
+     },
+     "order": -1,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 2,
+     "kind": "search",
+     "key": "searchPreference",
+     "title": null,
+     "summary": "Search…",
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 3,
+     "kind": "preference",
+     "key": "prefScreenInterface",
+     "title": "User interface",
+     "summary": "Appearance, subscriptions, lockscreen",
+     "icon": "ic_appearance",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_user_interface"
+     }
+    },
+    {
+     "position": 4,
+     "kind": "preference",
+     "key": "prefScreenPlayback",
+     "title": "Playback",
+     "summary": "Headphone controls, Skip intervals, Queue",
+     "icon": "ic_play_24dp",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_playback"
+     }
+    },
+    {
+     "position": 5,
+     "kind": "preference",
+     "key": "prefScreenDownloads",
+     "title": "Downloads",
+     "summary": "Update interval, Mobile data, Automatic download, Automatic deletion",
+     "icon": "ic_download",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_downloads"
+     }
+    },
+    {
+     "position": 6,
+     "kind": "preference",
+     "key": "prefScreenSynchronization",
+     "title": "Synchronization",
+     "summary": "Synchronize with other devices",
+     "icon": "ic_cloud",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_synchronization"
+     }
+    },
+    {
+     "position": 7,
+     "kind": "preference",
+     "key": "prefScreenImportExport",
+     "title": "Backup & restore",
+     "summary": "Move subscriptions and queue to another device",
+     "icon": "ic_storage",
+     "icon_color_filter": null,
+     "order": 5,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_import_export"
+     }
+    },
+    {
+     "position": 8,
+     "kind": "preference",
+     "key": "notifications",
+     "title": "Notifications",
+     "summary": null,
+     "icon": "ic_notifications",
+     "icon_color_filter": null,
+     "order": 6,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_notifications"
+     }
+    },
+    {
+     "position": 9,
+     "kind": "category",
+     "key": "project",
+     "title": "Project",
+     "summary": null,
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 7,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 10,
+     "kind": "preference",
+     "key": "prefDocumentation",
+     "title": "Documentation & support",
+     "summary": null,
+     "icon": "ic_questionmark",
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": "project",
+     "action": {
+      "type": "open_browser",
+      "target": "https://antennapod.org/documentation/"
+     }
+    },
+    {
+     "position": 11,
+     "kind": "preference",
+     "key": "prefViewForum",
+     "title": "User forum",
+     "summary": null,
+     "icon": "ic_chat",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": "project",
+     "action": {
+      "type": "open_browser",
+      "target": "https://forum.antennapod.org/"
+     }
+    },
+    {
+     "position": 12,
+     "kind": "preference",
+     "key": "prefContribute",
+     "title": "Contribute",
+     "summary": null,
+     "icon": "ic_contribute",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": "project",
+     "action": {
+      "type": "open_browser",
+      "target": "https://antennapod.org/contribute/"
+     }
+    },
+    {
+     "position": 13,
+     "kind": "preference",
+     "key": "prefSendBugReport",
+     "title": "Report bug",
+     "summary": null,
+     "icon": "ic_bug",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": "project",
+     "action": {
+      "type": "push_fragment",
+      "target": "BugReportFragment"
+     }
+    },
+    {
+     "position": 14,
+     "kind": "preference",
+     "key": "prefAbout",
+     "title": "About",
+     "summary": null,
+     "icon": "ic_info",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": "project",
+     "action": {
+      "type": "push_fragment",
+      "target": "AboutFragment"
+     }
+    }
+   ],
+   "project_category_visible": true,
+   "reachable_project_rows": [
+    "prefDocumentation",
+    "prefViewForum",
+    "prefContribute",
+    "prefSendBugReport",
+    "prefAbout"
+   ],
+   "row_titles_or_text": [
+    "This is a development version of AntennaPod and not meant for daily use",
+    "Search…",
+    "User interface",
+    "Playback",
+    "Downloads",
+    "Synchronization",
+    "Backup & restore",
+    "Notifications",
+    "Project",
+    "Documentation & support",
+    "User forum",
+    "Contribute",
+    "Report bug",
+    "About"
+   ]
+  },
+  {
+   "label": "this iOS app, every configuration",
+   "package": "org.antennapod.swift",
+   "java_hash": -520351791,
+   "branch": "unofficial",
+   "rows": [
+    {
+     "position": 1,
+     "kind": "search",
+     "key": "searchPreference",
+     "title": null,
+     "summary": "Search…",
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 2,
+     "kind": "preference",
+     "key": "prefScreenInterface",
+     "title": "User interface",
+     "summary": "Appearance, subscriptions, lockscreen",
+     "icon": "ic_appearance",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_user_interface"
+     }
+    },
+    {
+     "position": 3,
+     "kind": "preference",
+     "key": "prefScreenPlayback",
+     "title": "Playback",
+     "summary": "Headphone controls, Skip intervals, Queue",
+     "icon": "ic_play_24dp",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_playback"
+     }
+    },
+    {
+     "position": 4,
+     "kind": "preference",
+     "key": "prefScreenDownloads",
+     "title": "Downloads",
+     "summary": "Update interval, Mobile data, Automatic download, Automatic deletion",
+     "icon": "ic_download",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_downloads"
+     }
+    },
+    {
+     "position": 5,
+     "kind": "preference",
+     "key": "prefScreenSynchronization",
+     "title": "Synchronization",
+     "summary": "Synchronize with other devices",
+     "icon": "ic_cloud",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_synchronization"
+     }
+    },
+    {
+     "position": 6,
+     "kind": "preference",
+     "key": "prefScreenImportExport",
+     "title": "Backup & restore",
+     "summary": "Move subscriptions and queue to another device",
+     "icon": "ic_storage",
+     "icon_color_filter": null,
+     "order": 5,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_import_export"
+     }
+    },
+    {
+     "position": 7,
+     "kind": "preference",
+     "key": "notifications",
+     "title": "Notifications",
+     "summary": null,
+     "icon": "ic_notifications",
+     "icon_color_filter": null,
+     "order": 6,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_notifications"
+     }
+    },
+    {
+     "position": 8,
+     "kind": "notice",
+     "key": null,
+     "title": null,
+     "summary": "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL).",
+     "icon": "ic_info_white",
+     "icon_color_filter": {
+      "color": "#CC0000",
+      "mode": "MULTIPLY"
+     },
+     "order": 8,
+     "in_category": null,
+     "action": null
+    }
+   ],
+   "project_category_visible": false,
+   "reachable_project_rows": [],
+   "row_titles_or_text": [
+    "Search…",
+    "User interface",
+    "Playback",
+    "Downloads",
+    "Synchronization",
+    "Backup & restore",
+    "Notifications",
+    "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL)."
+   ]
+  },
+  {
+   "label": "hypothetical third-party fork",
+   "package": "com.example.podcastfork",
+   "java_hash": -144596139,
+   "branch": "unofficial",
+   "rows": [
+    {
+     "position": 1,
+     "kind": "search",
+     "key": "searchPreference",
+     "title": null,
+     "summary": "Search…",
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 2,
+     "kind": "preference",
+     "key": "prefScreenInterface",
+     "title": "User interface",
+     "summary": "Appearance, subscriptions, lockscreen",
+     "icon": "ic_appearance",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_user_interface"
+     }
+    },
+    {
+     "position": 3,
+     "kind": "preference",
+     "key": "prefScreenPlayback",
+     "title": "Playback",
+     "summary": "Headphone controls, Skip intervals, Queue",
+     "icon": "ic_play_24dp",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_playback"
+     }
+    },
+    {
+     "position": 4,
+     "kind": "preference",
+     "key": "prefScreenDownloads",
+     "title": "Downloads",
+     "summary": "Update interval, Mobile data, Automatic download, Automatic deletion",
+     "icon": "ic_download",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_downloads"
+     }
+    },
+    {
+     "position": 5,
+     "kind": "preference",
+     "key": "prefScreenSynchronization",
+     "title": "Synchronization",
+     "summary": "Synchronize with other devices",
+     "icon": "ic_cloud",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_synchronization"
+     }
+    },
+    {
+     "position": 6,
+     "kind": "preference",
+     "key": "prefScreenImportExport",
+     "title": "Backup & restore",
+     "summary": "Move subscriptions and queue to another device",
+     "icon": "ic_storage",
+     "icon_color_filter": null,
+     "order": 5,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_import_export"
+     }
+    },
+    {
+     "position": 7,
+     "kind": "preference",
+     "key": "notifications",
+     "title": "Notifications",
+     "summary": null,
+     "icon": "ic_notifications",
+     "icon_color_filter": null,
+     "order": 6,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_notifications"
+     }
+    },
+    {
+     "position": 8,
+     "kind": "notice",
+     "key": null,
+     "title": null,
+     "summary": "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL).",
+     "icon": "ic_info_white",
+     "icon_color_filter": {
+      "color": "#CC0000",
+      "mode": "MULTIPLY"
+     },
+     "order": 8,
+     "in_category": null,
+     "action": null
+    }
+   ],
+   "project_category_visible": false,
+   "reachable_project_rows": [],
+   "row_titles_or_text": [
+    "Search…",
+    "User interface",
+    "Playback",
+    "Downloads",
+    "Synchronization",
+    "Backup & restore",
+    "Notifications",
+    "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL)."
+   ]
+  },
+  {
+   "label": "near miss: other suffix",
+   "package": "de.danoeh.antennapod.beta",
+   "java_hash": -1423934532,
+   "branch": "unofficial",
+   "rows": [
+    {
+     "position": 1,
+     "kind": "search",
+     "key": "searchPreference",
+     "title": null,
+     "summary": "Search…",
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 2,
+     "kind": "preference",
+     "key": "prefScreenInterface",
+     "title": "User interface",
+     "summary": "Appearance, subscriptions, lockscreen",
+     "icon": "ic_appearance",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_user_interface"
+     }
+    },
+    {
+     "position": 3,
+     "kind": "preference",
+     "key": "prefScreenPlayback",
+     "title": "Playback",
+     "summary": "Headphone controls, Skip intervals, Queue",
+     "icon": "ic_play_24dp",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_playback"
+     }
+    },
+    {
+     "position": 4,
+     "kind": "preference",
+     "key": "prefScreenDownloads",
+     "title": "Downloads",
+     "summary": "Update interval, Mobile data, Automatic download, Automatic deletion",
+     "icon": "ic_download",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_downloads"
+     }
+    },
+    {
+     "position": 5,
+     "kind": "preference",
+     "key": "prefScreenSynchronization",
+     "title": "Synchronization",
+     "summary": "Synchronize with other devices",
+     "icon": "ic_cloud",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_synchronization"
+     }
+    },
+    {
+     "position": 6,
+     "kind": "preference",
+     "key": "prefScreenImportExport",
+     "title": "Backup & restore",
+     "summary": "Move subscriptions and queue to another device",
+     "icon": "ic_storage",
+     "icon_color_filter": null,
+     "order": 5,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_import_export"
+     }
+    },
+    {
+     "position": 7,
+     "kind": "preference",
+     "key": "notifications",
+     "title": "Notifications",
+     "summary": null,
+     "icon": "ic_notifications",
+     "icon_color_filter": null,
+     "order": 6,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_notifications"
+     }
+    },
+    {
+     "position": 8,
+     "kind": "notice",
+     "key": null,
+     "title": null,
+     "summary": "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL).",
+     "icon": "ic_info_white",
+     "icon_color_filter": {
+      "color": "#CC0000",
+      "mode": "MULTIPLY"
+     },
+     "order": 8,
+     "in_category": null,
+     "action": null
+    }
+   ],
+   "project_category_visible": false,
+   "reachable_project_rows": [],
+   "row_titles_or_text": [
+    "Search…",
+    "User interface",
+    "Playback",
+    "Downloads",
+    "Synchronization",
+    "Backup & restore",
+    "Notifications",
+    "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL)."
+   ]
+  },
+  {
+   "label": "near miss: case change",
+   "package": "de.danoeh.AntennaPod",
+   "java_hash": -511095646,
+   "branch": "unofficial",
+   "rows": [
+    {
+     "position": 1,
+     "kind": "search",
+     "key": "searchPreference",
+     "title": null,
+     "summary": "Search…",
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 2,
+     "kind": "preference",
+     "key": "prefScreenInterface",
+     "title": "User interface",
+     "summary": "Appearance, subscriptions, lockscreen",
+     "icon": "ic_appearance",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_user_interface"
+     }
+    },
+    {
+     "position": 3,
+     "kind": "preference",
+     "key": "prefScreenPlayback",
+     "title": "Playback",
+     "summary": "Headphone controls, Skip intervals, Queue",
+     "icon": "ic_play_24dp",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_playback"
+     }
+    },
+    {
+     "position": 4,
+     "kind": "preference",
+     "key": "prefScreenDownloads",
+     "title": "Downloads",
+     "summary": "Update interval, Mobile data, Automatic download, Automatic deletion",
+     "icon": "ic_download",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_downloads"
+     }
+    },
+    {
+     "position": 5,
+     "kind": "preference",
+     "key": "prefScreenSynchronization",
+     "title": "Synchronization",
+     "summary": "Synchronize with other devices",
+     "icon": "ic_cloud",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_synchronization"
+     }
+    },
+    {
+     "position": 6,
+     "kind": "preference",
+     "key": "prefScreenImportExport",
+     "title": "Backup & restore",
+     "summary": "Move subscriptions and queue to another device",
+     "icon": "ic_storage",
+     "icon_color_filter": null,
+     "order": 5,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_import_export"
+     }
+    },
+    {
+     "position": 7,
+     "kind": "preference",
+     "key": "notifications",
+     "title": "Notifications",
+     "summary": null,
+     "icon": "ic_notifications",
+     "icon_color_filter": null,
+     "order": 6,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_notifications"
+     }
+    },
+    {
+     "position": 8,
+     "kind": "notice",
+     "key": null,
+     "title": null,
+     "summary": "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL).",
+     "icon": "ic_info_white",
+     "icon_color_filter": {
+      "color": "#CC0000",
+      "mode": "MULTIPLY"
+     },
+     "order": 8,
+     "in_category": null,
+     "action": null
+    }
+   ],
+   "project_category_visible": false,
+   "reachable_project_rows": [],
+   "row_titles_or_text": [
+    "Search…",
+    "User interface",
+    "Playback",
+    "Downloads",
+    "Synchronization",
+    "Backup & restore",
+    "Notifications",
+    "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL)."
+   ]
+  },
+  {
+   "label": "hash stress: non-ASCII and a surrogate pair",
+   "package": "org.exämple.😀",
+   "java_hash": -1341118514,
+   "branch": "unofficial",
+   "rows": [
+    {
+     "position": 1,
+     "kind": "search",
+     "key": "searchPreference",
+     "title": null,
+     "summary": "Search…",
+     "icon": null,
+     "icon_color_filter": null,
+     "order": 0,
+     "in_category": null,
+     "action": null
+    },
+    {
+     "position": 2,
+     "kind": "preference",
+     "key": "prefScreenInterface",
+     "title": "User interface",
+     "summary": "Appearance, subscriptions, lockscreen",
+     "icon": "ic_appearance",
+     "icon_color_filter": null,
+     "order": 1,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_user_interface"
+     }
+    },
+    {
+     "position": 3,
+     "kind": "preference",
+     "key": "prefScreenPlayback",
+     "title": "Playback",
+     "summary": "Headphone controls, Skip intervals, Queue",
+     "icon": "ic_play_24dp",
+     "icon_color_filter": null,
+     "order": 2,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_playback"
+     }
+    },
+    {
+     "position": 4,
+     "kind": "preference",
+     "key": "prefScreenDownloads",
+     "title": "Downloads",
+     "summary": "Update interval, Mobile data, Automatic download, Automatic deletion",
+     "icon": "ic_download",
+     "icon_color_filter": null,
+     "order": 3,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_downloads"
+     }
+    },
+    {
+     "position": 5,
+     "kind": "preference",
+     "key": "prefScreenSynchronization",
+     "title": "Synchronization",
+     "summary": "Synchronize with other devices",
+     "icon": "ic_cloud",
+     "icon_color_filter": null,
+     "order": 4,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_synchronization"
+     }
+    },
+    {
+     "position": 6,
+     "kind": "preference",
+     "key": "prefScreenImportExport",
+     "title": "Backup & restore",
+     "summary": "Move subscriptions and queue to another device",
+     "icon": "ic_storage",
+     "icon_color_filter": null,
+     "order": 5,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_import_export"
+     }
+    },
+    {
+     "position": 7,
+     "kind": "preference",
+     "key": "notifications",
+     "title": "Notifications",
+     "summary": null,
+     "icon": "ic_notifications",
+     "icon_color_filter": null,
+     "order": 6,
+     "in_category": null,
+     "action": {
+      "type": "open_screen",
+      "target": "preferences_notifications"
+     }
+    },
+    {
+     "position": 8,
+     "kind": "notice",
+     "key": null,
+     "title": null,
+     "summary": "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL).",
+     "icon": "ic_info_white",
+     "icon_color_filter": {
+      "color": "#CC0000",
+      "mode": "MULTIPLY"
+     },
+     "order": 8,
+     "in_category": null,
+     "action": null
+    }
+   ],
+   "project_category_visible": false,
+   "reachable_project_rows": [],
+   "row_titles_or_text": [
+    "Search…",
+    "User interface",
+    "Playback",
+    "Downloads",
+    "Synchronization",
+    "Backup & restore",
+    "Notifications",
+    "This application is based on AntennaPod. The AntennaPod team does NOT provide support for this unofficial version. If you can read this message, the developers of this modification violate the GNU General Public License (GPL)."
+   ]
+  }
+ ]
+}

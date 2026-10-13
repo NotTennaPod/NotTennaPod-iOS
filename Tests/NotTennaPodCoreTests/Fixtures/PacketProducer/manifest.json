@@ -1,0 +1,29 @@
+{
+  "source": "Existing synthetic 440 Hz/8-second WebM Opus fixture looped 90 times without re-encoding; long-buffer scheduling only.",
+  "command": [
+    "ffmpeg",
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-stream_loop",
+    "89",
+    "-i",
+    "Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-opus.webm",
+    "-map",
+    "0:a:0",
+    "-c:a",
+    "copy",
+    "-map_metadata",
+    "-1",
+    "-fflags",
+    "+bitexact",
+    "-flags:a",
+    "+bitexact",
+    "Tests/NotTennaPodCoreTests/Fixtures/PacketProducer/long-opus.webm"
+  ],
+  "ffmpeg": "ffmpeg version 8.1.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "sha256": "0db8e1b7b74177d7a8ef546f14b4d96543556cecf47e9826eec194691679c5d1",
+  "bytes": 7698268
+}

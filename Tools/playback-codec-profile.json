@@ -1,0 +1,57 @@
+{
+  "name": "playback-completion-2026-09-24",
+  "demuxers": [
+    "ogg",
+    "matroska",
+    "mov",
+    "wav",
+    "flac",
+    "aac",
+    "mp3",
+    "amr",
+    "mpegts",
+    "flv",
+    "avi"
+  ],
+  "decoders": [
+    "vorbis",
+    "opus",
+    "aac",
+    "mp3float",
+    "flac",
+    "amrnb",
+    "amrwb",
+    "adpcm_ima_wav",
+    "pcm_u8",
+    "pcm_s16le",
+    "pcm_s24le",
+    "pcm_f32le",
+    "pcm_alaw",
+    "pcm_mulaw",
+    "h264",
+    "mpeg4",
+    "vp8",
+    "vp9",
+    "hevc",
+    "libdav1d"
+  ],
+  "parsers": [
+    "vorbis",
+    "opus",
+    "aac",
+    "mpegaudio",
+    "flac",
+    "amr",
+    "h264",
+    "mpeg4video",
+    "vp8",
+    "vp9",
+    "hevc",
+    "av1"
+  ],
+  "swscale": true,
+  "rationale": "Retain reviewed Vorbis/Opus. Add actual Android-profile AMR NB/WB, Ogg FLAC, WAV PCM/G.711/IMA, AAC and MP3 container audio, regular/fragmented MP4, TS/FLV/AVI and H264/MPEG4/VP8/VP9 video. swresample converts decoder formats to common PCM; swscale converts decoded video planes to presentation pixel format. No network, filters, devices, encoders or unadmitted MPEG2/MP2/MS-ADPCM/AC3. Configuration is a bounded build request, not runtime acceptance. PC-A3c actual Android decoded HEVC Main8 SDR and AV1 Main8 SDR MP4/Matroska; enable software HEVC and pinned dav1d 8-bit for these admitted profiles. Other bit depths/HDR and conditional AC3/EAC3/AC4/DTS/TrueHD remain unproven. extract_extradata is required to retain in-band video configuration across fresh decoder seeks.",
+  "bitstreamFilters": [
+    "extract_extradata"
+  ]
+}

@@ -1,0 +1,322 @@
+{
+  "oracle": "HomeSectionsVerification/expected_home.py",
+  "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "database": "TestSupport/Data/database-restore/android-3.12.1/authentication-preview-library.db",
+  "now_ms": 1790000000000,
+  "python_sqlite_version": "3.53.4",
+  "preferences": {
+    "PrefHomeSectionsString": "",
+    "PrefHomeSectionOrder": "",
+    "ignored_unknown_tags": [],
+    "prefInboxSortedOrder": 2,
+    "prefDownloadSortedOrder": 2,
+    "prefGlobalDefaultSortedOrder": 2,
+    "countAll": false
+  },
+  "welcome": {
+    "total_subscribed_episode_count": 41,
+    "welcome_visible": false,
+    "sections_container_visible": true,
+    "swipe_refresh_visible": true
+  },
+  "visible_section_tags": [
+    "QueueSection",
+    "InboxSection",
+    "EpisodesSurpriseSection",
+    "SubscriptionsSection",
+    "DownloadsSection"
+  ],
+  "sections": [
+    {
+      "tag": "QueueSection",
+      "title": "Continue listening",
+      "more": {
+        "label": "Queue",
+        "target": "QueueFragment"
+      },
+      "presentation": "horizontal_episode_cards",
+      "limit": 8,
+      "empty_text": "You can add episodes by downloading them or long-pressing them and selecting \"Add to queue\".",
+      "item_ids": [
+        84,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "items": [
+        {
+          "id": 84,
+          "queue_row": 8,
+          "feed": 10,
+          "resume_key": 1789914872428,
+          "progress_bar": true
+        },
+        {
+          "id": 20,
+          "queue_row": 0,
+          "feed": 4,
+          "resume_key": 0,
+          "progress_bar": false
+        },
+        {
+          "id": 21,
+          "queue_row": 1,
+          "feed": 4,
+          "resume_key": 0,
+          "progress_bar": false
+        },
+        {
+          "id": 22,
+          "queue_row": 2,
+          "feed": 4,
+          "resume_key": 0,
+          "progress_bar": false
+        },
+        {
+          "id": 23,
+          "queue_row": 3,
+          "feed": 4,
+          "resume_key": 0,
+          "progress_bar": false
+        },
+        {
+          "id": 24,
+          "queue_row": 4,
+          "feed": 4,
+          "resume_key": 0,
+          "progress_bar": false
+        },
+        {
+          "id": 25,
+          "queue_row": 5,
+          "feed": 4,
+          "resume_key": 0,
+          "progress_bar": false
+        },
+        {
+          "id": 26,
+          "queue_row": 6,
+          "feed": 4,
+          "resume_key": 0,
+          "progress_bar": false
+        }
+      ],
+      "empty_label_visible": false,
+      "total_queue_rows": 9
+    },
+    {
+      "tag": "InboxSection",
+      "title": "See what's new",
+      "more": {
+        "label": "Inbox",
+        "target": "InboxFragment"
+      },
+      "presentation": "vertical_episode_rows",
+      "limit": 2,
+      "empty_text": "New episodes will show up here. You can then decide whether you are interested in them.",
+      "sort_code": 2,
+      "sort_sql": "FeedItems.pubDate DESC",
+      "item_ids": [
+        19
+      ],
+      "new_count": 1,
+      "badge": {
+        "visible": true,
+        "text": "1"
+      },
+      "empty_label_visible": false,
+      "ties": []
+    },
+    {
+      "tag": "EpisodesSurpriseSection",
+      "title": "Get surprised",
+      "more": {
+        "label": "Episodes",
+        "target": "AllEpisodesFragment"
+      },
+      "presentation": "horizontal_episode_cards",
+      "limit": 8,
+      "empty_text": "You already played all recent episodes. Nothing to be surprised here ;)",
+      "seed": 12345,
+      "candidate_episode_ids_by_feed": {
+        "1": [
+          1
+        ],
+        "10": [
+          85
+        ]
+      },
+      "candidate_count": 2,
+      "feeds_with_candidates": 2,
+      "expected_count": 2,
+      "shuffle_button_visible": true,
+      "empty_label_visible": false,
+      "item_ids": [
+        1,
+        85
+      ],
+      "python_recomputation": [
+        1,
+        85
+      ],
+      "recomputation_agrees": true,
+      "ties": []
+    },
+    {
+      "tag": "SubscriptionsSection",
+      "title": "Check your classics",
+      "more": {
+        "label": "Subscriptions",
+        "target": "SubscriptionFragment"
+      },
+      "presentation": "horizontal_feed_covers",
+      "limit": 8,
+      "empty_text": null,
+      "include_marked_played": false,
+      "time_from_ms": 1695392000000,
+      "feed_ids": [
+        10,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "items": [
+        {
+          "feed_id": 10,
+          "state": 0,
+          "played_seconds": 53
+        },
+        {
+          "feed_id": 1,
+          "state": 0,
+          "played_seconds": 0
+        },
+        {
+          "feed_id": 2,
+          "state": 0,
+          "played_seconds": 0
+        },
+        {
+          "feed_id": 3,
+          "state": 0,
+          "played_seconds": 0
+        },
+        {
+          "feed_id": 4,
+          "state": 0,
+          "played_seconds": 0
+        },
+        {
+          "feed_id": 5,
+          "state": 0,
+          "played_seconds": 0
+        }
+      ],
+      "skipped_non_subscribed": [],
+      "statistics_group_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        10
+      ],
+      "empty_label_visible": false,
+      "strip_empty": false,
+      "ties": [
+        {
+          "feed_ids": [
+            1,
+            2
+          ],
+          "played_seconds": 0,
+          "resolved_by": "stable sort over SQLite GROUP BY Feeds.id row order"
+        },
+        {
+          "feed_ids": [
+            2,
+            3
+          ],
+          "played_seconds": 0,
+          "resolved_by": "stable sort over SQLite GROUP BY Feeds.id row order"
+        },
+        {
+          "feed_ids": [
+            3,
+            4
+          ],
+          "played_seconds": 0,
+          "resolved_by": "stable sort over SQLite GROUP BY Feeds.id row order"
+        },
+        {
+          "feed_ids": [
+            4,
+            5
+          ],
+          "played_seconds": 0,
+          "resolved_by": "stable sort over SQLite GROUP BY Feeds.id row order"
+        }
+      ]
+    },
+    {
+      "tag": "DownloadsSection",
+      "title": "Manage downloads",
+      "more": {
+        "label": "Downloads",
+        "target": "CompletedDownloadsFragment"
+      },
+      "presentation": "vertical_episode_rows",
+      "limit": 2,
+      "empty_text": "You can download any episode to listen to it offline.",
+      "sort_code": 2,
+      "sort_sql": "FeedItems.pubDate DESC",
+      "item_ids": [
+        84
+      ],
+      "empty_label_visible": false,
+      "ties": []
+    }
+  ],
+  "configure_dialog": {
+    "title": "Configure home screen",
+    "buttons": {
+      "positive": "OK",
+      "negative": "Cancel",
+      "neutral": "Reset"
+    },
+    "rows": [
+      {
+        "header": "Shown"
+      },
+      {
+        "tag": "QueueSection",
+        "label": "Continue listening"
+      },
+      {
+        "tag": "InboxSection",
+        "label": "See what's new"
+      },
+      {
+        "tag": "EpisodesSurpriseSection",
+        "label": "Get surprised"
+      },
+      {
+        "tag": "SubscriptionsSection",
+        "label": "Check your classics"
+      },
+      {
+        "tag": "DownloadsSection",
+        "label": "Manage downloads"
+      },
+      {
+        "header": "Hidden"
+      }
+    ]
+  }
+}

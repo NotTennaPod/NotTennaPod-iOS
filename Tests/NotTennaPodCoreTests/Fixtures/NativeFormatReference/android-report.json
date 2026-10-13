@@ -1,0 +1,2113 @@
+{
+  "runID": "af437c09-e5a9-45a6-85b7-fab6867ef593",
+  "device": "google\/sdk_gphone64_arm64\/emu64a:16\/BE2A.250530.026.F3\/13894323:userdebug\/dev-keys",
+  "complete": true,
+  "cases": [
+    {
+      "name": "tone.wav",
+      "knownLength": true,
+      "truncated": false,
+      "size": 768044,
+      "sha256": "05b58bd38cd184982e473eaaac0a8d819e658a8cb1b3267be248626643b38da7",
+      "extractor": "androidx.media3.extractor.wav.WavExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.wav.WavSeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 20,
+              "secondPosition": 46
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999979,
+              "firstPosition": 96042,
+              "secondTimeUs": 1000000,
+              "secondPosition": 96044
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 372812,
+              "secondTimeUs": 3883000,
+              "secondPosition": 372812
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 384044,
+              "secondTimeUs": 4000000,
+              "secondPosition": 384044
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 767084,
+              "secondTimeUs": 7990000,
+              "secondPosition": 767084
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 7999979,
+              "firstPosition": 768042,
+              "secondTimeUs": 7999979,
+              "secondPosition": 768042
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 7999979,
+              "firstPosition": 768042,
+              "secondTimeUs": 7999979,
+              "secondPosition": 768042
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 768044,
+      "iterations": 84,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 80,
+            "bytes": 768000,
+            "formats": [
+              {
+                "mime": "audio\/raw",
+                "container": "audio\/wav",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 7900000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.wav",
+      "knownLength": false,
+      "truncated": false,
+      "size": 768044,
+      "sha256": "05b58bd38cd184982e473eaaac0a8d819e658a8cb1b3267be248626643b38da7",
+      "extractor": "androidx.media3.extractor.wav.WavExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.wav.WavSeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 20,
+              "secondPosition": 46
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999979,
+              "firstPosition": 96042,
+              "secondTimeUs": 1000000,
+              "secondPosition": 96044
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 372812,
+              "secondTimeUs": 3883000,
+              "secondPosition": 372812
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 384044,
+              "secondTimeUs": 4000000,
+              "secondPosition": 384044
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 767084,
+              "secondTimeUs": 7990000,
+              "secondPosition": 767084
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 7999979,
+              "firstPosition": 768042,
+              "secondTimeUs": 7999979,
+              "secondPosition": 768042
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 7999979,
+              "firstPosition": 768042,
+              "secondTimeUs": 7999979,
+              "secondPosition": 768042
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 768044,
+      "iterations": 84,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 80,
+            "bytes": 768000,
+            "formats": [
+              {
+                "mime": "audio\/raw",
+                "container": "audio\/wav",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 7900000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.wav",
+      "knownLength": true,
+      "truncated": true,
+      "size": 384022,
+      "sha256": "d08721955b3f83d4b875ded0b76079271ad52e38194d86b2307577bd6b6df9f2",
+      "extractor": "androidx.media3.extractor.wav.WavExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.wav.WavSeekMap",
+          "durationUs": 3999770,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 20,
+              "secondPosition": 46
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999979,
+              "firstPosition": 96042,
+              "secondTimeUs": 1000000,
+              "secondPosition": 96044
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 372812,
+              "secondTimeUs": 3883000,
+              "secondPosition": 372812
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 3999750,
+              "firstPosition": 384020,
+              "secondTimeUs": 3999750,
+              "secondPosition": 384020
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 3999750,
+              "firstPosition": 384020,
+              "secondTimeUs": 3999750,
+              "secondPosition": 384020
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 3999750,
+              "firstPosition": 384020,
+              "secondTimeUs": 3999750,
+              "secondPosition": 384020
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 3999750,
+              "firstPosition": 384020,
+              "secondTimeUs": 3999750,
+              "secondPosition": 384020
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 384022,
+      "iterations": 44,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 40,
+            "bytes": 383978,
+            "formats": [
+              {
+                "mime": "audio\/raw",
+                "container": "audio\/wav",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 3999770,
+            "firstTimeUs": 0,
+            "lastTimeUs": 3900000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.wav",
+      "knownLength": false,
+      "truncated": true,
+      "size": 384022,
+      "sha256": "d08721955b3f83d4b875ded0b76079271ad52e38194d86b2307577bd6b6df9f2",
+      "extractor": "androidx.media3.extractor.wav.WavExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.wav.WavSeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 20,
+              "secondPosition": 46
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999979,
+              "firstPosition": 96042,
+              "secondTimeUs": 1000000,
+              "secondPosition": 96044
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 372812,
+              "secondTimeUs": 3883000,
+              "secondPosition": 372812
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 384044,
+              "secondTimeUs": 4000000,
+              "secondPosition": 384044
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 767084,
+              "secondTimeUs": 7990000,
+              "secondPosition": 767084
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 7999979,
+              "firstPosition": 768042,
+              "secondTimeUs": 7999979,
+              "secondPosition": 768042
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 7999979,
+              "firstPosition": 768042,
+              "secondTimeUs": 7999979,
+              "secondPosition": 768042
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 384022,
+      "iterations": 44,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 40,
+            "bytes": 383978,
+            "formats": [
+              {
+                "mime": "audio\/raw",
+                "container": "audio\/wav",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 3900000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.aac",
+      "knownLength": true,
+      "truncated": false,
+      "size": 67095,
+      "sha256": "bfbbe9390459761b756da2af615e0509e715d950448dd9a5b2efa2b833570373",
+      "extractor": "androidx.media3.extractor.ts.AdtsExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.ConstantBitrateSeekMap",
+          "durationUs": 8041227,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 21333,
+              "secondPosition": 178
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 981318,
+              "firstPosition": 8188,
+              "secondTimeUs": 1002651,
+              "secondPosition": 8366
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3882608,
+              "firstPosition": 32396,
+              "secondTimeUs": 3903941,
+              "secondPosition": 32574
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 3989273,
+              "firstPosition": 33286,
+              "secondTimeUs": 4010606,
+              "secondPosition": 33464
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7978547,
+              "firstPosition": 66572,
+              "secondTimeUs": 7999880,
+              "secondPosition": 66750
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 7999880,
+              "firstPosition": 66750,
+              "secondTimeUs": 8021213,
+              "secondPosition": 66928
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 8019894,
+              "firstPosition": 66917,
+              "secondTimeUs": 8019894,
+              "secondPosition": 66917
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 67095,
+      "iterations": 34,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4a-latm",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "firstTimeUs": 0,
+            "lastTimeUs": 7999875
+          }
+        },
+        {
+          "id": 1,
+          "output": {
+            "samples": 0,
+            "bytes": 0,
+            "formats": [
+              {
+                "mime": "application\/id3",
+                "container": "audio\/mp4a-latm",
+                "rate": -1,
+                "channels": -1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.aac",
+      "knownLength": false,
+      "truncated": false,
+      "size": 67095,
+      "sha256": "bfbbe9390459761b756da2af615e0509e715d950448dd9a5b2efa2b833570373",
+      "extractor": "androidx.media3.extractor.ts.AdtsExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.SeekMap$Unseekable",
+          "durationUs": -9223372036854775807,
+          "seekable": false,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 67095,
+      "iterations": 34,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4a-latm",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "firstTimeUs": 0,
+            "lastTimeUs": 7999875
+          }
+        },
+        {
+          "id": 1,
+          "output": {
+            "samples": 0,
+            "bytes": 0,
+            "formats": [
+              {
+                "mime": "application\/id3",
+                "container": "audio\/mp4a-latm",
+                "rate": -1,
+                "channels": -1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.aac",
+      "knownLength": true,
+      "truncated": true,
+      "size": 33547,
+      "sha256": "f2227ceb27722b2aeeda29fc5f996c9dd5db4262e4c9266da7b2f1cc46ff74b9",
+      "extractor": "androidx.media3.extractor.ts.AdtsExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.ConstantBitrateSeekMap",
+          "durationUs": 4020553,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 21333,
+              "secondPosition": 178
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 981318,
+              "firstPosition": 8188,
+              "secondTimeUs": 1002651,
+              "secondPosition": 8366
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3882608,
+              "firstPosition": 32396,
+              "secondTimeUs": 3903941,
+              "secondPosition": 32574
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 3989273,
+              "firstPosition": 33286,
+              "secondTimeUs": 4010606,
+              "secondPosition": 33464
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 3999220,
+              "firstPosition": 33369,
+              "secondTimeUs": 3999220,
+              "secondPosition": 33369
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 3999220,
+              "firstPosition": 33369,
+              "secondTimeUs": 3999220,
+              "secondPosition": 33369
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 3999220,
+              "firstPosition": 33369,
+              "secondTimeUs": 3999220,
+              "secondPosition": 33369
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 33547,
+      "iterations": 18,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 187,
+            "bytes": 32116,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4a-latm",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "firstTimeUs": 0,
+            "lastTimeUs": 3967938
+          }
+        },
+        {
+          "id": 1,
+          "output": {
+            "samples": 0,
+            "bytes": 0,
+            "formats": [
+              {
+                "mime": "application\/id3",
+                "container": "audio\/mp4a-latm",
+                "rate": -1,
+                "channels": -1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.aac",
+      "knownLength": false,
+      "truncated": true,
+      "size": 33547,
+      "sha256": "f2227ceb27722b2aeeda29fc5f996c9dd5db4262e4c9266da7b2f1cc46ff74b9",
+      "extractor": "androidx.media3.extractor.ts.AdtsExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.SeekMap$Unseekable",
+          "durationUs": -9223372036854775807,
+          "seekable": false,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 33547,
+      "iterations": 18,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 187,
+            "bytes": 32116,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4a-latm",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "firstTimeUs": 0,
+            "lastTimeUs": 3967938
+          }
+        },
+        {
+          "id": 1,
+          "output": {
+            "samples": 0,
+            "bytes": 0,
+            "formats": [
+              {
+                "mime": "application\/id3",
+                "container": "audio\/mp4a-latm",
+                "rate": -1,
+                "channels": -1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.m4a",
+      "knownLength": true,
+      "truncated": false,
+      "size": 66729,
+      "sha256": "3f98abf645a3ba431647b4ab477491b7b92d7e3655e25433599860e5f6f82672",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 2266,
+              "secondTimeUs": 0,
+              "secondPosition": 2266
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 2266,
+              "secondTimeUs": 1,
+              "secondPosition": 2266
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 10283,
+              "secondTimeUs": 999999,
+              "secondPosition": 10283
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 33527,
+              "secondTimeUs": 3883000,
+              "secondPosition": 33527
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 34382,
+              "secondTimeUs": 4000000,
+              "secondPosition": 34382
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 66405,
+              "secondTimeUs": 7990000,
+              "secondPosition": 66405
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 66572,
+              "secondTimeUs": 8000000,
+              "secondPosition": 66572
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 66572,
+              "secondTimeUs": 20000000,
+              "secondPosition": 66572
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 66729,
+      "iterations": 377,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 8000000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.m4a",
+      "knownLength": false,
+      "truncated": false,
+      "size": 66729,
+      "sha256": "3f98abf645a3ba431647b4ab477491b7b92d7e3655e25433599860e5f6f82672",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 2266,
+              "secondTimeUs": 0,
+              "secondPosition": 2266
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 2266,
+              "secondTimeUs": 1,
+              "secondPosition": 2266
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 10283,
+              "secondTimeUs": 999999,
+              "secondPosition": 10283
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 33527,
+              "secondTimeUs": 3883000,
+              "secondPosition": 33527
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 34382,
+              "secondTimeUs": 4000000,
+              "secondPosition": 34382
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 66405,
+              "secondTimeUs": 7990000,
+              "secondPosition": 66405
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 66572,
+              "secondTimeUs": 8000000,
+              "secondPosition": 66572
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 66572,
+              "secondTimeUs": 20000000,
+              "secondPosition": 66572
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 66729,
+      "iterations": 377,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 8000000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.m4a",
+      "knownLength": true,
+      "truncated": true,
+      "size": 33364,
+      "sha256": "2b081f5d4d07743e225dc3d255e40dbcf4cb8780305bd061d54395cbf54da187",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "error": "java.io.EOFException",
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 2266,
+              "secondTimeUs": 0,
+              "secondPosition": 2266
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 2266,
+              "secondTimeUs": 1,
+              "secondPosition": 2266
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 10283,
+              "secondTimeUs": 999999,
+              "secondPosition": 10283
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 33527,
+              "secondTimeUs": 3883000,
+              "secondPosition": 33527
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 34382,
+              "secondTimeUs": 4000000,
+              "secondPosition": 34382
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 66405,
+              "secondTimeUs": 7990000,
+              "secondPosition": 66405
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 66572,
+              "secondTimeUs": 8000000,
+              "secondPosition": 66572
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 66572,
+              "secondTimeUs": 20000000,
+              "secondPosition": 66572
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 0,
+      "iterations": 182,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 181,
+            "bytes": 31090,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 3840000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.m4a",
+      "knownLength": false,
+      "truncated": true,
+      "size": 33364,
+      "sha256": "2b081f5d4d07743e225dc3d255e40dbcf4cb8780305bd061d54395cbf54da187",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "error": "java.io.EOFException",
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 2266,
+              "secondTimeUs": 0,
+              "secondPosition": 2266
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 2266,
+              "secondTimeUs": 1,
+              "secondPosition": 2266
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 10283,
+              "secondTimeUs": 999999,
+              "secondPosition": 10283
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 33527,
+              "secondTimeUs": 3883000,
+              "secondPosition": 33527
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 34382,
+              "secondTimeUs": 4000000,
+              "secondPosition": 34382
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 66405,
+              "secondTimeUs": 7990000,
+              "secondPosition": 66405
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 66572,
+              "secondTimeUs": 8000000,
+              "secondPosition": 66572
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 66572,
+              "secondTimeUs": 20000000,
+              "secondPosition": 66572
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 0,
+      "iterations": 182,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 181,
+            "bytes": 31090,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 3840000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone-tail.m4a",
+      "knownLength": true,
+      "truncated": false,
+      "size": 66729,
+      "sha256": "9540c18b7dd79db894c79e74a2f1274333d47429ad719b07c2d3f609a0f4a425",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 44,
+              "secondTimeUs": 1,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 8061,
+              "secondTimeUs": 999999,
+              "secondPosition": 8061
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 31305,
+              "secondTimeUs": 3883000,
+              "secondPosition": 31305
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 32160,
+              "secondTimeUs": 4000000,
+              "secondPosition": 32160
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 64183,
+              "secondTimeUs": 7990000,
+              "secondPosition": 64183
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 8000000,
+              "secondPosition": 64350
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 20000000,
+              "secondPosition": 64350
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0,
+        44
+      ],
+      "readBytes": 131192,
+      "iterations": 378,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 8000000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone-tail.m4a",
+      "knownLength": false,
+      "truncated": false,
+      "size": 66729,
+      "sha256": "9540c18b7dd79db894c79e74a2f1274333d47429ad719b07c2d3f609a0f4a425",
+      "extractor": "androidx.media3.extractor.mp4.Mp4Extractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.mp4.Mp4Extractor$Mp4SeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 44,
+              "secondTimeUs": 0,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 44,
+              "secondTimeUs": 1,
+              "secondPosition": 44
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 8061,
+              "secondTimeUs": 999999,
+              "secondPosition": 8061
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 31305,
+              "secondTimeUs": 3883000,
+              "secondPosition": 31305
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 32160,
+              "secondTimeUs": 4000000,
+              "secondPosition": 32160
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 64183,
+              "secondTimeUs": 7990000,
+              "secondPosition": 64183
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 8000000,
+              "secondPosition": 64350
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 64350,
+              "secondTimeUs": 20000000,
+              "secondPosition": 64350
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0,
+        44
+      ],
+      "readBytes": 131192,
+      "iterations": 378,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 376,
+            "bytes": 64463,
+            "formats": [
+              {
+                "mime": "audio\/mp4a-latm",
+                "container": "audio\/mp4",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 1024,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 8000000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.flac",
+      "knownLength": true,
+      "truncated": false,
+      "size": 113190,
+      "sha256": "74c53b005c0637aaa6843a2197dcf40bc5855b4191f46a47364cc6293af717b9",
+      "extractor": "androidx.media3.extractor.flac.FlacExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.BinarySearchSeeker$BinarySearchSeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 8256,
+              "secondTimeUs": 0,
+              "secondPosition": 8256
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 8256,
+              "secondTimeUs": 1,
+              "secondPosition": 8256
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 19849,
+              "secondTimeUs": 999999,
+              "secondPosition": 19849
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 55774,
+              "secondTimeUs": 3883000,
+              "secondPosition": 55774
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 57232,
+              "secondTimeUs": 4000000,
+              "secondPosition": 57232
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 106950,
+              "secondTimeUs": 7990000,
+              "secondPosition": 106950
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 107075,
+              "secondTimeUs": 8000000,
+              "secondPosition": 107075
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 107075,
+              "secondTimeUs": 20000000,
+              "secondPosition": 107075
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 113190,
+      "iterations": 94,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 84,
+            "bytes": 104934,
+            "formats": [
+              {
+                "mime": "audio\/flac",
+                "container": "audio\/flac",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 7968000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.flac",
+      "knownLength": false,
+      "truncated": false,
+      "size": 113190,
+      "sha256": "74c53b005c0637aaa6843a2197dcf40bc5855b4191f46a47364cc6293af717b9",
+      "extractor": "androidx.media3.extractor.flac.FlacExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.SeekMap$Unseekable",
+          "durationUs": 8000000,
+          "seekable": false,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 113190,
+      "iterations": 94,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 84,
+            "bytes": 104934,
+            "formats": [
+              {
+                "mime": "audio\/flac",
+                "container": "audio\/flac",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 7968000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.flac",
+      "knownLength": true,
+      "truncated": true,
+      "size": 56595,
+      "sha256": "7faaa1bc4535145fe188f5081ae42e40b66383abba18704ca1f6b99ab2829190",
+      "extractor": "androidx.media3.extractor.flac.FlacExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.BinarySearchSeeker$BinarySearchSeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 8256,
+              "secondTimeUs": 0,
+              "secondPosition": 8256
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 1,
+              "firstPosition": 8256,
+              "secondTimeUs": 1,
+              "secondPosition": 8256
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 999999,
+              "firstPosition": 13128,
+              "secondTimeUs": 999999,
+              "secondPosition": 13128
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 3883000,
+              "firstPosition": 29677,
+              "secondTimeUs": 3883000,
+              "secondPosition": 29677
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 4000000,
+              "firstPosition": 30349,
+              "secondTimeUs": 4000000,
+              "secondPosition": 30349
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 7990000,
+              "firstPosition": 53253,
+              "secondTimeUs": 7990000,
+              "secondPosition": 53253
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 8000000,
+              "firstPosition": 53310,
+              "secondTimeUs": 8000000,
+              "secondPosition": 53310
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 20000000,
+              "firstPosition": 53310,
+              "secondTimeUs": 20000000,
+              "secondPosition": 53310
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 56595,
+      "iterations": 47,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 39,
+            "bytes": 48339,
+            "formats": [
+              {
+                "mime": "audio\/flac",
+                "container": "audio\/flac",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 3648000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone.flac",
+      "knownLength": false,
+      "truncated": true,
+      "size": 56595,
+      "sha256": "7faaa1bc4535145fe188f5081ae42e40b66383abba18704ca1f6b99ab2829190",
+      "extractor": "androidx.media3.extractor.flac.FlacExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.SeekMap$Unseekable",
+          "durationUs": 8000000,
+          "seekable": false,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 0,
+              "firstPosition": 0,
+              "secondTimeUs": 0,
+              "secondPosition": 0
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 56595,
+      "iterations": 47,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 39,
+            "bytes": 48339,
+            "formats": [
+              {
+                "mime": "audio\/flac",
+                "container": "audio\/flac",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 3648000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone-seektable.flac",
+      "knownLength": true,
+      "truncated": false,
+      "size": 113212,
+      "sha256": "20d98698bca39debdcedc7949ca395e2bdeb8d5f45193cdfb8e672376be3095b",
+      "extractor": "androidx.media3.extractor.flac.FlacExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.FlacSeekTableSeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 113212,
+      "iterations": 94,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 84,
+            "bytes": 104934,
+            "formats": [
+              {
+                "mime": "audio\/flac",
+                "container": "audio\/flac",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 7968000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tone-seektable.flac",
+      "knownLength": false,
+      "truncated": false,
+      "size": 113212,
+      "sha256": "20d98698bca39debdcedc7949ca395e2bdeb8d5f45193cdfb8e672376be3095b",
+      "extractor": "androidx.media3.extractor.flac.FlacExtractor",
+      "ended": true,
+      "maps": [
+        {
+          "class": "androidx.media3.extractor.FlacSeekTableSeekMap",
+          "durationUs": 8000000,
+          "seekable": true,
+          "points": [
+            {
+              "targetUs": 0,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 1,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 999999,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 3883000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 4000000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 7990000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 8000000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            },
+            {
+              "targetUs": 20000000,
+              "firstTimeUs": 0,
+              "firstPosition": 8278,
+              "secondTimeUs": 0,
+              "secondPosition": 8278
+            }
+          ]
+        }
+      ],
+      "opens": [
+        0
+      ],
+      "readBytes": 113212,
+      "iterations": 94,
+      "endedTracks": true,
+      "tracks": [
+        {
+          "id": 0,
+          "output": {
+            "samples": 84,
+            "bytes": 104934,
+            "formats": [
+              {
+                "mime": "audio\/flac",
+                "container": "audio\/flac",
+                "rate": 48000,
+                "channels": 1,
+                "encoderDelay": 0,
+                "encoderPadding": 0
+              }
+            ],
+            "durationUs": 8000000,
+            "firstTimeUs": 0,
+            "lastTimeUs": 7968000
+          }
+        }
+      ]
+    }
+  ]
+}

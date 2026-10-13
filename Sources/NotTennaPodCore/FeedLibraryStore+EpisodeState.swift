@@ -1,0 +1,279 @@
+import Foundation
+
+/// Episode state: favorites, sort order, Inbox, played and swipe marks with undo.
+extension FeedLibraryStore {
+    public func updateEpisode(id: Int64, change: @Sendable (inout LibraryEpisode) throws -> Void) throws {
+        try Task.checkCancellation()
+        try write(.registers) {
+            guard var episode = try loadEpisode(id) else { throw FeedLibraryError.missingEpisode(id) }
+            try change(&episode)
+            guard episode.id == id else { throw FeedLibraryError.invalidMutation }
+            let feedID = try database.scalar("SELECT feed_id FROM episodes WHERE id = ?", [.integer(id)])
+            try saveEpisode(episode, feedID: feedID)
+        }
+    }
+
+    /// Explicit Add/Remove favorite commands are idempotent, never stale toggles.
+    public func setFavorite(episodeID: Int64, favorite: Bool) throws {
+        try updateEpisode(id: episodeID) { $0.userState.isFavorite = favorite }
+    }
+
+    public func setFeedEpisodeSortOrder(feedID: Int64, order: FeedEpisodeSortOrder) throws {
+        try Task.checkCancellation()
+        try write(.local) {
+            guard var feed = try loadFeedHeader(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
+            feed.episodeSortOrderCode = order.rawValue
+            try saveHeader(feed)
+        }
+    }
+
+    /// DBWriter.removeFeedNewFlag changes only NEW to UNPLAYED for this feed.
+    /// It does not mark episodes played, reset positions, unqueue or sync them.
+    @discardableResult
+    public func removeFeedFromInbox(feedID: Int64) throws -> [Int64] {
+        try Task.checkCancellation()
+        return try write(.dismiss) {
+            guard let feed = try loadFeed(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
+            var changed: [Int64] = []
+            for var episode in feed.episodes where episode.userState.playState == .new {
+                episode.userState.playState = .unplayed
+                try saveEpisode(episode, feedID: feedID)
+                changed.append(episode.id)
+            }
+            try Task.checkCancellation()
+            return changed
+        }
+    }
+
+    /// `DBWriter.removeAllNewFlags`: every NEW episode in every feed, archived and not-subscribed
+    /// included, becomes UNPLAYED. Nothing else changes: no position, queue or favorite change, no sync
+    /// action and no undo.
+    @discardableResult
+    public func removeAllFromInbox() throws -> [Int64] {
+        try Task.checkCancellation()
+        return try write(.dismissAll) {
+            var changed: [Int64] = []
+            for row in try database.rows("SELECT id FROM feeds f\(hiddenFeedsCondition("f.id").map { " WHERE " + $0 } ?? "") ORDER BY id") {
+                guard let id = row[0].integer, let feed = try loadFeed(id) else { throw FeedLibraryError.corruptRecord }
+                for var episode in feed.episodes where episode.userState.playState == .new {
+                    episode.userState.playState = .unplayed
+                    try saveEpisode(episode, feedID: feed.id)
+                    changed.append(episode.id)
+                }
+            }
+            try Task.checkCancellation()
+            return changed
+        }
+    }
+
+    /// `DBWriter.clearPlaybackHistory`: clears every completion date (`playback_completion_date`).
+    /// Played state, position, played duration, last-played time, downloads, queue and favorites are kept.
+    @discardableResult
+    public func clearPlaybackHistory() throws -> [Int64] {
+        try Task.checkCancellation()
+        return try write(.historyClear) {
+            var changed: [Int64] = []
+            for row in try database.rows("SELECT id FROM feeds f\(hiddenFeedsCondition("f.id").map { " WHERE " + $0 } ?? "") ORDER BY id") {
+                guard let id = row[0].integer, let feed = try loadFeed(id) else { throw FeedLibraryError.corruptRecord }
+                for var episode in feed.episodes where episode.userState.lastPlayedHistoryMilliseconds != nil {
+                    episode.userState.lastPlayedHistoryMilliseconds = nil
+                    try saveEpisode(episode, feedID: feed.id)
+                    changed.append(episode.id)
+                }
+            }
+            // A standalone library's statistics units are rows to Android's `clearPlaybackHistory` too (schema 20). In
+            // a server library they are the server's records and follow its fold of the clear.
+            if serverContext == nil { try database.execute("UPDATE statistics_units SET history = NULL WHERE history IS NOT NULL") }
+            try Task.checkCancellation()
+            return changed
+        }
+    }
+
+    /// Capture the accepted prior state and guard in the same commit as a swipe
+    /// mark. Neither direction resets position or emits a manual sync action.
+    public func applySwipeMark(episodeID: Int64, action: EpisodeSwipeMark) throws -> EpisodeMarkReceipt? {
+        try Task.checkCancellation()
+        return try write(.swipeMark) {
+            guard var episode = try loadEpisode(episodeID) else { throw FeedLibraryError.missingEpisode(episodeID) }
+            let previous = episode.userState.playState
+            let applied: EpisodePlayState
+            switch action {
+            case .removeInbox:
+                guard previous == .new else { return nil }
+                applied = .unplayed
+            case .togglePlayed:
+                applied = previous == .unplayed ? .played : .unplayed
+            }
+            let feedID = try feedID(forEpisode: episodeID)
+            let receipt = EpisodeMarkReceipt(operationID: UUID(), episodeID: episodeID, feedID: feedID,
+                previousState: previous, appliedState: applied, storeEpoch: swipeUndoEpoch)
+            episode.userState.playState = applied
+            try saveEpisode(episode, feedID: feedID, explicitStateIntent: true)
+            try updateSwipeSessionState(episodeID: episodeID, state: applied)
+            try database.execute("INSERT INTO episode_swipe_undo(episode_id, operation_id) VALUES (?, ?)",
+                [.integer(episodeID), .text(receipt.operationID.uuidString)])
+            try Task.checkCancellation()
+            return receipt
+        }
+    }
+
+    /// Restore only the state delta, preserving current progress and metadata.
+    /// Timer cancellation belongs to the caller and must not depend on success.
+    public func undoSwipeMark(_ receipt: EpisodeMarkReceipt) throws -> EpisodeMarkUndoResult {
+        try Task.checkCancellation()
+        guard receipt.storeEpoch == swipeUndoEpoch else { return .unavailable }
+        return try write(.undoMark) {
+            guard var episode = try loadEpisode(receipt.episodeID) else { return .unavailable }
+            guard try feedID(forEpisode: receipt.episodeID) == receipt.feedID,
+                  episode.userState.playState == receipt.appliedState,
+                  try hasSwipeUndo(receipt) else { return .superseded }
+            episode.userState.playState = receipt.previousState
+            // saveEpisode consumes the old guard along with the changed state.
+            try saveEpisode(episode, feedID: receipt.feedID, explicitStateIntent: true)
+            try updateSwipeSessionState(episodeID: receipt.episodeID, state: receipt.previousState)
+            try Task.checkCancellation()
+            return .restored
+        }
+    }
+
+    /// Dismissal expires this offer only; it is not deletion cancellation.
+    public func releaseSwipeUndo(_ receipt: EpisodeMarkReceipt) throws {
+        try Task.checkCancellation()
+        guard receipt.storeEpoch == swipeUndoEpoch else { return }
+        try write(.local) {
+            try database.execute("DELETE FROM episode_swipe_undo WHERE episode_id = ? AND operation_id = ?",
+                [.integer(receipt.episodeID), .text(receipt.operationID.uuidString)])
+            try Task.checkCancellation()
+        }
+    }
+
+    private func hasSwipeUndo(_ receipt: EpisodeMarkReceipt) throws -> Bool {
+        try database.scalar("SELECT count(*) FROM episode_swipe_undo WHERE episode_id = ? AND operation_id = ?",
+            [.integer(receipt.episodeID), .text(receipt.operationID.uuidString)]) == 1
+    }
+
+    private func updateSwipeSessionState(episodeID: Int64, state: EpisodePlayState) throws {
+        if var session = try playbackSession(), session.episodeID == episodeID {
+            session.itemPlayState = state
+            try savePlaybackSession(session)
+        }
+    }
+
+    /// Context Remove from inbox does not emit a played/unplayed sync action.
+    public func removeEpisodeFromInbox(episodeID: Int64) throws {
+        try Task.checkCancellation()
+        try write(.dismiss) {
+            guard try removeFromInboxInTransaction(episodeID) else { throw FeedLibraryError.missingEpisode(episodeID) }
+        }
+    }
+
+    /// Multi-select Remove from inbox: `removeEpisodeFromInbox` for each episode, in one transaction (source
+    /// `DBWriter.removeNewFlag` style batch). An episode that no longer exists is skipped, as the source's
+    /// `UPDATE … WHERE id IN (…)` skips it.
+    public func removeEpisodesFromInbox(episodeIDs: [Int64]) throws {
+        try Task.checkCancellation()
+        try write(.dismiss) {
+            for id in episodeIDs { _ = try removeFromInboxInTransaction(id) }
+            try Task.checkCancellation()
+        }
+    }
+
+    private func removeFromInboxInTransaction(_ episodeID: Int64) throws -> Bool {
+        guard var episode = try loadEpisode(episodeID) else { return false }
+        episode.userState.playState = .unplayed
+        try saveEpisode(episode, feedID: feedID(forEpisode: episodeID), explicitStateIntent: true)
+        if var session = try playbackSession(), session.episodeID == episodeID {
+            session.itemPlayState = .unplayed; try savePlaybackSession(session)
+        }
+        return true
+    }
+
+    /// Multi-select Add/Remove favorite: `setFavorite` for each episode, in one transaction. An episode that
+    /// no longer exists is skipped.
+    public func setFavorite(episodeIDs: [Int64], favorite: Bool) throws {
+        try Task.checkCancellation()
+        try write(.registers) {
+            for id in episodeIDs {
+                guard var episode = try loadEpisode(id) else { continue }
+                episode.userState.isFavorite = favorite
+                try saveEpisode(episode, feedID: feedID(forEpisode: id))
+            }
+            try Task.checkCancellation()
+        }
+    }
+
+    public func markEpisodePlayed(episodeID: Int64, played: Bool, resetPosition: Bool = true,
+                                  syncProviderConnected: Bool? = nil, now: Date = Date()) throws {
+        try Task.checkCancellation()
+        try write(.mark(played: played, resetPosition: resetPosition), now: now) {
+            var headers: [Int64: LibraryFeed] = [:]
+            let connected = try syncProviderConnected ?? (synchronizationState().accountID != nil)
+            guard try markPlayedInTransaction(episodeID, played: played, resetPosition: resetPosition,
+                                              providerConnected: connected, now: now, headers: &headers) else {
+                throw FeedLibraryError.missingEpisode(episodeID)
+            }
+            try Task.checkCancellation()
+        }
+    }
+
+    /// Multi-select Mark played/unplayed: `markEpisodePlayed` for each episode in the given order, with the same
+    /// sync actions and statistics-session handling, in one transaction (source `DBWriter.markItemPlayed(state,
+    /// ids…)` is one statement). An episode that no longer exists is skipped, as that statement skips it.
+    public func markEpisodesPlayed(episodeIDs: [Int64], played: Bool, resetPosition: Bool = true,
+                                   syncProviderConnected: Bool? = nil, now: Date = Date()) throws {
+        try Task.checkCancellation()
+        try write(.mark(played: played, resetPosition: resetPosition), now: now) {
+            var headers: [Int64: LibraryFeed] = [:]
+            let connected = try syncProviderConnected ?? (synchronizationState().accountID != nil)
+            for id in episodeIDs {
+                _ = try markPlayedInTransaction(id, played: played, resetPosition: resetPosition,
+                                                providerConnected: connected, now: now, headers: &headers)
+            }
+            try Task.checkCancellation()
+        }
+    }
+
+    private func markPlayedInTransaction(_ episodeID: Int64, played: Bool, resetPosition: Bool, providerConnected: Bool,
+                                         now: Date, headers: inout [Int64: LibraryFeed]) throws -> Bool {
+        guard var episode = try loadEpisode(episodeID) else { return false }
+        let feedID = try feedID(forEpisode: episodeID)
+        let feed: LibraryFeed
+        if let cached = headers[feedID] { feed = cached } else {
+            guard let header = try loadFeedHeader(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
+            headers[feedID] = header; feed = header
+        }
+        if let action = EpisodeStateSyncAction(episode: episode, feed: feed, played: played, providerConnected: providerConnected) {
+            try appendEffect(.init(feedID: feedID, date: now, kind: .episodeStateChanged(action)))
+        }
+        episode.userState.playState = played ? .played : .unplayed
+        if played && resetPosition && episode.details.media != nil { episode.userState.positionMilliseconds = 0 }
+        try saveEpisode(episode, feedID: feedID, explicitStateIntent: true)
+        // The statistics session may still be playing. Retain its identity
+        // and counters, but never let a saved New flag undo an explicit mark.
+        if var session = try playbackSession(), session.episodeID == episodeID {
+            session.itemPlayState = episode.userState.playState
+            try savePlaybackSession(session)
+        }
+        return true
+    }
+
+    /// Reset is not playback completion: keep queue, history, statistics and files.
+    public func resetPlaybackPosition(episodeID: Int64) throws {
+        try Task.checkCancellation()
+        try write(.resetPosition) {
+            guard var episode = try loadEpisode(episodeID) else { throw FeedLibraryError.missingEpisode(episodeID) }
+            guard episode.details.media != nil else { throw FeedLibraryError.invalidMutation }
+            episode.userState.positionMilliseconds = 0
+            episode.userState.playState = .unplayed
+            let feedID = try feedID(forEpisode: episodeID)
+            try saveEpisode(episode, feedID: feedID, explicitStateIntent: true)
+            // Invalidate the statistics writer in the same commit so a late
+            // engine reading cannot restore the position that was just reset.
+            try database.execute("DELETE FROM playback_session WHERE episode_id = ?", [.integer(episodeID)])
+            try database.execute("DELETE FROM playback_selection WHERE episode_id = ?", [.integer(episodeID)])
+            // A server library flushes and closes the episode's sessions, and clears its pending transition (PROTOCOL §8).
+            try journalPositionReset(episodeID: episodeID, now: try milliseconds(Date()))
+            try Task.checkCancellation()
+        }
+    }
+}

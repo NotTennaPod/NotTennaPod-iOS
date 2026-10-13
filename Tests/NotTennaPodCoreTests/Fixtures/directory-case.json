@@ -1,0 +1,82 @@
+[
+  {
+    "left": "Track",
+    "right": "tRaCk",
+    "equal": true
+  },
+  {
+    "left": "Artist",
+    "right": "Artist ",
+    "equal": false
+  },
+  {
+    "left": "İ",
+    "right": "i",
+    "equal": true
+  },
+  {
+    "left": "ı",
+    "right": "I",
+    "equal": true
+  },
+  {
+    "left": "ß",
+    "right": "ss",
+    "equal": false
+  },
+  {
+    "left": "ß",
+    "right": "ẞ",
+    "equal": true
+  },
+  {
+    "left": "ßss",
+    "right": "ssß",
+    "equal": false
+  },
+  {
+    "left": "ﬅ",
+    "right": "ﬆ",
+    "equal": false
+  },
+  {
+    "left": "é",
+    "right": "é",
+    "equal": false
+  },
+  {
+    "left": "ς",
+    "right": "σ",
+    "equal": true
+  },
+  {
+    "left": "ᾀ",
+    "right": "ᾈ",
+    "equal": true
+  },
+  {
+    "left": "𐐀",
+    "right": "𐐨",
+    "equal": true
+  },
+  {
+    "left": "K",
+    "right": "k",
+    "equal": true
+  },
+  {
+    "left": "ſ",
+    "right": "s",
+    "equal": true
+  },
+  {
+    "left": "",
+    "right": "",
+    "equal": true
+  },
+  {
+    "left": "a",
+    "right": "á",
+    "equal": false
+  }
+]

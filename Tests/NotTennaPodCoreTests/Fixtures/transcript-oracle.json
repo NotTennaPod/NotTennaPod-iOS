@@ -1,0 +1,2971 @@
+[
+  {
+    "speakers": [""],
+    "name": "json-0.1-none",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 0.1, \"body\": \"word0\"}, {\"startTime\": 0.225, \"endTime\": 0.325, \"body\": \"word1\"}, {\"startTime\": 0.45, \"endTime\": 0.55, \"body\": \"word2\"}, {\"startTime\": 0.675, \"endTime\": 0.775, \"body\": \"word3\"}, {\"startTime\": 0.9, \"endTime\": 1.0, \"body\": \"word4\"}, {\"startTime\": 1.125, \"endTime\": 1.225, \"body\": \"word5\"}, {\"startTime\": 1.35, \"endTime\": 1.45, \"body\": \"word6\"}, {\"startTime\": 1.575, \"endTime\": 1.675, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [{
+      "endMilliseconds": 1675,
+      "speaker": "",
+      "startMilliseconds": 0,
+      "words": "word0 word1 word2 word3 word4 word5 word6 word7"
+    }]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-0.1-same",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 0.1, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 0.225, \"endTime\": 0.325, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 0.45, \"endTime\": 0.55, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 0.675, \"endTime\": 0.775, \"body\": \"word3\", \"speaker\": \"Ada\"}, {\"startTime\": 0.9, \"endTime\": 1.0, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 1.125, \"endTime\": 1.225, \"body\": \"word5\", \"speaker\": \"Ada\"}, {\"startTime\": 1.35, \"endTime\": 1.45, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 1.575, \"endTime\": 1.675, \"body\": \"word7\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [{
+      "endMilliseconds": 1675,
+      "speaker": "Ada",
+      "startMilliseconds": 0,
+      "words": "word0 word1 word2 word3 word4 word5 word6 word7"
+    }]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "json-0.1-change",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 0.1, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 0.225, \"endTime\": 0.325, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 0.45, \"endTime\": 0.55, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 0.675, \"endTime\": 0.775, \"body\": \"word3\", \"speaker\": \"Bob\"}, {\"startTime\": 0.9, \"endTime\": 1.0, \"body\": \"word4\", \"speaker\": \"Bob\"}, {\"startTime\": 1.125, \"endTime\": 1.225, \"body\": \"word5\", \"speaker\": \"Bob\"}, {\"startTime\": 1.35, \"endTime\": 1.45, \"body\": \"word6\", \"speaker\": \"Bob\"}, {\"startTime\": 1.575, \"endTime\": 1.675, \"body\": \"word7\", \"speaker\": \"Bob\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 550,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2"
+      },
+      {
+        "endMilliseconds": 1675,
+        "speaker": "Bob",
+        "startMilliseconds": 675,
+        "words": "word3 word4 word5 word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "",
+      "Ada"
+    ],
+    "name": "json-0.1-missing",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 0.1, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 0.225, \"endTime\": 0.325, \"body\": \"word1\"}, {\"startTime\": 0.45, \"endTime\": 0.55, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 0.675, \"endTime\": 0.775, \"body\": \"word3\"}, {\"startTime\": 0.9, \"endTime\": 1.0, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 1.125, \"endTime\": 1.225, \"body\": \"word5\"}, {\"startTime\": 1.35, \"endTime\": 1.45, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 1.575, \"endTime\": 1.675, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [{
+      "endMilliseconds": 1675,
+      "speaker": "Ada",
+      "startMilliseconds": 0,
+      "words": "word0 word1 word2 word3 word4 word5 word6 word7"
+    }]
+  },
+  {
+    "speakers": [""],
+    "name": "json-1-none",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 1.0, \"body\": \"word0\"}, {\"startTime\": 1.125, \"endTime\": 2.125, \"body\": \"word1\"}, {\"startTime\": 2.25, \"endTime\": 3.25, \"body\": \"word2\"}, {\"startTime\": 3.375, \"endTime\": 4.375, \"body\": \"word3\"}, {\"startTime\": 4.5, \"endTime\": 5.5, \"body\": \"word4\"}, {\"startTime\": 5.625, \"endTime\": 6.625, \"body\": \"word5\"}, {\"startTime\": 6.75, \"endTime\": 7.75, \"body\": \"word6\"}, {\"startTime\": 7.875, \"endTime\": 8.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5500,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2 word3 word4"
+      },
+      {
+        "endMilliseconds": 8875,
+        "speaker": "",
+        "startMilliseconds": 5625,
+        "words": "word5 word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-1-same",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 1.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 1.125, \"endTime\": 2.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 2.25, \"endTime\": 3.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 3.375, \"endTime\": 4.375, \"body\": \"word3\", \"speaker\": \"Ada\"}, {\"startTime\": 4.5, \"endTime\": 5.5, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 5.625, \"endTime\": 6.625, \"body\": \"word5\", \"speaker\": \"Ada\"}, {\"startTime\": 6.75, \"endTime\": 7.75, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 7.875, \"endTime\": 8.875, \"body\": \"word7\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5500,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2 word3 word4"
+      },
+      {
+        "endMilliseconds": 8875,
+        "speaker": "Ada",
+        "startMilliseconds": 5625,
+        "words": "word5 word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "json-1-change",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 1.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 1.125, \"endTime\": 2.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 2.25, \"endTime\": 3.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 3.375, \"endTime\": 4.375, \"body\": \"word3\", \"speaker\": \"Bob\"}, {\"startTime\": 4.5, \"endTime\": 5.5, \"body\": \"word4\", \"speaker\": \"Bob\"}, {\"startTime\": 5.625, \"endTime\": 6.625, \"body\": \"word5\", \"speaker\": \"Bob\"}, {\"startTime\": 6.75, \"endTime\": 7.75, \"body\": \"word6\", \"speaker\": \"Bob\"}, {\"startTime\": 7.875, \"endTime\": 8.875, \"body\": \"word7\", \"speaker\": \"Bob\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 3250,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2"
+      },
+      {
+        "endMilliseconds": 8875,
+        "speaker": "Bob",
+        "startMilliseconds": 3375,
+        "words": "word3 word4 word5 word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "",
+      "Ada"
+    ],
+    "name": "json-1-missing",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 1.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 1.125, \"endTime\": 2.125, \"body\": \"word1\"}, {\"startTime\": 2.25, \"endTime\": 3.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 3.375, \"endTime\": 4.375, \"body\": \"word3\"}, {\"startTime\": 4.5, \"endTime\": 5.5, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 5.625, \"endTime\": 6.625, \"body\": \"word5\"}, {\"startTime\": 6.75, \"endTime\": 7.75, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 7.875, \"endTime\": 8.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5500,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2 word3 word4"
+      },
+      {
+        "endMilliseconds": 8875,
+        "speaker": "Ada",
+        "startMilliseconds": 5625,
+        "words": "word5 word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [""],
+    "name": "json-2.5-none",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 2.5, \"body\": \"word0\"}, {\"startTime\": 2.625, \"endTime\": 5.125, \"body\": \"word1\"}, {\"startTime\": 5.25, \"endTime\": 7.75, \"body\": \"word2\"}, {\"startTime\": 7.875, \"endTime\": 10.375, \"body\": \"word3\"}, {\"startTime\": 10.5, \"endTime\": 13.0, \"body\": \"word4\"}, {\"startTime\": 13.125, \"endTime\": 15.625, \"body\": \"word5\"}, {\"startTime\": 15.75, \"endTime\": 18.25, \"body\": \"word6\"}, {\"startTime\": 18.375, \"endTime\": 20.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5125,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 10375,
+        "speaker": "",
+        "startMilliseconds": 5250,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 15625,
+        "speaker": "",
+        "startMilliseconds": 10500,
+        "words": "word4 word5"
+      },
+      {
+        "endMilliseconds": 20875,
+        "speaker": "",
+        "startMilliseconds": 15750,
+        "words": "word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-2.5-same",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 2.5, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 2.625, \"endTime\": 5.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 5.25, \"endTime\": 7.75, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 7.875, \"endTime\": 10.375, \"body\": \"word3\", \"speaker\": \"Ada\"}, {\"startTime\": 10.5, \"endTime\": 13.0, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 13.125, \"endTime\": 15.625, \"body\": \"word5\", \"speaker\": \"Ada\"}, {\"startTime\": 15.75, \"endTime\": 18.25, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 18.375, \"endTime\": 20.875, \"body\": \"word7\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5125,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 10375,
+        "speaker": "Ada",
+        "startMilliseconds": 5250,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 15625,
+        "speaker": "Ada",
+        "startMilliseconds": 10500,
+        "words": "word4 word5"
+      },
+      {
+        "endMilliseconds": 20875,
+        "speaker": "Ada",
+        "startMilliseconds": 15750,
+        "words": "word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "json-2.5-change",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 2.5, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 2.625, \"endTime\": 5.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 5.25, \"endTime\": 7.75, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 7.875, \"endTime\": 10.375, \"body\": \"word3\", \"speaker\": \"Bob\"}, {\"startTime\": 10.5, \"endTime\": 13.0, \"body\": \"word4\", \"speaker\": \"Bob\"}, {\"startTime\": 13.125, \"endTime\": 15.625, \"body\": \"word5\", \"speaker\": \"Bob\"}, {\"startTime\": 15.75, \"endTime\": 18.25, \"body\": \"word6\", \"speaker\": \"Bob\"}, {\"startTime\": 18.375, \"endTime\": 20.875, \"body\": \"word7\", \"speaker\": \"Bob\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5125,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 7750,
+        "speaker": "Ada",
+        "startMilliseconds": 5250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 15625,
+        "speaker": "Bob",
+        "startMilliseconds": 7875,
+        "words": "word3 word4 word5"
+      },
+      {
+        "endMilliseconds": 20875,
+        "speaker": "Bob",
+        "startMilliseconds": 15750,
+        "words": "word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "",
+      "Ada"
+    ],
+    "name": "json-2.5-missing",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 2.5, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 2.625, \"endTime\": 5.125, \"body\": \"word1\"}, {\"startTime\": 5.25, \"endTime\": 7.75, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 7.875, \"endTime\": 10.375, \"body\": \"word3\"}, {\"startTime\": 10.5, \"endTime\": 13.0, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 13.125, \"endTime\": 15.625, \"body\": \"word5\"}, {\"startTime\": 15.75, \"endTime\": 18.25, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 18.375, \"endTime\": 20.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5125,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 10375,
+        "speaker": "Ada",
+        "startMilliseconds": 5250,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 15625,
+        "speaker": "Ada",
+        "startMilliseconds": 10500,
+        "words": "word4 word5"
+      },
+      {
+        "endMilliseconds": 20875,
+        "speaker": "Ada",
+        "startMilliseconds": 15750,
+        "words": "word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [""],
+    "name": "json-4.999-none",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 4.999, \"body\": \"word0\"}, {\"startTime\": 5.124, \"endTime\": 10.123, \"body\": \"word1\"}, {\"startTime\": 10.248, \"endTime\": 15.247, \"body\": \"word2\"}, {\"startTime\": 15.372, \"endTime\": 20.371, \"body\": \"word3\"}, {\"startTime\": 20.496, \"endTime\": 25.495, \"body\": \"word4\"}, {\"startTime\": 25.62, \"endTime\": 30.619, \"body\": \"word5\"}, {\"startTime\": 30.744, \"endTime\": 35.743, \"body\": \"word6\"}, {\"startTime\": 35.868, \"endTime\": 40.867, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10123,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 20371,
+        "speaker": "",
+        "startMilliseconds": 10248,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 30619,
+        "speaker": "",
+        "startMilliseconds": 20496,
+        "words": "word4 word5"
+      },
+      {
+        "endMilliseconds": 40867,
+        "speaker": "",
+        "startMilliseconds": 30744,
+        "words": "word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-4.999-same",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 4.999, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 5.124, \"endTime\": 10.123, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 10.248, \"endTime\": 15.247, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 15.372, \"endTime\": 20.371, \"body\": \"word3\", \"speaker\": \"Ada\"}, {\"startTime\": 20.496, \"endTime\": 25.495, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 25.62, \"endTime\": 30.619, \"body\": \"word5\", \"speaker\": \"Ada\"}, {\"startTime\": 30.744, \"endTime\": 35.743, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 35.868, \"endTime\": 40.867, \"body\": \"word7\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10123,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 20371,
+        "speaker": "Ada",
+        "startMilliseconds": 10248,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 30619,
+        "speaker": "Ada",
+        "startMilliseconds": 20496,
+        "words": "word4 word5"
+      },
+      {
+        "endMilliseconds": 40867,
+        "speaker": "Ada",
+        "startMilliseconds": 30744,
+        "words": "word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "json-4.999-change",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 4.999, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 5.124, \"endTime\": 10.123, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 10.248, \"endTime\": 15.247, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 15.372, \"endTime\": 20.371, \"body\": \"word3\", \"speaker\": \"Bob\"}, {\"startTime\": 20.496, \"endTime\": 25.495, \"body\": \"word4\", \"speaker\": \"Bob\"}, {\"startTime\": 25.62, \"endTime\": 30.619, \"body\": \"word5\", \"speaker\": \"Bob\"}, {\"startTime\": 30.744, \"endTime\": 35.743, \"body\": \"word6\", \"speaker\": \"Bob\"}, {\"startTime\": 35.868, \"endTime\": 40.867, \"body\": \"word7\", \"speaker\": \"Bob\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10123,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 15247,
+        "speaker": "Ada",
+        "startMilliseconds": 10248,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 30619,
+        "speaker": "Bob",
+        "startMilliseconds": 15372,
+        "words": "word3 word4 word5"
+      },
+      {
+        "endMilliseconds": 40867,
+        "speaker": "Bob",
+        "startMilliseconds": 30744,
+        "words": "word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "",
+      "Ada"
+    ],
+    "name": "json-4.999-missing",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 4.999, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 5.124, \"endTime\": 10.123, \"body\": \"word1\"}, {\"startTime\": 10.248, \"endTime\": 15.247, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 15.372, \"endTime\": 20.371, \"body\": \"word3\"}, {\"startTime\": 20.496, \"endTime\": 25.495, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 25.62, \"endTime\": 30.619, \"body\": \"word5\"}, {\"startTime\": 30.744, \"endTime\": 35.743, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 35.868, \"endTime\": 40.867, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10123,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 20371,
+        "speaker": "Ada",
+        "startMilliseconds": 10248,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 30619,
+        "speaker": "Ada",
+        "startMilliseconds": 20496,
+        "words": "word4 word5"
+      },
+      {
+        "endMilliseconds": 40867,
+        "speaker": "Ada",
+        "startMilliseconds": 30744,
+        "words": "word6 word7"
+      }
+    ]
+  },
+  {
+    "speakers": [""],
+    "name": "json-5-none",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 5.0, \"body\": \"word0\"}, {\"startTime\": 5.125, \"endTime\": 10.125, \"body\": \"word1\"}, {\"startTime\": 10.25, \"endTime\": 15.25, \"body\": \"word2\"}, {\"startTime\": 15.375, \"endTime\": 20.375, \"body\": \"word3\"}, {\"startTime\": 20.5, \"endTime\": 25.5, \"body\": \"word4\"}, {\"startTime\": 25.625, \"endTime\": 30.625, \"body\": \"word5\"}, {\"startTime\": 30.75, \"endTime\": 35.75, \"body\": \"word6\"}, {\"startTime\": 35.875, \"endTime\": 40.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 10125,
+        "speaker": "",
+        "startMilliseconds": 5125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 15250,
+        "speaker": "",
+        "startMilliseconds": 10250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 20375,
+        "speaker": "",
+        "startMilliseconds": 15375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 25500,
+        "speaker": "",
+        "startMilliseconds": 20500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 30625,
+        "speaker": "",
+        "startMilliseconds": 25625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 35750,
+        "speaker": "",
+        "startMilliseconds": 30750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 40875,
+        "speaker": "",
+        "startMilliseconds": 35875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-5-same",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 5.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 5.125, \"endTime\": 10.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 10.25, \"endTime\": 15.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 15.375, \"endTime\": 20.375, \"body\": \"word3\", \"speaker\": \"Ada\"}, {\"startTime\": 20.5, \"endTime\": 25.5, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 25.625, \"endTime\": 30.625, \"body\": \"word5\", \"speaker\": \"Ada\"}, {\"startTime\": 30.75, \"endTime\": 35.75, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 35.875, \"endTime\": 40.875, \"body\": \"word7\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 10125,
+        "speaker": "Ada",
+        "startMilliseconds": 5125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 15250,
+        "speaker": "Ada",
+        "startMilliseconds": 10250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 20375,
+        "speaker": "Ada",
+        "startMilliseconds": 15375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 25500,
+        "speaker": "Ada",
+        "startMilliseconds": 20500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 30625,
+        "speaker": "Ada",
+        "startMilliseconds": 25625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 35750,
+        "speaker": "Ada",
+        "startMilliseconds": 30750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 40875,
+        "speaker": "Ada",
+        "startMilliseconds": 35875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "json-5-change",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 5.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 5.125, \"endTime\": 10.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 10.25, \"endTime\": 15.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 15.375, \"endTime\": 20.375, \"body\": \"word3\", \"speaker\": \"Bob\"}, {\"startTime\": 20.5, \"endTime\": 25.5, \"body\": \"word4\", \"speaker\": \"Bob\"}, {\"startTime\": 25.625, \"endTime\": 30.625, \"body\": \"word5\", \"speaker\": \"Bob\"}, {\"startTime\": 30.75, \"endTime\": 35.75, \"body\": \"word6\", \"speaker\": \"Bob\"}, {\"startTime\": 35.875, \"endTime\": 40.875, \"body\": \"word7\", \"speaker\": \"Bob\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 10125,
+        "speaker": "Ada",
+        "startMilliseconds": 5125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 15250,
+        "speaker": "Ada",
+        "startMilliseconds": 10250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 20375,
+        "speaker": "Bob",
+        "startMilliseconds": 15375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 25500,
+        "speaker": "Bob",
+        "startMilliseconds": 20500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 30625,
+        "speaker": "Bob",
+        "startMilliseconds": 25625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 35750,
+        "speaker": "Bob",
+        "startMilliseconds": 30750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 40875,
+        "speaker": "Bob",
+        "startMilliseconds": 35875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "",
+      "Ada"
+    ],
+    "name": "json-5-missing",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 5.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 5.125, \"endTime\": 10.125, \"body\": \"word1\"}, {\"startTime\": 10.25, \"endTime\": 15.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 15.375, \"endTime\": 20.375, \"body\": \"word3\"}, {\"startTime\": 20.5, \"endTime\": 25.5, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 25.625, \"endTime\": 30.625, \"body\": \"word5\"}, {\"startTime\": 30.75, \"endTime\": 35.75, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 35.875, \"endTime\": 40.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 10125,
+        "speaker": "Ada",
+        "startMilliseconds": 5125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 15250,
+        "speaker": "Ada",
+        "startMilliseconds": 10250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 20375,
+        "speaker": "Ada",
+        "startMilliseconds": 15375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 25500,
+        "speaker": "Ada",
+        "startMilliseconds": 20500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 30625,
+        "speaker": "Ada",
+        "startMilliseconds": 25625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 35750,
+        "speaker": "Ada",
+        "startMilliseconds": 30750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 40875,
+        "speaker": "Ada",
+        "startMilliseconds": 35875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [""],
+    "name": "json-7.999-none",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 7.999, \"body\": \"word0\"}, {\"startTime\": 8.124, \"endTime\": 16.123, \"body\": \"word1\"}, {\"startTime\": 16.248, \"endTime\": 24.247, \"body\": \"word2\"}, {\"startTime\": 24.372, \"endTime\": 32.371, \"body\": \"word3\"}, {\"startTime\": 32.496, \"endTime\": 40.495, \"body\": \"word4\"}, {\"startTime\": 40.62, \"endTime\": 48.619, \"body\": \"word5\"}, {\"startTime\": 48.744, \"endTime\": 56.743, \"body\": \"word6\"}, {\"startTime\": 56.868, \"endTime\": 64.867, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7999,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 16123,
+        "speaker": "",
+        "startMilliseconds": 8124,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 24247,
+        "speaker": "",
+        "startMilliseconds": 16248,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 32371,
+        "speaker": "",
+        "startMilliseconds": 24372,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 40495,
+        "speaker": "",
+        "startMilliseconds": 32496,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 48619,
+        "speaker": "",
+        "startMilliseconds": 40620,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 56743,
+        "speaker": "",
+        "startMilliseconds": 48744,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 64867,
+        "speaker": "",
+        "startMilliseconds": 56868,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-7.999-same",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 7.999, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 8.124, \"endTime\": 16.123, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 16.248, \"endTime\": 24.247, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 24.372, \"endTime\": 32.371, \"body\": \"word3\", \"speaker\": \"Ada\"}, {\"startTime\": 32.496, \"endTime\": 40.495, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 40.62, \"endTime\": 48.619, \"body\": \"word5\", \"speaker\": \"Ada\"}, {\"startTime\": 48.744, \"endTime\": 56.743, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 56.868, \"endTime\": 64.867, \"body\": \"word7\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7999,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 16123,
+        "speaker": "Ada",
+        "startMilliseconds": 8124,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 24247,
+        "speaker": "Ada",
+        "startMilliseconds": 16248,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 32371,
+        "speaker": "Ada",
+        "startMilliseconds": 24372,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 40495,
+        "speaker": "Ada",
+        "startMilliseconds": 32496,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 48619,
+        "speaker": "Ada",
+        "startMilliseconds": 40620,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 56743,
+        "speaker": "Ada",
+        "startMilliseconds": 48744,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 64867,
+        "speaker": "Ada",
+        "startMilliseconds": 56868,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "json-7.999-change",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 7.999, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 8.124, \"endTime\": 16.123, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 16.248, \"endTime\": 24.247, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 24.372, \"endTime\": 32.371, \"body\": \"word3\", \"speaker\": \"Bob\"}, {\"startTime\": 32.496, \"endTime\": 40.495, \"body\": \"word4\", \"speaker\": \"Bob\"}, {\"startTime\": 40.62, \"endTime\": 48.619, \"body\": \"word5\", \"speaker\": \"Bob\"}, {\"startTime\": 48.744, \"endTime\": 56.743, \"body\": \"word6\", \"speaker\": \"Bob\"}, {\"startTime\": 56.868, \"endTime\": 64.867, \"body\": \"word7\", \"speaker\": \"Bob\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7999,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 16123,
+        "speaker": "Ada",
+        "startMilliseconds": 8124,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 24247,
+        "speaker": "Ada",
+        "startMilliseconds": 16248,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 32371,
+        "speaker": "Bob",
+        "startMilliseconds": 24372,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 40495,
+        "speaker": "Bob",
+        "startMilliseconds": 32496,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 48619,
+        "speaker": "Bob",
+        "startMilliseconds": 40620,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 56743,
+        "speaker": "Bob",
+        "startMilliseconds": 48744,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 64867,
+        "speaker": "Bob",
+        "startMilliseconds": 56868,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "",
+      "Ada"
+    ],
+    "name": "json-7.999-missing",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 7.999, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 8.124, \"endTime\": 16.123, \"body\": \"word1\"}, {\"startTime\": 16.248, \"endTime\": 24.247, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 24.372, \"endTime\": 32.371, \"body\": \"word3\"}, {\"startTime\": 32.496, \"endTime\": 40.495, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 40.62, \"endTime\": 48.619, \"body\": \"word5\"}, {\"startTime\": 48.744, \"endTime\": 56.743, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 56.868, \"endTime\": 64.867, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7999,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 16123,
+        "speaker": "Ada",
+        "startMilliseconds": 8124,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 24247,
+        "speaker": "Ada",
+        "startMilliseconds": 16248,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 32371,
+        "speaker": "Ada",
+        "startMilliseconds": 24372,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 40495,
+        "speaker": "Ada",
+        "startMilliseconds": 32496,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 48619,
+        "speaker": "Ada",
+        "startMilliseconds": 40620,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 56743,
+        "speaker": "Ada",
+        "startMilliseconds": 48744,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 64867,
+        "speaker": "Ada",
+        "startMilliseconds": 56868,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [""],
+    "name": "json-8-none",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 8.0, \"body\": \"word0\"}, {\"startTime\": 8.125, \"endTime\": 16.125, \"body\": \"word1\"}, {\"startTime\": 16.25, \"endTime\": 24.25, \"body\": \"word2\"}, {\"startTime\": 24.375, \"endTime\": 32.375, \"body\": \"word3\"}, {\"startTime\": 32.5, \"endTime\": 40.5, \"body\": \"word4\"}, {\"startTime\": 40.625, \"endTime\": 48.625, \"body\": \"word5\"}, {\"startTime\": 48.75, \"endTime\": 56.75, \"body\": \"word6\"}, {\"startTime\": 56.875, \"endTime\": 64.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 16125,
+        "speaker": "",
+        "startMilliseconds": 8125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 24250,
+        "speaker": "",
+        "startMilliseconds": 16250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 32375,
+        "speaker": "",
+        "startMilliseconds": 24375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 40500,
+        "speaker": "",
+        "startMilliseconds": 32500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 48625,
+        "speaker": "",
+        "startMilliseconds": 40625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 56750,
+        "speaker": "",
+        "startMilliseconds": 48750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 64875,
+        "speaker": "",
+        "startMilliseconds": 56875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-8-same",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 8.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 8.125, \"endTime\": 16.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 16.25, \"endTime\": 24.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 24.375, \"endTime\": 32.375, \"body\": \"word3\", \"speaker\": \"Ada\"}, {\"startTime\": 32.5, \"endTime\": 40.5, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 40.625, \"endTime\": 48.625, \"body\": \"word5\", \"speaker\": \"Ada\"}, {\"startTime\": 48.75, \"endTime\": 56.75, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 56.875, \"endTime\": 64.875, \"body\": \"word7\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 16125,
+        "speaker": "Ada",
+        "startMilliseconds": 8125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 24250,
+        "speaker": "Ada",
+        "startMilliseconds": 16250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 32375,
+        "speaker": "Ada",
+        "startMilliseconds": 24375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 40500,
+        "speaker": "Ada",
+        "startMilliseconds": 32500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 48625,
+        "speaker": "Ada",
+        "startMilliseconds": 40625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 56750,
+        "speaker": "Ada",
+        "startMilliseconds": 48750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 64875,
+        "speaker": "Ada",
+        "startMilliseconds": 56875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "json-8-change",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 8.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 8.125, \"endTime\": 16.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 16.25, \"endTime\": 24.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 24.375, \"endTime\": 32.375, \"body\": \"word3\", \"speaker\": \"Bob\"}, {\"startTime\": 32.5, \"endTime\": 40.5, \"body\": \"word4\", \"speaker\": \"Bob\"}, {\"startTime\": 40.625, \"endTime\": 48.625, \"body\": \"word5\", \"speaker\": \"Bob\"}, {\"startTime\": 48.75, \"endTime\": 56.75, \"body\": \"word6\", \"speaker\": \"Bob\"}, {\"startTime\": 56.875, \"endTime\": 64.875, \"body\": \"word7\", \"speaker\": \"Bob\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 16125,
+        "speaker": "Ada",
+        "startMilliseconds": 8125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 24250,
+        "speaker": "Ada",
+        "startMilliseconds": 16250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 32375,
+        "speaker": "Bob",
+        "startMilliseconds": 24375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 40500,
+        "speaker": "Bob",
+        "startMilliseconds": 32500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 48625,
+        "speaker": "Bob",
+        "startMilliseconds": 40625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 56750,
+        "speaker": "Bob",
+        "startMilliseconds": 48750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 64875,
+        "speaker": "Bob",
+        "startMilliseconds": 56875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "",
+      "Ada"
+    ],
+    "name": "json-8-missing",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 8.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 8.125, \"endTime\": 16.125, \"body\": \"word1\"}, {\"startTime\": 16.25, \"endTime\": 24.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 24.375, \"endTime\": 32.375, \"body\": \"word3\"}, {\"startTime\": 32.5, \"endTime\": 40.5, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 40.625, \"endTime\": 48.625, \"body\": \"word5\"}, {\"startTime\": 48.75, \"endTime\": 56.75, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 56.875, \"endTime\": 64.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 16125,
+        "speaker": "Ada",
+        "startMilliseconds": 8125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 24250,
+        "speaker": "Ada",
+        "startMilliseconds": 16250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 32375,
+        "speaker": "Ada",
+        "startMilliseconds": 24375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 40500,
+        "speaker": "Ada",
+        "startMilliseconds": 32500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 48625,
+        "speaker": "Ada",
+        "startMilliseconds": 40625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 56750,
+        "speaker": "Ada",
+        "startMilliseconds": 48750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 64875,
+        "speaker": "Ada",
+        "startMilliseconds": 56875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [""],
+    "name": "json-10-none",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 10.0, \"body\": \"word0\"}, {\"startTime\": 10.125, \"endTime\": 20.125, \"body\": \"word1\"}, {\"startTime\": 20.25, \"endTime\": 30.25, \"body\": \"word2\"}, {\"startTime\": 30.375, \"endTime\": 40.375, \"body\": \"word3\"}, {\"startTime\": 40.5, \"endTime\": 50.5, \"body\": \"word4\"}, {\"startTime\": 50.625, \"endTime\": 60.625, \"body\": \"word5\"}, {\"startTime\": 60.75, \"endTime\": 70.75, \"body\": \"word6\"}, {\"startTime\": 70.875, \"endTime\": 80.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 20125,
+        "speaker": "",
+        "startMilliseconds": 10125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 30250,
+        "speaker": "",
+        "startMilliseconds": 20250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 40375,
+        "speaker": "",
+        "startMilliseconds": 30375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 50500,
+        "speaker": "",
+        "startMilliseconds": 40500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 60625,
+        "speaker": "",
+        "startMilliseconds": 50625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 70750,
+        "speaker": "",
+        "startMilliseconds": 60750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 80875,
+        "speaker": "",
+        "startMilliseconds": 70875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-10-same",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 10.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 10.125, \"endTime\": 20.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 20.25, \"endTime\": 30.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 30.375, \"endTime\": 40.375, \"body\": \"word3\", \"speaker\": \"Ada\"}, {\"startTime\": 40.5, \"endTime\": 50.5, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 50.625, \"endTime\": 60.625, \"body\": \"word5\", \"speaker\": \"Ada\"}, {\"startTime\": 60.75, \"endTime\": 70.75, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 70.875, \"endTime\": 80.875, \"body\": \"word7\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 20125,
+        "speaker": "Ada",
+        "startMilliseconds": 10125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 30250,
+        "speaker": "Ada",
+        "startMilliseconds": 20250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 40375,
+        "speaker": "Ada",
+        "startMilliseconds": 30375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 50500,
+        "speaker": "Ada",
+        "startMilliseconds": 40500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 60625,
+        "speaker": "Ada",
+        "startMilliseconds": 50625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 70750,
+        "speaker": "Ada",
+        "startMilliseconds": 60750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 80875,
+        "speaker": "Ada",
+        "startMilliseconds": 70875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "json-10-change",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 10.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 10.125, \"endTime\": 20.125, \"body\": \"word1\", \"speaker\": \"Ada\"}, {\"startTime\": 20.25, \"endTime\": 30.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 30.375, \"endTime\": 40.375, \"body\": \"word3\", \"speaker\": \"Bob\"}, {\"startTime\": 40.5, \"endTime\": 50.5, \"body\": \"word4\", \"speaker\": \"Bob\"}, {\"startTime\": 50.625, \"endTime\": 60.625, \"body\": \"word5\", \"speaker\": \"Bob\"}, {\"startTime\": 60.75, \"endTime\": 70.75, \"body\": \"word6\", \"speaker\": \"Bob\"}, {\"startTime\": 70.875, \"endTime\": 80.875, \"body\": \"word7\", \"speaker\": \"Bob\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 20125,
+        "speaker": "Ada",
+        "startMilliseconds": 10125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 30250,
+        "speaker": "Ada",
+        "startMilliseconds": 20250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 40375,
+        "speaker": "Bob",
+        "startMilliseconds": 30375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 50500,
+        "speaker": "Bob",
+        "startMilliseconds": 40500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 60625,
+        "speaker": "Bob",
+        "startMilliseconds": 50625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 70750,
+        "speaker": "Bob",
+        "startMilliseconds": 60750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 80875,
+        "speaker": "Bob",
+        "startMilliseconds": 70875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "",
+      "Ada"
+    ],
+    "name": "json-10-missing",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0.0, \"endTime\": 10.0, \"body\": \"word0\", \"speaker\": \"Ada\"}, {\"startTime\": 10.125, \"endTime\": 20.125, \"body\": \"word1\"}, {\"startTime\": 20.25, \"endTime\": 30.25, \"body\": \"word2\", \"speaker\": \"Ada\"}, {\"startTime\": 30.375, \"endTime\": 40.375, \"body\": \"word3\"}, {\"startTime\": 40.5, \"endTime\": 50.5, \"body\": \"word4\", \"speaker\": \"Ada\"}, {\"startTime\": 50.625, \"endTime\": 60.625, \"body\": \"word5\"}, {\"startTime\": 60.75, \"endTime\": 70.75, \"body\": \"word6\", \"speaker\": \"Ada\"}, {\"startTime\": 70.875, \"endTime\": 80.875, \"body\": \"word7\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 20125,
+        "speaker": "Ada",
+        "startMilliseconds": 10125,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 30250,
+        "speaker": "Ada",
+        "startMilliseconds": 20250,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 40375,
+        "speaker": "Ada",
+        "startMilliseconds": 30375,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 50500,
+        "speaker": "Ada",
+        "startMilliseconds": 40500,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 60625,
+        "speaker": "Ada",
+        "startMilliseconds": 50625,
+        "words": "word5"
+      },
+      {
+        "endMilliseconds": 70750,
+        "speaker": "Ada",
+        "startMilliseconds": 60750,
+        "words": "word6"
+      },
+      {
+        "endMilliseconds": 80875,
+        "speaker": "Ada",
+        "startMilliseconds": 70875,
+        "words": "word7"
+      }
+    ]
+  },
+  {
+    "speakers": [""],
+    "name": "json-punctuation",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0, \"endTime\": 1, \"body\": \"word\"}, {\"startTime\": 1, \"endTime\": 2, \"body\": \"word\"}, {\"startTime\": 2, \"endTime\": 3, \"body\": \"word\"}, {\"startTime\": 3, \"endTime\": 4, \"body\": \"word\"}, {\"startTime\": 4, \"endTime\": 5, \"body\": \"word\"}, {\"startTime\": 5, \"endTime\": 6, \"body\": \".\"}, {\"startTime\": 6, \"endTime\": 7, \"body\": \"word\"}, {\"startTime\": 7, \"endTime\": 8, \"body\": \"word\"}, {\"startTime\": 8, \"endTime\": 9, \"body\": \"word\"}]}",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 6000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word word word word word ."
+      },
+      {
+        "endMilliseconds": 9000,
+        "speaker": "",
+        "startMilliseconds": 6000,
+        "words": "word word word"
+      }
+    ]
+  },
+  {
+    "exception": "StringIndexOutOfBoundsException",
+    "name": "json-empty-lookahead",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0, \"endTime\": 5, \"body\": \"Hello\"}, {\"startTime\": 5, \"endTime\": 6, \"body\": \"\"}]}",
+    "correction": "empty-lookahead-no-crash",
+    "outcome": "exception"
+  },
+  {
+    "exception": "IllegalArgumentException",
+    "name": "json-duplicate-start",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": 0, \"endTime\": 5, \"body\": \"One\"}, {\"startTime\": 0, \"endTime\": 5, \"body\": \"Two\"}]}",
+    "correction": "invalid-order-error",
+    "outcome": "exception"
+  },
+  {
+    "speakers": [""],
+    "name": "json-invalid-times",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": -1, \"endTime\": 0, \"body\": \"Skip\"}, {\"startTime\": 1, \"endTime\": 2, \"body\": \"Keep\"}]}",
+    "outcome": "parsed",
+    "segments": [{
+      "endMilliseconds": 2000,
+      "speaker": "",
+      "startMilliseconds": 1000,
+      "words": "Keep"
+    }]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "json-numeric-strings",
+    "format": "application/json",
+    "text": "{\"version\": \"1.0.0\", \"segments\": [{\"startTime\": \"1.125\", \"endTime\": \"6.125\", \"body\": \"Words\", \"speaker\": \"Ada\"}]}",
+    "outcome": "parsed",
+    "segments": [{
+      "endMilliseconds": 6125,
+      "speaker": "Ada",
+      "startMilliseconds": 1125,
+      "words": "Words"
+    }]
+  },
+  {
+    "speakers": [],
+    "name": "text/vtt-1-none",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:01.000\nword0\n\n2\n00:00:02.000 --> 00:00:03.000\nword1\n\n3\n00:00:04.000 --> 00:00:05.000\nword2\n\n4\n00:00:06.000 --> 00:00:07.000\nword3\n\n5\n00:00:08.000 --> 00:00:09.000\nword4\n\n6\n00:00:10.000 --> 00:00:11.000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "",
+        "startMilliseconds": 6000,
+        "words": "word3 word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "text/vtt-1-same",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:01.000\n<v Ada>word0\n\n2\n00:00:02.000 --> 00:00:03.000\n<v Ada>word1\n\n3\n00:00:04.000 --> 00:00:05.000\n<v Ada>word2\n\n4\n00:00:06.000 --> 00:00:07.000\n<v Ada>word3\n\n5\n00:00:08.000 --> 00:00:09.000\n<v Ada>word4\n\n6\n00:00:10.000 --> 00:00:11.000\n<v Ada>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Ada",
+        "startMilliseconds": 6000,
+        "words": "word3 word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "text/vtt-1-change",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:01.000\n<v Ada>word0\n\n2\n00:00:02.000 --> 00:00:03.000\n<v Ada>word1\n\n3\n00:00:04.000 --> 00:00:05.000\n<v Bob>word2\n\n4\n00:00:06.000 --> 00:00:07.000\n<v Bob>word3\n\n5\n00:00:08.000 --> 00:00:09.000\n<v Bob>word4\n\n6\n00:00:10.000 --> 00:00:11.000\n<v Bob>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 3000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 9000,
+        "speaker": "Bob",
+        "startMilliseconds": 4000,
+        "words": "word2 word3 word4"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Bob",
+        "startMilliseconds": 10000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "text/vtt-2-none",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:02.000\nword0\n\n2\n00:00:03.000 --> 00:00:05.000\nword1\n\n3\n00:00:06.000 --> 00:00:08.000\nword2\n\n4\n00:00:09.000 --> 00:00:11.000\nword3\n\n5\n00:00:12.000 --> 00:00:14.000\nword4\n\n6\n00:00:15.000 --> 00:00:17.000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "",
+        "startMilliseconds": 6000,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "",
+        "startMilliseconds": 12000,
+        "words": "word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "text/vtt-2-same",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:02.000\n<v Ada>word0\n\n2\n00:00:03.000 --> 00:00:05.000\n<v Ada>word1\n\n3\n00:00:06.000 --> 00:00:08.000\n<v Ada>word2\n\n4\n00:00:09.000 --> 00:00:11.000\n<v Ada>word3\n\n5\n00:00:12.000 --> 00:00:14.000\n<v Ada>word4\n\n6\n00:00:15.000 --> 00:00:17.000\n<v Ada>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Ada",
+        "startMilliseconds": 6000,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Ada",
+        "startMilliseconds": 12000,
+        "words": "word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "text/vtt-2-change",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:02.000\n<v Ada>word0\n\n2\n00:00:03.000 --> 00:00:05.000\n<v Ada>word1\n\n3\n00:00:06.000 --> 00:00:08.000\n<v Bob>word2\n\n4\n00:00:09.000 --> 00:00:11.000\n<v Bob>word3\n\n5\n00:00:12.000 --> 00:00:14.000\n<v Bob>word4\n\n6\n00:00:15.000 --> 00:00:17.000\n<v Bob>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Bob",
+        "startMilliseconds": 6000,
+        "words": "word2 word3"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Bob",
+        "startMilliseconds": 12000,
+        "words": "word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "text/vtt-5-none",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:05.000\nword0\n\n2\n00:00:06.000 --> 00:00:11.000\nword1\n\n3\n00:00:12.000 --> 00:00:17.000\nword2\n\n4\n00:00:18.000 --> 00:00:23.000\nword3\n\n5\n00:00:24.000 --> 00:00:29.000\nword4\n\n6\n00:00:30.000 --> 00:00:35.000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "",
+        "startMilliseconds": 6000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "",
+        "startMilliseconds": 12000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "",
+        "startMilliseconds": 18000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 29000,
+        "speaker": "",
+        "startMilliseconds": 24000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "",
+        "startMilliseconds": 30000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "text/vtt-5-same",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:05.000\n<v Ada>word0\n\n2\n00:00:06.000 --> 00:00:11.000\n<v Ada>word1\n\n3\n00:00:12.000 --> 00:00:17.000\n<v Ada>word2\n\n4\n00:00:18.000 --> 00:00:23.000\n<v Ada>word3\n\n5\n00:00:24.000 --> 00:00:29.000\n<v Ada>word4\n\n6\n00:00:30.000 --> 00:00:35.000\n<v Ada>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Ada",
+        "startMilliseconds": 6000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Ada",
+        "startMilliseconds": 12000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "Ada",
+        "startMilliseconds": 18000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 29000,
+        "speaker": "Ada",
+        "startMilliseconds": 24000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "Ada",
+        "startMilliseconds": 30000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "text/vtt-5-change",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:05.000\n<v Ada>word0\n\n2\n00:00:06.000 --> 00:00:11.000\n<v Ada>word1\n\n3\n00:00:12.000 --> 00:00:17.000\n<v Bob>word2\n\n4\n00:00:18.000 --> 00:00:23.000\n<v Bob>word3\n\n5\n00:00:24.000 --> 00:00:29.000\n<v Bob>word4\n\n6\n00:00:30.000 --> 00:00:35.000\n<v Bob>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Ada",
+        "startMilliseconds": 6000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Bob",
+        "startMilliseconds": 12000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "Bob",
+        "startMilliseconds": 18000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 29000,
+        "speaker": "Bob",
+        "startMilliseconds": 24000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "Bob",
+        "startMilliseconds": 30000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "text/vtt-7-none",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:07.000\nword0\n\n2\n00:00:08.000 --> 00:00:15.000\nword1\n\n3\n00:00:16.000 --> 00:00:23.000\nword2\n\n4\n00:00:24.000 --> 00:00:31.000\nword3\n\n5\n00:00:32.000 --> 00:00:39.000\nword4\n\n6\n00:00:40.000 --> 00:00:47.000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 15000,
+        "speaker": "",
+        "startMilliseconds": 8000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "",
+        "startMilliseconds": 16000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 31000,
+        "speaker": "",
+        "startMilliseconds": 24000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 39000,
+        "speaker": "",
+        "startMilliseconds": 32000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 47000,
+        "speaker": "",
+        "startMilliseconds": 40000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "text/vtt-7-same",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:07.000\n<v Ada>word0\n\n2\n00:00:08.000 --> 00:00:15.000\n<v Ada>word1\n\n3\n00:00:16.000 --> 00:00:23.000\n<v Ada>word2\n\n4\n00:00:24.000 --> 00:00:31.000\n<v Ada>word3\n\n5\n00:00:32.000 --> 00:00:39.000\n<v Ada>word4\n\n6\n00:00:40.000 --> 00:00:47.000\n<v Ada>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 15000,
+        "speaker": "Ada",
+        "startMilliseconds": 8000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "Ada",
+        "startMilliseconds": 16000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 31000,
+        "speaker": "Ada",
+        "startMilliseconds": 24000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 39000,
+        "speaker": "Ada",
+        "startMilliseconds": 32000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 47000,
+        "speaker": "Ada",
+        "startMilliseconds": 40000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "text/vtt-7-change",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:07.000\n<v Ada>word0\n\n2\n00:00:08.000 --> 00:00:15.000\n<v Ada>word1\n\n3\n00:00:16.000 --> 00:00:23.000\n<v Bob>word2\n\n4\n00:00:24.000 --> 00:00:31.000\n<v Bob>word3\n\n5\n00:00:32.000 --> 00:00:39.000\n<v Bob>word4\n\n6\n00:00:40.000 --> 00:00:47.000\n<v Bob>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 15000,
+        "speaker": "Ada",
+        "startMilliseconds": 8000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "Bob",
+        "startMilliseconds": 16000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 31000,
+        "speaker": "Bob",
+        "startMilliseconds": 24000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 39000,
+        "speaker": "Bob",
+        "startMilliseconds": 32000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 47000,
+        "speaker": "Bob",
+        "startMilliseconds": 40000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "text/vtt-8-none",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:08.000\nword0\n\n2\n00:00:09.000 --> 00:00:17.000\nword1\n\n3\n00:00:18.000 --> 00:00:26.000\nword2\n\n4\n00:00:27.000 --> 00:00:35.000\nword3\n\n5\n00:00:36.000 --> 00:00:44.000\nword4\n\n6\n00:00:45.000 --> 00:00:53.000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "",
+        "startMilliseconds": 9000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 26000,
+        "speaker": "",
+        "startMilliseconds": 18000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "",
+        "startMilliseconds": 27000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 44000,
+        "speaker": "",
+        "startMilliseconds": 36000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 53000,
+        "speaker": "",
+        "startMilliseconds": 45000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "text/vtt-8-same",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:08.000\n<v Ada>word0\n\n2\n00:00:09.000 --> 00:00:17.000\n<v Ada>word1\n\n3\n00:00:18.000 --> 00:00:26.000\n<v Ada>word2\n\n4\n00:00:27.000 --> 00:00:35.000\n<v Ada>word3\n\n5\n00:00:36.000 --> 00:00:44.000\n<v Ada>word4\n\n6\n00:00:45.000 --> 00:00:53.000\n<v Ada>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Ada",
+        "startMilliseconds": 9000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 26000,
+        "speaker": "Ada",
+        "startMilliseconds": 18000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "Ada",
+        "startMilliseconds": 27000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 44000,
+        "speaker": "Ada",
+        "startMilliseconds": 36000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 53000,
+        "speaker": "Ada",
+        "startMilliseconds": 45000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "text/vtt-8-change",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:08.000\n<v Ada>word0\n\n2\n00:00:09.000 --> 00:00:17.000\n<v Ada>word1\n\n3\n00:00:18.000 --> 00:00:26.000\n<v Bob>word2\n\n4\n00:00:27.000 --> 00:00:35.000\n<v Bob>word3\n\n5\n00:00:36.000 --> 00:00:44.000\n<v Bob>word4\n\n6\n00:00:45.000 --> 00:00:53.000\n<v Bob>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Ada",
+        "startMilliseconds": 9000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 26000,
+        "speaker": "Bob",
+        "startMilliseconds": 18000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "Bob",
+        "startMilliseconds": 27000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 44000,
+        "speaker": "Bob",
+        "startMilliseconds": 36000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 53000,
+        "speaker": "Bob",
+        "startMilliseconds": 45000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "text/vtt-10-none",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:10.000\nword0\n\n2\n00:00:11.000 --> 00:00:21.000\nword1\n\n3\n00:00:22.000 --> 00:00:32.000\nword2\n\n4\n00:00:33.000 --> 00:00:43.000\nword3\n\n5\n00:00:44.000 --> 00:00:54.000\nword4\n\n6\n00:00:55.000 --> 00:01:05.000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 21000,
+        "speaker": "",
+        "startMilliseconds": 11000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 32000,
+        "speaker": "",
+        "startMilliseconds": 22000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 43000,
+        "speaker": "",
+        "startMilliseconds": 33000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 54000,
+        "speaker": "",
+        "startMilliseconds": 44000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 65000,
+        "speaker": "",
+        "startMilliseconds": 55000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "text/vtt-10-same",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:10.000\n<v Ada>word0\n\n2\n00:00:11.000 --> 00:00:21.000\n<v Ada>word1\n\n3\n00:00:22.000 --> 00:00:32.000\n<v Ada>word2\n\n4\n00:00:33.000 --> 00:00:43.000\n<v Ada>word3\n\n5\n00:00:44.000 --> 00:00:54.000\n<v Ada>word4\n\n6\n00:00:55.000 --> 00:01:05.000\n<v Ada>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 21000,
+        "speaker": "Ada",
+        "startMilliseconds": 11000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 32000,
+        "speaker": "Ada",
+        "startMilliseconds": 22000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 43000,
+        "speaker": "Ada",
+        "startMilliseconds": 33000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 54000,
+        "speaker": "Ada",
+        "startMilliseconds": 44000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 65000,
+        "speaker": "Ada",
+        "startMilliseconds": 55000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "text/vtt-10-change",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\n1\n00:00:00.000 --> 00:00:10.000\n<v Ada>word0\n\n2\n00:00:11.000 --> 00:00:21.000\n<v Ada>word1\n\n3\n00:00:22.000 --> 00:00:32.000\n<v Bob>word2\n\n4\n00:00:33.000 --> 00:00:43.000\n<v Bob>word3\n\n5\n00:00:44.000 --> 00:00:54.000\n<v Bob>word4\n\n6\n00:00:55.000 --> 00:01:05.000\n<v Bob>word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 21000,
+        "speaker": "Ada",
+        "startMilliseconds": 11000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 32000,
+        "speaker": "Bob",
+        "startMilliseconds": 22000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 43000,
+        "speaker": "Bob",
+        "startMilliseconds": 33000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 54000,
+        "speaker": "Bob",
+        "startMilliseconds": 44000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 65000,
+        "speaker": "Bob",
+        "startMilliseconds": 55000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "application/srt-1-none",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:01,000\nword0\n\n2\n00:00:02,000 --> 00:00:03,000\nword1\n\n3\n00:00:04,000 --> 00:00:05,000\nword2\n\n4\n00:00:06,000 --> 00:00:07,000\nword3\n\n5\n00:00:08,000 --> 00:00:09,000\nword4\n\n6\n00:00:10,000 --> 00:00:11,000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 9000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2 word3 word4"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "",
+        "startMilliseconds": 10000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "application/srt-1-same",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:01,000\nAda: word0\n\n2\n00:00:02,000 --> 00:00:03,000\nAda: word1\n\n3\n00:00:04,000 --> 00:00:05,000\nAda: word2\n\n4\n00:00:06,000 --> 00:00:07,000\nAda: word3\n\n5\n00:00:08,000 --> 00:00:09,000\nAda: word4\n\n6\n00:00:10,000 --> 00:00:11,000\nAda: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 9000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2 word3 word4"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Ada",
+        "startMilliseconds": 10000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "application/srt-1-change",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:01,000\nAda: word0\n\n2\n00:00:02,000 --> 00:00:03,000\nAda: word1\n\n3\n00:00:04,000 --> 00:00:05,000\nBob: word2\n\n4\n00:00:06,000 --> 00:00:07,000\nBob: word3\n\n5\n00:00:08,000 --> 00:00:09,000\nBob: word4\n\n6\n00:00:10,000 --> 00:00:11,000\nBob: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 3000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Bob",
+        "startMilliseconds": 4000,
+        "words": "word2 word3 word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "application/srt-2-none",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:02,000\nword0\n\n2\n00:00:03,000 --> 00:00:05,000\nword1\n\n3\n00:00:06,000 --> 00:00:08,000\nword2\n\n4\n00:00:09,000 --> 00:00:11,000\nword3\n\n5\n00:00:12,000 --> 00:00:14,000\nword4\n\n6\n00:00:15,000 --> 00:00:17,000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "",
+        "startMilliseconds": 9000,
+        "words": "word3 word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "application/srt-2-same",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:02,000\nAda: word0\n\n2\n00:00:03,000 --> 00:00:05,000\nAda: word1\n\n3\n00:00:06,000 --> 00:00:08,000\nAda: word2\n\n4\n00:00:09,000 --> 00:00:11,000\nAda: word3\n\n5\n00:00:12,000 --> 00:00:14,000\nAda: word4\n\n6\n00:00:15,000 --> 00:00:17,000\nAda: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1 word2"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Ada",
+        "startMilliseconds": 9000,
+        "words": "word3 word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "application/srt-2-change",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:02,000\nAda: word0\n\n2\n00:00:03,000 --> 00:00:05,000\nAda: word1\n\n3\n00:00:06,000 --> 00:00:08,000\nBob: word2\n\n4\n00:00:09,000 --> 00:00:11,000\nBob: word3\n\n5\n00:00:12,000 --> 00:00:14,000\nBob: word4\n\n6\n00:00:15,000 --> 00:00:17,000\nBob: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0 word1"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Bob",
+        "startMilliseconds": 6000,
+        "words": "word2 word3 word4 word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "application/srt-5-none",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:05,000\nword0\n\n2\n00:00:06,000 --> 00:00:11,000\nword1\n\n3\n00:00:12,000 --> 00:00:17,000\nword2\n\n4\n00:00:18,000 --> 00:00:23,000\nword3\n\n5\n00:00:24,000 --> 00:00:29,000\nword4\n\n6\n00:00:30,000 --> 00:00:35,000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "",
+        "startMilliseconds": 6000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "",
+        "startMilliseconds": 12000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "",
+        "startMilliseconds": 18000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 29000,
+        "speaker": "",
+        "startMilliseconds": 24000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "",
+        "startMilliseconds": 30000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "application/srt-5-same",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:05,000\nAda: word0\n\n2\n00:00:06,000 --> 00:00:11,000\nAda: word1\n\n3\n00:00:12,000 --> 00:00:17,000\nAda: word2\n\n4\n00:00:18,000 --> 00:00:23,000\nAda: word3\n\n5\n00:00:24,000 --> 00:00:29,000\nAda: word4\n\n6\n00:00:30,000 --> 00:00:35,000\nAda: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Ada",
+        "startMilliseconds": 6000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Ada",
+        "startMilliseconds": 12000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "Ada",
+        "startMilliseconds": 18000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 29000,
+        "speaker": "Ada",
+        "startMilliseconds": 24000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "Ada",
+        "startMilliseconds": 30000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "application/srt-5-change",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:05,000\nAda: word0\n\n2\n00:00:06,000 --> 00:00:11,000\nAda: word1\n\n3\n00:00:12,000 --> 00:00:17,000\nBob: word2\n\n4\n00:00:18,000 --> 00:00:23,000\nBob: word3\n\n5\n00:00:24,000 --> 00:00:29,000\nBob: word4\n\n6\n00:00:30,000 --> 00:00:35,000\nBob: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 5000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 11000,
+        "speaker": "Ada",
+        "startMilliseconds": 6000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Bob",
+        "startMilliseconds": 12000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "Bob",
+        "startMilliseconds": 18000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 29000,
+        "speaker": "Bob",
+        "startMilliseconds": 24000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "Bob",
+        "startMilliseconds": 30000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "application/srt-7-none",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:07,000\nword0\n\n2\n00:00:08,000 --> 00:00:15,000\nword1\n\n3\n00:00:16,000 --> 00:00:23,000\nword2\n\n4\n00:00:24,000 --> 00:00:31,000\nword3\n\n5\n00:00:32,000 --> 00:00:39,000\nword4\n\n6\n00:00:40,000 --> 00:00:47,000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 15000,
+        "speaker": "",
+        "startMilliseconds": 8000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "",
+        "startMilliseconds": 16000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 31000,
+        "speaker": "",
+        "startMilliseconds": 24000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 39000,
+        "speaker": "",
+        "startMilliseconds": 32000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 47000,
+        "speaker": "",
+        "startMilliseconds": 40000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "application/srt-7-same",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:07,000\nAda: word0\n\n2\n00:00:08,000 --> 00:00:15,000\nAda: word1\n\n3\n00:00:16,000 --> 00:00:23,000\nAda: word2\n\n4\n00:00:24,000 --> 00:00:31,000\nAda: word3\n\n5\n00:00:32,000 --> 00:00:39,000\nAda: word4\n\n6\n00:00:40,000 --> 00:00:47,000\nAda: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 15000,
+        "speaker": "Ada",
+        "startMilliseconds": 8000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "Ada",
+        "startMilliseconds": 16000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 31000,
+        "speaker": "Ada",
+        "startMilliseconds": 24000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 39000,
+        "speaker": "Ada",
+        "startMilliseconds": 32000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 47000,
+        "speaker": "Ada",
+        "startMilliseconds": 40000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "application/srt-7-change",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:07,000\nAda: word0\n\n2\n00:00:08,000 --> 00:00:15,000\nAda: word1\n\n3\n00:00:16,000 --> 00:00:23,000\nBob: word2\n\n4\n00:00:24,000 --> 00:00:31,000\nBob: word3\n\n5\n00:00:32,000 --> 00:00:39,000\nBob: word4\n\n6\n00:00:40,000 --> 00:00:47,000\nBob: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 7000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 15000,
+        "speaker": "Ada",
+        "startMilliseconds": 8000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 23000,
+        "speaker": "Bob",
+        "startMilliseconds": 16000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 31000,
+        "speaker": "Bob",
+        "startMilliseconds": 24000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 39000,
+        "speaker": "Bob",
+        "startMilliseconds": 32000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 47000,
+        "speaker": "Bob",
+        "startMilliseconds": 40000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "application/srt-8-none",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:08,000\nword0\n\n2\n00:00:09,000 --> 00:00:17,000\nword1\n\n3\n00:00:18,000 --> 00:00:26,000\nword2\n\n4\n00:00:27,000 --> 00:00:35,000\nword3\n\n5\n00:00:36,000 --> 00:00:44,000\nword4\n\n6\n00:00:45,000 --> 00:00:53,000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "",
+        "startMilliseconds": 9000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 26000,
+        "speaker": "",
+        "startMilliseconds": 18000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "",
+        "startMilliseconds": 27000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 44000,
+        "speaker": "",
+        "startMilliseconds": 36000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 53000,
+        "speaker": "",
+        "startMilliseconds": 45000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "application/srt-8-same",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:08,000\nAda: word0\n\n2\n00:00:09,000 --> 00:00:17,000\nAda: word1\n\n3\n00:00:18,000 --> 00:00:26,000\nAda: word2\n\n4\n00:00:27,000 --> 00:00:35,000\nAda: word3\n\n5\n00:00:36,000 --> 00:00:44,000\nAda: word4\n\n6\n00:00:45,000 --> 00:00:53,000\nAda: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Ada",
+        "startMilliseconds": 9000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 26000,
+        "speaker": "Ada",
+        "startMilliseconds": 18000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "Ada",
+        "startMilliseconds": 27000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 44000,
+        "speaker": "Ada",
+        "startMilliseconds": 36000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 53000,
+        "speaker": "Ada",
+        "startMilliseconds": 45000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "application/srt-8-change",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:08,000\nAda: word0\n\n2\n00:00:09,000 --> 00:00:17,000\nAda: word1\n\n3\n00:00:18,000 --> 00:00:26,000\nBob: word2\n\n4\n00:00:27,000 --> 00:00:35,000\nBob: word3\n\n5\n00:00:36,000 --> 00:00:44,000\nBob: word4\n\n6\n00:00:45,000 --> 00:00:53,000\nBob: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 8000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 17000,
+        "speaker": "Ada",
+        "startMilliseconds": 9000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 26000,
+        "speaker": "Bob",
+        "startMilliseconds": 18000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 35000,
+        "speaker": "Bob",
+        "startMilliseconds": 27000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 44000,
+        "speaker": "Bob",
+        "startMilliseconds": 36000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 53000,
+        "speaker": "Bob",
+        "startMilliseconds": 45000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [],
+    "name": "application/srt-10-none",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:10,000\nword0\n\n2\n00:00:11,000 --> 00:00:21,000\nword1\n\n3\n00:00:22,000 --> 00:00:32,000\nword2\n\n4\n00:00:33,000 --> 00:00:43,000\nword3\n\n5\n00:00:44,000 --> 00:00:54,000\nword4\n\n6\n00:00:55,000 --> 00:01:05,000\nword5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 21000,
+        "speaker": "",
+        "startMilliseconds": 11000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 32000,
+        "speaker": "",
+        "startMilliseconds": 22000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 43000,
+        "speaker": "",
+        "startMilliseconds": 33000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 54000,
+        "speaker": "",
+        "startMilliseconds": 44000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 65000,
+        "speaker": "",
+        "startMilliseconds": 55000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "application/srt-10-same",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:10,000\nAda: word0\n\n2\n00:00:11,000 --> 00:00:21,000\nAda: word1\n\n3\n00:00:22,000 --> 00:00:32,000\nAda: word2\n\n4\n00:00:33,000 --> 00:00:43,000\nAda: word3\n\n5\n00:00:44,000 --> 00:00:54,000\nAda: word4\n\n6\n00:00:55,000 --> 00:01:05,000\nAda: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 21000,
+        "speaker": "Ada",
+        "startMilliseconds": 11000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 32000,
+        "speaker": "Ada",
+        "startMilliseconds": 22000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 43000,
+        "speaker": "Ada",
+        "startMilliseconds": 33000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 54000,
+        "speaker": "Ada",
+        "startMilliseconds": 44000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 65000,
+        "speaker": "Ada",
+        "startMilliseconds": 55000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "application/srt-10-change",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:10,000\nAda: word0\n\n2\n00:00:11,000 --> 00:00:21,000\nAda: word1\n\n3\n00:00:22,000 --> 00:00:32,000\nBob: word2\n\n4\n00:00:33,000 --> 00:00:43,000\nBob: word3\n\n5\n00:00:44,000 --> 00:00:54,000\nBob: word4\n\n6\n00:00:55,000 --> 00:01:05,000\nBob: word5\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 10000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "word0"
+      },
+      {
+        "endMilliseconds": 21000,
+        "speaker": "Ada",
+        "startMilliseconds": 11000,
+        "words": "word1"
+      },
+      {
+        "endMilliseconds": 32000,
+        "speaker": "Bob",
+        "startMilliseconds": 22000,
+        "words": "word2"
+      },
+      {
+        "endMilliseconds": 43000,
+        "speaker": "Bob",
+        "startMilliseconds": 33000,
+        "words": "word3"
+      },
+      {
+        "endMilliseconds": 54000,
+        "speaker": "Bob",
+        "startMilliseconds": 44000,
+        "words": "word4"
+      },
+      {
+        "endMilliseconds": 65000,
+        "speaker": "Bob",
+        "startMilliseconds": 55000,
+        "words": "word5"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "vtt-markup",
+    "format": "text/vtt",
+    "text": "WEBVTT\n\ncue\n00:00.000 --> 00:06.000 align:left\n<v.strong Ada><b>Hello<\/b> &amp; <i>goodbye<\/i>.\n\n00:06.000 --> 00:07.000\nNext <br> line.\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 6000,
+        "speaker": "Ada",
+        "startMilliseconds": 0,
+        "words": "Hello & goodbye."
+      },
+      {
+        "endMilliseconds": 7000,
+        "speaker": "Ada",
+        "startMilliseconds": 6000,
+        "words": "Next line."
+      }
+    ]
+  },
+  {
+    "speakers": [
+      "Ada",
+      "Bob"
+    ],
+    "name": "vtt-gap-and-speaker",
+    "format": "text/vtt",
+    "text": "00:00.000 --> 00:01.000\nintro\n\n00:03.389 --> 00:09.000\n<v Ada>First\n\n00:09.150 --> 00:12.123\nContinued\n\n00:13.000 --> 00:15.000\n<v Bob>Second\n\n00:15.000 --> 00:18.000\nEnding\n",
+    "outcome": "parsed",
+    "segments": [
+      {
+        "endMilliseconds": 1000,
+        "speaker": "",
+        "startMilliseconds": 0,
+        "words": "intro"
+      },
+      {
+        "endMilliseconds": 9000,
+        "speaker": "Ada",
+        "startMilliseconds": 3389,
+        "words": "First"
+      },
+      {
+        "endMilliseconds": 12123,
+        "speaker": "Ada",
+        "startMilliseconds": 9150,
+        "words": "Continued"
+      },
+      {
+        "endMilliseconds": 18000,
+        "speaker": "Bob",
+        "startMilliseconds": 13000,
+        "words": "Second Ending"
+      }
+    ]
+  },
+  {
+    "speakers": ["Ada"],
+    "name": "srt-colon-loss",
+    "format": "application/srt",
+    "text": "1\n00:00:00,000 --> 00:00:05,000\nAda: A ratio: two to one.\n",
+    "correction": "preserve-body-colons",
+    "outcome": "parsed",
+    "segments": [{
+      "endMilliseconds": 5000,
+      "speaker": "Ada",
+      "startMilliseconds": 0,
+      "words": "A ratio"
+    }]
+  },
+  {
+    "exception": "NoSuchElementException",
+    "name": "srt-no-body",
+    "format": "application/srt",
+    "text": "00:00:00,000 --> 00:00:05,000",
+    "correction": "empty-cue-no-crash",
+    "outcome": "exception"
+  },
+  {
+    "speakers": [],
+    "name": "srt-invalid-first",
+    "format": "application/srt",
+    "text": "00:0000,000 --> 00:00:02,000\nBad\n\n00:00:03,000 --> 00:00:06,000\nGood\n",
+    "outcome": "parsed",
+    "segments": [{
+      "endMilliseconds": 6000,
+      "speaker": "",
+      "startMilliseconds": 3000,
+      "words": "Good"
+    }]
+  },
+  {
+    "name": "application/json-empty",
+    "format": "application/json",
+    "text": "",
+    "outcome": "empty"
+  },
+  {
+    "name": "application/json-text",
+    "format": "application/json",
+    "text": "plain text",
+    "outcome": "empty"
+  },
+  {
+    "name": "application/json-whitespace",
+    "format": "application/json",
+    "text": "\r\n\r\n",
+    "outcome": "empty"
+  },
+  {
+    "name": "application/srt-empty",
+    "format": "application/srt",
+    "text": "",
+    "outcome": "empty"
+  },
+  {
+    "name": "application/srt-text",
+    "format": "application/srt",
+    "text": "plain text",
+    "outcome": "empty"
+  },
+  {
+    "name": "application/srt-whitespace",
+    "format": "application/srt",
+    "text": "\r\n\r\n",
+    "outcome": "empty"
+  },
+  {
+    "name": "text/vtt-empty",
+    "format": "text/vtt",
+    "text": "",
+    "outcome": "empty"
+  },
+  {
+    "name": "text/vtt-text",
+    "format": "text/vtt",
+    "text": "plain text",
+    "outcome": "empty"
+  },
+  {
+    "name": "text/vtt-whitespace",
+    "format": "text/vtt",
+    "text": "\r\n\r\n",
+    "outcome": "empty"
+  }
+]

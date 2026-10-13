@@ -1,0 +1,282 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "androidSourceTag": "android-16.0.0_r1",
+  "limitations": [
+    "Android16 source executed unchanged on host JVM, not the emulator framework binary.",
+    "XmlPull interfaces/factory are cached KXml2; META-INF provider selection only.",
+    "Existing Android glue stubs remain unchanged."
+  ],
+  "provenance": {
+    "source/OpmlReader.java": "f59d5a31ed7f1e8e2307d127a74152355767d933f1833a9b93ecc608b36ffff1",
+    "source/StringPool.java": "65ca9d7b9363a7ef46fc7c40f89444eecde449496656320f8478524ac324f291",
+    "source/OpmlSymbols.java": "119ddd65a9f0441e4bf8b91ec6131a403ff9facdc8c0dc85b4fb9208779f7c1a",
+    "source/OpmlElement.java": "52863fde3b6af0a9ec929e9dc132c34fa6f7bfe8b4f7c3b24480f078d061412e",
+    "source/Probe.java": "b795f6e014b18a83f9cf010c7409776602f643238f88e36ec334ad8585610e05",
+    "source/Log.java": "563bb8c3f65d37739268b8a2867e3bebce3e34ac83bcf0ee1069df7486403963",
+    "source/TextUtils.java": "c7eb86acf7feaa10e16a97ce7c305fa3174b02330c46bc3a29a554d7a16fc4c8",
+    "source/KXmlParser.java": "d91fa063856bed37dcfe2a088ee26f7ac7d52374952865fbd259f3cb49f0e2b5",
+    "source/BuildConfig.java": "55df159384d323397d1f1f215282102ff058b70fc2c8939e0a9ae4c1da51b801",
+    "commons-io-2.5.jar": "a10418348d234968600ccb1d988efcbbd08716e1d96936ccc1880e7d22513474",
+    "kxml2-2.3.0.jar": "f264dd9f79a1fde10ce5ecc53221eff24be4c9331c830b7d52f2f08a7b633de2",
+    "inputs/collision-unprefixed-first.opml": "374b1a0e9dd3cda13eceea926f36f0e212717c3a796a064dfd0f6252e0358dae",
+    "inputs/wrapped.opml": "1daaa267e83a5887ebf65bffba887dbef10fdbfb2fb624c0a7066ab63e110e87",
+    "inputs/collision-unprefixed-last.opml": "e286caea1396fc0d0bf77dd7a26f7a88a6e9e013973f50faaeca473677d78ea5",
+    "inputs/collision-prefix-order.opml": "c223a96c2e5508e9645a90c05cc026f7d21a2ef211978e14052bc0481ff8c19f",
+    "inputs/collision-empty-fallback.opml": "86abcf30cda323e63000ba5d9644dd226897fa8c3f40c3c5b3e7fdc3efe15b42",
+    "inputs/collision-namespace-declarations.opml": "390dc9e573fae0ab389b72901ab706e95477aee9b1201daebe49c4059e9beb73",
+    "inputs/collision-quoted-markup.opml": "810ec54e68154eae3495255e9bbb03ef07da59c74dd94fd66d3ae24306c931e4",
+    "inputs/wrapper-token-boundaries.opml": "518b01f66bfd82bc227c3a63cd37c2e98ad45ed9a9a1776aef717f5ad088c56a"
+  },
+  "results": {
+    "host-kxml2": {
+      "provider": "org.kxml2.io.KXmlParser",
+      "cases": [
+        {
+          "name": "collision-empty-fallback",
+          "entries": [
+            {
+              "title": "last",
+              "xmlURL": "keep",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-namespace-declarations",
+          "entries": [
+            {
+              "title": "A",
+              "xmlURL": "a",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-prefix-order",
+          "entries": [
+            {
+              "title": "last",
+              "xmlURL": "last",
+              "htmlURL": "last-html",
+              "type": "atom"
+            },
+            {
+              "title": "last",
+              "xmlURL": "last",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-quoted-markup",
+          "entries": [
+            {
+              "title": "actual\tlast",
+              "xmlURL": "b&c",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-unprefixed-first",
+          "entries": [
+            {
+              "title": "last",
+              "xmlURL": "prefixed",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-unprefixed-last",
+          "entries": [
+            {
+              "title": "last",
+              "xmlURL": "unprefixed",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "wrapped",
+          "entries": [
+            {
+              "title": "a",
+              "xmlURL": "a",
+              "htmlURL": null,
+              "type": null
+            },
+            {
+              "title": "b",
+              "xmlURL": "b",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "wrapper-token-boundaries",
+          "entries": [
+            {
+              "title": "after",
+              "xmlURL": "after",
+              "htmlURL": null,
+              "type": null
+            },
+            {
+              "title": "nested",
+              "xmlURL": "nested",
+              "htmlURL": null,
+              "type": null
+            },
+            {
+              "title": "last",
+              "xmlURL": "last",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        }
+      ]
+    },
+    "android16-source": {
+      "provider": "com.android.org.kxml2.io.KXmlParser",
+      "cases": [
+        {
+          "name": "collision-empty-fallback",
+          "entries": [
+            {
+              "title": "last",
+              "xmlURL": "keep",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-namespace-declarations",
+          "entries": [
+            {
+              "title": "A",
+              "xmlURL": "a",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-prefix-order",
+          "entries": [
+            {
+              "title": "last",
+              "xmlURL": "last",
+              "htmlURL": "last-html",
+              "type": "atom"
+            },
+            {
+              "title": "last",
+              "xmlURL": "last",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-quoted-markup",
+          "entries": [
+            {
+              "title": "actual\tlast",
+              "xmlURL": "b&c",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-unprefixed-first",
+          "entries": [
+            {
+              "title": "last",
+              "xmlURL": "prefixed",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "collision-unprefixed-last",
+          "entries": [
+            {
+              "title": "last",
+              "xmlURL": "unprefixed",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "wrapped",
+          "entries": [
+            {
+              "title": "a",
+              "xmlURL": "a",
+              "htmlURL": null,
+              "type": null
+            },
+            {
+              "title": "b",
+              "xmlURL": "b",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        },
+        {
+          "name": "wrapper-token-boundaries",
+          "entries": [
+            {
+              "title": "after",
+              "xmlURL": "after",
+              "htmlURL": null,
+              "type": null
+            },
+            {
+              "title": "nested",
+              "xmlURL": "nested",
+              "htmlURL": null,
+              "type": null
+            },
+            {
+              "title": "last",
+              "xmlURL": "last",
+              "htmlURL": null,
+              "type": null
+            }
+          ],
+          "outcome": "success"
+        }
+      ]
+    }
+  }
+}

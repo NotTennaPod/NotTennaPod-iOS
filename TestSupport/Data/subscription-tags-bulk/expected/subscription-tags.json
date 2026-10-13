@@ -1,0 +1,7670 @@
+{
+ "oracle": "an independent Python oracle written from the pinned source (expected_tags.py)",
+ "reference_commit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+ "fixture": "TestSupport/Data/subscription-tags-bulk/tags-feeds.json",
+ "preferences": {
+  "prefDrawerFeedOrder": "1",
+  "prefDrawerFeedIndicator": "1",
+  "prefSubscriptionsFilter": "",
+  "prefEnableAutoDl": false
+ },
+ "views": {
+  "subscribed": {
+   "chips_row_visible": true,
+   "chips": [
+    {
+     "tag": "#root",
+     "label": "All",
+     "long_press_menu": false,
+     "menu_header": null,
+     "unfiltered_feed_ids": [
+      1,
+      2,
+      4,
+      5,
+      3,
+      9,
+      10,
+      11,
+      12,
+      6
+     ]
+    },
+    {
+     "tag": "123456789012345678🎧xyz",
+     "label": "123456789012345678\\ud83c…",
+     "long_press_menu": true,
+     "menu_header": "123456789012345678🎧xyz",
+     "unfiltered_feed_ids": [
+      12
+     ]
+    },
+    {
+     "tag": "A very long tag name exceeding twenty",
+     "label": "A very long tag nam…",
+     "long_press_menu": true,
+     "menu_header": "A very long tag name exceeding twenty",
+     "unfiltered_feed_ids": [
+      12
+     ]
+    },
+    {
+     "tag": "Aa",
+     "label": "Aa",
+     "long_press_menu": true,
+     "menu_header": "Aa",
+     "unfiltered_feed_ids": [
+      9,
+      10
+     ]
+    },
+    {
+     "tag": "BB",
+     "label": "BB",
+     "long_press_menu": true,
+     "menu_header": "BB",
+     "unfiltered_feed_ids": [
+      9,
+      10
+     ]
+    },
+    {
+     "tag": "news",
+     "label": "news",
+     "long_press_menu": true,
+     "menu_header": "news",
+     "unfiltered_feed_ids": [
+      5
+     ]
+    },
+    {
+     "tag": "News",
+     "label": "News",
+     "long_press_menu": true,
+     "menu_header": "News",
+     "unfiltered_feed_ids": [
+      2,
+      3
+     ]
+    },
+    {
+     "tag": "Solo",
+     "label": "Solo",
+     "long_press_menu": true,
+     "menu_header": "Solo",
+     "unfiltered_feed_ids": [
+      11
+     ]
+    },
+    {
+     "tag": "Tech",
+     "label": "Tech",
+     "long_press_menu": true,
+     "menu_header": "Tech",
+     "unfiltered_feed_ids": [
+      4,
+      5,
+      3,
+      6
+     ]
+    },
+    {
+     "tag": "#untagged",
+     "label": "Untagged",
+     "long_press_menu": false,
+     "menu_header": null,
+     "unfiltered_feed_ids": [
+      1
+     ]
+    }
+   ],
+   "by_chip": {
+    "#root": {
+     "selected_chip_after_load": "#root",
+     "feed_ids": [
+      1,
+      2,
+      4,
+      5,
+      3,
+      9,
+      10,
+      11,
+      12,
+      6
+     ]
+    },
+    "123456789012345678🎧xyz": {
+     "selected_chip_after_load": "123456789012345678🎧xyz",
+     "feed_ids": [
+      12
+     ]
+    },
+    "A very long tag name exceeding twenty": {
+     "selected_chip_after_load": "A very long tag name exceeding twenty",
+     "feed_ids": [
+      12
+     ]
+    },
+    "Aa": {
+     "selected_chip_after_load": "Aa",
+     "feed_ids": [
+      9,
+      10
+     ]
+    },
+    "BB": {
+     "selected_chip_after_load": "BB",
+     "feed_ids": [
+      9,
+      10
+     ]
+    },
+    "news": {
+     "selected_chip_after_load": "news",
+     "feed_ids": [
+      5
+     ]
+    },
+    "News": {
+     "selected_chip_after_load": "News",
+     "feed_ids": [
+      2,
+      3
+     ]
+    },
+    "Solo": {
+     "selected_chip_after_load": "Solo",
+     "feed_ids": [
+      11
+     ]
+    },
+    "Tech": {
+     "selected_chip_after_load": "Tech",
+     "feed_ids": [
+      4,
+      5,
+      3,
+      6
+     ]
+    },
+    "#untagged": {
+     "selected_chip_after_load": "#untagged",
+     "feed_ids": [
+      1
+     ]
+    }
+   }
+  },
+  "archive": {
+   "chips_row_visible": true,
+   "chips": [
+    {
+     "tag": "#root",
+     "label": "All",
+     "long_press_menu": false,
+     "menu_header": null,
+     "unfiltered_feed_ids": [
+      7
+     ]
+    },
+    {
+     "tag": "News",
+     "label": "News",
+     "long_press_menu": true,
+     "menu_header": "News",
+     "unfiltered_feed_ids": [
+      7
+     ]
+    },
+    {
+     "tag": "Old",
+     "label": "Old",
+     "long_press_menu": true,
+     "menu_header": "Old",
+     "unfiltered_feed_ids": [
+      7
+     ]
+    }
+   ],
+   "by_chip": {
+    "#root": {
+     "selected_chip_after_load": "#root",
+     "feed_ids": [
+      7
+     ]
+    },
+    "News": {
+     "selected_chip_after_load": "News",
+     "feed_ids": [
+      7
+     ]
+    },
+    "Old": {
+     "selected_chip_after_load": "Old",
+     "feed_ids": [
+      7
+     ]
+    }
+   }
+  },
+  "subscribed_filter_kept_updated": {
+   "chips_row_visible": true,
+   "chips": [
+    {
+     "tag": "#root",
+     "label": "All",
+     "long_press_menu": false,
+     "menu_header": null,
+     "unfiltered_feed_ids": [
+      1,
+      2,
+      4,
+      5,
+      3,
+      9,
+      10,
+      11,
+      12,
+      6
+     ]
+    },
+    {
+     "tag": "123456789012345678🎧xyz",
+     "label": "123456789012345678\\ud83c…",
+     "long_press_menu": true,
+     "menu_header": "123456789012345678🎧xyz",
+     "unfiltered_feed_ids": [
+      12
+     ]
+    },
+    {
+     "tag": "A very long tag name exceeding twenty",
+     "label": "A very long tag nam…",
+     "long_press_menu": true,
+     "menu_header": "A very long tag name exceeding twenty",
+     "unfiltered_feed_ids": [
+      12
+     ]
+    },
+    {
+     "tag": "Aa",
+     "label": "Aa",
+     "long_press_menu": true,
+     "menu_header": "Aa",
+     "unfiltered_feed_ids": [
+      9,
+      10
+     ]
+    },
+    {
+     "tag": "BB",
+     "label": "BB",
+     "long_press_menu": true,
+     "menu_header": "BB",
+     "unfiltered_feed_ids": [
+      9,
+      10
+     ]
+    },
+    {
+     "tag": "news",
+     "label": "news",
+     "long_press_menu": true,
+     "menu_header": "news",
+     "unfiltered_feed_ids": [
+      5
+     ]
+    },
+    {
+     "tag": "News",
+     "label": "News",
+     "long_press_menu": true,
+     "menu_header": "News",
+     "unfiltered_feed_ids": [
+      2,
+      3
+     ]
+    },
+    {
+     "tag": "Solo",
+     "label": "Solo",
+     "long_press_menu": true,
+     "menu_header": "Solo",
+     "unfiltered_feed_ids": [
+      11
+     ]
+    },
+    {
+     "tag": "Tech",
+     "label": "Tech",
+     "long_press_menu": true,
+     "menu_header": "Tech",
+     "unfiltered_feed_ids": [
+      4,
+      5,
+      3,
+      6
+     ]
+    },
+    {
+     "tag": "#untagged",
+     "label": "Untagged",
+     "long_press_menu": false,
+     "menu_header": null,
+     "unfiltered_feed_ids": [
+      1
+     ]
+    }
+   ],
+   "by_chip": {
+    "#root": {
+     "selected_chip_after_load": "#root",
+     "feed_ids": [
+      1,
+      2,
+      4,
+      3,
+      9,
+      10,
+      11,
+      12,
+      6
+     ]
+    },
+    "123456789012345678🎧xyz": {
+     "selected_chip_after_load": "123456789012345678🎧xyz",
+     "feed_ids": [
+      12
+     ]
+    },
+    "A very long tag name exceeding twenty": {
+     "selected_chip_after_load": "A very long tag name exceeding twenty",
+     "feed_ids": [
+      12
+     ]
+    },
+    "Aa": {
+     "selected_chip_after_load": "Aa",
+     "feed_ids": [
+      9,
+      10
+     ]
+    },
+    "BB": {
+     "selected_chip_after_load": "BB",
+     "feed_ids": [
+      9,
+      10
+     ]
+    },
+    "news": {
+     "selected_chip_after_load": "#root",
+     "feed_ids": [
+      1,
+      2,
+      4,
+      3,
+      9,
+      10,
+      11,
+      12,
+      6
+     ]
+    },
+    "News": {
+     "selected_chip_after_load": "News",
+     "feed_ids": [
+      2,
+      3
+     ]
+    },
+    "Solo": {
+     "selected_chip_after_load": "Solo",
+     "feed_ids": [
+      11
+     ]
+    },
+    "Tech": {
+     "selected_chip_after_load": "Tech",
+     "feed_ids": [
+      4,
+      3,
+      6
+     ]
+    },
+    "#untagged": {
+     "selected_chip_after_load": "#untagged",
+     "feed_ids": [
+      1
+     ]
+    }
+   }
+  },
+  "drawer": {
+   "filter": [],
+   "open_folders": [
+    "News",
+    "Tech"
+   ],
+   "flat": [
+    {
+     "feed": 1,
+     "title": "Alpha Daily",
+     "counter": 2,
+     "layer": 0
+    },
+    {
+     "feed": 4,
+     "title": "Delta Radio",
+     "counter": 0,
+     "layer": 0
+    },
+    {
+     "folder": "123456789012345678🎧xyz",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "A very long tag name exceeding twenty",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "Aa",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "BB",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "news",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "News",
+     "counter": 4,
+     "open": true,
+     "counter_visible": false
+    },
+    {
+     "feed": 2,
+     "title": "Beta Weekly",
+     "counter": 1,
+     "layer": 1
+    },
+    {
+     "feed": 3,
+     "title": "Gamma Talk",
+     "counter": 3,
+     "layer": 1
+    },
+    {
+     "folder": "Solo",
+     "counter": 2,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "Tech",
+     "counter": 5,
+     "open": true,
+     "counter_visible": false
+    },
+    {
+     "feed": 4,
+     "title": "Delta Radio",
+     "counter": 0,
+     "layer": 1
+    },
+    {
+     "feed": 5,
+     "title": "Epsilon Cast",
+     "counter": 1,
+     "layer": 1
+    },
+    {
+     "feed": 3,
+     "title": "Gamma Talk",
+     "counter": 3,
+     "layer": 1
+    },
+    {
+     "feed": 6,
+     "title": "Zeta Local",
+     "counter": 1,
+     "layer": 1
+    }
+   ],
+   "subscriptions_entry_counter": 12
+  },
+  "drawer_filter_kept_updated": {
+   "filter": [
+    "enabled_updates"
+   ],
+   "open_folders": [
+    "Tech",
+    "news"
+   ],
+   "flat": [
+    {
+     "feed": 1,
+     "title": "Alpha Daily",
+     "counter": 2,
+     "layer": 0
+    },
+    {
+     "feed": 4,
+     "title": "Delta Radio",
+     "counter": 0,
+     "layer": 0
+    },
+    {
+     "folder": "123456789012345678🎧xyz",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "A very long tag name exceeding twenty",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "Aa",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "BB",
+     "counter": 1,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "News",
+     "counter": 4,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "Solo",
+     "counter": 2,
+     "open": false,
+     "counter_visible": true
+    },
+    {
+     "folder": "Tech",
+     "counter": 4,
+     "open": true,
+     "counter_visible": false
+    },
+    {
+     "feed": 4,
+     "title": "Delta Radio",
+     "counter": 0,
+     "layer": 1
+    },
+    {
+     "feed": 3,
+     "title": "Gamma Talk",
+     "counter": 3,
+     "layer": 1
+    },
+    {
+     "feed": 6,
+     "title": "Zeta Local",
+     "counter": 1,
+     "layer": 1
+    }
+   ],
+   "subscriptions_entry_counter": 12
+  },
+  "chip_label_notes": [
+   {
+    "tag": "A very long tag name exceeding twenty",
+    "label": "A very long tag nam…",
+    "splits_surrogate_pair": false
+   },
+   {
+    "tag": "123456789012345678🎧xyz",
+    "label": "123456789012345678\\ud83c…",
+    "splits_surrogate_pair": true
+   },
+   {
+    "tag": "Exactly twenty chars",
+    "label": "Exactly twenty chars",
+    "splits_surrogate_pair": false
+   },
+   {
+    "tag": "Twenty-one characters",
+    "label": "Twenty-one characte…",
+    "splits_surrogate_pair": false
+   }
+  ],
+  "stored_tags_parse": [
+   {
+    "feed": 1,
+    "stored": "",
+    "tags_in_android_order": [
+     "#root"
+    ]
+   },
+   {
+    "feed": 2,
+    "stored": "News",
+    "tags_in_android_order": [
+     "News"
+    ]
+   },
+   {
+    "feed": 3,
+    "stored": "News\u001eTech",
+    "tags_in_android_order": [
+     "Tech",
+     "News"
+    ]
+   },
+   {
+    "feed": 4,
+    "stored": "#root\u001eTech",
+    "tags_in_android_order": [
+     "Tech",
+     "#root"
+    ]
+   },
+   {
+    "feed": 5,
+    "stored": "news\u001eTech",
+    "tags_in_android_order": [
+     "news",
+     "Tech"
+    ]
+   },
+   {
+    "feed": 6,
+    "stored": "Tech",
+    "tags_in_android_order": [
+     "Tech"
+    ]
+   },
+   {
+    "feed": 7,
+    "stored": "News\u001eOld",
+    "tags_in_android_order": [
+     "Old",
+     "News"
+    ]
+   },
+   {
+    "feed": 8,
+    "stored": "News",
+    "tags_in_android_order": [
+     "News"
+    ]
+   },
+   {
+    "feed": 9,
+    "stored": "Aa\u001eBB",
+    "tags_in_android_order": [
+     "Aa",
+     "BB"
+    ]
+   },
+   {
+    "feed": 10,
+    "stored": "BB\u001eAa",
+    "tags_in_android_order": [
+     "BB",
+     "Aa"
+    ]
+   },
+   {
+    "feed": 11,
+    "stored": "Solo",
+    "tags_in_android_order": [
+     "Solo"
+    ]
+   },
+   {
+    "feed": 12,
+    "stored": "A very long tag name exceeding twenty\u001e123456789012345678🎧xyz",
+    "tags_in_android_order": [
+     "A very long tag name exceeding twenty",
+     "123456789012345678🎧xyz"
+    ]
+   }
+  ]
+ },
+ "dialogs": {
+  "text": {
+   "title": "Tags",
+   "root_checkbox": "Show above tags (side navigation only)",
+   "root_checkbox_visible_only_when": "prefBottomNavigation == false (drawer mode)",
+   "info_multi": "Only common tags from all selected subscriptions are shown. Other tags stay unaffected.",
+   "input_hint": "Add tag",
+   "buttons": [
+    "Cancel",
+    "OK"
+   ]
+  },
+  "cases": [
+   {
+    "selection_in_list_order": [
+     3
+    ],
+    "displayed_tags": [
+     "Tech",
+     "News"
+    ],
+    "root_checked": false,
+    "info_visible": false
+   },
+   {
+    "selection_in_list_order": [
+     2,
+     3
+    ],
+    "displayed_tags": [
+     "News"
+    ],
+    "root_checked": false,
+    "info_visible": true
+   },
+   {
+    "selection_in_list_order": [
+     3,
+     4
+    ],
+    "displayed_tags": [
+     "Tech"
+    ],
+    "root_checked": false,
+    "info_visible": true
+   },
+   {
+    "selection_in_list_order": [
+     9
+    ],
+    "displayed_tags": [
+     "Aa",
+     "BB"
+    ],
+    "root_checked": false,
+    "info_visible": false
+   },
+   {
+    "selection_in_list_order": [
+     10
+    ],
+    "displayed_tags": [
+     "BB",
+     "Aa"
+    ],
+    "root_checked": false,
+    "info_visible": false
+   },
+   {
+    "selection_in_list_order": [
+     9,
+     10
+    ],
+    "displayed_tags": [
+     "Aa",
+     "BB"
+    ],
+    "root_checked": false,
+    "info_visible": true
+   },
+   {
+    "selection_in_list_order": [
+     10,
+     9
+    ],
+    "displayed_tags": [
+     "BB",
+     "Aa"
+    ],
+    "root_checked": false,
+    "info_visible": true
+   },
+   {
+    "selection_in_list_order": [
+     1,
+     4
+    ],
+    "displayed_tags": [],
+    "root_checked": true,
+    "info_visible": true
+   },
+   {
+    "selection_in_list_order": [
+     2,
+     5
+    ],
+    "displayed_tags": [],
+    "root_checked": false,
+    "info_visible": true
+   },
+   {
+    "selection_in_list_order": [
+     7
+    ],
+    "displayed_tags": [
+     "Old",
+     "News"
+    ],
+    "root_checked": false,
+    "info_visible": false
+   }
+  ]
+ },
+ "tag_edits": [
+  {
+   "name": "dialog_multi_remove_common_add_new",
+   "doc": "Beta+Gamma: remove common News, add Favourites",
+   "changes": [
+    {
+     "feed": 2,
+     "before": [
+      "News"
+     ],
+     "after_in_memory": [
+      "Favourites"
+     ],
+     "stored": "Favourites",
+     "after_reload": [
+      "Favourites"
+     ]
+    },
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "Tech",
+      "Favourites"
+     ],
+     "stored": "Tech\u001eFavourites",
+     "after_reload": [
+      "Tech",
+      "Favourites"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "Favourites",
+      "label": "Favourites",
+      "long_press_menu": true,
+      "menu_header": "Favourites",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "Favourites": {
+      "selected_chip_after_load": "Favourites",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Favourites",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "selection": [
+    2,
+    3
+   ],
+   "edits": [
+    [
+     "remove",
+     "News"
+    ],
+    [
+     "add",
+     "Favourites"
+    ]
+   ],
+   "root_checkbox_set_to": null,
+   "rejected_inputs": []
+  },
+  {
+   "name": "dialog_multi_pending_text_keeps_partial_tags",
+   "doc": "Gamma+Delta: common Tech; type 'Evening' without pressing +, then OK. News (Gamma only) and #root (Delta only) are partial and stay",
+   "changes": [
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "Tech",
+      "Evening",
+      "News"
+     ],
+     "stored": "Tech\u001eEvening\u001eNews",
+     "after_reload": [
+      "Tech",
+      "Evening",
+      "News"
+     ]
+    },
+    {
+     "feed": 4,
+     "before": [
+      "Tech",
+      "#root"
+     ],
+     "after_in_memory": [
+      "Tech",
+      "Evening",
+      "#root"
+     ],
+     "stored": "Tech\u001eEvening\u001e#root",
+     "after_reload": [
+      "Tech",
+      "Evening",
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "Evening",
+      "label": "Evening",
+      "long_press_menu": true,
+      "menu_header": "Evening",
+      "unfiltered_feed_ids": [
+       4,
+       3
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "Evening": {
+      "selected_chip_after_load": "Evening",
+      "feed_ids": [
+       4,
+       3
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Evening",
+      "counter": 3,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "selection": [
+    3,
+    4
+   ],
+   "edits": [
+    [
+     "pending",
+     "  Evening  "
+    ]
+   ],
+   "root_checkbox_set_to": null,
+   "rejected_inputs": []
+  },
+  {
+   "name": "dialog_single_remove_last_tag",
+   "doc": "Lambda: remove Solo -> empty set -> stored '' -> #root/untagged",
+   "changes": [
+    {
+     "feed": 11,
+     "before": [
+      "Solo"
+     ],
+     "after_in_memory": [],
+     "stored": "",
+     "after_reload": [
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       11
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1,
+       11
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "feed": 11,
+      "title": "Lambda Solo",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "selection": [
+    11
+   ],
+   "edits": [
+    [
+     "remove",
+     "Solo"
+    ]
+   ],
+   "root_checkbox_set_to": null,
+   "rejected_inputs": []
+  },
+  {
+   "name": "dialog_root_common_hidden_checkbox_kept",
+   "doc": "Alpha+Delta (both #root, bottom navigation on: checkbox hidden but checked): add Tech",
+   "changes": [
+    {
+     "feed": 1,
+     "before": [
+      "#root"
+     ],
+     "after_in_memory": [
+      "Tech",
+      "#root"
+     ],
+     "stored": "Tech\u001e#root",
+     "after_reload": [
+      "Tech",
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       1,
+       4,
+       5,
+       3,
+       6
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       1,
+       4,
+       5,
+       3,
+       6
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 7,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "selection": [
+    1,
+    4
+   ],
+   "edits": [
+    [
+     "add",
+     "Tech"
+    ]
+   ],
+   "root_checkbox_set_to": null,
+   "rejected_inputs": []
+  },
+  {
+   "name": "dialog_uncheck_root_drawer_mode",
+   "doc": "Alpha+Delta in drawer mode: uncheck the root box. Delta leaves the main list; Alpha had only #root, is stored '' and reads back as #root",
+   "changes": [
+    {
+     "feed": 1,
+     "before": [
+      "#root"
+     ],
+     "after_in_memory": [],
+     "stored": "",
+     "after_reload": [
+      "#root"
+     ]
+    },
+    {
+     "feed": 4,
+     "before": [
+      "Tech",
+      "#root"
+     ],
+     "after_in_memory": [
+      "Tech"
+     ],
+     "stored": "Tech",
+     "after_reload": [
+      "Tech"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    2,
+    3,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "selection": [
+    1,
+    4
+   ],
+   "edits": [],
+   "root_checkbox_set_to": false,
+   "rejected_inputs": []
+  },
+  {
+   "name": "dialog_rejected_inputs",
+   "doc": "Beta: '', duplicate 'News', '#untagged' are rejected; '#root' is accepted",
+   "changes": [
+    {
+     "feed": 2,
+     "before": [
+      "News"
+     ],
+     "after_in_memory": [
+      "News",
+      "#root"
+     ],
+     "stored": "News\u001e#root",
+     "after_reload": [
+      "News",
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 2,
+      "title": "Beta Weekly",
+      "counter": 1,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "selection": [
+    2
+   ],
+   "edits": [
+    [
+     "add",
+     ""
+    ],
+    [
+     "add",
+     "News"
+    ],
+    [
+     "add",
+     "#untagged"
+    ],
+    [
+     "add",
+     "#root"
+    ]
+   ],
+   "root_checkbox_set_to": null,
+   "rejected_inputs": [
+    "",
+    "News",
+    "#untagged"
+   ]
+  },
+  {
+   "name": "dialog_collision_pair_order",
+   "doc": "Iota+Kappa: common Aa/BB shown in Iota's order; remove BB",
+   "changes": [
+    {
+     "feed": 9,
+     "before": [
+      "Aa",
+      "BB"
+     ],
+     "after_in_memory": [
+      "Aa"
+     ],
+     "stored": "Aa",
+     "after_reload": [
+      "Aa"
+     ]
+    },
+    {
+     "feed": 10,
+     "before": [
+      "BB",
+      "Aa"
+     ],
+     "after_in_memory": [
+      "Aa"
+     ],
+     "stored": "Aa",
+     "after_reload": [
+      "Aa"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "selection": [
+    9,
+    10
+   ],
+   "edits": [
+    [
+     "remove",
+     "BB"
+    ]
+   ],
+   "root_checkbox_set_to": null,
+   "rejected_inputs": []
+  },
+  {
+   "name": "chip_rename_news",
+   "doc": "Subscriptions chip News -> Headlines: subscribed feeds 2,3 only; archived 7 and preview 8 keep News; 'news' (5) untouched",
+   "changes": [
+    {
+     "feed": 2,
+     "before": [
+      "News"
+     ],
+     "after_in_memory": [
+      "Headlines"
+     ],
+     "stored": "Headlines",
+     "after_reload": [
+      "Headlines"
+     ]
+    },
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "Tech",
+      "Headlines"
+     ],
+     "stored": "Tech\u001eHeadlines",
+     "after_reload": [
+      "Tech",
+      "Headlines"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "Headlines",
+      "label": "Headlines",
+      "long_press_menu": true,
+      "menu_header": "Headlines",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "Headlines": {
+      "selected_chip_after_load": "Headlines",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Headlines",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   }
+  },
+  {
+   "name": "chip_rename_collision_merge",
+   "doc": "News -> Tech: Gamma already has Tech (merge)",
+   "changes": [
+    {
+     "feed": 2,
+     "before": [
+      "News"
+     ],
+     "after_in_memory": [
+      "Tech"
+     ],
+     "stored": "Tech",
+     "after_reload": [
+      "Tech"
+     ]
+    },
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "Tech"
+     ],
+     "stored": "Tech",
+     "after_reload": [
+      "Tech"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       2,
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       2,
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 6,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   }
+  },
+  {
+   "name": "chip_rename_case_only",
+   "doc": "news -> News: Epsilon joins the News chip",
+   "changes": [
+    {
+     "feed": 5,
+     "before": [
+      "news",
+      "Tech"
+     ],
+     "after_in_memory": [
+      "Tech",
+      "News"
+     ],
+     "stored": "Tech\u001eNews",
+     "after_reload": [
+      "Tech",
+      "News"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       5,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       5,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   }
+  },
+  {
+   "name": "chip_rename_to_empty_single_tag",
+   "doc": "Solo -> '' on Lambda: stored '' reads as #root, the tag vanishes (Android accepts empty input)",
+   "changes": [
+    {
+     "feed": 11,
+     "before": [
+      "Solo"
+     ],
+     "after_in_memory": [
+      ""
+     ],
+     "stored": "",
+     "after_reload": [
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       11
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1,
+       11
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "feed": 11,
+      "title": "Lambda Solo",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "android_defect": "empty tag name accepted"
+  },
+  {
+   "name": "chip_rename_to_empty_with_other_tags",
+   "doc": "Tech -> '': Android keeps an empty-named tag only where the empty string iterates first",
+   "changes": [
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "",
+      "News"
+     ],
+     "stored": "\u001eNews",
+     "after_reload": [
+      "",
+      "News"
+     ]
+    },
+    {
+     "feed": 4,
+     "before": [
+      "Tech",
+      "#root"
+     ],
+     "after_in_memory": [
+      "",
+      "#root"
+     ],
+     "stored": "\u001e#root",
+     "after_reload": [
+      "",
+      "#root"
+     ]
+    },
+    {
+     "feed": 5,
+     "before": [
+      "news",
+      "Tech"
+     ],
+     "after_in_memory": [
+      "news",
+      ""
+     ],
+     "stored": "news\u001e",
+     "after_reload": [
+      "news"
+     ]
+    },
+    {
+     "feed": 6,
+     "before": [
+      "Tech"
+     ],
+     "after_in_memory": [
+      ""
+     ],
+     "stored": "",
+     "after_reload": [
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "",
+      "label": "",
+      "long_press_menu": true,
+      "menu_header": "",
+      "unfiltered_feed_ids": [
+       4,
+       3
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       6
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "": {
+      "selected_chip_after_load": "",
+      "feed_ids": [
+       4,
+       3
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1,
+       6
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "feed": 6,
+      "title": "Zeta Local",
+      "counter": 1,
+      "layer": 0
+     },
+     {
+      "folder": "",
+      "counter": 3,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "android_defect": "empty tag name accepted; survival depends on HashSet order"
+  },
+  {
+   "name": "chip_delete_news",
+   "doc": "Delete News from chips: 2 becomes untagged, 3 keeps Tech; archived 7 and preview 8 keep News",
+   "changes": [
+    {
+     "feed": 2,
+     "before": [
+      "News"
+     ],
+     "after_in_memory": [],
+     "stored": "",
+     "after_reload": [
+      "#root"
+     ]
+    },
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "Tech"
+     ],
+     "stored": "Tech",
+     "after_reload": [
+      "Tech"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1,
+       2
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 2,
+      "title": "Beta Weekly",
+      "counter": 1,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   }
+  },
+  {
+   "name": "chip_delete_last_tag",
+   "doc": "Delete Solo: Lambda returns to the main list",
+   "changes": [
+    {
+     "feed": 11,
+     "before": [
+      "Solo"
+     ],
+     "after_in_memory": [],
+     "stored": "",
+     "after_reload": [
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       11
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1,
+       11
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "feed": 11,
+      "title": "Lambda Solo",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   }
+  },
+  {
+   "name": "archive_chip_delete_old",
+   "doc": "Archive screen chip Old: only archived feeds",
+   "changes": [
+    {
+     "feed": 7,
+     "before": [
+      "Old",
+      "News"
+     ],
+     "after_in_memory": [
+      "News"
+     ],
+     "stored": "News",
+     "after_reload": [
+      "News"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "Tech",
+      "feed_ids": [
+       4,
+       5,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Tech",
+      "counter": 5,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   }
+  },
+  {
+   "name": "drawer_rename_tech_filtered",
+   "doc": "Drawer folder Tech -> Technology while the 'Kept updated' filter hides Epsilon: Epsilon keeps Tech",
+   "changes": [
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "Technology",
+      "News"
+     ],
+     "stored": "Technology\u001eNews",
+     "after_reload": [
+      "Technology",
+      "News"
+     ]
+    },
+    {
+     "feed": 4,
+     "before": [
+      "Tech",
+      "#root"
+     ],
+     "after_in_memory": [
+      "Technology",
+      "#root"
+     ],
+     "stored": "Technology\u001e#root",
+     "after_reload": [
+      "Technology",
+      "#root"
+     ]
+    },
+    {
+     "feed": 6,
+     "before": [
+      "Tech"
+     ],
+     "after_in_memory": [
+      "Technology"
+     ],
+     "stored": "Technology",
+     "after_reload": [
+      "Technology"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "Technology",
+      "label": "Technology",
+      "long_press_menu": true,
+      "menu_header": "Technology",
+      "unfiltered_feed_ids": [
+       4,
+       3,
+       6
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "Technology": {
+      "selected_chip_after_load": "Technology",
+      "feed_ids": [
+       4,
+       3,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [
+     "enabled_updates"
+    ],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Technology",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "android_defect": "drawer rename/delete skip feeds hidden by the subscriptions filter"
+  },
+  {
+   "name": "drawer_delete_tech_filtered",
+   "doc": "Drawer delete Tech with the filter: Epsilon keeps Tech, the folder returns when the filter is cleared",
+   "changes": [
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "News"
+     ],
+     "stored": "News",
+     "after_reload": [
+      "News"
+     ]
+    },
+    {
+     "feed": 4,
+     "before": [
+      "Tech",
+      "#root"
+     ],
+     "after_in_memory": [
+      "#root"
+     ],
+     "stored": "#root",
+     "after_reload": [
+      "#root"
+     ]
+    },
+    {
+     "feed": 6,
+     "before": [
+      "Tech"
+     ],
+     "after_in_memory": [],
+     "stored": "",
+     "after_reload": [
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "Tech",
+      "label": "Tech",
+      "long_press_menu": true,
+      "menu_header": "Tech",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       4,
+       6
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "Tech": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1,
+       4,
+       6
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [
+     "enabled_updates"
+    ],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "feed": 6,
+      "title": "Zeta Local",
+      "counter": 1,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   },
+   "android_defect": "drawer rename/delete skip feeds hidden by the subscriptions filter"
+  },
+  {
+   "name": "drawer_delete_tech_unfiltered",
+   "doc": "Drawer delete Tech without a filter",
+   "changes": [
+    {
+     "feed": 3,
+     "before": [
+      "Tech",
+      "News"
+     ],
+     "after_in_memory": [
+      "News"
+     ],
+     "stored": "News",
+     "after_reload": [
+      "News"
+     ]
+    },
+    {
+     "feed": 4,
+     "before": [
+      "Tech",
+      "#root"
+     ],
+     "after_in_memory": [
+      "#root"
+     ],
+     "stored": "#root",
+     "after_reload": [
+      "#root"
+     ]
+    },
+    {
+     "feed": 5,
+     "before": [
+      "news",
+      "Tech"
+     ],
+     "after_in_memory": [
+      "news"
+     ],
+     "stored": "news",
+     "after_reload": [
+      "news"
+     ]
+    },
+    {
+     "feed": 6,
+     "before": [
+      "Tech"
+     ],
+     "after_in_memory": [],
+     "stored": "",
+     "after_reload": [
+      "#root"
+     ]
+    }
+   ],
+   "unchanged_feeds": [
+    1,
+    2,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "subscribed_after": {
+    "chips_row_visible": true,
+    "chips": [
+     {
+      "tag": "#root",
+      "label": "All",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     {
+      "tag": "123456789012345678🎧xyz",
+      "label": "123456789012345678\\ud83c…",
+      "long_press_menu": true,
+      "menu_header": "123456789012345678🎧xyz",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "A very long tag name exceeding twenty",
+      "label": "A very long tag nam…",
+      "long_press_menu": true,
+      "menu_header": "A very long tag name exceeding twenty",
+      "unfiltered_feed_ids": [
+       12
+      ]
+     },
+     {
+      "tag": "Aa",
+      "label": "Aa",
+      "long_press_menu": true,
+      "menu_header": "Aa",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "BB",
+      "label": "BB",
+      "long_press_menu": true,
+      "menu_header": "BB",
+      "unfiltered_feed_ids": [
+       9,
+       10
+      ]
+     },
+     {
+      "tag": "news",
+      "label": "news",
+      "long_press_menu": true,
+      "menu_header": "news",
+      "unfiltered_feed_ids": [
+       5
+      ]
+     },
+     {
+      "tag": "News",
+      "label": "News",
+      "long_press_menu": true,
+      "menu_header": "News",
+      "unfiltered_feed_ids": [
+       2,
+       3
+      ]
+     },
+     {
+      "tag": "Solo",
+      "label": "Solo",
+      "long_press_menu": true,
+      "menu_header": "Solo",
+      "unfiltered_feed_ids": [
+       11
+      ]
+     },
+     {
+      "tag": "#untagged",
+      "label": "Untagged",
+      "long_press_menu": false,
+      "menu_header": null,
+      "unfiltered_feed_ids": [
+       1,
+       4,
+       6
+      ]
+     }
+    ],
+    "by_chip": {
+     "#root": {
+      "selected_chip_after_load": "#root",
+      "feed_ids": [
+       1,
+       2,
+       4,
+       5,
+       3,
+       9,
+       10,
+       11,
+       12,
+       6
+      ]
+     },
+     "123456789012345678🎧xyz": {
+      "selected_chip_after_load": "123456789012345678🎧xyz",
+      "feed_ids": [
+       12
+      ]
+     },
+     "A very long tag name exceeding twenty": {
+      "selected_chip_after_load": "A very long tag name exceeding twenty",
+      "feed_ids": [
+       12
+      ]
+     },
+     "Aa": {
+      "selected_chip_after_load": "Aa",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "BB": {
+      "selected_chip_after_load": "BB",
+      "feed_ids": [
+       9,
+       10
+      ]
+     },
+     "news": {
+      "selected_chip_after_load": "news",
+      "feed_ids": [
+       5
+      ]
+     },
+     "News": {
+      "selected_chip_after_load": "News",
+      "feed_ids": [
+       2,
+       3
+      ]
+     },
+     "Solo": {
+      "selected_chip_after_load": "Solo",
+      "feed_ids": [
+       11
+      ]
+     },
+     "#untagged": {
+      "selected_chip_after_load": "#untagged",
+      "feed_ids": [
+       1,
+       4,
+       6
+      ]
+     }
+    }
+   },
+   "archive_chips_after": [
+    "#root",
+    "News",
+    "Old"
+   ],
+   "drawer_after": {
+    "filter": [],
+    "open_folders": [],
+    "flat": [
+     {
+      "feed": 1,
+      "title": "Alpha Daily",
+      "counter": 2,
+      "layer": 0
+     },
+     {
+      "feed": 4,
+      "title": "Delta Radio",
+      "counter": 0,
+      "layer": 0
+     },
+     {
+      "feed": 6,
+      "title": "Zeta Local",
+      "counter": 1,
+      "layer": 0
+     },
+     {
+      "folder": "123456789012345678🎧xyz",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "A very long tag name exceeding twenty",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Aa",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "BB",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "news",
+      "counter": 1,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "News",
+      "counter": 4,
+      "open": false,
+      "counter_visible": true
+     },
+     {
+      "folder": "Solo",
+      "counter": 2,
+      "open": false,
+      "counter_visible": true
+     }
+    ],
+    "subscriptions_entry_counter": 12
+   }
+  }
+ ],
+ "bulk": [
+  {
+   "action": "keep_updated",
+   "name": "keep_updated_off",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "switch_on": false
+   },
+   "dialog": {
+    "type": "switch",
+    "title": "Kept updated",
+    "switch_text": "Include this podcast when (auto-)refreshing all podcasts",
+    "switch_initially_on": false,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "keep_updated",
+     "before": 1,
+     "after": 0
+    },
+    {
+     "feed": 4,
+     "column": "keep_updated",
+     "before": 1,
+     "after": 0
+    },
+    {
+     "feed": 3,
+     "column": "keep_updated",
+     "before": 1,
+     "after": 0
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "notify_new_episodes",
+   "name": "notifications_off",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "switch_on": false
+   },
+   "dialog": {
+    "type": "switch",
+    "title": "Episode notifications",
+    "switch_text": "Show a notification when a new episode is released",
+    "switch_initially_on": false,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "episode_notification",
+     "before": 0,
+     "after": 0
+    },
+    {
+     "feed": 4,
+     "column": "episode_notification",
+     "before": 0,
+     "after": 0
+    },
+    {
+     "feed": 3,
+     "column": "episode_notification",
+     "before": 1,
+     "after": 0
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "keep_updated",
+   "name": "keep_updated_on",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "switch_on": true
+   },
+   "dialog": {
+    "type": "switch",
+    "title": "Kept updated",
+    "switch_text": "Include this podcast when (auto-)refreshing all podcasts",
+    "switch_initially_on": false,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "keep_updated",
+     "before": 1,
+     "after": 1
+    },
+    {
+     "feed": 4,
+     "column": "keep_updated",
+     "before": 1,
+     "after": 1
+    },
+    {
+     "feed": 3,
+     "column": "keep_updated",
+     "before": 1,
+     "after": 1
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "notify_new_episodes",
+   "name": "notifications_on",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "switch_on": true
+   },
+   "dialog": {
+    "type": "switch",
+    "title": "Episode notifications",
+    "switch_text": "Show a notification when a new episode is released",
+    "switch_initially_on": false,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "episode_notification",
+     "before": 0,
+     "after": 1
+    },
+    {
+     "feed": 4,
+     "column": "episode_notification",
+     "before": 0,
+     "after": 1
+    },
+    {
+     "feed": 3,
+     "column": "episode_notification",
+     "before": 1,
+     "after": 1
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "autodownload",
+   "name": "autodownload_global",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "index": 0,
+    "label": "Global default"
+   },
+   "dialog": {
+    "type": "single_choice",
+    "title": "Include in auto downloads",
+    "items": [
+     "Global default",
+     "Enabled",
+     "Disabled"
+    ],
+    "initially_checked": 0,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "auto_download",
+     "before": 1,
+     "after": 1
+    },
+    {
+     "feed": 4,
+     "column": "auto_download",
+     "before": 2,
+     "after": 1
+    },
+    {
+     "feed": 3,
+     "column": "auto_download",
+     "before": 1,
+     "after": 1
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "autoDeleteDownload",
+   "name": "auto_delete_global",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "index": 0,
+    "label": "Global default"
+   },
+   "dialog": {
+    "type": "single_choice",
+    "title": "Delete after playing",
+    "items": [
+     "Global default",
+     "Always",
+     "Never"
+    ],
+    "initially_checked": 0,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 0
+    },
+    {
+     "feed": 4,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 0
+    },
+    {
+     "feed": 3,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 0
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "autodownload",
+   "name": "autodownload_enabled",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "index": 1,
+    "label": "Enabled"
+   },
+   "dialog": {
+    "type": "single_choice",
+    "title": "Include in auto downloads",
+    "items": [
+     "Global default",
+     "Enabled",
+     "Disabled"
+    ],
+    "initially_checked": 0,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "auto_download",
+     "before": 1,
+     "after": 2
+    },
+    {
+     "feed": 4,
+     "column": "auto_download",
+     "before": 2,
+     "after": 2
+    },
+    {
+     "feed": 3,
+     "column": "auto_download",
+     "before": 1,
+     "after": 2
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "autoDeleteDownload",
+   "name": "auto_delete_always",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "index": 1,
+    "label": "Always"
+   },
+   "dialog": {
+    "type": "single_choice",
+    "title": "Delete after playing",
+    "items": [
+     "Global default",
+     "Always",
+     "Never"
+    ],
+    "initially_checked": 0,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 1
+    },
+    {
+     "feed": 4,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 1
+    },
+    {
+     "feed": 3,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 1
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "autodownload",
+   "name": "autodownload_disabled",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "index": 2,
+    "label": "Disabled"
+   },
+   "dialog": {
+    "type": "single_choice",
+    "title": "Include in auto downloads",
+    "items": [
+     "Global default",
+     "Enabled",
+     "Disabled"
+    ],
+    "initially_checked": 0,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "auto_download",
+     "before": 1,
+     "after": 0
+    },
+    {
+     "feed": 4,
+     "column": "auto_download",
+     "before": 2,
+     "after": 0
+    },
+    {
+     "feed": 3,
+     "column": "auto_download",
+     "before": 1,
+     "after": 0
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "autoDeleteDownload",
+   "name": "auto_delete_never",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "index": 2,
+    "label": "Never"
+   },
+   "dialog": {
+    "type": "single_choice",
+    "title": "Delete after playing",
+    "items": [
+     "Global default",
+     "Always",
+     "Never"
+    ],
+    "initially_checked": 0,
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 2
+    },
+    {
+     "feed": 4,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 2
+    },
+    {
+     "feed": 3,
+     "column": "auto_delete_action",
+     "before": 0,
+     "after": 2
+    }
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "playback_speed",
+   "name": "speed_unchanged_slider",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "global": false,
+    "progress": 10
+   },
+   "dialog": {
+    "type": "speed",
+    "title": "Playback speed",
+    "global_checkbox": "Global default",
+    "global_initially_checked": false,
+    "slider_initial_speed": 1.0,
+    "value_label_initial": "",
+    "value_label_format": "%.2fx",
+    "range": [
+     0.5,
+     4.0
+    ],
+    "step": 0.05,
+    "skip_silence_checkbox": "Skip silence in audio",
+    "skip_silence_checkbox_saved": false,
+    "buttons": [
+     "Cancel",
+     "OK"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "feed_playback_speed",
+     "before": -1.0,
+     "after": 1.0
+    },
+    {
+     "feed": 4,
+     "column": "feed_playback_speed",
+     "before": 1.25,
+     "after": 1.0
+    },
+    {
+     "feed": 3,
+     "column": "feed_playback_speed",
+     "before": -1.0,
+     "after": 1.0
+    }
+   ],
+   "untouched_columns": [
+    "feed_skip_silence"
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "playback_speed",
+   "name": "speed_plus_seven_steps",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "global": false,
+    "progress": 17
+   },
+   "dialog": {
+    "type": "speed",
+    "title": "Playback speed",
+    "global_checkbox": "Global default",
+    "global_initially_checked": false,
+    "slider_initial_speed": 1.0,
+    "value_label_initial": "",
+    "value_label_format": "%.2fx",
+    "range": [
+     0.5,
+     4.0
+    ],
+    "step": 0.05,
+    "skip_silence_checkbox": "Skip silence in audio",
+    "skip_silence_checkbox_saved": false,
+    "buttons": [
+     "Cancel",
+     "OK"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "feed_playback_speed",
+     "before": -1.0,
+     "after": 1.350000023841858
+    },
+    {
+     "feed": 4,
+     "column": "feed_playback_speed",
+     "before": 1.25,
+     "after": 1.350000023841858
+    },
+    {
+     "feed": 3,
+     "column": "feed_playback_speed",
+     "before": -1.0,
+     "after": 1.350000023841858
+    }
+   ],
+   "untouched_columns": [
+    "feed_skip_silence"
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "playback_speed",
+   "name": "speed_max",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "global": false,
+    "progress": 70
+   },
+   "dialog": {
+    "type": "speed",
+    "title": "Playback speed",
+    "global_checkbox": "Global default",
+    "global_initially_checked": false,
+    "slider_initial_speed": 1.0,
+    "value_label_initial": "",
+    "value_label_format": "%.2fx",
+    "range": [
+     0.5,
+     4.0
+    ],
+    "step": 0.05,
+    "skip_silence_checkbox": "Skip silence in audio",
+    "skip_silence_checkbox_saved": false,
+    "buttons": [
+     "Cancel",
+     "OK"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "feed_playback_speed",
+     "before": -1.0,
+     "after": 4.0
+    },
+    {
+     "feed": 4,
+     "column": "feed_playback_speed",
+     "before": 1.25,
+     "after": 4.0
+    },
+    {
+     "feed": 3,
+     "column": "feed_playback_speed",
+     "before": -1.0,
+     "after": 4.0
+    }
+   ],
+   "untouched_columns": [
+    "feed_skip_silence"
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "playback_speed",
+   "name": "speed_global",
+   "selection": [
+    1,
+    4,
+    3
+   ],
+   "choice": {
+    "global": true
+   },
+   "dialog": {
+    "type": "speed",
+    "title": "Playback speed",
+    "global_checkbox": "Global default",
+    "global_initially_checked": false,
+    "slider_initial_speed": 1.0,
+    "value_label_initial": "",
+    "value_label_format": "%.2fx",
+    "range": [
+     0.5,
+     4.0
+    ],
+    "step": 0.05,
+    "skip_silence_checkbox": "Skip silence in audio",
+    "skip_silence_checkbox_saved": false,
+    "buttons": [
+     "Cancel",
+     "OK"
+    ]
+   },
+   "feeds_changes": [
+    {
+     "feed": 1,
+     "column": "feed_playback_speed",
+     "before": -1.0,
+     "after": -1.0
+    },
+    {
+     "feed": 4,
+     "column": "feed_playback_speed",
+     "before": 1.25,
+     "after": -1.0
+    },
+    {
+     "feed": 3,
+     "column": "feed_playback_speed",
+     "before": -1.0,
+     "after": -1.0
+    }
+   ],
+   "untouched_columns": [
+    "feed_skip_silence"
+   ],
+   "snackbar": "3 subscriptions updated.",
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "remove_all_inbox_item",
+   "name": "remove_all_from_inbox",
+   "selection": [
+    1,
+    3
+   ],
+   "dialog": {
+    "type": "confirmation",
+    "title": "Remove all from inbox",
+    "message": "Please confirm that you want to remove all from the inbox.",
+    "buttons": [
+     "Cancel",
+     "Confirm"
+    ]
+   },
+   "feeds_changes": [],
+   "feed_items_changes": [
+    {
+     "episode": 1,
+     "feed": 1,
+     "item_identifier": "m24-1-1",
+     "column": "read",
+     "before": -1,
+     "after": 0
+    },
+    {
+     "episode": 2,
+     "feed": 1,
+     "item_identifier": "m24-1-2",
+     "column": "read",
+     "before": -1,
+     "after": 0
+    },
+    {
+     "episode": 6,
+     "feed": 3,
+     "item_identifier": "m24-3-1",
+     "column": "read",
+     "before": -1,
+     "after": 0
+    },
+    {
+     "episode": 7,
+     "feed": 3,
+     "item_identifier": "m24-3-2",
+     "column": "read",
+     "before": -1,
+     "after": 0
+    },
+    {
+     "episode": 8,
+     "feed": 3,
+     "item_identifier": "m24-3-3",
+     "column": "read",
+     "before": -1,
+     "after": 0
+    }
+   ],
+   "snackbar": null,
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    2,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "remove_archive_feed",
+   "name": "archive",
+   "selection": [
+    2,
+    3
+   ],
+   "dialog": {
+    "type": "bottom_sheet",
+    "title": "Unsubscribe / archive",
+    "selection_text": "2 subscriptions",
+    "explanations": [
+     "Unsubscribing removes the subscription including all its episodes, downloads, playback history, and statistics.",
+     "Archiving hides the subscription from the list and stops looking for new episodes. Downloads, statistics and playback state are kept."
+    ],
+    "buttons": [
+     "Cancel",
+     "Unsubscribe",
+     "Archive"
+    ],
+    "progress_text": "Archiving podcast %1$d of %2$d…"
+   },
+   "choice": "Archive",
+   "feeds_changes": [
+    {
+     "feed": 2,
+     "column": "state",
+     "before": 0,
+     "after": 2
+    },
+    {
+     "feed": 3,
+     "column": "state",
+     "before": 0,
+     "after": 2
+    }
+   ],
+   "snackbar": null,
+   "select_mode_ends_immediately": false,
+   "other_feeds_unchanged": [
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  {
+   "action": "remove_restore_feed",
+   "name": "restore",
+   "selection": [
+    7
+   ],
+   "dialog": {
+    "type": "bottom_sheet",
+    "title": "Unsubscribe / archive",
+    "selection_text": "Eta Archive",
+    "explanations": [
+     "Unsubscribing removes the subscription including all its episodes, downloads, playback history, and statistics."
+    ],
+    "buttons": [
+     "Cancel",
+     "Unsubscribe",
+     "Restore"
+    ],
+    "progress_text": "Restoring podcast %1$d of %2$d…"
+   },
+   "choice": "Restore",
+   "feeds_changes": [
+    {
+     "feed": 7,
+     "column": "state",
+     "before": 2,
+     "after": 0
+    }
+   ],
+   "snackbar": null,
+   "select_mode_ends_immediately": true,
+   "other_feeds_unchanged": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  }
+ ],
+ "menus": {
+  "floating": [
+   {
+    "selection": [
+     1
+    ],
+    "archive_screen": false,
+    "items": [
+     "Edit tags",
+     "Share",
+     "Remove all from inbox",
+     "Unsubscribe / archive",
+     "Keep updated",
+     "Episode notifications",
+     "Include in auto downloads",
+     "Delete after playing",
+     "Playback speed"
+    ]
+   },
+   {
+    "selection": [
+     6
+    ],
+    "archive_screen": false,
+    "items": [
+     "Edit tags",
+     "Remove all from inbox",
+     "Unsubscribe / archive",
+     "Keep updated",
+     "Episode notifications",
+     "Include in auto downloads",
+     "Delete after playing",
+     "Playback speed"
+    ]
+   },
+   {
+    "selection": [
+     1,
+     3
+    ],
+    "archive_screen": false,
+    "items": [
+     "Edit tags",
+     "Remove all from inbox",
+     "Unsubscribe / archive",
+     "Keep updated",
+     "Episode notifications",
+     "Include in auto downloads",
+     "Delete after playing",
+     "Playback speed"
+    ]
+   },
+   {
+    "selection": [
+     6,
+     1
+    ],
+    "archive_screen": false,
+    "items": [
+     "Edit tags",
+     "Remove all from inbox",
+     "Unsubscribe / archive",
+     "Keep updated",
+     "Episode notifications",
+     "Include in auto downloads",
+     "Delete after playing",
+     "Playback speed"
+    ]
+   },
+   {
+    "selection": [
+     7
+    ],
+    "archive_screen": true,
+    "items": [
+     "Edit tags",
+     "Share",
+     "Unsubscribe / restore"
+    ]
+   },
+   {
+    "selection": [],
+    "archive_screen": false,
+    "items": "unchanged from the previous selection (FMH.onPrepareMenu returns early); any tap only ends select mode (FMSAH:44-46, SF:201-203)"
+   }
+  ],
+  "feed_context": [
+   {
+    "feed": 1,
+    "state": 0,
+    "local": false,
+    "header": "Alpha Daily",
+    "items": [
+     "Remove all from inbox",
+     "Edit tags",
+     "Unsubscribe / archive",
+     "Share"
+    ]
+   },
+   {
+    "feed": 6,
+    "state": 0,
+    "local": true,
+    "header": "Zeta Local",
+    "items": [
+     "Remove all from inbox",
+     "Edit tags",
+     "Unsubscribe / archive"
+    ]
+   },
+   {
+    "feed": 7,
+    "state": 2,
+    "local": false,
+    "header": "Eta Archive",
+    "items": [
+     "Edit tags",
+     "Unsubscribe / restore",
+     "Share"
+    ]
+   },
+   {
+    "feed": 8,
+    "state": 1,
+    "local": false,
+    "header": "Theta Preview",
+    "items": [
+     "Edit tags",
+     "Share"
+    ]
+   }
+  ],
+  "folder_context": {
+   "items": [
+    "Rename tag",
+    "Delete tag"
+   ],
+   "header": "<tag title>"
+  },
+  "action_mode_overflow": [
+   "Select all|Deselect all",
+   "Select all above",
+   "Select all below"
+  ],
+  "action_mode_title": "%1$d/%2$d selected"
+ },
+ "selection": [
+  {
+   "visible": 6,
+   "selected": [
+    2
+   ],
+   "select_toggle": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "select_all_above": [
+    0,
+    1,
+    2
+   ],
+   "select_all_below": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "visible": 6,
+   "selected": [
+    1,
+    4
+   ],
+   "select_toggle": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "select_all_above": [
+    0,
+    1,
+    4
+   ],
+   "select_all_below": [
+    1,
+    4,
+    5
+   ]
+  },
+  {
+   "visible": 6,
+   "selected": [
+    0
+   ],
+   "select_toggle": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "select_all_above": [
+    0
+   ],
+   "select_all_below": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "visible": 6,
+   "selected": [
+    5
+   ],
+   "select_toggle": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "select_all_above": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "select_all_below": [
+    5
+   ]
+  },
+  {
+   "visible": 6,
+   "selected": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "select_toggle": [],
+   "select_all_above": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "select_all_below": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  }
+ ]
+}

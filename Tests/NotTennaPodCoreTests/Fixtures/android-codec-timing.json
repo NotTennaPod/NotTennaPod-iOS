@@ -1,0 +1,74 @@
+[
+  {
+    "file": "tone-vorbis.ogg",
+    "startMs": 0,
+    "firstPTSUs": 0,
+    "frames": 384000
+  },
+  {
+    "file": "tone-vorbis.ogg",
+    "startMs": 3883,
+    "firstPTSUs": 3904000,
+    "frames": 196608
+  },
+  {
+    "file": "tone-vorbis.ogg",
+    "startMs": 4000,
+    "firstPTSUs": 4010666,
+    "frames": 191488
+  },
+  {
+    "file": "tone-vorbis.ogg",
+    "startMs": 7990,
+    "firstPTSUs": null,
+    "frames": 0
+  },
+  {
+    "file": "tone-opus.ogg",
+    "startMs": 0,
+    "firstPTSUs": 0,
+    "frames": 384648
+  },
+  {
+    "file": "tone-opus.ogg",
+    "startMs": 3883,
+    "firstPTSUs": 3900000,
+    "frames": 197760
+  },
+  {
+    "file": "tone-opus.ogg",
+    "startMs": 4000,
+    "firstPTSUs": 4000000,
+    "frames": 192648
+  },
+  {
+    "file": "tone-opus.ogg",
+    "startMs": 7990,
+    "firstPTSUs": 8000000,
+    "frames": 960
+  },
+  {
+    "file": "tone-opus.webm",
+    "startMs": 0,
+    "firstPTSUs": 0,
+    "frames": 384648
+  },
+  {
+    "file": "tone-opus.webm",
+    "startMs": 3883,
+    "firstPTSUs": 3901000,
+    "frames": 197760
+  },
+  {
+    "file": "tone-opus.webm",
+    "startMs": 4000,
+    "firstPTSUs": 4001000,
+    "frames": 192960
+  },
+  {
+    "file": "tone-opus.webm",
+    "startMs": 7990,
+    "firstPTSUs": 8001000,
+    "frames": 960
+  }
+]

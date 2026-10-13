@@ -1,0 +1,52 @@
+{
+  "comment": "The hub publisher's catalogue (PROTOCOL §16): synthetic feeds over repository media. Media made with `repeat` are the source's MPEG audio frames repeated (its Xing/Info frame left out), so each fixture has its own duration and bytes. Dates are seconds since 1970 (UTC).",
+  "media": {
+    "tone-8": {"file": "TestSupport/Media/playback-end/tone-8sec.mp3", "seconds": 8},
+    "tone-20": {"file": "TestSupport/Media/playback-end/tone-20sec.mp3", "seconds": 20},
+    "tone-30": {"file": "TestSupport/Media/listening/30sec.mp3", "seconds": 30},
+    "tone-60": {"file": "TestSupport/Media/listening/sync-60sec.mp3", "seconds": 60},
+    "tone-120": {"file": "TestSupport/Media/listening/sync-60sec.mp3", "repeat": 2, "seconds": 120},
+    "tone-180": {"file": "TestSupport/Media/listening/sync-60sec.mp3", "repeat": 3, "seconds": 180},
+    "tone-300": {"file": "TestSupport/Media/listening/sync-60sec.mp3", "repeat": 5, "seconds": 300}
+  },
+  "feeds": {
+    "daily": {
+      "title": "Hub Daily",
+      "description": "A public podcast with an episode a day.",
+      "items": [
+        {"guid": "hub-daily-1", "title": "Daily 1", "date": 1767268800, "media": "tone-20"},
+        {"guid": "hub-daily-2", "title": "Daily 2", "date": 1767355200, "media": "tone-30"},
+        {"guid": "hub-daily-3", "title": "Daily 3", "date": 1767441600, "media": "tone-60"}
+      ]
+    },
+    "private": {
+      "title": "Hub Private",
+      "description": "A podcast behind Basic authentication; only the current login is accepted, for the feed and its media.",
+      "auth": {"username": "listener", "password": "private-secret-1"},
+      "items": [
+        {"guid": "hub-private-1", "title": "Private 1", "date": 1767268800, "media": "tone-8"},
+        {"guid": "hub-private-2", "title": "Private 2", "date": 1767355200, "media": "tone-20"}
+      ]
+    },
+    "identity": {
+      "title": "Hub Identity",
+      "description": "Releases told apart by duration, for GUID changes, reuse and hosting moves.",
+      "items": [
+        {"guid": "hub-identity-1", "title": "Release One", "date": 1767268800, "media": "tone-60"},
+        {"guid": "hub-identity-2", "title": "Release Two", "date": 1767355200, "media": "tone-120"}
+      ]
+    },
+    "long": {
+      "title": "Hub Long Listen",
+      "description": "One five-minute episode, for uninterrupted playback across timed saves and exports.",
+      "items": [
+        {"guid": "hub-long-1", "title": "Long Listen", "date": 1767268800, "media": "tone-300"}
+      ]
+    },
+    "backlog": {
+      "title": "Hub Backlog",
+      "description": "Two hundred episodes at once.",
+      "generate": {"count": 200, "media": "tone-8", "first_date": 1735732800, "step": 86400}
+    }
+  }
+}

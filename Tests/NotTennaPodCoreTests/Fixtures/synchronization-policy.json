@@ -1,0 +1,2834 @@
+{
+  "cases": [
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 0,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 1,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 2,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": -1,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 0,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 1,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 2,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": -1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 0,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 1,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 2,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 0,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 1,
+      "remoteTime": 3,
+      "selected": false
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 2,
+      "remoteTime": 3,
+      "selected": true
+    },
+    {
+      "localKind": 3,
+      "localTime": 3,
+      "remoteKind": 3,
+      "remoteTime": 3,
+      "selected": false
+    }
+  ],
+  "nullAfterDated": "NullPointerException",
+  "positions": [
+    {
+      "seconds": -1,
+      "stored": -1000
+    },
+    {
+      "seconds": 0,
+      "stored": 0
+    },
+    {
+      "seconds": 1,
+      "stored": 1000
+    },
+    {
+      "seconds": 2147483,
+      "stored": 2147483000
+    },
+    {
+      "seconds": 2147484,
+      "stored": -2147483296
+    },
+    {
+      "seconds": 2147483647,
+      "stored": -1000
+    }
+  ],
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "sourceSHA256": "6e506bb90e4b83934a402957ee7613a2fc6b2f0714c6a56f92b0530dda3a109d",
+  "positionAssignment": "media.setPosition(action.getPosition() * 1000);"
+}

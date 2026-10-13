@@ -1,0 +1,82 @@
+[
+  {
+    "timeZone": "UTC",
+    "milliseconds": 0,
+    "formatted": "01 Jan 70 00:00:00 +0000"
+  },
+  {
+    "timeZone": "UTC",
+    "milliseconds": 1709251199000,
+    "formatted": "29 Feb 24 23:59:59 +0000"
+  },
+  {
+    "timeZone": "UTC",
+    "milliseconds": 1710064799000,
+    "formatted": "10 Mar 24 09:59:59 +0000"
+  },
+  {
+    "timeZone": "UTC",
+    "milliseconds": 1710064800000,
+    "formatted": "10 Mar 24 10:00:00 +0000"
+  },
+  {
+    "timeZone": "Asia/Kathmandu",
+    "milliseconds": 0,
+    "formatted": "01 Jan 70 05:30:00 +0530"
+  },
+  {
+    "timeZone": "Asia/Kathmandu",
+    "milliseconds": 1709251199000,
+    "formatted": "01 Mar 24 05:44:59 +0545"
+  },
+  {
+    "timeZone": "Asia/Kathmandu",
+    "milliseconds": 1710064799000,
+    "formatted": "10 Mar 24 15:44:59 +0545"
+  },
+  {
+    "timeZone": "Asia/Kathmandu",
+    "milliseconds": 1710064800000,
+    "formatted": "10 Mar 24 15:45:00 +0545"
+  },
+  {
+    "timeZone": "America/Los_Angeles",
+    "milliseconds": 0,
+    "formatted": "31 Dec 69 16:00:00 -0800"
+  },
+  {
+    "timeZone": "America/Los_Angeles",
+    "milliseconds": 1709251199000,
+    "formatted": "29 Feb 24 15:59:59 -0800"
+  },
+  {
+    "timeZone": "America/Los_Angeles",
+    "milliseconds": 1710064799000,
+    "formatted": "10 Mar 24 01:59:59 -0800"
+  },
+  {
+    "timeZone": "America/Los_Angeles",
+    "milliseconds": 1710064800000,
+    "formatted": "10 Mar 24 03:00:00 -0700"
+  },
+  {
+    "timeZone": "Pacific/Kiritimati",
+    "milliseconds": 0,
+    "formatted": "31 Dec 69 13:20:00 -1040"
+  },
+  {
+    "timeZone": "Pacific/Kiritimati",
+    "milliseconds": 1709251199000,
+    "formatted": "01 Mar 24 13:59:59 +1400"
+  },
+  {
+    "timeZone": "Pacific/Kiritimati",
+    "milliseconds": 1710064799000,
+    "formatted": "10 Mar 24 23:59:59 +1400"
+  },
+  {
+    "timeZone": "Pacific/Kiritimati",
+    "milliseconds": 1710064800000,
+    "formatted": "11 Mar 24 00:00:00 +1400"
+  }
+]

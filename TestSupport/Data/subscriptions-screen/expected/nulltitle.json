@@ -1,0 +1,285 @@
+{
+  "oracle": "SubscriptionsScreenVerification/expected_subscriptions.py",
+  "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "db": "TestSupport/Data/subscriptions-screen/databases/nulltitle.db",
+  "python_sqlite_version": "3.53.4",
+  "now_ms": 1790000000000,
+  "preferences": {
+    "prefDrawerFeedOrder": {
+      "raw": "0",
+      "resolved": 0,
+      "name": "COUNTER"
+    },
+    "prefDrawerFeedIndicator": {
+      "raw": "1",
+      "resolved": 1,
+      "name": "SHOW_NEW"
+    },
+    "prefSubscriptionsFilter": {
+      "raw": "",
+      "tokens": [],
+      "enabled": false,
+      "unknown_tokens": []
+    },
+    "prefSubscriptionTitle": false,
+    "prefEnableAutoDl": false,
+    "SubscriptionFragment.columns": null,
+    "SubscriptionFragment.last_tag": "#root",
+    "NavDrawerPrefs.prefOpenFolders": []
+  },
+  "sql_preorder_feed_ids": [
+    1,
+    4,
+    2,
+    3
+  ],
+  "counters_by_setting": {
+    "SHOW_NEW": {
+      "1": 2,
+      "2": 2,
+      "3": 1
+    },
+    "SHOW_UNPLAYED": {
+      "1": 2,
+      "2": 2,
+      "3": 1
+    },
+    "SHOW_DOWNLOADED": {},
+    "SHOW_DOWNLOADED_UNPLAYED": {},
+    "SHOW_NONE": {}
+  },
+  "subscriptions": {
+    "load_error": "NullPointerException: compareToIgnoreCase on null title",
+    "visible_effect": "RxJava error handler only logs; progress bar stays visible, list not updated"
+  },
+  "archive": {
+    "state": 2,
+    "selected_tag": "#root",
+    "feed_ids": [],
+    "feeds": [],
+    "filtered_out": [],
+    "filtered_message_visible": false,
+    "ties": [],
+    "notes": [],
+    "empty_view": {
+      "title": "Nothing archived",
+      "message": "You can archive podcasts from the main subscriptions screen."
+    }
+  },
+  "drawer": {
+    "load_error": "NullPointerException: compareToIgnoreCase on null title"
+  },
+  "dialogs": {
+    "sort": {
+      "title": "Sort",
+      "negative": "Cancel",
+      "options": [
+        {
+          "value": "0",
+          "label": "Sort by counter",
+          "checked": true
+        },
+        {
+          "value": "1",
+          "label": "Sort alphabetically",
+          "checked": false
+        },
+        {
+          "value": "2",
+          "label": "Sort by publication date",
+          "checked": false
+        },
+        {
+          "value": "3",
+          "label": "Sort by number of played episodes",
+          "checked": false
+        }
+      ]
+    },
+    "counter": {
+      "title": "Counter",
+      "negative": "Cancel",
+      "options": [
+        {
+          "value": "1",
+          "label": "Number of episodes in the inbox",
+          "checked": true
+        },
+        {
+          "value": "2",
+          "label": "Number of unplayed episodes",
+          "checked": false
+        },
+        {
+          "value": "4",
+          "label": "Number of downloaded episodes",
+          "checked": false
+        },
+        {
+          "value": "5",
+          "label": "Number of downloaded and unplayed episodes",
+          "checked": false
+        },
+        {
+          "value": "3",
+          "label": "None",
+          "checked": false
+        }
+      ]
+    },
+    "filter": {
+      "rows": [
+        [
+          {
+            "token": "counter_greater_zero",
+            "label": "Counter greater than zero",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "enabled_auto_download",
+            "label": "Auto downloaded",
+            "checked": false
+          },
+          {
+            "token": "disabled_auto_download",
+            "label": "Not auto downloaded",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "enabled_updates",
+            "label": "Kept updated",
+            "checked": false
+          },
+          {
+            "token": "disabled_updates",
+            "label": "Not kept updated",
+            "checked": false
+          }
+        ],
+        [
+          {
+            "token": "episode_notification_enabled",
+            "label": "Notification enabled",
+            "checked": false
+          },
+          {
+            "token": "episode_notification_disabled",
+            "label": "Notification disabled",
+            "checked": false
+          }
+        ]
+      ],
+      "buttons": [
+        "Reset",
+        "Confirm"
+      ]
+    }
+  },
+  "limitations": [
+    "Java HashMap treeified buckets (>=8 colliding tags with capacity>=64) are not modelled",
+    "Character case mappings come from Python's Unicode tables (simple mappings), not Android ICU",
+    "counter_text assumes an en-US default locale for NumberFormat.getInstance()",
+    "Feeds.title COLLATE NOCASE ties keep this host SQLite's order (python_sqlite_version)"
+  ],
+  "matrix_subscribed_feed_ids": {
+    "COUNTER/SHOW_NEW": "NullPointerException: compareToIgnoreCase on null title",
+    "COUNTER/SHOW_UNPLAYED": "NullPointerException: compareToIgnoreCase on null title",
+    "COUNTER/SHOW_DOWNLOADED": "NullPointerException: compareToIgnoreCase on null title",
+    "COUNTER/SHOW_DOWNLOADED_UNPLAYED": "NullPointerException: compareToIgnoreCase on null title",
+    "COUNTER/SHOW_NONE": "NullPointerException: compareToIgnoreCase on null title",
+    "ALPHABETICAL/SHOW_NEW": [
+      2,
+      3,
+      1,
+      4
+    ],
+    "ALPHABETICAL/SHOW_UNPLAYED": [
+      2,
+      3,
+      1,
+      4
+    ],
+    "ALPHABETICAL/SHOW_DOWNLOADED": [
+      2,
+      3,
+      1,
+      4
+    ],
+    "ALPHABETICAL/SHOW_DOWNLOADED_UNPLAYED": [
+      2,
+      3,
+      1,
+      4
+    ],
+    "ALPHABETICAL/SHOW_NONE": [
+      2,
+      3,
+      1,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_NEW": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_UNPLAYED": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_DOWNLOADED": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_DOWNLOADED_UNPLAYED": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "MOST_RECENT_EPISODE/SHOW_NONE": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "MOST_PLAYED/SHOW_NEW": [
+      1,
+      4,
+      2,
+      3
+    ],
+    "MOST_PLAYED/SHOW_UNPLAYED": [
+      1,
+      4,
+      2,
+      3
+    ],
+    "MOST_PLAYED/SHOW_DOWNLOADED": [
+      1,
+      4,
+      2,
+      3
+    ],
+    "MOST_PLAYED/SHOW_DOWNLOADED_UNPLAYED": [
+      1,
+      4,
+      2,
+      3
+    ],
+    "MOST_PLAYED/SHOW_NONE": [
+      1,
+      4,
+      2,
+      3
+    ]
+  }
+}

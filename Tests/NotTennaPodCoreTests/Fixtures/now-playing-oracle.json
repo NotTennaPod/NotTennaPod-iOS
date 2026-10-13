@@ -1,0 +1,66 @@
+{
+  "preferenceKey": "prefFullNotificationButtons",
+  "title": "Set notification buttons",
+  "summary": "Change the buttons on the playback notification",
+  "category": "External elements",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "androidRequiredCount": 2,
+  "androidError": "You must select exactly two items",
+  "defaultIDs": [
+    2,
+    4
+  ],
+  "androidDialog": [
+    {
+      "name": "NOTIFICATION_BUTTON_SKIP",
+      "id": 2,
+      "labelKey": "skip_episode_label",
+      "label": "Skip episode"
+    },
+    {
+      "name": "NOTIFICATION_BUTTON_NEXT_CHAPTER",
+      "id": 3,
+      "labelKey": "next_chapter",
+      "label": "Next chapter"
+    },
+    {
+      "name": "NOTIFICATION_BUTTON_PLAYBACK_SPEED",
+      "id": 4,
+      "labelKey": "playback_speed",
+      "label": "Playback speed"
+    },
+    {
+      "name": "NOTIFICATION_BUTTON_SLEEP_TIMER",
+      "id": 5,
+      "labelKey": "sleep_timer_label",
+      "label": "Sleep timer"
+    }
+  ],
+  "androidLayoutOrderIDs": [
+    4,
+    3,
+    2,
+    5
+  ],
+  "iosDialog": [
+    {
+      "name": "NOTIFICATION_BUTTON_SKIP",
+      "id": 2,
+      "labelKey": "skip_episode_label",
+      "label": "Skip episode"
+    },
+    {
+      "name": "NOTIFICATION_BUTTON_PLAYBACK_SPEED",
+      "id": 4,
+      "labelKey": "playback_speed",
+      "label": "Playback speed"
+    }
+  ],
+  "iosCommands": {
+    "2": "nextTrackCommand",
+    "4": "changePlaybackRateCommand",
+    "3": null,
+    "5": null
+  }
+}

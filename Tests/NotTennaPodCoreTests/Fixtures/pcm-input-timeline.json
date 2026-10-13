@@ -1,0 +1,6970 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "media3Version": "1.10.0",
+  "scope": "Verbatim synchronization block; controlled drain, zero already-decoder-trimmed frames; ordinary finite integer durations",
+  "sourceSHA256": "acd35ab2cf135092032bdfa7d72dd6d14b8cca10d6544b904b5da4102952bade",
+  "blockSHA256": "08378b74bc81354b4a70e9a6094844fae22f00509027822b518e7183c600148a",
+  "generatedJavaSHA256": "4b4c893cd2887c94f64eb9d709d8786ed1171b09d35ed95034adb386ce1b6f98",
+  "operations": [
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -434127,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -434127,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -450002,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": -306127,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -450002,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": -224627,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -450002,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": -106361,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -451236,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -434126,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": -106126,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": -24626,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 93640,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -434125,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": -106126,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": -24626,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 93640,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -234126,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": -106126,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": -24626,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 93640,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -34127,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": -106126,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": -24626,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 93640,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -34126,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": -106126,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": -24626,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 93640,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -34125,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -34125,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -50000,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 93875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -50000,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 175375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -50000,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 293641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -51234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -184126,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -184126,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": -56126,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 25374,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 143640,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -201235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -184125,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -184124,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 15875,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 215874,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 215875,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 215876,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 215876,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 343876,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 425376,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 543642,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 198767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -184126,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -184126,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": -56126,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 25374,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 143640,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -201235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -184125,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": -184124,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 15875,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 215874,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 215875,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 143875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 225375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 343641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 215876,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 215876,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 343876,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 425376,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 543642,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 198767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 815875,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 815875,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 800000,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 943875,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 800000,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 1025375,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 800000,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 1143641,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 798766,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 815876,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 1143876,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 1225376,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 1343642,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 815877,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 1143876,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 1225376,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 1343642,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 1015876,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 1143876,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 1225376,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 1343642,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 1215875,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 1143876,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 1225376,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 1343642,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 1215876,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 1143876,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 1225376,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 1343642,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 8000
+    },
+    {
+      "rate": 8000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 1215877,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 8000,
+      "pts": 1215877,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1200002,
+      "submitted": 1151
+    },
+    {
+      "rate": 8000,
+      "pts": 1343877,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1200002,
+      "submitted": 1799
+    },
+    {
+      "rate": 8000,
+      "pts": 1425377,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1200002,
+      "submitted": 2759
+    },
+    {
+      "rate": 8000,
+      "pts": 1543643,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1198768,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -447123,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -447123,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -450002,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -423903,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -450002,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -408709,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -450002,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": -388674,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -451236,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -447122,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -223902,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -208708,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": -188673,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -447121,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -223902,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -208708,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": -188673,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -247122,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -223902,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -208708,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": -188673,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -47123,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -223902,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -208708,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": -188673,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -47122,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -223902,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -208708,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": -188673,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -47121,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -47121,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -50000,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -23901,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -50000,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -8707,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -50000,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 11328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -51234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -197122,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -197122,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -173902,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -158708,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": -138673,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -201235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -197121,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -197120,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 2879,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 202878,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 202879,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 202880,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 202880,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 226100,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 241294,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 261329,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 198767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -197122,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -197122,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": -173902,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": -158708,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": -138673,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -201235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -197121,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": -197120,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 2879,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 202878,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 202879,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 26099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 41293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 61328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 202880,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 202880,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 226100,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 241294,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 261329,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 198767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 802879,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 802879,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 800000,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 826099,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 800000,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 841293,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 800000,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 861328,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 798766,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 802880,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 1026100,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 1041294,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 1061329,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 802881,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 1026100,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 1041294,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 1061329,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 1002880,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 1026100,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 1041294,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 1061329,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 1202879,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 1026100,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 1041294,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 1061329,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 1202880,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 1026100,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 1041294,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 1061329,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 44100
+    },
+    {
+      "rate": 44100,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 1202881,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 44100,
+      "pts": 1202881,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1200002,
+      "submitted": 1151
+    },
+    {
+      "rate": 44100,
+      "pts": 1226101,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1200002,
+      "submitted": 1799
+    },
+    {
+      "rate": 44100,
+      "pts": 1241295,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1200002,
+      "submitted": 2759
+    },
+    {
+      "rate": 44100,
+      "pts": 1261330,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1198768,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -447357,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -447357,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -450002,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -426023,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -450002,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -412023,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -450002,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": -393757,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -451236,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -447356,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -226022,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -212022,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": -193756,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -447355,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -226022,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -212022,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": -193756,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -247356,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -226022,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -212022,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": -193756,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -47357,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -226022,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -212022,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": -193756,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -47356,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -226022,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -212022,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": -193756,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -47355,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -47355,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -50000,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -26021,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -50000,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -12021,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -50000,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 6245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -51234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -197356,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -197356,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -176022,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -162022,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": -143756,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -201235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -197355,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -197354,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 2645,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 202644,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 202645,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 202646,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 202646,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 223980,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 237980,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 256246,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 198767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -197356,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -197356,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": -176022,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": -162022,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": -143756,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -201235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -197355,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": -197354,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 2645,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 202644,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 202645,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 23979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 37979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 56245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 202646,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 202646,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 223980,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 237980,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 256246,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 198767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 802645,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 802645,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 800000,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 823979,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 800000,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 837979,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 800000,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 856245,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 798766,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 802646,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 1023980,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 1037980,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 1056246,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 802647,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 1023980,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 1037980,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 1056246,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 1002646,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 1023980,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 1037980,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 1056246,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 1202645,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 1023980,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 1037980,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 1056246,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 1202646,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 1023980,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 1037980,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 1056246,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 48000
+    },
+    {
+      "rate": 48000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 1202647,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 48000,
+      "pts": 1202647,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1200002,
+      "submitted": 1151
+    },
+    {
+      "rate": 48000,
+      "pts": 1223981,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1200002,
+      "submitted": 1799
+    },
+    {
+      "rate": 48000,
+      "pts": 1237981,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1200002,
+      "submitted": 2759
+    },
+    {
+      "rate": 48000,
+      "pts": 1256247,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1198768,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -449341,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -449341,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -450002,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -444008,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -450002,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -440133,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -450002,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -436867,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -451236,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -449340,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -244007,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -240132,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -236866,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -449339,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -244007,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -240132,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -236866,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -249340,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -244007,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -240132,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -236866,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -49341,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -244007,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -240132,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -236866,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -49340,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -244007,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -240132,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -250001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -236866,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -251235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -250001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -49339,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": -250001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -49339,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -50000,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -44006,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -50000,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -40131,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -50000,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -36865,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -51234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -199340,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -199340,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -194007,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -190132,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -186866,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -201235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -199339,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -199338,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 661,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 200660,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 200661,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": -1,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 200662,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 200662,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 205995,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 209870,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 213136,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 198767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -199340,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -199340,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": -194007,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": -190132,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": -200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": -186866,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -201235,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -199339,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": -199338,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 661,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 200660,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 200661,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 5994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 9869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 13135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": -1234,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 0,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 200662,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 0,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 200662,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 205995,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 200001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 209870,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 200001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 213136,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 198767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 800661,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 800661,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 800000,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 805994,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 800000,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 809869,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 800000,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 813135,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 798766,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 800662,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 1005995,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 1009870,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 1013136,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 800663,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 1005995,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 1009870,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 1013136,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 1000662,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 1005995,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 1009870,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 1013136,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 1200661,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 1005995,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 1009870,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 1013136,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 1200662,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 1005995,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 1009870,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 1013136,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 998767,
+      "submitted": 3719
+    },
+    {
+      "reset": true,
+      "rate": 192000
+    },
+    {
+      "rate": 192000,
+      "pts": 1000001,
+      "frames": 127,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 1200663,
+      "frames": 1024,
+      "force": false,
+      "canDrain": false,
+      "accepted": false,
+      "drained": true,
+      "anchor": 1000001,
+      "submitted": 127
+    },
+    {
+      "rate": 192000,
+      "pts": 1200663,
+      "frames": 1024,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1200002,
+      "submitted": 1151
+    },
+    {
+      "rate": 192000,
+      "pts": 1205996,
+      "frames": 648,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1200002,
+      "submitted": 1799
+    },
+    {
+      "rate": 192000,
+      "pts": 1209871,
+      "frames": 960,
+      "force": false,
+      "canDrain": true,
+      "accepted": true,
+      "drained": false,
+      "anchor": 1200002,
+      "submitted": 2759
+    },
+    {
+      "rate": 192000,
+      "pts": 1213137,
+      "frames": 960,
+      "force": true,
+      "canDrain": true,
+      "accepted": true,
+      "drained": true,
+      "anchor": 1198768,
+      "submitted": 3719
+    }
+  ]
+}

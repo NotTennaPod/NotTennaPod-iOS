@@ -1,0 +1,21 @@
+MP3XingMetadata.swift, MP3SourceTimeline.swift and MP3RequiredID3Metadata.swift adapt MPEG Layer III and Xing/Info metadata field
+interpretation from AndroidX Media3 1.10.0:
+  androidx/media3/extractor/MpegAudioUtil.java
+  androidx/media3/extractor/mp3/Mp3Extractor.java
+  androidx/media3/extractor/mp3/XingFrame.java
+  androidx/media3/extractor/mp3/XingSeeker.java
+  androidx/media3/extractor/mp3/VbriSeeker.java
+  androidx/media3/extractor/mp3/ConstantBitrateSeeker.java
+  androidx/media3/extractor/ConstantBitrateSeekMap.java
+  androidx/media3/extractor/mp3/MlltSeeker.java
+  androidx/media3/extractor/Id3Peeker.java
+  androidx/media3/extractor/metadata/id3/Id3Decoder.java
+
+Copyright 2016, 2018, 2020, 2024 The Android Open Source Project
+Licensed under the Apache License, Version 2.0.
+See Apache-2.0.txt for the license text.
+
+Source archive: media3-extractor-1.10.0-sources.jar
+SHA256: f0dc47d6378dc65b012db3cbb303f32cf0476d957ffd864af5a1d67fbb31b534
+Source adaptation: Swift streaming ID3 skipping and bounded first-frame metadata
+reader; audio demuxing/format detection remain with Apple's AudioFileStream.

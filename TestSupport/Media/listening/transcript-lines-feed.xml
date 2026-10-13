@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:podcast="https://podcastindex.org/namespace/1.0"><channel>
+<title>Transcript boundary parity</title><link>https://example.invalid/podcast</link><description>Deterministic player overflow and transcript fixture.</description>
+<item><guid>transcript-lines-1</guid><title>Transcript boundary episode</title><description>Playback and transcript interaction fixture.</description><link>https://example.invalid/episode</link><pubDate>Tue, 22 Sep 2026 10:00:00 GMT</pubDate>
+<enclosure url="http://127.0.0.1:18765/30sec.mp3" type="audio/mpeg" length="120017"/>
+<podcast:transcript url="http://127.0.0.1:18765/transcript-lines.json" type="application/json"/>
+<podcast:socialInteract uri="https://example.invalid/comments" protocol="activitypub"/>
+</item></channel></rss>

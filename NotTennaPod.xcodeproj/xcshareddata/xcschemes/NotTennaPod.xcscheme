@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "2710"
+   version = "1.7">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES"
+      runPostActionsOnFailure = "NO">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "23BDBA322D08D20A907C3BA0"
+               BuildableName = "NotTennaPod.app"
+               BlueprintName = "NotTennaPod"
+               ReferencedContainer = "container:NotTennaPod.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9F62615CF8A7603BE78D3F7E"
+               BuildableName = "NotTennaPodUITests.xctest"
+               BlueprintName = "NotTennaPodUITests"
+               ReferencedContainer = "container:NotTennaPod.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "NO"
+      onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Start UI-test fixture servers"
+               scriptText = "mkdir -p &quot;$SRCROOT/.work/test-fixtures&quot;&#10;&quot;$SRCROOT/Tools/test-fixtures.sh&quot; start &quot;$TARGET_DEVICE_IDENTIFIER&quot; &gt; &quot;$SRCROOT/.work/test-fixtures/pre-action.log&quot; 2&gt;&amp;1&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "23BDBA322D08D20A907C3BA0"
+                     BuildableName = "NotTennaPod.app"
+                     BlueprintName = "NotTennaPod"
+                     ReferencedContainer = "container:NotTennaPod.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Stop UI-test fixture servers"
+               scriptText = "&quot;$SRCROOT/Tools/test-fixtures.sh&quot; stop &quot;$TARGET_DEVICE_IDENTIFIER&quot; &gt; &quot;$SRCROOT/.work/test-fixtures/post-action.log&quot; 2&gt;&amp;1&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "23BDBA322D08D20A907C3BA0"
+                     BuildableName = "NotTennaPod.app"
+                     BlueprintName = "NotTennaPod"
+                     ReferencedContainer = "container:NotTennaPod.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "23BDBA322D08D20A907C3BA0"
+            BuildableName = "NotTennaPod.app"
+            BlueprintName = "NotTennaPod"
+            ReferencedContainer = "container:NotTennaPod.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9F62615CF8A7603BE78D3F7E"
+               BuildableName = "NotTennaPodUITests.xctest"
+               BlueprintName = "NotTennaPodUITests"
+               ReferencedContainer = "container:NotTennaPod.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "PLAYBACK_VIDEO_FIXTURE_URL"
+            value = "http://127.0.0.1:59421"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "23BDBA322D08D20A907C3BA0"
+            BuildableName = "NotTennaPod.app"
+            BlueprintName = "NotTennaPod"
+            ReferencedContainer = "container:NotTennaPod.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "23BDBA322D08D20A907C3BA0"
+            BuildableName = "NotTennaPod.app"
+            BlueprintName = "NotTennaPod"
+            ReferencedContainer = "container:NotTennaPod.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

@@ -1,0 +1,57 @@
+[
+ {
+  "file": "zero-bytes.db",
+  "android_3_12_1": "accepted as user_version 0 -> onCreate -> empty library, 'Import successful' (a data-loss defect in Android)",
+  "ios_expected": "reject, library unchanged"
+ },
+ {
+  "file": "text-file.db",
+  "android_3_12_1": "'Import error' with the SQLite message (file is not a database, code 26) [aosp]",
+  "ios_expected": "'Import error' with the SQLite-style message, library unchanged"
+ },
+ {
+  "file": "foreign-sqlite-v0.db",
+  "android_3_12_1": "accepted (version 0) -> onCreate on a foreign file -> empty library",
+  "ios_expected": "reject"
+ },
+ {
+  "file": "empty-sqlite-v0.db",
+  "android_3_12_1": "accepted (version 0) -> empty library",
+  "ios_expected": "reject",
+  "note": "valid SQLite header, no tables, user_version 0"
+ },
+ {
+  "file": "newer-3110001.db",
+  "android_3_12_1": "rejected with import_no_downgrade (DE:85-87); live DB untouched",
+  "ios_expected": "exact 'Import error' + import_no_downgrade text, library unchanged"
+ },
+ {
+  "file": "negative-version.db",
+  "android_3_12_1": "accepted (not > VERSION), then onUpgrade ALTERs fail [aosp]",
+  "ios_expected": "reject"
+ },
+ {
+  "file": "missing-feedmedia-3110000.db",
+  "android_3_12_1": "installed; cursors throw (getColumnIndexOrThrow / no such table) -> library cannot load",
+  "ios_expected": "reject in staging"
+ },
+ {
+  "file": "truncated-half.db",
+  "android_3_12_1": "header intact -> installed; later corruption -> PodDbErrorHandler deletes the DB (PDA:1528-1545) -> empty library",
+  "ios_expected": "integrity_check fails -> reject",
+  "source": "TestSupport/Data/android-first-journey/Antennapod.db",
+  "pages_kept": "8 of 17"
+ },
+ {
+  "file": "truncated-half.db (observed)",
+  "android_3_12_1": "NOTE: with SQLite 3.53 every statement, including PRAGMA user_version, fails with 'database disk image is malformed' because schema root pages lie beyond the file end; Android's getVersion() likely throws too -> 'Import error'. The contract's 'accepted and installed' needs emulator confirmation",
+  "ios_expected": "reject"
+ },
+ {
+  "file": "corrupt-feeditems-page.db",
+  "android_3_12_1": "header/schema intact -> accepted and installed; reading items hits corruption -> PodDbErrorHandler deletes the DB (PDA:1528-1545) -> empty library",
+  "ios_expected": "integrity_check fails -> reject",
+  "source": "TestSupport/Data/android-first-journey/Antennapod.db",
+  "corrupted_page": 6
+ }
+]

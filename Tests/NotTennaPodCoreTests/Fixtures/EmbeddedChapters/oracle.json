@@ -1,0 +1,1386 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "cases": [
+    {
+      "file": "id3-v3-ordered.mp3",
+      "kind": "id3",
+      "sha256": "72e61fa1f33be74aa99729f9af46e1075970db9fd62c7d0abbfd0efab8a8909b",
+      "raw": [
+        {
+          "startMilliseconds": 60000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "later"
+        },
+        {
+          "startMilliseconds": 0,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "first"
+        },
+        {
+          "startMilliseconds": 0,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "same"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "0",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "first"
+        },
+        {
+          "startMilliseconds": 0,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "same"
+        },
+        {
+          "startMilliseconds": 60000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "later"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-text-0.mp3",
+      "kind": "id3",
+      "sha256": "ace06f6b447b8661f9948345a642383f40b0f66867e1025c75e4162f50d9d0cc",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": "Café",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "Café",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-text-1.mp3",
+      "kind": "id3",
+      "sha256": "eb51233b25cb50ad013676c8dd5f02b462f1449a2a907bc888b4ef5e02ac6472",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": "日本語 🎙",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "日本語 🎙",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-text-2.mp3",
+      "kind": "id3",
+      "sha256": "a831974c98b3402eff2ca16d550566401446e86c327d24bb34da4d1dd9f7f1f0",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": "Grüße",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "Grüße",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-text-3.mp3",
+      "kind": "id3",
+      "sha256": "2677c944e03a8236bea7ca54a3996a8172944e37d004b369f7e5c3703a5d6733",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": "❤️😊",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "❤️😊",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-embedded.mp3",
+      "kind": "id3",
+      "sha256": "5562e259bd70f7b129f8f79374d7ac8884da017b1f5bf2560e992c9d03071182",
+      "raw": [
+        {
+          "startMilliseconds": 1000,
+          "title": null,
+          "link": null,
+          "imageURL": "embedded-image:\/\/115\/74",
+          "chapterID": "picture",
+          "artworkSHA256": "4eabe16d76633f4b6e1b1a12954ad8799afdf5a598ed0a5f749e7cfaf5b3dd5d"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 1000,
+          "title": "0",
+          "link": null,
+          "imageURL": "embedded-image:\/\/115\/74",
+          "chapterID": "picture",
+          "artworkSHA256": "4eabe16d76633f4b6e1b1a12954ad8799afdf5a598ed0a5f749e7cfaf5b3dd5d"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-linked.mp3",
+      "kind": "id3",
+      "sha256": "1484acf07d1f246773da23b4d306023627db71c1899e882ecc02f05cddcd06c7",
+      "raw": [
+        {
+          "startMilliseconds": 1000,
+          "title": null,
+          "link": null,
+          "imageURL": "https:\/\/example.test\/cover.png",
+          "chapterID": "picture"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 1000,
+          "title": "0",
+          "link": null,
+          "imageURL": "https:\/\/example.test\/cover.png",
+          "chapterID": "picture"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-invalid-url.mp3",
+      "kind": "id3",
+      "sha256": "2b48cb30a2c3ca555bf2655536eebe90889933a552e52183656960ee65e25b87",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "bad-url"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "0",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "bad-url"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-negative.mp3",
+      "kind": "id3",
+      "sha256": "a59e0d6eddbaeb1b5a3b99d506ecabb7cd57ba43fc1c5e81df1893bb534a367c",
+      "raw": [
+        {
+          "startMilliseconds": -1,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "negative"
+        }
+      ],
+      "loaded": null
+    },
+    {
+      "file": "id3-v3-garbage.mp3",
+      "kind": "id3",
+      "sha256": "d8f013aacf863479978b29e6f9bbcef74283b0d46a7948d8a5d62bfc1b610d3f",
+      "raw": [
+        {
+          "startMilliseconds": 23,
+          "title": "A",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "title"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 23,
+          "title": "A",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "title"
+        }
+      ]
+    },
+    {
+      "file": "id3-v3-none.mp3",
+      "kind": "id3",
+      "sha256": "4a7eb2dac9a756a5d4d6630e3fce141c69374c9ceadec4725fdb144161544df8",
+      "raw": [],
+      "loaded": null
+    },
+    {
+      "file": "id3-v4-ordered.mp3",
+      "kind": "id3",
+      "sha256": "9bc2afe0561dcf7b097a66a974b09c439e2d582e13c56f67462a9a8af747d5b0",
+      "raw": [
+        {
+          "startMilliseconds": 60000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "later"
+        },
+        {
+          "startMilliseconds": 0,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "first"
+        },
+        {
+          "startMilliseconds": 0,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "same"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "0",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "first"
+        },
+        {
+          "startMilliseconds": 0,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "same"
+        },
+        {
+          "startMilliseconds": 60000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "later"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-text-0.mp3",
+      "kind": "id3",
+      "sha256": "18b651fc7913800c24e2d661cff798cc99adfefcbcbaca23e2dd4975bd988806",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": "Café",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "Café",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-text-1.mp3",
+      "kind": "id3",
+      "sha256": "1927726f3cb0749c23419224ab3659ade806647b429cd871e5c5626ac001da1c",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": "日本語 🎙",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "日本語 🎙",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-text-2.mp3",
+      "kind": "id3",
+      "sha256": "2f7090c159cbeb00fa3ccfa51663a4135d36e7dce129a2b6e8eec2174be579ed",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": "Grüße",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "Grüße",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-text-3.mp3",
+      "kind": "id3",
+      "sha256": "74f41a0627d3aed00473b7534d414b261bb425f9dcfd07d2321d3f5d7dc6da68",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": "❤️😊",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "❤️😊",
+          "link": "https:\/\/example.test\/é x",
+          "imageURL": null,
+          "chapterID": "text"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-embedded.mp3",
+      "kind": "id3",
+      "sha256": "732dfc2432655f6ab1cc0f212379467b8a484cfc239bea4961047175785434ec",
+      "raw": [
+        {
+          "startMilliseconds": 1000,
+          "title": null,
+          "link": null,
+          "imageURL": "embedded-image:\/\/115\/74",
+          "chapterID": "picture",
+          "artworkSHA256": "4eabe16d76633f4b6e1b1a12954ad8799afdf5a598ed0a5f749e7cfaf5b3dd5d"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 1000,
+          "title": "0",
+          "link": null,
+          "imageURL": "embedded-image:\/\/115\/74",
+          "chapterID": "picture",
+          "artworkSHA256": "4eabe16d76633f4b6e1b1a12954ad8799afdf5a598ed0a5f749e7cfaf5b3dd5d"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-linked.mp3",
+      "kind": "id3",
+      "sha256": "31bfacfe3f95c8541da83268b390aa791d4bd6c7bfe57ba0e7ed17b0ba860fac",
+      "raw": [
+        {
+          "startMilliseconds": 1000,
+          "title": null,
+          "link": null,
+          "imageURL": "https:\/\/example.test\/cover.png",
+          "chapterID": "picture"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 1000,
+          "title": "0",
+          "link": null,
+          "imageURL": "https:\/\/example.test\/cover.png",
+          "chapterID": "picture"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-invalid-url.mp3",
+      "kind": "id3",
+      "sha256": "3801d02e8952b10d7a4e328c9f6f445239c267e02aa87da7ecc4c80345b7ed64",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "bad-url"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "0",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "bad-url"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-negative.mp3",
+      "kind": "id3",
+      "sha256": "16d12e84b07476467a17d07c7de96cf194a3b2b0aafefe1bd1532834d1d95f0a",
+      "raw": [
+        {
+          "startMilliseconds": -1,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "negative"
+        }
+      ],
+      "loaded": null
+    },
+    {
+      "file": "id3-v4-garbage.mp3",
+      "kind": "id3",
+      "sha256": "c2ffdafdfacc383c09d1de26b7813748a69aaec106566caa68811205756e97c2",
+      "raw": [
+        {
+          "startMilliseconds": 23,
+          "title": "A",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "title"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 23,
+          "title": "A",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "title"
+        }
+      ]
+    },
+    {
+      "file": "id3-v4-none.mp3",
+      "kind": "id3",
+      "sha256": "eca0fae362fa60161a33f40324e477a2bb3b0483514b735ac30a523029c734fc",
+      "raw": [],
+      "loaded": null
+    },
+    {
+      "file": "vorbis-ordered.ogg",
+      "kind": "vorbis",
+      "sha256": "facbc4e4eef435820a08018a3c1bf4df200b8fc70ae954084020f36621995d25",
+      "raw": [
+        {
+          "startMilliseconds": 62000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "First",
+          "link": "https:\/\/example.test\/first",
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 3000,
+          "title": "First",
+          "link": "https:\/\/example.test\/first",
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 62000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        }
+      ]
+    },
+    {
+      "file": "vorbis-early-name.ogg",
+      "kind": "vorbis",
+      "sha256": "25cedc35bcca14fda6e692e9c90d6834f6c87ed639995e620b88aaf41092c497",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "0",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        }
+      ]
+    },
+    {
+      "file": "vorbis-case.ogg",
+      "kind": "vorbis",
+      "sha256": "1d8e292b0e8a6368c4cd89308f624ccfbd1b80a499aee1a65bb9126f1aeed9e7",
+      "raw": [
+        {
+          "startMilliseconds": 3723000,
+          "title": "日本語 ❤️",
+          "link": "https:\/\/example.test\/raw%20value",
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 3723000,
+          "title": "日本語 ❤️",
+          "link": "https:\/\/example.test\/raw%20value",
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ]
+    },
+    {
+      "file": "vorbis-duplicate.ogg",
+      "kind": "vorbis",
+      "sha256": "cbed566b18e04d0fed2cc7e1ba8751fbae70438a2af0f6e30778c72d0e25b999",
+      "rawError": "VorbisCommentReaderException: Found chapter with duplicate ID (chapter001, 00:00:02)",
+      "loaded": null
+    },
+    {
+      "file": "vorbis-id-collision.ogg",
+      "kind": "vorbis",
+      "sha256": "112ceec96c7bbe81e052c3483671b3b309c1920d8bdb15b6ebc68150fa7b3cc6",
+      "rawError": "VorbisCommentReaderException: Found chapter with duplicate ID (chapter100, 00:00:02)",
+      "loaded": null
+    },
+    {
+      "file": "vorbis-negative.ogg",
+      "kind": "vorbis",
+      "sha256": "f2914cd51243383d563112d62544ed3e8f1ec3cb8b0cd3974a42bd3574d63b1e",
+      "raw": [
+        {
+          "startMilliseconds": -2000,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": null
+    },
+    {
+      "file": "vorbis-arrow.ogg",
+      "kind": "vorbis",
+      "sha256": "b4a6a97a435f00c340a16a9bb347d951747ec9c6f5a0c7fa4340c71eb85422d1",
+      "raw": [
+        {
+          "startMilliseconds": 123000,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 123000,
+          "title": "0",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ]
+    },
+    {
+      "file": "vorbis-none.ogg",
+      "kind": "vorbis",
+      "sha256": "5f86248be2700684cc83f937d8f3164427789ebf796d01e76b8e8176497f6090",
+      "raw": [],
+      "loaded": null
+    },
+    {
+      "file": "opus-ordered.opus",
+      "kind": "vorbis",
+      "sha256": "e4e53c251ac66fd1b1ad0ad4ff5ea2cf8018344011c42370532b40e97cff43a6",
+      "raw": [
+        {
+          "startMilliseconds": 62000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "First",
+          "link": "https:\/\/example.test\/first",
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 3000,
+          "title": "First",
+          "link": "https:\/\/example.test\/first",
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 62000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        }
+      ]
+    },
+    {
+      "file": "opus-early-name.opus",
+      "kind": "vorbis",
+      "sha256": "f811d93fb2382a2dcdddf3a9c56c8a4510c538d20446eceb5fe09aa394d447fd",
+      "raw": [
+        {
+          "startMilliseconds": 5000,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 5000,
+          "title": "0",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        }
+      ]
+    },
+    {
+      "file": "opus-case.opus",
+      "kind": "vorbis",
+      "sha256": "ecae4bf6f26bce4c0ca93b16f58729a8f62800b68f25f31b3f0d21b78be286e1",
+      "raw": [
+        {
+          "startMilliseconds": 3723000,
+          "title": "日本語 ❤️",
+          "link": "https:\/\/example.test\/raw%20value",
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 3723000,
+          "title": "日本語 ❤️",
+          "link": "https:\/\/example.test\/raw%20value",
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ]
+    },
+    {
+      "file": "opus-duplicate.opus",
+      "kind": "vorbis",
+      "sha256": "a3a9223ab47f59e63eae1ee9162bb45137715dfaa226286baecd426bf197e883",
+      "rawError": "VorbisCommentReaderException: Found chapter with duplicate ID (chapter001, 00:00:02)",
+      "loaded": null
+    },
+    {
+      "file": "opus-id-collision.opus",
+      "kind": "vorbis",
+      "sha256": "923ecd7f8feff69abcb38387c42584496f42741dde7fa450f512a872411b92f5",
+      "rawError": "VorbisCommentReaderException: Found chapter with duplicate ID (chapter100, 00:00:02)",
+      "loaded": null
+    },
+    {
+      "file": "opus-negative.opus",
+      "kind": "vorbis",
+      "sha256": "ed6baa1c3acf864dd52c2cd5e8a86903c7661701b78e8ee942fa30cab1d02d80",
+      "raw": [
+        {
+          "startMilliseconds": -2000,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": null
+    },
+    {
+      "file": "opus-arrow.opus",
+      "kind": "vorbis",
+      "sha256": "5192a9022512b3613933b5ca71fce7e98fa8be3dbff281eb1dba48f31c029ccf",
+      "raw": [
+        {
+          "startMilliseconds": 123000,
+          "title": null,
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 123000,
+          "title": "0",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ]
+    },
+    {
+      "file": "opus-none.opus",
+      "kind": "vorbis",
+      "sha256": "10b48fbfd2ec9a1777c79fbb63b26f19f9309e18ed605d68f6464bc1f24ea37a",
+      "raw": [],
+      "loaded": null
+    },
+    {
+      "file": "nero-ordinary.m4a",
+      "kind": "m4a",
+      "sha256": "ea1b02ff4332f01d8bf49a43e8941cc6ccc13e335b916de145f1cd69902cc204",
+      "raw": [
+        {
+          "startMilliseconds": 3000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 0,
+          "title": "日本語 ❤️",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Same",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "3"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "日本語 ❤️",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Later",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Same",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "3"
+        }
+      ]
+    },
+    {
+      "file": "nero-empty-title.m4a",
+      "kind": "m4a",
+      "sha256": "014c6bf06fa0ef4f93748ec41b65bbac26722f83a338eb224adc6465a912bef5",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ]
+    },
+    {
+      "file": "nero-long-title.m4a",
+      "kind": "m4a",
+      "sha256": "ac609986e7fe128ffdb618b53a8364126585356ee2cb278e79a694e53dc08431",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ]
+    },
+    {
+      "file": "nero-negative.m4a",
+      "kind": "m4a",
+      "sha256": "42b4d8e2737c27ce0d33ed4e5d28702f85bac12594710d879fde77b229c74604",
+      "raw": [
+        {
+          "startMilliseconds": -1,
+          "title": "Negative",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        }
+      ],
+      "loaded": null
+    },
+    {
+      "file": "nero-none.m4a",
+      "kind": "m4a",
+      "sha256": "b80a186de96697ce93ef2c2ec7744bdf311b1cec906d6dca5ced37b2cd041fa6",
+      "raw": [],
+      "loaded": null
+    },
+    {
+      "file": "original-auphonic.mp3",
+      "kind": "id3",
+      "sha256": "56db56610ab83ab5943ea09e7b2e4ff59091e1a73054993fd90a58df9f7dcc10",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter 1 - ❤️😊",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/765\/308",
+          "chapterID": "chp0",
+          "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Chapter 2 - ßöÄ",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/1271\/308",
+          "chapterID": "chp1",
+          "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "Chapter 3 - 爱",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/1771\/308",
+          "chapterID": "chp2",
+          "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 4",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/2259\/308",
+          "chapterID": "chp3",
+          "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter 1 - ❤️😊",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/765\/308",
+          "chapterID": "chp0",
+          "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Chapter 2 - ßöÄ",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/1271\/308",
+          "chapterID": "chp1",
+          "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "Chapter 3 - 爱",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/1771\/308",
+          "chapterID": "chp2",
+          "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 4",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/2259\/308",
+          "chapterID": "chp3",
+          "artworkSHA256": "d641f1cca75de5a37bcd2f235fc0f4803b3c6b8c6cf79f3eafe1a81b81e8656c"
+        }
+      ]
+    },
+    {
+      "file": "original-ultraschall5.mp3",
+      "kind": "id3",
+      "sha256": "b4896f9a053dde82e501b6e90f7faab96d47bbb63327dd08db79824d55c5c387",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "Marke 1",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/16073\/2750569",
+          "chapterID": "chp0",
+          "artworkSHA256": "6ae62d37bb8f54e0ba194bc9ca54058981e52d959b17e9c591c794057bbbf76c"
+        },
+        {
+          "startMilliseconds": 4004,
+          "title": "Marke 2",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/2766765\/15740",
+          "chapterID": "chp1",
+          "artworkSHA256": "d46a885ec853ade9a4448124db130cb8858594193b9f507a855878d45ab1fbf0"
+        },
+        {
+          "startMilliseconds": 7999,
+          "title": "Marke 3",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/2782628\/2750569",
+          "chapterID": "chp2",
+          "artworkSHA256": "6ae62d37bb8f54e0ba194bc9ca54058981e52d959b17e9c591c794057bbbf76c"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "Marke 1",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/16073\/2750569",
+          "chapterID": "chp0",
+          "artworkSHA256": "6ae62d37bb8f54e0ba194bc9ca54058981e52d959b17e9c591c794057bbbf76c"
+        },
+        {
+          "startMilliseconds": 4004,
+          "title": "Marke 2",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/2766765\/15740",
+          "chapterID": "chp1",
+          "artworkSHA256": "d46a885ec853ade9a4448124db130cb8858594193b9f507a855878d45ab1fbf0"
+        },
+        {
+          "startMilliseconds": 7999,
+          "title": "Marke 3",
+          "link": "https:\/\/example.com",
+          "imageURL": "embedded-image:\/\/2782628\/2750569",
+          "chapterID": "chp2",
+          "artworkSHA256": "6ae62d37bb8f54e0ba194bc9ca54058981e52d959b17e9c591c794057bbbf76c"
+        }
+      ]
+    },
+    {
+      "file": "original-hindenburg-journalist-pro.mp3",
+      "kind": "id3",
+      "sha256": "9236e5b41e6be91ee1db1c313d355d396dddde327b39792a917406a0aa3dcfd2",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter Marker 1",
+          "link": "https:\/\/example.com\/chapter1url",
+          "imageURL": "embedded-image:\/\/5330\/4015",
+          "chapterID": "id3",
+          "artworkSHA256": "7ae1804aee1b03f5b32a9c44176b8e4cf9d56cd75d37dc85038dd27f82151f9b"
+        },
+        {
+          "startMilliseconds": 5006,
+          "title": "Chapter Marker 2",
+          "link": "https:\/\/example.com\/chapter2url",
+          "imageURL": "embedded-image:\/\/9498\/4364",
+          "chapterID": "id4",
+          "artworkSHA256": "da0c9d12e0ff4ea7d686c645c74218ccd6142fd3c7450f3bb8ad7c476dfcec9a"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter Marker 1",
+          "link": "https:\/\/example.com\/chapter1url",
+          "imageURL": "embedded-image:\/\/5330\/4015",
+          "chapterID": "id3",
+          "artworkSHA256": "7ae1804aee1b03f5b32a9c44176b8e4cf9d56cd75d37dc85038dd27f82151f9b"
+        },
+        {
+          "startMilliseconds": 5006,
+          "title": "Chapter Marker 2",
+          "link": "https:\/\/example.com\/chapter2url",
+          "imageURL": "embedded-image:\/\/9498\/4364",
+          "chapterID": "id4",
+          "artworkSHA256": "da0c9d12e0ff4ea7d686c645c74218ccd6142fd3c7450f3bb8ad7c476dfcec9a"
+        }
+      ]
+    },
+    {
+      "file": "original-mp3chaps-py.mp3",
+      "kind": "id3",
+      "sha256": "605cda1e4efcd3eb88b6f3d7aa54ce9f293630109f920d1dbd25c6e9766bda9a",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "Start",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "ch0"
+        },
+        {
+          "startMilliseconds": 7000,
+          "title": "Chapter 1",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "ch1"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 2",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "ch2"
+        },
+        {
+          "startMilliseconds": 11000,
+          "title": "Chapter 3",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "ch3"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "Start",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "ch0"
+        },
+        {
+          "startMilliseconds": 7000,
+          "title": "Chapter 1",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "ch1"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 2",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "ch2"
+        },
+        {
+          "startMilliseconds": 11000,
+          "title": "Chapter 3",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "ch3"
+        }
+      ]
+    },
+    {
+      "file": "original-auphonic.ogg",
+      "kind": "vorbis",
+      "sha256": "33409b2885d4f75c13cd5ad504d8c6f518cd447418041733eadff4ff61c10856",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter 1 - ❤️😊",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Chapter 2 - ßöÄ",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "Chapter 3 - 爱",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "3"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 4",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "4"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter 1 - ❤️😊",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Chapter 2 - ßöÄ",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "Chapter 3 - 爱",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "3"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 4",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "4"
+        }
+      ]
+    },
+    {
+      "file": "original-auphonic.opus",
+      "kind": "vorbis",
+      "sha256": "00011304c5d3bb598112712d45cae33f566724084d3e0b9ec4d579f9e0cd0cc8",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter 1 - ❤️😊",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Chapter 2 - ßöÄ",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "Chapter 3 - 爱",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "3"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 4",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "4"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter 1 - ❤️😊",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Chapter 2 - ßöÄ",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "Chapter 3 - 爱",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "3"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 4",
+          "link": "https:\/\/example.com",
+          "imageURL": null,
+          "chapterID": "4"
+        }
+      ]
+    },
+    {
+      "file": "original-nero-chapters.m4a",
+      "kind": "m4a",
+      "sha256": "deca96d49fdc7d41dd7ac6fd2dca0b0ee4434bf65ecf6f3154a8dd1f1ca26aa4",
+      "raw": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter 1 - ❤️😊",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Chapter 2 - ßöÄ",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "Chapter 3 - 爱",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "3"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 4",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "4"
+        }
+      ],
+      "loaded": [
+        {
+          "startMilliseconds": 0,
+          "title": "Chapter 1 - ❤️😊",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "1"
+        },
+        {
+          "startMilliseconds": 3000,
+          "title": "Chapter 2 - ßöÄ",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "2"
+        },
+        {
+          "startMilliseconds": 6000,
+          "title": "Chapter 3 - 爱",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "3"
+        },
+        {
+          "startMilliseconds": 9000,
+          "title": "Chapter 4",
+          "link": null,
+          "imageURL": null,
+          "chapterID": "4"
+        }
+      ]
+    }
+  ],
+  "complete": true
+}

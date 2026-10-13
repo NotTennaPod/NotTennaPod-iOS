@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Parity Listening Lab</title>
+    <link>https://example.org/parity</link>
+    <description>Controlled episodes for comparing AntennaPod on Android and iOS.</description>
+    <language>en</language>
+    <itunes:author>AntennaPod Parity</itunes:author>
+    <item>
+      <guid isPermaLink="false">parity-episode-2</guid>
+      <title>Second episode: queue and resume</title>
+      <pubDate>Fri, 11 Sep 2026 12:00:00 GMT</pubDate>
+      <description><![CDATA[<p>A controlled episode for <strong>queue ordering</strong> and saved playback position.</p>]]></description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?episode=2" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+    <item>
+      <guid isPermaLink="false">parity-episode-1</guid>
+      <title>First episode: a short introduction</title>
+      <pubDate>Thu, 10 Sep 2026 12:00:00 GMT</pubDate>
+      <description><![CDATA[<p>Welcome to the listening lab.</p><p>Compare download, play, pause, and relaunch.</p>]]></description>
+      <enclosure url="http://127.0.0.1:18765/30sec.mp3?episode=1" type="audio/mpeg" length="120017"/>
+      <itunes:duration>00:30</itunes:duration>
+    </item>
+  </channel>
+</rss>

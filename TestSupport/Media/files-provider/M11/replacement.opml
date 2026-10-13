@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head><title>M11 journey</title></head>
+  <body>
+    <outline type="rss" text="M11 Replacement" title="M11 Replacement" xmlUrl="http://127.0.0.1:9/m11/replacement.xml"/>
+  </body>
+</opml>

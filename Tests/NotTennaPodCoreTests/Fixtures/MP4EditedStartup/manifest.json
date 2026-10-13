@@ -1,0 +1,352 @@
+{
+  "files": [
+    {
+      "name": "lc-aligned-clip-tag.m4a",
+      "sha256": "ce096e1b22955d28ed6618fdb0ce30153b9cff324e04520ea1700528b70065fc",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          49152
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "lc-leading-gap-tag.m4a",
+      "sha256": "367322c327e8d57c5d7711ed32e0a40eab7808e92b956a200c92343d894f0c7f",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          500,
+          -1
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "lc-repeat-start-tag.m4a",
+      "sha256": "4b413ac4452d297622fb979076ef0182f10b4d1a8550dc1ea2b2d2b05beb22a8",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          0
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "lc-reverse-tag.m4a",
+      "sha256": "1c7426023681703707a70a840ef05b6152ba8d29a243d34c12482c2d8686c9f0",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          96000
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "lc-short-prefix-tag.m4a",
+      "sha256": "498ea0b0d7456048f5454572d3983e434164803cf35dddde96e965e8b1d8ef08",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          10,
+          0
+        ],
+        [
+          1000,
+          48000
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "lc-all-prefix-tag.m4a",
+      "sha256": "9f7eeb468c6f76ade459e95beda2023005fcfd42ef46ac00a951d068768664c6",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/lc.m4a",
+      "sourceSHA256": "df4fe011e5deadc0e58e7c84271a05e1a21fb0104ebc95303b4315a9ed7fef58",
+      "mediaPayloadSHA256": "d9c5738717a2f6047420627291dec0edf0879f157e60d065e4484a8e4d46fa93",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          10,
+          0
+        ],
+        [
+          10,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-aligned-clip-tag.m4a",
+      "sha256": "dd8be2e559b5bbb76db7266c6844314603c3a3ed37800499b16bc8981cb3a1ac",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          49152
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-leading-gap-tag.m4a",
+      "sha256": "f270d8c340b97b54d7982dca52dd16be16d9e1785f23038d6f4be26aa299c147",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          500,
+          -1
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-repeat-start-tag.m4a",
+      "sha256": "49359ec8a4727e3936b4c05b0362b5894f108bdf64d23a83efa82c84b953fd5f",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          0
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-reverse-tag.m4a",
+      "sha256": "1972e9ffd59850448f090c86a4dc0f0a64ed4d4628ae58bbea96cd4044b32db8",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          96000
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-short-prefix-tag.m4a",
+      "sha256": "7752f39ebdb93aa4ba90664990ef53fe3f9d71613645f4a3b3e14bbf95742d00",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          10,
+          0
+        ],
+        [
+          1000,
+          48000
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "he-all-prefix-tag.m4a",
+      "sha256": "8d93cc8be343a1dd465fcb4f94ac41e7f2fca63349e2af8ad36309a89321dd68",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/he.m4a",
+      "sourceSHA256": "a94dc592aa40c9cba49e7af2747c438cedd9ce513bd9e802c4d2f236c3179937",
+      "mediaPayloadSHA256": "afaf70fbd94151fb66431cdcf0388183dd2be8628305120bea742c59fd6e3fd4",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          10,
+          0
+        ],
+        [
+          10,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-aligned-clip-tag.m4a",
+      "sha256": "48339d6509e96f054407f8f45dffc7e0c5361162fd951529022b812d7eb39f7d",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          49152
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-leading-gap-tag.m4a",
+      "sha256": "4cccdf8ae6e666ab61ad78b694822b7189c98290cb53f3a64eb02bffeb23d4b5",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          500,
+          -1
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-repeat-start-tag.m4a",
+      "sha256": "5f0ed358b003ec0b97b68cc56dd5bfccac03be00bc21993c9912e8c8d722b909",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          0
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-reverse-tag.m4a",
+      "sha256": "5419a3a77a1810dfabb8c00bfa53b1079e6670845f59b1db181858d71e01f57e",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          1000,
+          96000
+        ],
+        [
+          1000,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-short-prefix-tag.m4a",
+      "sha256": "990242d3bf1c4efb8cf0e422963858c6a3cdc6919d32323f24f0720b3e11f607",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          10,
+          0
+        ],
+        [
+          1000,
+          48000
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    },
+    {
+      "name": "hev2-all-prefix-tag.m4a",
+      "sha256": "d269fea7686df7e0d4380206eb750bd407c7dafb29ca4716201a2d9bcf03a287",
+      "source": "Tests/NotTennaPodCoreTests/Fixtures/AACGapless/hev2.m4a",
+      "sourceSHA256": "08f90cf082d42f60cd0f4a5596345c8eb7b722dd0a2fb1770572c698028abd5e",
+      "mediaPayloadSHA256": "0579b7b2ee28a27b98e1dfaa0013cff5f092a81386f2ede144bd9fbbd1844c8c",
+      "movieTimescale": 1000,
+      "mediaTimescale": 48000,
+      "edits": [
+        [
+          10,
+          0
+        ],
+        [
+          10,
+          0
+        ]
+      ],
+      "smpb": " 00000000 00000C00 000000C8 0000000000000000"
+    }
+  ]
+}

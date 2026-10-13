@@ -1,0 +1,1962 @@
+{
+  "referenceCommit": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
+  "boundary": "Unchanged FeedItem.getImageLocation and FeedMedia.updateFromOther on JBR; field/getter adapters only. Known presence flags; does not execute lazy metadata probing, storage or Android UI.",
+  "sources": {
+    "reference/AntennaPod/model/src/main/java/de/danoeh/antennapod/model/feed/FeedItem.java": "9981b01345664a23dbaac36225fc892cbb8f16499d8bd7e7d4c496ec9b8485bd",
+    "reference/AntennaPod/model/src/main/java/de/danoeh/antennapod/model/feed/FeedMedia.java": "16fc3eb5877716bc6cbe585d76deb75c0f3a43486976136296163763e423564b"
+  },
+  "methodHashes": {
+    "select": "042eae376111f66932a9d2b501c505fefe642b395428f410355007c8b0556a73",
+    "merge": "9fead3f8e96a449509b362826ad6fdb4ec1bf82dfaf9aae6151ef957a9827db7"
+  },
+  "cases": [
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": null
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://feed/image"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "metadata-retriever:null"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "metadata-retriever:null"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "metadata-retriever:null"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "metadata-retriever:null"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "metadata-retriever:null"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "metadata-retriever:null"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "metadata-retriever:file:///one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "metadata-retriever:file:///one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "metadata-retriever:file:///one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "metadata-retriever:file:///one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "metadata-retriever:file:///one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "metadata-retriever:file:///one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "metadata-retriever:content://document/one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "metadata-retriever:content://document/one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "metadata-retriever:content://document/one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "metadata-retriever:content://document/one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "metadata-retriever:content://document/one"
+    },
+    {
+      "episodeImage": null,
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "metadata-retriever:content://document/one"
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": ""
+    },
+    {
+      "episodeImage": "",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": ""
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": false,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": false,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": null,
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "file:///one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": false,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": null,
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "",
+      "expected": "https://episode/image"
+    },
+    {
+      "episodeImage": "https://episode/image",
+      "mediaPresent": true,
+      "embedded": true,
+      "localMedia": "content://document/one",
+      "feedPresent": true,
+      "feedImage": "https://feed/image",
+      "expected": "https://episode/image"
+    }
+  ],
+  "stalePresence": [
+    "DEFECT:false:true:false:2",
+    "DEFECT:true:false:true:2"
+  ]
+}

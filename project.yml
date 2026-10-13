@@ -1,0 +1,532 @@
+name: NotTennaPod
+options:
+  bundleIdPrefix: org.nottennapod.app
+  deploymentTarget:
+    iOS: '27.0'
+  xcodeVersion: '27.1'
+packages:
+  NotTennaPodCore:
+    path: .
+  GTMSessionFetcher:
+    url: https://github.com/google/gtm-session-fetcher.git
+    exactVersion: 5.3.1
+settings:
+  base:
+    SWIFT_VERSION: '6.0'
+    IPHONEOS_DEPLOYMENT_TARGET: '27.0'
+    TARGETED_DEVICE_FAMILY: '1,2'
+    MARKETING_VERSION: '0.1.0'
+    CURRENT_PROJECT_VERSION: '1'
+targets:
+  NotTennaPod:
+    type: application
+    platform: iOS
+    # WidgetShared holds the widget's intents and view, compiled into the app and the widget extension.
+    sources: [App, UITestFixtures, WidgetShared]
+    dependencies:
+      - package: NotTennaPodCore
+      - target: NotTennaPodShare
+      - target: NotTennaPodWidget
+      - framework: Vendor/GoogleCastSDK/GoogleCast.xcframework
+        embed: false
+      - package: GTMSessionFetcher
+        product: GTMSessionFetcher
+      - sdk: CoreData.framework
+      - sdk: AVKit.framework
+      - sdk: AVRouting.framework
+    postCompileScripts:
+      - name: Copy Google Cast platform resources
+        script: python3 "$SRCROOT/Tools/copy-cast-resources.py"
+        basedOnDependencyAnalysis: false
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: NotTennaPod
+        LSSupportsOpeningDocumentsInPlace: true
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: org.opml.opml
+            UTTypeDescription: OPML document
+            UTTypeConformsTo: [public.xml]
+            UTTypeTagSpecification:
+              public.filename-extension: [opml]
+              public.mime-type: [text/x-opml]
+          # iOS declares public.rss but no Atom type.
+          - UTTypeIdentifier: org.ietf.atom
+            UTTypeDescription: Atom feed
+            UTTypeConformsTo: [public.xml]
+            UTTypeTagSpecification:
+              public.filename-extension: [atom]
+              public.mime-type: [application/atom+xml]
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: OPML document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [org.opml.opml, public.xml, public.plain-text]
+          # A feed document opens the preview of its own address.
+          - CFBundleTypeName: Podcast feed
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [public.rss, org.ietf.atom]
+        # OnlineFeedViewActivity's podcast protocols; nottennapod-share is the Share
+        # Extension's internal handoff.
+        CFBundleURLTypes:
+          - CFBundleURLName: org.nottennapod.app.subscribe
+            CFBundleTypeRole: Viewer
+            CFBundleURLSchemes: [itpc, pcast, feed, antennapod-subscribe]
+          - CFBundleURLName: org.nottennapod.app.share
+            CFBundleTypeRole: Viewer
+            CFBundleURLSchemes: [nottennapod-share]
+          # The player widget's taps that open the player and the speed dialog.
+          - CFBundleURLName: org.nottennapod.app.widget
+            CFBundleTypeRole: Viewer
+            CFBundleURLSchemes: [nottennapod-widget]
+        # The launcher shortcuts, in shortcuts.xml order. Titles are the Android labels.
+        UIApplicationShortcutItems:
+          - UIApplicationShortcutItemType: org.nottennapod.app.shortcut.queue
+            UIApplicationShortcutItemTitle: Queue
+            UIApplicationShortcutItemIconFile: ic_playlist_play
+          - UIApplicationShortcutItemType: org.nottennapod.app.shortcut.episodes
+            UIApplicationShortcutItemTitle: Episodes
+            UIApplicationShortcutItemIconFile: ic_feed
+          - UIApplicationShortcutItemType: org.nottennapod.app.shortcut.subscriptions
+            UIApplicationShortcutItemTitle: Subscriptions
+            UIApplicationShortcutItemIconFile: ic_subscriptions
+          - UIApplicationShortcutItemType: org.nottennapod.app.shortcut.refresh
+            UIApplicationShortcutItemTitle: Refresh
+            UIApplicationShortcutItemIconFile: ic_refresh
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UIAppFonts: [Roboto-Regular.ttf]
+        UIBackgroundModes: [audio, fetch, processing]
+        BGTaskSchedulerPermittedIdentifiers: [org.nottennapod.app.feed-refresh, org.nottennapod.app.database-backup, org.nottennapod.app.server-sync, org.nottennapod.app.server-sync-processing]
+        NSBonjourServices: [_googlecast._tcp, _CC1AD845._googlecast._tcp]
+        NSLocalNetworkUsageDescription: NotTennaPod uses your local network to find and connect to Cast devices.
+        # The scene restoration activity: where each window was, saved by UIKit (SceneNavigationState).
+        NSUserActivityTypes: [org.nottennapod.app.scene-restoration]
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: true
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        UISupportedInterfaceOrientations~ipad: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+    # The App Group the widget extension reads the player snapshot from.
+    entitlements:
+      path: App/NotTennaPod.entitlements
+      properties:
+        com.apple.security.application-groups: [group.org.nottennapod.app]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.nottennapod.app
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        OTHER_LDFLAGS: [$(inherited), '-ObjC', '-lc++']
+  # The Share Extension hands a shared link or text to the app.
+  NotTennaPodShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - ShareExtension
+      - Sources/NotTennaPodCore/ShareHandoff.swift
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: NotTennaPod
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
+              NSExtensionActivationSupportsText: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.nottennapod.app.share
+  # The Home Screen player widget and the Control Center control.
+  NotTennaPodWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Widget
+        excludes: ["Info.plist", "*.entitlements"]
+      - WidgetShared
+      - Sources/NotTennaPodCore/PlayerWidgetModel.swift
+      - path: App/Resources/en.lproj
+        buildPhase: resources
+      - path: App/Resources/Roboto-Regular.ttf
+        buildPhase: resources
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: NotTennaPod
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UIAppFonts: [Roboto-Regular.ttf]
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: Widget/NotTennaPodWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [group.org.nottennapod.app]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.nottennapod.app.widget
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) WIDGET_EXTENSION
+  NotTennaPodViewTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - AppTests
+      - Tests/NotTennaPodCoreTests/OPMLReaderTests.swift
+      - Tests/NotTennaPodCoreTests/LargeAndroidLibrary.swift
+      - Tests/NotTennaPodCoreTests/OPMLImportTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/OPMLFixtures
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/OPMLNamespaceFixtures
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/OPMLExportWriterTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/OPMLExportFixtures
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/StatisticsTextFormatterTests.swift
+      - Tests/NotTennaPodCoreTests/FeedInformationLinksTests.swift
+      - Tests/NotTennaPodCoreTests/ProxyRecipientTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackURLResolverTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackResolvedSourceTests.swift
+      - Tests/NotTennaPodCoreTests/ProxyMediaDownloadTests.swift
+      - Tests/NotTennaPodCoreTests/ProxyStreamingTests.swift
+      - Tests/NotTennaPodCoreTests/ReceiverNetworkRouteTests.swift
+      - Tests/NotTennaPodCoreTests/ReceiverStreamingRelayTests.swift
+      - Tests/NotTennaPodCoreTests/NativeStreamingRelayTests.swift
+      - Tests/NotTennaPodCoreTests/NativeRelayBodyTests.swift
+      - Tests/NotTennaPodCoreTests/HTTPCodecDemandTests.swift
+      - Tests/NotTennaPodCoreTests/HTTPRangeEndTests.swift
+      - Tests/NotTennaPodCoreTests/HTTPMediaByteRangesTests.swift
+      - Tests/NotTennaPodCoreTests/HTTPMediaRangeValidationTests.swift
+      - Tests/NotTennaPodCoreTests/HTTPMemoryBackingTests.swift
+      - Tests/NotTennaPodCoreTests/PCMSourceRetryTests.swift
+      - Tests/NotTennaPodCoreTests/PCMDeferredRetryTests.swift
+      - Tests/NotTennaPodCoreTests/PCMNativeDeferredRetryTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackTimelineResetTests.swift
+      - Tests/NotTennaPodCoreTests/SharedStreamingCacheTests.swift
+      - Tests/NotTennaPodCoreTests/MediaStreamingTimeoutTests.swift
+      - Tests/NotTennaPodCoreTests/ProgressiveStreamingRecoveryTests.swift
+      - Tests/NotTennaPodCoreTests/UnknownDurationStreamingRecoveryTests.swift
+      - Tests/NotTennaPodCoreTests/MP3XingMetadataTests.swift
+      - Tests/NotTennaPodCoreTests/NativeMP3PlaybackSourceTests.swift
+      - Tests/NotTennaPodCoreTests/PCIndexedMP3TailOracle.swift
+      - Tests/NotTennaPodCoreTests/MP3SourceTimelineTests.swift
+      - Tests/NotTennaPodCoreTests/MP3RequiredID3MetadataTests.swift
+      - Tests/NotTennaPodCoreTests/NativeMP3LoadingTests.swift
+      - Tests/NotTennaPodCoreTests/PCMMP3RecoveryTests.swift
+      - Tests/NotTennaPodCoreTests/VolumeControlledPCMTransportTests.swift
+      - Tests/NotTennaPodCoreTests/PCMVolumeRecoveryTests.swift
+      - Tests/NotTennaPodCoreTests/VolumeOracle.swift
+      - Tests/NotTennaPodCoreTests/PCMNativeRecoveryTests.swift
+      - Tests/NotTennaPodCoreTests/PCMPlaybackEngineTests.swift
+      - Tests/NotTennaPodCoreTests/PCMPlaybackFactoryTests.swift
+      - Tests/NotTennaPodCoreTests/PCMRecoveryFactoryTests.swift
+      - Tests/NotTennaPodCoreTests/PCMSourceResolutionTests.swift
+      - Tests/NotTennaPodCoreTests/PCMFileRoutingTests.swift
+      - Tests/NotTennaPodCoreTests/PCMRemoteRoutingTests.swift
+      - Tests/NotTennaPodCoreTests/NativeIncrementalPCMDecoderTests.swift
+      - Tests/NotTennaPodCoreTests/NativeAudioSourceTimelineTests.swift
+      - Tests/NotTennaPodCoreTests/ADTSTruncationTests.swift
+      - Tests/NotTennaPodCoreTests/AACGaplessTests.swift
+      - Tests/NotTennaPodCoreTests/AACEditSequenceTests.swift
+      - Tests/NotTennaPodCoreTests/AACEmptyEditTests.swift
+      - Tests/NotTennaPodCoreTests/MP4GaplessMetadataTests.swift
+      - Tests/NotTennaPodCoreTests/LocalMP3SourceTests.swift
+      - Tests/NotTennaPodCoreTests/LargeID3TagRoutingTests.swift
+      - Tests/NotTennaPodCoreTests/MP3LeadingMetadataTests.swift
+      - Tests/NotTennaPodCoreTests/NativeMP3LongSourceTests.swift
+      - Tests/NotTennaPodCoreTests/ApplicationPlaybackEngineTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackSilenceFallbackTests.swift
+      - Tests/NotTennaPodCoreTests/RoutedPlaybackEngineTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackCoordinatorTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackApplicationPreferencesTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackSystemControlsTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackVideoCommandTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackVideoTimelineTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackVideoProcessingTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackVideoPresentationTests.swift
+      - Tests/NotTennaPodCoreTests/FFmpegMediaReaderTests.swift
+      - Tests/NotTennaPodCoreTests/FFmpegPlaybackMediaAdapterTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackSourceIdentificationTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackProcessedSelectionTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackHardwarePreferenceStoreTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackDisconnectPreferenceTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackRecoveryControllerTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackInputRecoveryTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackRequestContextTests.swift
+      - Tests/NotTennaPodCoreTests/AudioSessionActivationControllerTests.swift
+      - Tests/NotTennaPodCoreTests/AudioSessionEventSourceTests.swift
+      - Tests/NotTennaPodCoreTests/SleepTimerTests.swift
+      - Tests/NotTennaPodCoreTests/TranscriptTests.swift
+      - Tests/NotTennaPodCoreTests/TranscriptScrollTests.swift
+      - Tests/NotTennaPodCoreTests/TranscriptLoaderTests.swift
+      - Tests/NotTennaPodCoreTests/PlayerOverflowTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/transcript-oracle.json
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/transcript-scroll-ordinary.json
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/transcript-scroll-tall.json
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/sleep-timer-oracle.json
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/ApplicationPlaybackSourceTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/LongMP3
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/AACLocalSourceSelectionTests.swift
+      - Tests/NotTennaPodCoreTests/PCMLocalSourceSelectionTests.swift
+      # Heard speed and skip-silence on the iOS renderer.
+      - Tests/NotTennaPodCoreTests/HeardPlaybackRateTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/HeardRate
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/NativeLocalAudioSourceTests.swift
+      - Tests/NotTennaPodCoreTests/MP4StartupSourceTests.swift
+      - Tests/NotTennaPodCoreTests/MP4EditedStartupTests.swift
+      - Tests/NotTennaPodCoreTests/NativePCMDecoderTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/silence-processor-oracle.json
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/PCMInputTimelineTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/pcm-input-timeline.json
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/MP4Gapless
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/MP4EditedStartup
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/AACEmptyEdits
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/AACEdits
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/AACGapless
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/NativeAACProfileTests.swift
+      - Tests/NotTennaPodCoreTests/AACSeekOracle.swift
+      - Tests/NotTennaPodCoreTests/AACDeterministicTests.swift
+      - Tests/NotTennaPodCoreTests/PCNativeAACSeekDiagnostics.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/AACProfiles
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/ADTSTruncation
+        type: folder
+        buildPhase: resources
+      # ADTS configuration changes and surround as stereo (audio plan F7, F8). The FFmpeg channel-layout
+      # cases (PCMStereoDownmixLayoutTests) import the codec module directly and stay SwiftPM-only.
+      - Tests/NotTennaPodCoreTests/ADTSFormatChangeTests.swift
+      - Tests/NotTennaPodCoreTests/SurroundDownmixTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/Surround
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/NativeMP4InputTests.swift
+      - Tests/NotTennaPodCoreTests/NativeMP4SourceTimelineTests.swift
+      - Tests/NotTennaPodCoreTests/NativeAudioPlaybackSourceTests.swift
+      - Tests/NotTennaPodCoreTests/NativeAudioRetainedSeekTests.swift
+      - Tests/NotTennaPodCoreTests/NativeAudioRecoveryTests.swift
+      - Tests/NotTennaPodCoreTests/NativeAudioPacketProducerTests.swift
+      - Tests/NotTennaPodCoreTests/NativeAudioIndexedPacketTests.swift
+      - Tests/NotTennaPodCoreTests/NativeFLACSourceVariantsTests.swift
+      - Tests/NotTennaPodCoreTests/NativeFLACLoadingTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackLoadControlTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/stream-loading-oracle.json
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/NativeBuffering
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/FLACVariants
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/EncodedAudioQueueTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/NativeMP4Timeline
+        type: folder
+      - path: Tests/NotTennaPodCoreTests/Fixtures/NativeFormatReference
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/FFmpegPlaybackSourceTests.swift
+      - Tests/NotTennaPodCoreTests/FFmpegBufferedSeekReferenceTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/BufferedCodecReference
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/SampleBufferPCMOutputTests.swift
+      - Tests/NotTennaPodCoreTests/SampleBufferPlaybackSessionTests.swift
+      - Tests/NotTennaPodCoreTests/PCMParameterTransitionTests.swift
+      - Tests/NotTennaPodCoreTests/NativePCMFileEndTests.swift
+      - Tests/NotTennaPodCoreTests/PCMTestFixture.swift
+      - Tests/NotTennaPodCoreTests/NativeMP3PCMDecoderTests.swift
+      - Tests/NotTennaPodCoreTests/NativeMP3PacketParserTests.swift
+      - Tests/NotTennaPodCoreTests/MP3SeekAdmissionTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/MP3SeekMarkers
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/MP3FormatChangeTests.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/MP3FormatChanges
+        type: folder
+        buildPhase: resources
+      - Tests/NotTennaPodCoreTests/ProxyNetworkEnvironmentTests.swift
+      - Tests/NotTennaPodCoreTests/AuthenticatedPlaybackTests.swift
+      - Tests/NotTennaPodCoreTests/PausedHLSBufferingTests.swift
+      - Tests/NotTennaPodCoreTests/PlaybackVolumeTapTests.swift
+      - Tests/NotTennaPodCoreTests/LoopbackHTTPServer.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-vorbis.ogg
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-opus.ogg
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-opus.webm
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone.wav
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone.m4a
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone-tail.m4a
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone.aac
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingFormats/tone.flac
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/LongNativeFormats/long.aac
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/LongNativeFormats/long.m4a
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/LongNativeFormats/long-tail.m4a
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/LongNativeFormats/long.flac
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-30sec.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-silence.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-vbr-low-rate.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-indexed-mllt-stereo-v3.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-indexed-mllt-stereo-v4.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-indexed-vbr-stereo.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-indexed-vbri-9.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-indexed-vbri-3.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-indexed-vbr-low-rate.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-vbr-stereo.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-unknown-duration.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/PlaybackDecoder
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/AACDeterministic
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingHLS
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingHLSAES
+        type: folder
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/feed-information-links.json
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/feed-tag-order.json
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/statistics-format-runtime.json
+        buildPhase: resources
+    dependencies:
+      - target: NotTennaPod
+      - package: NotTennaPodCore
+      - framework: Vendor/GoogleCastSDK/GoogleCast.xcframework
+        embed: false
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+  NotTennaPodProbeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - ProbeTests
+      - Tests/NotTennaPodCoreTests/LoopbackHTTPServer.swift
+      - path: Tests/NotTennaPodCoreTests/Fixtures/playback-30sec.mp3
+        buildPhase: resources
+      - path: Tests/NotTennaPodCoreTests/Fixtures/StreamingHLS
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - target: NotTennaPod
+      - package: NotTennaPodCore
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+  NotTennaPodUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      # The video fixture server's Python cache is local build output, not a test resource.
+      - path: AppUITests
+        excludes: ["**/__pycache__"]
+      # Journeys that need a server whose responses the test controls while the app is terminated.
+      - Tests/NotTennaPodCoreTests/LoopbackHTTPServer.swift
+    dependencies:
+      - target: NotTennaPod
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        # Restores portrait after every test, also when a failure skips the test's own restore (OrientationGuard.swift).
+        INFOPLIST_KEY_NSPrincipalClass: UITestOrientationGuard
+schemes:
+  NotTennaPodProbeTests:
+    build:
+      targets:
+        NotTennaPod: all
+        NotTennaPodProbeTests: [test]
+    test:
+      targets: [NotTennaPodProbeTests]
+      commandLineArguments:
+        "-test-library-id 7C96A453-51F6-4676-A9F5-C7C5D03A4C75": true
+        "-test-muted-playback": true
+  NotTennaPod:
+    build:
+      targets:
+        NotTennaPod: all
+        NotTennaPodUITests: [test]
+    test:
+      targets: [NotTennaPodUITests]
+      # The UI tests' loopback fixture servers (Tools/test-fixtures.sh) start before and stop after
+      # every test run, for the Simulator that runs it.
+      preActions:
+        - name: Start UI-test fixture servers
+          settingsTarget: NotTennaPod
+          script: |
+            mkdir -p "$SRCROOT/.work/test-fixtures"
+            "$SRCROOT/Tools/test-fixtures.sh" start "$TARGET_DEVICE_IDENTIFIER" > "$SRCROOT/.work/test-fixtures/pre-action.log" 2>&1
+      postActions:
+        - name: Stop UI-test fixture servers
+          settingsTarget: NotTennaPod
+          script: |
+            "$SRCROOT/Tools/test-fixtures.sh" stop "$TARGET_DEVICE_IDENTIFIER" > "$SRCROOT/.work/test-fixtures/post-action.log" 2>&1
+      environmentVariables:
+        PLAYBACK_VIDEO_FIXTURE_URL: http://127.0.0.1:59421
+  NotTennaPodViewTests:
+    build:
+      targets:
+        NotTennaPod: all
+        NotTennaPodViewTests: [test]
+    test:
+      targets: [NotTennaPodViewTests]
+      commandLineArguments:
+        "-test-library-id 39F9E878-12C4-45CB-A73B-09065D8A41F7": true
+        "-test-muted-playback": true

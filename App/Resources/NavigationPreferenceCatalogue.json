@@ -1,0 +1,362 @@
+{
+  "interface": [
+    {
+      "kind": "PreferenceCategory",
+      "title": "theming"
+    },
+    {
+      "kind": "ThemePreference",
+      "key": "prefTheme"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_black_theme_title",
+      "summary": "pref_black_theme_message",
+      "key": "prefThemeBlack",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_tinted_theme_title",
+      "summary": "pref_tinted_theme_message",
+      "key": "prefTintedColors",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "episode_information"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_episode_cover_title",
+      "summary": "pref_episode_cover_summary",
+      "key": "prefEpisodeCover",
+      "defaultValue": "true"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_show_remain_time_title",
+      "summary": "pref_show_remain_time_summary",
+      "key": "showTimeLeft",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_playback_time_respects_speed_title",
+      "summary": "pref_playback_time_respects_speed_sum",
+      "key": "prefPlaybackTimeRespectsSpeed",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "external_elements"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_expandNotify_title",
+      "summary": "pref_expandNotify_sum",
+      "key": "prefExpandNotify",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_persistNotify_title",
+      "summary": "pref_persistNotify_sum",
+      "key": "prefPersistNotify",
+      "defaultValue": "true"
+    },
+    {
+      "kind": "Preference",
+      "title": "pref_full_notification_buttons_title",
+      "summary": "pref_full_notification_buttons_sum",
+      "key": "prefFullNotificationButtons"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "behavior"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "pref_default_page",
+      "summary": "pref_default_page_sum",
+      "key": "prefDefaultPage",
+      "defaultValue": "HomeFragment"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "bottom_navigation",
+      "summary": "bottom_navigation_summary",
+      "key": "prefBottomNavigation",
+      "defaultValue": "true"
+    },
+    {
+      "kind": "Preference",
+      "title": "pref_nav_drawer_items_title",
+      "summary": "pref_nav_drawer_items_sum",
+      "key": "prefHiddenDrawerItems"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_back_button_opens_drawer",
+      "summary": "pref_back_button_opens_drawer_summary",
+      "key": "prefBackButtonOpensDrawer",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "episode_lists"
+    },
+    {
+      "kind": "Preference",
+      "title": "pref_global_default_episode_list_sort_order_title",
+      "summary": "pref_global_default_episode_list_sort_order_sum",
+      "key": "prefGlobalDefaultSortedOrder"
+    },
+    {
+      "kind": "Preference",
+      "title": "swipeactions_label",
+      "summary": "swipeactions_summary",
+      "key": "prefSwipe"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_stream_over_download_title",
+      "summary": "pref_stream_over_download_sum",
+      "key": "prefStreamOverDownload",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_downloads_button_action_title",
+      "summary": "pref_downloads_button_action_sum",
+      "key": "prefDownloadsButtonAction",
+      "defaultValue": "false"
+    }
+  ],
+  "downloads": [
+    {
+      "kind": "Preference",
+      "title": "choose_data_directory",
+      "key": "prefChooseDataDir"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "automation"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "feed_refresh_title",
+      "summary": "feed_refresh_sum",
+      "key": "prefAutoUpdateIntervall",
+      "defaultValue": "720"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "pref_new_episodes_action_title",
+      "summary": "pref_new_episodes_action_sum",
+      "key": "prefNewEpisodesAction",
+      "defaultValue": "1"
+    },
+    {
+      "kind": "Preference",
+      "title": "pref_automatic_download_title",
+      "summary": "pref_automatic_download_sum",
+      "key": "prefAutoDownloadSettings"
+    },
+    {
+      "kind": "Preference",
+      "title": "pref_auto_delete_title",
+      "summary": "pref_auto_delete_sum",
+      "key": "prefAutoDeleteScreen"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_delete_removes_from_queue_title",
+      "summary": "pref_delete_removes_from_queue_sum",
+      "key": "prefDeleteRemovesFromQueue",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "download_pref_details"
+    },
+    {
+      "kind": "MaterialMultiSelectListPreference",
+      "title": "pref_mobileUpdate_title",
+      "summary": "pref_mobileUpdate_sum",
+      "key": "prefMobileUpdateTypes",
+      "defaultValue": "@array/mobile_update_default_value"
+    },
+    {
+      "kind": "Preference",
+      "title": "pref_proxy_title",
+      "summary": "pref_proxy_sum",
+      "key": "prefProxy"
+    }
+  ],
+  "autodownload": [
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_automatic_download_title",
+      "summary": "pref_automatic_download_global_description",
+      "key": "prefEnableAutoDl",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_automatic_download_queue_title",
+      "summary": "pref_automatic_download_queue_description",
+      "key": "prefEnableAutoDlQueue",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "pref_episode_cache_title",
+      "summary": "pref_episode_cache_summary",
+      "key": "prefEpisodeCacheSize",
+      "defaultValue": "25"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_automatic_download_on_battery_title",
+      "summary": "pref_automatic_download_on_battery_sum",
+      "key": "prefEnableAutoDownloadOnBattery",
+      "defaultValue": "true"
+    }
+  ],
+  "autodeletion": [
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_auto_delete_playback_title",
+      "summary": "pref_auto_delete_playback_sum",
+      "key": "prefAutoDelete",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_auto_local_delete_title",
+      "summary": "pref_auto_local_delete_sum",
+      "key": "prefAutoDeleteLocal",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_favorite_keeps_episodes_title",
+      "summary": "pref_favorite_keeps_episodes_sum",
+      "key": "prefFavoriteKeepsEpisode",
+      "defaultValue": "true"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "pref_episode_cleanup_title",
+      "summary": "pref_episode_cleanup_summary",
+      "key": "prefEpisodeCleanup",
+      "defaultValue": "-2"
+    }
+  ],
+  "playback": [
+    {
+      "kind": "PreferenceCategory",
+      "title": "interruptions"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_pauseOnHeadsetDisconnect_title",
+      "summary": "pref_pauseOnDisconnect_sum",
+      "key": "prefPauseOnHeadsetDisconnect",
+      "defaultValue": "true"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_unpauseOnHeadsetReconnect_title",
+      "summary": "pref_unpauseOnHeadsetReconnect_sum",
+      "key": "prefUnpauseOnHeadsetReconnect",
+      "defaultValue": "true"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_unpauseOnBluetoothReconnect_title",
+      "summary": "pref_unpauseOnBluetoothReconnect_sum",
+      "key": "prefUnpauseOnBluetoothReconnect",
+      "defaultValue": "false"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "playback_control"
+    },
+    {
+      "kind": "Preference",
+      "title": "pref_fast_forward",
+      "summary": "pref_fast_forward_sum",
+      "key": "prefPlaybackFastForwardDeltaLauncher"
+    },
+    {
+      "kind": "Preference",
+      "title": "pref_rewind",
+      "summary": "pref_rewind_sum",
+      "key": "prefPlaybackRewindDeltaLauncher"
+    },
+    {
+      "kind": "Preference",
+      "title": "playback_speed",
+      "summary": "pref_playback_speed_sum",
+      "key": "prefPlaybackSpeedLauncher"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "reassign_hardware_buttons"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "pref_hardware_forward_button_title",
+      "summary": "pref_hardware_forward_button_summary",
+      "key": "prefHardwareForwardButton",
+      "defaultValue": "keycode_media_fast_forward"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "pref_hardware_previous_button_title",
+      "summary": "pref_hardware_previous_button_summary",
+      "key": "prefHardwarePreviousButton",
+      "defaultValue": "keycode_media_rewind"
+    },
+    {
+      "kind": "PreferenceCategory",
+      "title": "queue_label"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "pref_enqueue_location_title",
+      "key": "prefEnqueueLocation",
+      "defaultValue": "BACK"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_enqueue_downloaded_title",
+      "summary": "pref_enqueue_downloaded_summary",
+      "key": "prefEnqueueDownloaded",
+      "defaultValue": "true"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_followQueue_title",
+      "summary": "pref_followQueue_sum",
+      "key": "prefFollowQueue",
+      "defaultValue": "true"
+    },
+    {
+      "kind": "MaterialListPreference",
+      "title": "pref_smart_mark_as_played_title",
+      "summary": "pref_smart_mark_as_played_sum",
+      "key": "prefSmartMarkAsPlayedSecs",
+      "defaultValue": "30"
+    },
+    {
+      "kind": "SwitchPreferenceCompat",
+      "title": "pref_skip_keeps_episodes_title",
+      "summary": "pref_skip_keeps_episodes_sum",
+      "key": "prefSkipKeepsEpisode",
+      "defaultValue": "true"
+    }
+  ]
+}

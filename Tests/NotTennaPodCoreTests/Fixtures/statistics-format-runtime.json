@@ -1,0 +1,4269 @@
+{
+  "now": 1789776210109,
+  "durations": [
+    {
+      "locale": "en-US",
+      "value": -9223372036854775808,
+      "text": "-2562047850053632.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": -1,
+      "text": "-0.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 0,
+      "text": "0.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1,
+      "text": "0.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 179,
+      "text": "0.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 180,
+      "text": "0.1 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 181,
+      "text": "0.1 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 898,
+      "text": "0.2 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899,
+      "text": "0.2 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900,
+      "text": "0.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 901,
+      "text": "0.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 902,
+      "text": "0.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 998,
+      "text": "0.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999,
+      "text": "0.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000,
+      "text": "0.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1001,
+      "text": "0.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1002,
+      "text": "0.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 3599,
+      "text": "1.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 3600,
+      "text": "1.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 3780,
+      "text": "1.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 9000,
+      "text": "2.5 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 9999,
+      "text": "2.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 10000,
+      "text": "2.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 99999,
+      "text": "27.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 100000,
+      "text": "27.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899998,
+      "text": "250.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999,
+      "text": "250.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000,
+      "text": "250.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900001,
+      "text": "250.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900002,
+      "text": "250.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999998,
+      "text": "277.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999,
+      "text": "277.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000,
+      "text": "277.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000001,
+      "text": "277.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000002,
+      "text": "277.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 16777215,
+      "text": "4660.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 16777216,
+      "text": "4660.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 16777217,
+      "text": "4660.3 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999998,
+      "text": "250000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999,
+      "text": "250000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000,
+      "text": "250000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000001,
+      "text": "250000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000002,
+      "text": "250000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999998,
+      "text": "277777.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999,
+      "text": "277777.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000,
+      "text": "277777.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000001,
+      "text": "277777.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000002,
+      "text": "277777.8 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999998,
+      "text": "250000000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999999,
+      "text": "250000000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000000,
+      "text": "250000000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000001,
+      "text": "250000000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000002,
+      "text": "250000000.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999998,
+      "text": "277777792.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999999,
+      "text": "277777792.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000000,
+      "text": "277777792.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000001,
+      "text": "277777792.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000002,
+      "text": "277777792.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999999998,
+      "text": "249999998976.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999999999,
+      "text": "249999998976.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000000000,
+      "text": "249999998976.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000000001,
+      "text": "249999998976.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000000002,
+      "text": "249999998976.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999999998,
+      "text": "277777776640.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999999999,
+      "text": "277777776640.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000000000,
+      "text": "277777776640.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000000001,
+      "text": "277777776640.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000000002,
+      "text": "277777776640.0 hours"
+    },
+    {
+      "locale": "en-US",
+      "value": 9223372036854775807,
+      "text": "2562047850053632.0 hours"
+    },
+    {
+      "locale": "de-DE",
+      "value": -9223372036854775808,
+      "text": "-2562047850053632,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": -1,
+      "text": "-0,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 0,
+      "text": "0,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1,
+      "text": "0,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 179,
+      "text": "0,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 180,
+      "text": "0,1 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 181,
+      "text": "0,1 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 898,
+      "text": "0,2 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899,
+      "text": "0,2 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900,
+      "text": "0,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 901,
+      "text": "0,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 902,
+      "text": "0,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 998,
+      "text": "0,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999,
+      "text": "0,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000,
+      "text": "0,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1001,
+      "text": "0,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1002,
+      "text": "0,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 3599,
+      "text": "1,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 3600,
+      "text": "1,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 3780,
+      "text": "1,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 9000,
+      "text": "2,5 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 9999,
+      "text": "2,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 10000,
+      "text": "2,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 99999,
+      "text": "27,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 100000,
+      "text": "27,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899998,
+      "text": "250,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999,
+      "text": "250,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000,
+      "text": "250,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900001,
+      "text": "250,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900002,
+      "text": "250,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999998,
+      "text": "277,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999,
+      "text": "277,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000,
+      "text": "277,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000001,
+      "text": "277,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000002,
+      "text": "277,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 16777215,
+      "text": "4660,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 16777216,
+      "text": "4660,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 16777217,
+      "text": "4660,3 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999998,
+      "text": "250000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999,
+      "text": "250000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000,
+      "text": "250000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000001,
+      "text": "250000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000002,
+      "text": "250000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999998,
+      "text": "277777,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999,
+      "text": "277777,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000,
+      "text": "277777,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000001,
+      "text": "277777,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000002,
+      "text": "277777,8 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999998,
+      "text": "250000000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999999,
+      "text": "250000000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000000,
+      "text": "250000000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000001,
+      "text": "250000000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000002,
+      "text": "250000000,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999998,
+      "text": "277777792,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999999,
+      "text": "277777792,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000000,
+      "text": "277777792,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000001,
+      "text": "277777792,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000002,
+      "text": "277777792,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999999998,
+      "text": "249999998976,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999999999,
+      "text": "249999998976,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000000000,
+      "text": "249999998976,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000000001,
+      "text": "249999998976,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000000002,
+      "text": "249999998976,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999999998,
+      "text": "277777776640,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999999999,
+      "text": "277777776640,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000000000,
+      "text": "277777776640,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000000001,
+      "text": "277777776640,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000000002,
+      "text": "277777776640,0 Stunden"
+    },
+    {
+      "locale": "de-DE",
+      "value": 9223372036854775807,
+      "text": "2562047850053632,0 Stunden"
+    },
+    {
+      "locale": "fr-FR",
+      "value": -9223372036854775808,
+      "text": "-2562047850053632,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": -1,
+      "text": "-0,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 0,
+      "text": "0,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1,
+      "text": "0,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 179,
+      "text": "0,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 180,
+      "text": "0,1 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 181,
+      "text": "0,1 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 898,
+      "text": "0,2 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899,
+      "text": "0,2 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900,
+      "text": "0,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 901,
+      "text": "0,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 902,
+      "text": "0,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 998,
+      "text": "0,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999,
+      "text": "0,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000,
+      "text": "0,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1001,
+      "text": "0,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1002,
+      "text": "0,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 3599,
+      "text": "1,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 3600,
+      "text": "1,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 3780,
+      "text": "1,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 9000,
+      "text": "2,5 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 9999,
+      "text": "2,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 10000,
+      "text": "2,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 99999,
+      "text": "27,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 100000,
+      "text": "27,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899998,
+      "text": "250,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999,
+      "text": "250,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000,
+      "text": "250,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900001,
+      "text": "250,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900002,
+      "text": "250,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999998,
+      "text": "277,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999,
+      "text": "277,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000,
+      "text": "277,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000001,
+      "text": "277,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000002,
+      "text": "277,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 16777215,
+      "text": "4660,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 16777216,
+      "text": "4660,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 16777217,
+      "text": "4660,3 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999998,
+      "text": "250000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999,
+      "text": "250000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000,
+      "text": "250000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000001,
+      "text": "250000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000002,
+      "text": "250000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999998,
+      "text": "277777,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999,
+      "text": "277777,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000,
+      "text": "277777,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000001,
+      "text": "277777,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000002,
+      "text": "277777,8 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999998,
+      "text": "250000000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999999,
+      "text": "250000000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000000,
+      "text": "250000000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000001,
+      "text": "250000000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000002,
+      "text": "250000000,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999998,
+      "text": "277777792,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999999,
+      "text": "277777792,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000000,
+      "text": "277777792,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000001,
+      "text": "277777792,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000002,
+      "text": "277777792,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999999998,
+      "text": "249999998976,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999999999,
+      "text": "249999998976,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000000000,
+      "text": "249999998976,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000000001,
+      "text": "249999998976,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000000002,
+      "text": "249999998976,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999999998,
+      "text": "277777776640,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999999999,
+      "text": "277777776640,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000000000,
+      "text": "277777776640,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000000001,
+      "text": "277777776640,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000000002,
+      "text": "277777776640,0 heures"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 9223372036854775807,
+      "text": "2562047850053632,0 heures"
+    },
+    {
+      "locale": "ar-EG",
+      "value": -9223372036854775808,
+      "text": "-٢٥٦٢٠٤٧٨٥٠٠٥٣٦٣٢٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": -1,
+      "text": "-٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 0,
+      "text": "٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1,
+      "text": "٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 179,
+      "text": "٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 180,
+      "text": "٠٫١ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 181,
+      "text": "٠٫١ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 898,
+      "text": "٠٫٢ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899,
+      "text": "٠٫٢ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900,
+      "text": "٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 901,
+      "text": "٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 902,
+      "text": "٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 998,
+      "text": "٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999,
+      "text": "٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000,
+      "text": "٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1001,
+      "text": "٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1002,
+      "text": "٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 3599,
+      "text": "١٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 3600,
+      "text": "١٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 3780,
+      "text": "١٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 9000,
+      "text": "٢٫٥ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 9999,
+      "text": "٢٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 10000,
+      "text": "٢٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 99999,
+      "text": "٢٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 100000,
+      "text": "٢٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899998,
+      "text": "٢٥٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999,
+      "text": "٢٥٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000,
+      "text": "٢٥٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900001,
+      "text": "٢٥٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900002,
+      "text": "٢٥٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999998,
+      "text": "٢٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999,
+      "text": "٢٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000,
+      "text": "٢٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000001,
+      "text": "٢٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000002,
+      "text": "٢٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 16777215,
+      "text": "٤٦٦٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 16777216,
+      "text": "٤٦٦٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 16777217,
+      "text": "٤٦٦٠٫٣ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999998,
+      "text": "٢٥٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999,
+      "text": "٢٥٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000,
+      "text": "٢٥٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000001,
+      "text": "٢٥٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000002,
+      "text": "٢٥٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999998,
+      "text": "٢٧٧٧٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999,
+      "text": "٢٧٧٧٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000,
+      "text": "٢٧٧٧٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000001,
+      "text": "٢٧٧٧٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000002,
+      "text": "٢٧٧٧٧٧٫٨ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999998,
+      "text": "٢٥٠٠٠٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999999,
+      "text": "٢٥٠٠٠٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000000,
+      "text": "٢٥٠٠٠٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000001,
+      "text": "٢٥٠٠٠٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000002,
+      "text": "٢٥٠٠٠٠٠٠٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999998,
+      "text": "٢٧٧٧٧٧٧٩٢٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999999,
+      "text": "٢٧٧٧٧٧٧٩٢٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000000,
+      "text": "٢٧٧٧٧٧٧٩٢٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000001,
+      "text": "٢٧٧٧٧٧٧٩٢٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000002,
+      "text": "٢٧٧٧٧٧٧٩٢٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999999998,
+      "text": "٢٤٩٩٩٩٩٩٨٩٧٦٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999999999,
+      "text": "٢٤٩٩٩٩٩٩٨٩٧٦٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000000000,
+      "text": "٢٤٩٩٩٩٩٩٨٩٧٦٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000000001,
+      "text": "٢٤٩٩٩٩٩٩٨٩٧٦٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000000002,
+      "text": "٢٤٩٩٩٩٩٩٨٩٧٦٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999999998,
+      "text": "٢٧٧٧٧٧٧٧٦٦٤٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999999999,
+      "text": "٢٧٧٧٧٧٧٧٦٦٤٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000000000,
+      "text": "٢٧٧٧٧٧٧٧٦٦٤٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000000001,
+      "text": "٢٧٧٧٧٧٧٧٦٦٤٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000000002,
+      "text": "٢٧٧٧٧٧٧٧٦٦٤٠٫٠ ساعات"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 9223372036854775807,
+      "text": "٢٥٦٢٠٤٧٨٥٠٠٥٣٦٣٢٫٠ ساعات"
+    },
+    {
+      "locale": "ja-JP",
+      "value": -9223372036854775808,
+      "text": "-2562047850053632.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": -1,
+      "text": "-0.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 0,
+      "text": "0.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1,
+      "text": "0.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 179,
+      "text": "0.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 180,
+      "text": "0.1 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 181,
+      "text": "0.1 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 898,
+      "text": "0.2 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899,
+      "text": "0.2 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900,
+      "text": "0.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 901,
+      "text": "0.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 902,
+      "text": "0.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 998,
+      "text": "0.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999,
+      "text": "0.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000,
+      "text": "0.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1001,
+      "text": "0.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1002,
+      "text": "0.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 3599,
+      "text": "1.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 3600,
+      "text": "1.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 3780,
+      "text": "1.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 9000,
+      "text": "2.5 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 9999,
+      "text": "2.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 10000,
+      "text": "2.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 99999,
+      "text": "27.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 100000,
+      "text": "27.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899998,
+      "text": "250.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999,
+      "text": "250.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000,
+      "text": "250.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900001,
+      "text": "250.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900002,
+      "text": "250.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999998,
+      "text": "277.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999,
+      "text": "277.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000,
+      "text": "277.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000001,
+      "text": "277.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000002,
+      "text": "277.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 16777215,
+      "text": "4660.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 16777216,
+      "text": "4660.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 16777217,
+      "text": "4660.3 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999998,
+      "text": "250000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999,
+      "text": "250000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000,
+      "text": "250000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000001,
+      "text": "250000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000002,
+      "text": "250000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999998,
+      "text": "277777.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999,
+      "text": "277777.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000,
+      "text": "277777.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000001,
+      "text": "277777.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000002,
+      "text": "277777.8 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999998,
+      "text": "250000000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999999,
+      "text": "250000000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000000,
+      "text": "250000000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000001,
+      "text": "250000000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000002,
+      "text": "250000000.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999998,
+      "text": "277777792.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999999,
+      "text": "277777792.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000000,
+      "text": "277777792.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000001,
+      "text": "277777792.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000002,
+      "text": "277777792.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999999998,
+      "text": "249999998976.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999999999,
+      "text": "249999998976.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000000000,
+      "text": "249999998976.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000000001,
+      "text": "249999998976.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000000002,
+      "text": "249999998976.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999999998,
+      "text": "277777776640.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999999999,
+      "text": "277777776640.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000000000,
+      "text": "277777776640.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000000001,
+      "text": "277777776640.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000000002,
+      "text": "277777776640.0 時間"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 9223372036854775807,
+      "text": "2562047850053632.0 時間"
+    }
+  ],
+  "sizes": [
+    {
+      "locale": "en-US",
+      "value": -9223372036854775808,
+      "text": "9223372036854776000 B"
+    },
+    {
+      "locale": "en-US",
+      "value": -1,
+      "text": "-1 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 0,
+      "text": "0 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 1,
+      "text": "1 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 179,
+      "text": "179 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 180,
+      "text": "180 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 181,
+      "text": "181 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 898,
+      "text": "898 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 899,
+      "text": "899 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 900,
+      "text": "900 B"
+    },
+    {
+      "locale": "en-US",
+      "value": 901,
+      "text": "0.90 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 902,
+      "text": "0.90 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 998,
+      "text": "1.00 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999,
+      "text": "1.00 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000,
+      "text": "1.0 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1001,
+      "text": "1.0 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1002,
+      "text": "1.0 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 3599,
+      "text": "3.6 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 3600,
+      "text": "3.6 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 3780,
+      "text": "3.8 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 9000,
+      "text": "9.0 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 9999,
+      "text": "10.0 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 10000,
+      "text": "10 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 99999,
+      "text": "100 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 100000,
+      "text": "100 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 899998,
+      "text": "900 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999,
+      "text": "900 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000,
+      "text": "900 kB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900001,
+      "text": "0.90 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900002,
+      "text": "0.90 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999998,
+      "text": "1.00 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999,
+      "text": "1.00 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000,
+      "text": "1.0 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000001,
+      "text": "1.0 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000002,
+      "text": "1.0 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 16777215,
+      "text": "17 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 16777216,
+      "text": "17 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 16777217,
+      "text": "17 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999998,
+      "text": "900 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999,
+      "text": "900 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000,
+      "text": "900 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000001,
+      "text": "900 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000002,
+      "text": "900 MB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999998,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000001,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000002,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999998,
+      "text": "900 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999999,
+      "text": "900 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000000,
+      "text": "900 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000001,
+      "text": "900 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000002,
+      "text": "900 GB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999998,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999999,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000000,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000001,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000002,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999999998,
+      "text": "900 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 899999999999999,
+      "text": "900 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000000000,
+      "text": "900 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000000001,
+      "text": "900 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 900000000000002,
+      "text": "900 TB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999999998,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "en-US",
+      "value": 999999999999999,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000000000,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000000001,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "en-US",
+      "value": 1000000000000002,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "en-US",
+      "value": 9223372036854775807,
+      "text": "9223 PB"
+    },
+    {
+      "locale": "de-DE",
+      "value": -9223372036854775808,
+      "text": "9223372036854776000 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": -1,
+      "text": "-1 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 0,
+      "text": "0 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1,
+      "text": "1 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 179,
+      "text": "179 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 180,
+      "text": "180 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 181,
+      "text": "181 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 898,
+      "text": "898 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899,
+      "text": "899 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900,
+      "text": "900 B"
+    },
+    {
+      "locale": "de-DE",
+      "value": 901,
+      "text": "0,90 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 902,
+      "text": "0,90 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 998,
+      "text": "1,00 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999,
+      "text": "1,00 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000,
+      "text": "1,0 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1001,
+      "text": "1,0 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1002,
+      "text": "1,0 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 3599,
+      "text": "3,6 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 3600,
+      "text": "3,6 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 3780,
+      "text": "3,8 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 9000,
+      "text": "9,0 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 9999,
+      "text": "10,0 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 10000,
+      "text": "10 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 99999,
+      "text": "100 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 100000,
+      "text": "100 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899998,
+      "text": "900 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999,
+      "text": "900 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000,
+      "text": "900 kB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900001,
+      "text": "0,90 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900002,
+      "text": "0,90 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999998,
+      "text": "1,00 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999,
+      "text": "1,00 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000,
+      "text": "1,0 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000001,
+      "text": "1,0 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000002,
+      "text": "1,0 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 16777215,
+      "text": "17 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 16777216,
+      "text": "17 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 16777217,
+      "text": "17 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999998,
+      "text": "900 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999,
+      "text": "900 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000,
+      "text": "900 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000001,
+      "text": "900 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000002,
+      "text": "900 MB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999998,
+      "text": "1,0 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999,
+      "text": "1,0 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000,
+      "text": "1,0 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000001,
+      "text": "1,0 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000002,
+      "text": "1,0 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999998,
+      "text": "900 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999999,
+      "text": "900 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000000,
+      "text": "900 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000001,
+      "text": "900 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000002,
+      "text": "900 GB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999998,
+      "text": "1,0 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999999,
+      "text": "1,0 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000000,
+      "text": "1,0 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000001,
+      "text": "1,0 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000002,
+      "text": "1,0 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999999998,
+      "text": "900 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 899999999999999,
+      "text": "900 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000000000,
+      "text": "900 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000000001,
+      "text": "900 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 900000000000002,
+      "text": "900 TB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999999998,
+      "text": "1,0 PB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 999999999999999,
+      "text": "1,0 PB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000000000,
+      "text": "1,0 PB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000000001,
+      "text": "1,0 PB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 1000000000000002,
+      "text": "1,0 PB"
+    },
+    {
+      "locale": "de-DE",
+      "value": 9223372036854775807,
+      "text": "9223 PB"
+    },
+    {
+      "locale": "fr-FR",
+      "value": -9223372036854775808,
+      "text": "9223372036854776000 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": -1,
+      "text": "-1 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 0,
+      "text": "0 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1,
+      "text": "1 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 179,
+      "text": "179 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 180,
+      "text": "180 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 181,
+      "text": "181 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 898,
+      "text": "898 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899,
+      "text": "899 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900,
+      "text": "900 octet(s)"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 901,
+      "text": "0,90 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 902,
+      "text": "0,90 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 998,
+      "text": "1,00 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999,
+      "text": "1,00 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000,
+      "text": "1,0 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1001,
+      "text": "1,0 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1002,
+      "text": "1,0 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 3599,
+      "text": "3,6 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 3600,
+      "text": "3,6 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 3780,
+      "text": "3,8 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 9000,
+      "text": "9,0 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 9999,
+      "text": "10,0 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 10000,
+      "text": "10 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 99999,
+      "text": "100 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 100000,
+      "text": "100 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899998,
+      "text": "900 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999,
+      "text": "900 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000,
+      "text": "900 ko"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900001,
+      "text": "0,90 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900002,
+      "text": "0,90 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999998,
+      "text": "1,00 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999,
+      "text": "1,00 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000,
+      "text": "1,0 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000001,
+      "text": "1,0 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000002,
+      "text": "1,0 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 16777215,
+      "text": "17 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 16777216,
+      "text": "17 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 16777217,
+      "text": "17 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999998,
+      "text": "900 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999,
+      "text": "900 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000,
+      "text": "900 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000001,
+      "text": "900 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000002,
+      "text": "900 Mo"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999998,
+      "text": "1,0 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999,
+      "text": "1,0 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000,
+      "text": "1,0 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000001,
+      "text": "1,0 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000002,
+      "text": "1,0 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999998,
+      "text": "900 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999999,
+      "text": "900 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000000,
+      "text": "900 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000001,
+      "text": "900 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000002,
+      "text": "900 Go"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999998,
+      "text": "1,0 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999999,
+      "text": "1,0 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000000,
+      "text": "1,0 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000001,
+      "text": "1,0 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000002,
+      "text": "1,0 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999999998,
+      "text": "900 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 899999999999999,
+      "text": "900 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000000000,
+      "text": "900 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000000001,
+      "text": "900 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 900000000000002,
+      "text": "900 To"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999999998,
+      "text": "1,0 Po"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 999999999999999,
+      "text": "1,0 Po"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000000000,
+      "text": "1,0 Po"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000000001,
+      "text": "1,0 Po"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 1000000000000002,
+      "text": "1,0 Po"
+    },
+    {
+      "locale": "fr-FR",
+      "value": 9223372036854775807,
+      "text": "9223 Po"
+    },
+    {
+      "locale": "ar-EG",
+      "value": -9223372036854775808,
+      "text": "٩٢٢٣٣٧٢٠٣٦٨٥٤٧٧٦٠٠٠ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": -1,
+      "text": "؜-١ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 0,
+      "text": "٠ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1,
+      "text": "١ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 179,
+      "text": "١٧٩ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 180,
+      "text": "١٨٠ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 181,
+      "text": "١٨١ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 898,
+      "text": "٨٩٨ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899,
+      "text": "٨٩٩ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900,
+      "text": "٩٠٠ بايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 901,
+      "text": "٠٫٩٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 902,
+      "text": "٠٫٩٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 998,
+      "text": "١٫٠٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999,
+      "text": "١٫٠٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000,
+      "text": "١٫٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1001,
+      "text": "١٫٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1002,
+      "text": "١٫٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 3599,
+      "text": "٣٫٦ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 3600,
+      "text": "٣٫٦ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 3780,
+      "text": "٣٫٨ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 9000,
+      "text": "٩٫٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 9999,
+      "text": "١٠٫٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 10000,
+      "text": "١٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 99999,
+      "text": "١٠٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 100000,
+      "text": "١٠٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899998,
+      "text": "٩٠٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999,
+      "text": "٩٠٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000,
+      "text": "٩٠٠ كيلوبايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900001,
+      "text": "٠٫٩٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900002,
+      "text": "٠٫٩٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999998,
+      "text": "١٫٠٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999,
+      "text": "١٫٠٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000,
+      "text": "١٫٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000001,
+      "text": "١٫٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000002,
+      "text": "١٫٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 16777215,
+      "text": "١٧ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 16777216,
+      "text": "١٧ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 16777217,
+      "text": "١٧ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999998,
+      "text": "٩٠٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999,
+      "text": "٩٠٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000,
+      "text": "٩٠٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000001,
+      "text": "٩٠٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000002,
+      "text": "٩٠٠ م.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999998,
+      "text": "١٫٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999,
+      "text": "١٫٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000,
+      "text": "١٫٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000001,
+      "text": "١٫٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000002,
+      "text": "١٫٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999998,
+      "text": "٩٠٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999999,
+      "text": "٩٠٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000000,
+      "text": "٩٠٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000001,
+      "text": "٩٠٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000002,
+      "text": "٩٠٠ غ.ب"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999998,
+      "text": "١٫٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999999,
+      "text": "١٫٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000000,
+      "text": "١٫٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000001,
+      "text": "١٫٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000002,
+      "text": "١٫٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999999998,
+      "text": "٩٠٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 899999999999999,
+      "text": "٩٠٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000000000,
+      "text": "٩٠٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000000001,
+      "text": "٩٠٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 900000000000002,
+      "text": "٩٠٠ تيرابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999999998,
+      "text": "١٫٠ بيتابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 999999999999999,
+      "text": "١٫٠ بيتابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000000000,
+      "text": "١٫٠ بيتابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000000001,
+      "text": "١٫٠ بيتابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 1000000000000002,
+      "text": "١٫٠ بيتابايت"
+    },
+    {
+      "locale": "ar-EG",
+      "value": 9223372036854775807,
+      "text": "٩٢٢٣ بيتابايت"
+    },
+    {
+      "locale": "ja-JP",
+      "value": -9223372036854775808,
+      "text": "9223372036854776000 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": -1,
+      "text": "-1 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 0,
+      "text": "0 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1,
+      "text": "1 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 179,
+      "text": "179 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 180,
+      "text": "180 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 181,
+      "text": "181 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 898,
+      "text": "898 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899,
+      "text": "899 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900,
+      "text": "900 B"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 901,
+      "text": "0.90 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 902,
+      "text": "0.90 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 998,
+      "text": "1.00 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999,
+      "text": "1.00 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000,
+      "text": "1.0 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1001,
+      "text": "1.0 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1002,
+      "text": "1.0 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 3599,
+      "text": "3.6 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 3600,
+      "text": "3.6 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 3780,
+      "text": "3.8 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 9000,
+      "text": "9.0 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 9999,
+      "text": "10.0 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 10000,
+      "text": "10 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 99999,
+      "text": "100 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 100000,
+      "text": "100 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899998,
+      "text": "900 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999,
+      "text": "900 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000,
+      "text": "900 KB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900001,
+      "text": "0.90 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900002,
+      "text": "0.90 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999998,
+      "text": "1.00 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999,
+      "text": "1.00 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000,
+      "text": "1.0 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000001,
+      "text": "1.0 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000002,
+      "text": "1.0 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 16777215,
+      "text": "17 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 16777216,
+      "text": "17 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 16777217,
+      "text": "17 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999998,
+      "text": "900 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999,
+      "text": "900 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000,
+      "text": "900 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000001,
+      "text": "900 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000002,
+      "text": "900 MB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999998,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000001,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000002,
+      "text": "1.0 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999998,
+      "text": "900 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999999,
+      "text": "900 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000000,
+      "text": "900 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000001,
+      "text": "900 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000002,
+      "text": "900 GB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999998,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999999,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000000,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000001,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000002,
+      "text": "1.0 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999999998,
+      "text": "900 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 899999999999999,
+      "text": "900 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000000000,
+      "text": "900 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000000001,
+      "text": "900 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 900000000000002,
+      "text": "900 TB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999999998,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 999999999999999,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000000000,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000000001,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 1000000000000002,
+      "text": "1.0 PB"
+    },
+    {
+      "locale": "ja-JP",
+      "value": 9223372036854775807,
+      "text": "9223 PB"
+    }
+  ],
+  "dates": [
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1735777800000,
+      "text": "Jan 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1748824200000,
+      "text": "Jun 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1764635400000,
+      "text": "Dec 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1767313800000,
+      "text": "Jan 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1780360200000,
+      "text": "Jun 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1796171400000,
+      "text": "Dec 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1798849800000,
+      "text": "Jan 2, 2027"
+    },
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1811896200000,
+      "text": "Jun 2, 2027"
+    },
+    {
+      "locale": "en-US",
+      "zone": "UTC",
+      "value": 1827707400000,
+      "text": "Dec 2, 2027"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1735806600000,
+      "text": "Jan 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1748849400000,
+      "text": "Jun 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1764664200000,
+      "text": "Dec 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1767342600000,
+      "text": "Jan 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1780385400000,
+      "text": "Jun 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1796200200000,
+      "text": "Dec 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1798878600000,
+      "text": "Jan 2, 2027"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1811921400000,
+      "text": "Jun 2, 2027"
+    },
+    {
+      "locale": "en-US",
+      "zone": "America/Los_Angeles",
+      "value": 1827736200000,
+      "text": "Dec 2, 2027"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1735745400000,
+      "text": "Jan 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1748791800000,
+      "text": "Jun 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1764603000000,
+      "text": "Dec 2, 2025"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1767281400000,
+      "text": "Jan 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1780327800000,
+      "text": "Jun 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1796139000000,
+      "text": "Dec 2"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1798817400000,
+      "text": "Jan 2, 2027"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1811863800000,
+      "text": "Jun 2, 2027"
+    },
+    {
+      "locale": "en-US",
+      "zone": "Asia/Tokyo",
+      "value": 1827675000000,
+      "text": "Dec 2, 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1735777800000,
+      "text": "2. Jan. 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1748824200000,
+      "text": "2. Juni 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1764635400000,
+      "text": "2. Dez. 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1767313800000,
+      "text": "2. Jan."
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1780360200000,
+      "text": "2. Juni"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1796171400000,
+      "text": "2. Dez."
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1798849800000,
+      "text": "2. Jan. 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1811896200000,
+      "text": "2. Juni 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "UTC",
+      "value": 1827707400000,
+      "text": "2. Dez. 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1735806600000,
+      "text": "2. Jan. 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1748849400000,
+      "text": "2. Juni 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1764664200000,
+      "text": "2. Dez. 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1767342600000,
+      "text": "2. Jan."
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1780385400000,
+      "text": "2. Juni"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1796200200000,
+      "text": "2. Dez."
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1798878600000,
+      "text": "2. Jan. 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1811921400000,
+      "text": "2. Juni 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "America/Los_Angeles",
+      "value": 1827736200000,
+      "text": "2. Dez. 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1735745400000,
+      "text": "2. Jan. 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1748791800000,
+      "text": "2. Juni 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1764603000000,
+      "text": "2. Dez. 2025"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1767281400000,
+      "text": "2. Jan."
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1780327800000,
+      "text": "2. Juni"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1796139000000,
+      "text": "2. Dez."
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1798817400000,
+      "text": "2. Jan. 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1811863800000,
+      "text": "2. Juni 2027"
+    },
+    {
+      "locale": "de-DE",
+      "zone": "Asia/Tokyo",
+      "value": 1827675000000,
+      "text": "2. Dez. 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1735777800000,
+      "text": "2 janv. 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1748824200000,
+      "text": "2 juin 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1764635400000,
+      "text": "2 déc. 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1767313800000,
+      "text": "2 janv."
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1780360200000,
+      "text": "2 juin"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1796171400000,
+      "text": "2 déc."
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1798849800000,
+      "text": "2 janv. 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1811896200000,
+      "text": "2 juin 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "UTC",
+      "value": 1827707400000,
+      "text": "2 déc. 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1735806600000,
+      "text": "2 janv. 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1748849400000,
+      "text": "2 juin 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1764664200000,
+      "text": "2 déc. 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1767342600000,
+      "text": "2 janv."
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1780385400000,
+      "text": "2 juin"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1796200200000,
+      "text": "2 déc."
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1798878600000,
+      "text": "2 janv. 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1811921400000,
+      "text": "2 juin 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "America/Los_Angeles",
+      "value": 1827736200000,
+      "text": "2 déc. 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1735745400000,
+      "text": "2 janv. 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1748791800000,
+      "text": "2 juin 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1764603000000,
+      "text": "2 déc. 2025"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1767281400000,
+      "text": "2 janv."
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1780327800000,
+      "text": "2 juin"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1796139000000,
+      "text": "2 déc."
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1798817400000,
+      "text": "2 janv. 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1811863800000,
+      "text": "2 juin 2027"
+    },
+    {
+      "locale": "fr-FR",
+      "zone": "Asia/Tokyo",
+      "value": 1827675000000,
+      "text": "2 déc. 2027"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1735777800000,
+      "text": "٢ يناير ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1748824200000,
+      "text": "٢ يونيو ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1764635400000,
+      "text": "٢ ديسمبر ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1767313800000,
+      "text": "٢ يناير"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1780360200000,
+      "text": "٢ يونيو"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1796171400000,
+      "text": "٢ ديسمبر"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1798849800000,
+      "text": "٢ يناير ٢٠٢٧"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1811896200000,
+      "text": "٢ يونيو ٢٠٢٧"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "UTC",
+      "value": 1827707400000,
+      "text": "٢ ديسمبر ٢٠٢٧"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1735806600000,
+      "text": "٢ يناير ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1748849400000,
+      "text": "٢ يونيو ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1764664200000,
+      "text": "٢ ديسمبر ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1767342600000,
+      "text": "٢ يناير"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1780385400000,
+      "text": "٢ يونيو"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1796200200000,
+      "text": "٢ ديسمبر"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1798878600000,
+      "text": "٢ يناير ٢٠٢٧"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1811921400000,
+      "text": "٢ يونيو ٢٠٢٧"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "America/Los_Angeles",
+      "value": 1827736200000,
+      "text": "٢ ديسمبر ٢٠٢٧"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1735745400000,
+      "text": "٢ يناير ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1748791800000,
+      "text": "٢ يونيو ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1764603000000,
+      "text": "٢ ديسمبر ٢٠٢٥"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1767281400000,
+      "text": "٢ يناير"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1780327800000,
+      "text": "٢ يونيو"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1796139000000,
+      "text": "٢ ديسمبر"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1798817400000,
+      "text": "٢ يناير ٢٠٢٧"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1811863800000,
+      "text": "٢ يونيو ٢٠٢٧"
+    },
+    {
+      "locale": "ar-EG",
+      "zone": "Asia/Tokyo",
+      "value": 1827675000000,
+      "text": "٢ ديسمبر ٢٠٢٧"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1735777800000,
+      "text": "2025年1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1748824200000,
+      "text": "2025年6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1764635400000,
+      "text": "2025年12月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1767313800000,
+      "text": "1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1780360200000,
+      "text": "6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1796171400000,
+      "text": "12月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1798849800000,
+      "text": "2027年1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1811896200000,
+      "text": "2027年6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "UTC",
+      "value": 1827707400000,
+      "text": "2027年12月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1735806600000,
+      "text": "2025年1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1748849400000,
+      "text": "2025年6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1764664200000,
+      "text": "2025年12月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1767342600000,
+      "text": "1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1780385400000,
+      "text": "6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1796200200000,
+      "text": "12月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1798878600000,
+      "text": "2027年1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1811921400000,
+      "text": "2027年6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "America/Los_Angeles",
+      "value": 1827736200000,
+      "text": "2027年12月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1735745400000,
+      "text": "2025年1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1748791800000,
+      "text": "2025年6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1764603000000,
+      "text": "2025年12月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1767281400000,
+      "text": "1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1780327800000,
+      "text": "6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1796139000000,
+      "text": "12月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1798817400000,
+      "text": "2027年1月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1811863800000,
+      "text": "2027年6月2日"
+    },
+    {
+      "locale": "ja-JP",
+      "zone": "Asia/Tokyo",
+      "value": 1827675000000,
+      "text": "2027年12月2日"
+    }
+  ]
+}

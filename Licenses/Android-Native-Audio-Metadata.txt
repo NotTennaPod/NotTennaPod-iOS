@@ -1,0 +1,27 @@
+NativeAudioSourceTimeline.swift, NativeMP4SourceTimeline.swift, NativeMP4Input.swift
+NativeFLACSeekIndex.swift, NativeFLACPacketTiming.swift and NativeAudioPacketProducer.swift adapt the source duration, seeking and ADTS synchronization rules
+of AndroidX Media3 1.10.0 (with AntennaPod's constant-bitrate seeking enabled):
+  androidx/media3/extractor/mp4/Mp4Extractor.java
+  androidx/media3/extractor/mp4/BoxParser.java
+  androidx/media3/extractor/ts/AdtsExtractor.java
+  androidx/media3/extractor/ts/AdtsReader.java
+  androidx/media3/extractor/wav/WavExtractor.java
+  androidx/media3/extractor/wav/WavSeekMap.java
+  androidx/media3/extractor/flac/FlacExtractor.java
+  androidx/media3/extractor/flac/FlacBinarySearchSeeker.java
+  androidx/media3/extractor/BinarySearchSeeker.java
+  androidx/media3/extractor/FlacFrameReader.java
+  androidx/media3/extractor/FlacStreamMetadata.java
+  androidx/media3/extractor/FlacMetadataReader.java
+
+Copyright The Android Open Source Project
+Licensed under the Apache License, Version 2.0.
+See Apache-2.0.txt for the license text.
+
+Source archive: media3-extractor-1.10.0-sources.jar
+SHA256: f0dc47d6378dc65b012db3cbb303f32cf0476d957ffd864af5a1d67fbb31b534
+Adaptation: bounded Swift source metadata, byte positioning, FLAC frame validation and ADTS synchronization.
+Audio decoding remains native.
+
+FLAC packet timing also follows RFC9639 sections8.2 and9.1:
+https://www.rfc-editor.org/rfc/rfc9639.html
