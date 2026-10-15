@@ -156,3 +156,44 @@ import Testing
         await fixture.close()
     }
 }
+
+extension ServerLocalPlaybackTests {
+    /// A queue is written only once computed: a plan whose queue still needs projecting (a removal, a created feed, a
+    /// completion whose claim changed) is refused whole by the writer, the queue as it was; the projector's pass over any
+    /// scope computes it, and an unchanged queue is then not written at all.
+    @Test func aPlanWhoseQueueStillNeedsProjectingIsNeverWritten() async throws {
+        let (fixture, _, one, two) = try await Self.library()
+        #expect(try await fixture.store.queue().map(\.id) == [one, two])
+        let refused = try await fixture.store.writeUnprojectedQueueForTesting()
+        #expect(refused == .unprojectedQueue)
+        #expect(try await fixture.store.queue().map(\.id) == [one, two], "nothing written")
+        let projected = try await fixture.store.projectStaleQueueForTesting()
+        #expect(projected.stale == false && projected.queue == nil, "projected: the queue is unchanged, so nothing to write")
+        #expect(try await fixture.store.queue().map(\.id) == [one, two])
+        await fixture.close()
+    }
+}
+
+extension FeedLibraryStore {
+    /// Writes a plan that marks the queue as needing projection and changes nothing else; returns the writer's refusal.
+    func writeUnprojectedQueueForTesting() throws -> ServerApplyError? {
+        var plan = ServerProjectionPlan()
+        plan.queueStale = true
+        var result = ServerUnitResult(seq: 0)
+        do {
+            try database.transaction { try writePlan(plan, now: 0, result: &result) }
+            return nil
+        } catch let error as ServerApplyError {
+            return error
+        }
+    }
+
+    /// A unit projector's plan with its queue marked as needing projection, after projecting an empty scope.
+    func projectStaleQueueForTesting() throws -> (stale: Bool, queue: [Int64]?) {
+        let context = try #require(serverContext)
+        let projector = try unitProjector(context: context, now: 0)
+        projector.plan.queueStale = true
+        try database.transaction(write: false) { try projector.project(ServerProjectionScope()) }
+        return (projector.plan.queueStale, projector.plan.queue)
+    }
+}

@@ -525,7 +525,7 @@ final class ServerProjector {
         if created {
             plan.createdFeeds.insert(feedID)
             for episode in try episodes(ofPodcast: podcast) { try projectEpisode(episode, fields: .all) }
-            plan.queue = plan.queue ?? []
+            plan.queueStale = true
         }
     }
 
@@ -600,7 +600,7 @@ final class ServerProjector {
             // Images this projection made of its episodes are not written (the feed's rows are hidden, then deleted).
             for (id, entry) in plan.episodes where entry.feedID == feedID { plan.episodes[id] = nil }
             plan.feeds[feedID] = nil
-            plan.queue = plan.queue ?? []
+            plan.queueStale = true
             return
         }
         let episodes = try db.rows("SELECT id FROM episodes WHERE feed_id = ?", [.integer(feedID)]).compactMap { $0[0].integer }
@@ -614,7 +614,7 @@ final class ServerProjector {
         }
         for id in episodes { plan.episodes[id] = nil }
         plan.feeds[feedID] = nil
-        plan.queue = plan.queue ?? []
+        plan.queueStale = true
     }
 
     private func projectCredentials(feedID: Int64, secret: String?) throws {
@@ -719,7 +719,7 @@ final class ServerProjector {
         // shows or withdraws its PLAYED and its queue removal too.
         if fields.contains(.position), overlays.contains(where: { $0.kind == "completion" }) {
             fields.insert(.playState)
-            plan.queue = plan.queue ?? []
+            plan.queueStale = true
         }
         let pinned = isPinned(localID)
         // The position under the displayed claim and the completions that hold (PROTOCOL §6.8).
@@ -978,6 +978,7 @@ final class ServerProjector {
     /// anchors (PROTOCOL §7.6).
     func projectQueue() throws {
         visited.queue = true
+        plan.queueStale = false
         let owed = try owedQueue()
         if owed.unsettled {
             // The whole local order is owed: the queue and its keys stay as they are until the replay settles and
@@ -1113,8 +1114,8 @@ final class ServerProjector {
         if order != current || !changedKeys.isEmpty || stored.keys.contains(where: { keys[$0] == nil }) {
             plan.queue = order
             plan.queueKeys = keys
-        } else if plan.queue != nil, plan.queue == [] {
-            plan.queue = nil
+        } else {
+            plan.queue = nil; plan.queueKeys = [:]
         }
     }
 }
@@ -1191,7 +1192,7 @@ extension ServerProjector {
         plan.removedEpisodeIDs.insert(local)
         plan.episodes[local] = nil
         plan.removedEpisodeCount += 1 + (try cascadedStatisticsRows(episode: local))
-        plan.queue = plan.queue ?? []
+        plan.queueStale = true
         return true
     }
 
@@ -1291,7 +1292,7 @@ extension ServerProjector {
                 if let episode = row[0].text { try projectEpisode(episode, fields: scope.allEpisodes) }
             }
         }
-        if scope.queue || plan.queue != nil || !plan.createdEpisodes.isEmpty {
+        if scope.queue || plan.queueStale || !plan.createdEpisodes.isEmpty {
             withdrawnQueue.formUnion(scope.withdrawnQueue)
             try projectQueue()
         }

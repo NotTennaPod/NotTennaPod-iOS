@@ -407,6 +407,76 @@ import Testing
 extension ServerPlaybackScenarioTests {
     // MARK: - Named agreement cases
 
+    /// A phone's queue as a full re-projection of its own base shows it: a Force full synchronization from a snapshot
+    /// holding exactly the phone's base records, published locally (nothing is sent or pulled).
+    static func fullReprojectionQueue(_ phone: ExchangePhone) async throws -> [Int64] {
+        let records = try phone.rows("SELECT entity, id, field_group, CAST(value AS TEXT), provenance FROM ntp_records")
+        let items: [ContractJSON] = try records.map { row in
+            ["record": ["entity": .string(row[0]!), "id": .string(row[1]!), "field_group": .string(row[2]!),
+                        "value": try ContractJSON.decode(Array(row[3]!.utf8)),
+                        "provenance": try row[4].map { try ContractJSON.decode(Array($0.utf8)) } ?? []]]
+        }
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("full-\(UUID())", isDirectory: true)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let page = folder.appendingPathComponent("page.json")
+        try ContractJSON.object(["items": .array(items)]).canonicalData().write(to: page)
+        let head = try #require(try await phone.store.serverExchangeState().cursor)
+        let snapshot = ServerAttachSnapshot(head: head.encoded, installWatermark: 0, itemCount: items.count, podcastCount: 1, pages: [page])
+        let staged = folder.appendingPathComponent("full.sqlite")
+        try ServerFullReprojection.stageBase(snapshot, into: staged)
+        let ids = try await phone.store.reserveServerLocalIDs(feeds: 64, episodes: 64)
+        let now = Int64(StorePlayer.realClock().timeIntervalSince1970 * 1_000)
+        let build = try ServerFullReprojection.build(database: phone.location.database, file: staged, history: nil, now: now,
+                                                     feedIDs: ids.feeds, episodeIDs: ids.episodes, touches: try await phone.store.serverTouchWatermark())
+        _ = try await phone.store.publishFullReprojection(build, head: head, now: now, crash: nil)
+        return try await phone.store.queue().map(\.id)
+    }
+
+    /// A pin release must never empty the queue. B plays an episode, pauses and syncs, then resumes; A plays the same
+    /// episode for 13 s, pauses and syncs; B pulls A's newer position (deferred: B's player holds the episode), then
+    /// finishes its old session naturally. The completion's claim no longer owns the position, so releasing the pin
+    /// projects the queue again: it ends as a full re-projection shows it, the two unrelated episodes kept. In both
+    /// forms: B listened before the takeover, or only pressed play.
+    @Test(arguments: [true, false]) func aRealCompletionAndPinReleaseMustNotEmptyTheQueue(listened: Bool) async throws {
+        try await ExchangeWorld.run { world in
+            let (a, b, _, ids, _) = try await Concurrency.twoPhones(world)
+            let target = try await Concurrency.same(ids[0], from: a, on: b)
+            var unrelated: [Int64] = []
+            for id in ids[1..<3] { unrelated.append(try await Concurrency.same(id, from: a, on: b)) }
+            _ = try await a.store.enqueue(Array(ids.prefix(3)))
+            for _ in 0..<2 { await a.exchange(); await b.exchange() }
+            #expect(try await b.store.queue().map(\.id) == [target] + unrelated)
+            let playerB = StorePlayer(b.store, realTime: ())
+            try await playerB.load(target); try await playerB.play()
+            if listened { try await playerB.listen(30) }
+            try await playerB.pause()
+            await b.exchange()
+            try await playerB.play()
+            await b.exchange()
+            let playerA = StorePlayer(a.store, realTime: ())
+            try await playerA.load(ids[0]); try await playerA.play(); try await playerA.listen(13); try await playerA.pause()
+            await a.exchange()
+            await b.run([.pull, .apply])
+            let wire = try #require(try await b.store.wireEpisodeForTesting(target))
+            #expect(try b.rows("SELECT fields FROM ntp_deferred_pins WHERE episode_id = '\(wire)'").first?.first.flatMap { $0 } != nil,
+                    "A's newer position waits for B's player")
+            // B's old session ends naturally: its completion, under a claim A took over, is pending.
+            try await playerB.end(.ended, at: 600_000)
+            let ended = try await b.store.queue().map(\.id)
+            #expect(Set(unrelated).isSubset(of: Set(ended)))
+            #expect(try b.rows("SELECT count(*) FROM ntp_deferred_pins") != [["0"]], "the pin is still held")
+            await b.engine.releasePins()
+            #expect(try b.rows("SELECT count(*) FROM ntp_deferred_pins") == [["0"]], "the pin was released")
+            let released = try await b.store.queue().map(\.id)
+            #expect(Set(unrelated).isSubset(of: Set(released)), "the unrelated queued episodes stay")
+            #expect(released == [target] + unrelated, "the completion's claim was taken over: the episode stays queued")
+            #expect(try await Self.fullReprojectionQueue(b) == released, "a full re-projection shows the same queue")
+            let state = try await Self.state(b, target)
+            #expect(state.playState != .played && state.positionMilliseconds == 13_000, "A's position shows, unplayed")
+        }
+    }
+
     /// A completion overlay whose claim was taken over remotely: A's end completes under its session's claim, but C's
     /// later start arrives before A's end is sent; A shows the base (C's position, unplayed), as the server folds it.
     @Test func aCompletionWhoseClaimWasTakenOverShowsTheBase() async throws {

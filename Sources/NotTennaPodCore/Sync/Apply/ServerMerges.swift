@@ -73,7 +73,7 @@ extension ServerProjector {
             plan.removedEpisodeIDs.insert(local)
             plan.episodes[local] = nil
             plan.removedEpisodeCount += 1 + (try cascadedStatisticsRows(episode: local))
-            plan.queue = plan.queue ?? []
+            plan.queueStale = true
         }
     }
 

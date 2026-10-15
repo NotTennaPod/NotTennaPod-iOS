@@ -160,9 +160,13 @@ struct ServerProjectionPlan {
     var podcastMappings: [String: (feedID: Int64?, liveGeneration: String?)] = [:]
     var identityRules: [String: ContractJSON?] = [:]
     var episodeMappings: [String: (localID: Int64?, podcast: String, kind: String, value: String, occurrence: ContractJSON?, mergedInto: String?)] = [:]
-    /// The queue in its new order and the keys of its members, when it changed.
+    /// The queue in its new order and the keys of its members, when it changed: the final order, computed by
+    /// `projectQueue` (an empty list empties the queue).
     var queue: [Int64]?
     var queueKeys: [Int64: ServerQueueKeyRow] = [:]
+    /// The queue needs projecting again (a removal, a created feed, a completion whose claim changed): only
+    /// `projectQueue` clears it, and `writePlan` refuses a plan that still has it, so a queue is written only once computed.
+    var queueStale = false
     /// Feed credentials: the local credential the feed shows (nil: none).
     var credentials: [Int64: UUID?] = [:]
     /// Secrets the unit needs that this library has not fetched (PROTOCOL §6.8): the unit cannot run without them.

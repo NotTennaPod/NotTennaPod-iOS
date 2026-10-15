@@ -17,6 +17,9 @@ enum ServerApplyError: Error, Equatable, Sendable {
     /// it was built meets a structural dependency of its plan or its projection context, or the switch's work is over
     /// the budget. Nothing was written; it is kept and published as a whole when the budget is relaxed (the pause).
     case deferred(String)
+    /// A plan whose queue still needs projecting reached the writer: nothing of it is written (a queue is written only
+    /// once computed).
+    case unprojectedQueue
     /// The app came to the foreground or audio started since a publication over the budget was allowed:
     /// nothing was written, and the unit waits.
     case ineligible
@@ -565,6 +568,7 @@ extension FeedLibraryStore {
     /// Writes a plan's rows with `INSERT … ON CONFLICT DO UPDATE` or keyed updates: no replaced row can cascade away
     /// a playback session, selection, queue entry or download job. Deletes only feeds the server removed.
     func writePlan(_ plan: ServerProjectionPlan, now: Int64, result: inout ServerUnitResult) throws {
+        guard !plan.queueStale else { throw ServerApplyError.unprojectedQueue }
         for (id, feed) in plan.feeds.sorted(by: { $0.key < $1.key }) {
             var header = feed
             header.episodes = []
@@ -869,11 +873,15 @@ extension FeedLibraryStore {
         guard !deferred.isEmpty || !removals.isEmpty || !absences.isEmpty else { return false }
         return try write(.remote) {
             let projector = try unitProjector(context: context, now: try milliseconds(now))
+            // Projected as every unit is, so what the released fields change of the queue (a completion whose claim no
+            // longer owns the position) is projected before anything is written.
+            var scope = ServerProjectionScope()
             for row in deferred {
                 guard let episode = row[0].text, let fields = row[1].integer else { continue }
                 try database.execute("DELETE FROM ntp_deferred_pins WHERE episode_id = ?", [.text(episode)])
-                try projector.projectEpisode(episode, fields: ServerEpisodeFields(rawValue: Int(fields)))
+                scope.episodes[episode, default: []].formUnion(ServerEpisodeFields(rawValue: Int(fields)))
             }
+            try projector.project(scope)
             var result = ServerUnitResult(seq: 0)
             try writePlan(projector.plan, now: try milliseconds(now), result: &result)
             var queue = try loadQueue()
