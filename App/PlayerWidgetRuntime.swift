@@ -171,7 +171,7 @@ import NotTennaPodCore
         let library = library, store = store
         coverTask = Task { [weak self] in
             guard let feedID = try? await library.feedID(forEpisode: episode.id),
-                  let feed = try? await library.playbackFeed(id: feedID), !Task.isCancelled,
+                  let feed = try? await library.playbackFeedHeader(id: feedID), !Task.isCancelled,
                   let self, coverEpisode == episode.id else { return }
             let cover = EpisodeArtworkView(feed: feed, episode: episode, library: library)
             artwork = cover

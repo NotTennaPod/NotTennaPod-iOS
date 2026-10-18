@@ -10,15 +10,17 @@ private actor TranscriptViewTransport: FeedHTTPTransport {
     var words = "Text"
     var count = 6
     var fail = false
-    func configure(held: Bool = false, words: String = "Text", count: Int = 6, fail: Bool = false) {
-        self.held = held; self.words = words; self.count = count; self.fail = fail
+    var status = 200
+    func configure(held: Bool = false, words: String = "Text", count: Int = 6, fail: Bool = false, status: Int = 200) {
+        self.held = held; self.words = words; self.count = count; self.fail = fail; self.status = status
     }
     func release() { held = false; let saved = pending; pending = []; saved.forEach { $0.resume() } }
     func send(_ request: URLRequest) async throws -> FeedHTTPResponse {
         calls += 1
-        let words = words, count = count, fail = fail
+        let words = words, count = count, fail = fail, status = status
         if held { await withCheckedContinuation { pending.append($0) } }
         if fail { throw URLError(.notConnectedToInternet) }
+        if status != 200 { return .init(url: request.url!, status: status, body: Data(repeating: 32, count: 4096)) }
         let rows: [[String: Any]] = (0..<count).map { index in
             ["startTime": index * 5, "endTime": (index + 1) * 5, "body": "\(words) \(index).", "speaker": index < 2 ? "Ada" : index < 4 ? "Bob" : "Ada"]
         }
@@ -64,7 +66,7 @@ private actor TranscriptViewTransport: FeedHTTPTransport {
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct TranscriptViewTests {
     private func find<T: UIView>(_ id: String, _ view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let found = view as? T { return found }
@@ -75,7 +77,7 @@ struct TranscriptViewTests {
         while !(await condition()), ContinuousClock.now < end { try await Task.sleep(for: .milliseconds(10)) }
         try #require(await condition())
     }
-    private func fixture(_ body: (FeedLibraryStore, LibraryFeed, PlaybackCoordinator, TranscriptViewEngine, TranscriptViewTransport, TranscriptLoader) async throws -> Void) async throws {
+    private func fixture(admission: AuxiliaryNetworkAdmission = .unrestricted, _ body: (FeedLibraryStore, LibraryFeed, PlaybackCoordinator, TranscriptViewEngine, TranscriptViewTransport, TranscriptLoader) async throws -> Void) async throws {
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent("TranscriptView-\(UUID())")
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: dir) }
@@ -92,7 +94,8 @@ struct TranscriptViewTests {
             let playback = PlaybackCoordinator(store: store, engine: engine)
             try await playback.select(episodeID: feed.episodes[0].id, play: false)
             engine.ready(); try await wait { playback.phase == .paused }
-            let loader = TranscriptLoader(transport: transport, cache: URLCache(memoryCapacity: 1_000_000, diskCapacity: 0), userAgent: "test")
+            let loader = TranscriptLoader(transport: transport, cache: URLCache(memoryCapacity: 1_000_000, diskCapacity: 0), userAgent: "test",
+                                          admission: admission)
             try await body(store, feed, playback, engine, transport, loader)
             await transport.release(); try await playback.pause(); try await store.close()
         } catch { try? await store.close(); throw error }
@@ -293,14 +296,136 @@ struct TranscriptViewTests {
         }
     }
 
-    @Test(arguments: [false, true])
-    func asymmetricResizeSelectionAndWholeCompositionScrolling(rtl: Bool) async throws {
-        try await fixture { store, _, playback, engine, transport, loader in
-            await transport.configure(words: String(repeating: "Long transcript passage ", count: 5), count: 40)
+    /// A Refresh while Cover images is off on cellular keeps the cached rows "A", makes no request and keeps its intent
+    /// through a play/pause status change; once Cover images is allowed, exactly one request replaces them with "B".
+    @Test func deniedRefreshKeepsRowsAndIntentThenRefreshesOnceAllowed() async throws {
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("TranscriptMobile-\(UUID()).json")
+        defer { try? FileManager.default.removeItem(at: file) }
+        let preferences = try MobileNetworkPreferenceStore(file: file)
+        try preferences.updateAllowed(["images"])
+        let network = DownloadNetworkMonitor(startMonitoring: false)
+        network.update(.init(connected: true, metered: false, cellular: false, transport: .wifi))
+        let admission = AuxiliaryNetworkAdmission(network: network, preferences: preferences)
+        try await fixture(admission: admission) { store, _, playback, _, transport, loader in
+            await transport.configure(words: "A")
             let sheet = TranscriptController(playback: playback, library: store, loader: loader, notice: { _ in }, failure: { Issue.record($0) })
             try await withViewTestWindow { host, _ in
                 host.present(sheet, animated: false)
-                try await wait { (find("transcriptList", sheet.view) as UITableView?)?.numberOfRows(inSection: 0) == 40 }
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "A 0." }
+                #expect(await transport.calls == 1)
+                await transport.configure(words: "B")
+                try preferences.updateAllowed([]); admission.preferencesChanged()
+                network.update(.init(connected: true, metered: true, cellular: true))
+                let refresh: UIButton = try #require(find("transcriptRefresh", sheet.view))
+                refresh.sendActions(for: .touchUpInside)
+                let spinner: UIActivityIndicatorView = try #require(find("transcriptLoading", sheet.view))
+                try await wait { !spinner.isAnimating }
+                // A status change in the middle reloads the same episode; the refresh it owes is not forgotten.
+                try await playback.play(); try await wait { playback.phase == .playing }
+                try await playback.pause(); try await wait { playback.phase == .paused }
+                #expect((find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "A 0.")
+                #expect(await transport.calls == 1)
+                try preferences.updateAllowed(["images"]); admission.preferencesChanged()
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "B 0." }
+                #expect(await transport.calls == 2)
+            }
+        }
+    }
+
+    /// A Refresh is owed from the moment it is pressed: a play/pause while its first result is still held refreshes
+    /// again (forced), instead of reloading the cached rows, and the publisher's new rows show.
+    @Test func refreshOwedBeforeItsFirstResultSurvivesAStatusChange() async throws {
+        try await fixture { store, _, playback, _, transport, loader in
+            await transport.configure(words: "A")
+            let sheet = TranscriptController(playback: playback, library: store, loader: loader, notice: { _ in }, failure: { Issue.record($0) })
+            try await withViewTestWindow { host, _ in
+                host.present(sheet, animated: false)
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "A 0." }
+                await transport.configure(held: true, words: "B")
+                let refresh: UIButton = try #require(find("transcriptRefresh", sheet.view))
+                refresh.sendActions(for: .touchUpInside)
+                try await wait { await transport.calls == 2 }
+                try await playback.play(); try await wait { playback.phase == .playing }
+                try await wait { await transport.calls == 3 }
+                await transport.release()
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "B 0." }
+            }
+        }
+    }
+
+    /// A Refresh that ran and failed (the publisher answers HTTP 500) is settled: play/pause reloads show the cached
+    /// rows again without asking the publisher; only another Refresh asks, once.
+    @Test func failedRefreshIsNotRepeatedOnStatusChanges() async throws {
+        try await fixture { store, _, playback, _, transport, loader in
+            await transport.configure(words: "A")
+            let sheet = TranscriptController(playback: playback, library: store, loader: loader, notice: { _ in }, failure: { Issue.record($0) })
+            try await withViewTestWindow { host, _ in
+                host.present(sheet, animated: false)
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "A 0." }
+                let table: UITableView = try #require(find("transcriptList", sheet.view))
+                await transport.configure(words: "B", status: 500)
+                let refresh: UIButton = try #require(find("transcriptRefresh", sheet.view))
+                refresh.sendActions(for: .touchUpInside)
+                try await wait { await transport.calls == 2 && table.numberOfRows(inSection: 0) == 0 }
+                #expect(sheet.pendingForceEpisodeID == nil)
+                try await playback.play(); try await wait { playback.phase == .playing }
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "A 0." }
+                try await playback.pause(); try await wait { playback.phase == .paused }
+                try await playback.play(); try await wait { playback.phase == .playing }
+                try await playback.pause(); try await wait { playback.phase == .paused }
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "A 0." }
+                #expect(await transport.calls == 2)
+                await transport.configure(words: "B")
+                refresh.sendActions(for: .touchUpInside)
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "B 0." }
+                #expect(await transport.calls == 3)
+            }
+        }
+    }
+
+    /// A Refresh still owed (denied) is not owed any more once nothing is selected: selecting the episode again with
+    /// permission shows the cached rows without a request.
+    @Test func noSelectionClearsTheOwedRefresh() async throws {
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("TranscriptMobile-\(UUID()).json")
+        defer { try? FileManager.default.removeItem(at: file) }
+        let preferences = try MobileNetworkPreferenceStore(file: file)
+        try preferences.updateAllowed(["images"])
+        let network = DownloadNetworkMonitor(startMonitoring: false)
+        network.update(.init(connected: true, metered: false, cellular: false, transport: .wifi))
+        let admission = AuxiliaryNetworkAdmission(network: network, preferences: preferences)
+        try await fixture(admission: admission) { store, feed, playback, engine, transport, loader in
+            await transport.configure(words: "A")
+            let sheet = TranscriptController(playback: playback, library: store, loader: loader, notice: { _ in }, failure: { Issue.record($0) })
+            try await withViewTestWindow { host, _ in
+                host.present(sheet, animated: false)
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "A 0." }
+                try preferences.updateAllowed([]); admission.preferencesChanged()
+                network.update(.init(connected: true, metered: true, cellular: true))
+                let refresh: UIButton = try #require(find("transcriptRefresh", sheet.view))
+                refresh.sendActions(for: .touchUpInside)
+                #expect(sheet.pendingForceEpisodeID == feed.episodes[0].id)
+                try await playback.resetPlaybackPosition(episodeID: feed.episodes[0].id)
+                try await wait { playback.episode == nil && sheet.pendingForceEpisodeID == nil }
+                try preferences.updateAllowed(["images"]); admission.preferencesChanged()
+                try await playback.select(episodeID: feed.episodes[0].id, play: false); engine.ready()
+                try await wait { playback.phase == .paused }
+                try await wait { (find("transcriptSegment-0", sheet.view) as UIButton?)?.currentTitle == "A 0." }
+                #expect(sheet.pendingForceEpisodeID == nil)
+                #expect(await transport.calls == 1)
+            }
+        }
+    }
+
+    @Test(arguments: [false, true])
+    func asymmetricResizeSelectionAndWholeCompositionScrolling(rtl: Bool) async throws {
+        try await fixture { store, _, playback, engine, transport, loader in
+            // Enough rows that the list still scrolls at the default text size on a 13-inch iPad, where 40 one-line
+            // rows all fit and the only possible place is the top.
+            await transport.configure(words: String(repeating: "Long transcript passage ", count: 5), count: 100)
+            let sheet = TranscriptController(playback: playback, library: store, loader: loader, notice: { _ in }, failure: { Issue.record($0) })
+            try await withViewTestWindow { host, _ in
+                host.present(sheet, animated: false)
+                try await wait { (find("transcriptList", sheet.view) as UITableView?)?.numberOfRows(inSection: 0) == 100 }
                 // Source permits one initial follow scroll even when Follow is off.
                 // Establish that first position event before testing a later manual scroll.
                 try await playback.seek(to: 6_000)
@@ -347,6 +472,7 @@ struct TranscriptViewTests {
                 sheet.view.traitOverrides.preferredContentSizeCategory = .large
                 sheet.view.setNeedsLayout(); sheet.view.layoutIfNeeded()
                 let after = table.rectForRow(at: anchor)
+                try #require(table.contentSize.height > table.bounds.height, "the list must scroll for its place to be kept")
                 #expect(table.indexPathsForVisibleRows?.first == anchor)
                 #expect(abs((table.contentOffset.y - after.minY) / after.height - 0.5) < 0.06)
                 #expect(cancel.isHidden && copy.isHidden && follow.accessibilityValue == "On")

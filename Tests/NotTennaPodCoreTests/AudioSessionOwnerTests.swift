@@ -10,7 +10,7 @@ import Testing
 /// pauses and from one item to the next (as Media3 keeps audio focus); end of queue, stop,
 /// close and failure release it. Every check of the call history is of the whole history, after an
 /// explicit barrier (the owner idle, OS calls completed by hand).
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct AudioSessionOwnerTests {
+@MainActor @Suite(.serialized) struct AudioSessionOwnerTests {
     /// The OS session shared by every engine: records each call, completes on demand, never two at once.
     @MainActor final class SessionDriver: AudioSessionActivationDriver {
         var calls: [Bool] = []

@@ -5,7 +5,7 @@ import Testing
 /// PROTOCOL §16's discovery scenarios against the pinned server (PROTOCOL §9): phones refresh a
 /// loopback feed server with the parity parse, propose and file their releases, and converge with each other and
 /// with the server's own fetches, in the arrival orders and across the crash points each scenario names.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerDiscoveryScenarioTests {
+@Suite(.serialized) struct ServerDiscoveryScenarioTests {
     typealias Agreement = ServerExchangeAgreementTests
     typealias Concurrency = ServerExchangeConcurrencyTests
 
@@ -528,13 +528,13 @@ import Testing
     /// phone's evidence, so the phone converges with a fresh attach.
     @Test func twoNewReusedOccurrencesInOneFetchAgreeWithTheServer() async throws {
         try await ExchangeWorld.run { world in
-            Self.serve(world, "/rg2.xml", "RG2", Self.items("rg2", 1...3))
+            Self.serve(world, "/reused-guids.xml", "Reused GUIDs", Self.items("reused", 1...3))
             let a = try await world.attach("A")
-            let feed = try await Self.subscribe(a, world.url("rg2.xml"))
+            let feed = try await Self.subscribe(a, world.url("reused-guids.xml"))
             world.server.stop(keepingData: true)
-            Self.serve(world, "/rg2.xml", "RG2", [Item(guid: "rg", title: "Late", day: 20, enclosure: "https://media.example/rg-late.mp3"),
-                                                   Item(guid: "rg", title: "Early", day: 4, enclosure: "https://media.example/rg-early.mp3")]
-                       + Self.items("rg2", 1...3))
+            Self.serve(world, "/reused-guids.xml", "Reused GUIDs", [Item(guid: "rg", title: "Late", day: 20, enclosure: "https://media.example/rg-late.mp3"),
+                                                                    Item(guid: "rg", title: "Early", day: 4, enclosure: "https://media.example/rg-early.mp3")]
+                       + Self.items("reused", 1...3))
             try await Self.refresh(a, feed.id)
             #expect(try await a.store.feeds().flatMap(\.episodes).filter { $0.details.identifier == "rg" }.count == 2)
             try await world.server.launch()

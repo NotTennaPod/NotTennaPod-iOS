@@ -18,53 +18,78 @@ extension LibraryViewController {
         more.accessibilityIdentifier = "homeMore"; more.frame = layout.overflow
         [search, more].forEach(toolbar.addSubview)
         // Welcome: no episodes in subscribed feeds (source getTotalEpisodeCount(unfiltered)); menu stays.
-        guard !HomeSectionQueries.showsWelcome(feeds) else { welcome(); return }
-        let now = Self.homeNow(), nowMilliseconds = Int64((now.timeIntervalSince1970 * 1000).rounded())
+        homeSections = []
+        homeShowsWelcome = HomeScreenModel.showsWelcome(mirror)
+        guard !homeShowsWelcome else { welcome(); return }
+        // Home opens (or appears again): its sections are read from the screens' library once, Classics included.
         if Self.homeSurpriseSeed == 0 { Self.homeSurpriseSeed = Self.initialSurpriseSeed() }
+        homeModel = HomeScreenModel(mirror: mirror, inboxSort: episodeLists.inbox, seed: Self.homeSurpriseSeed, now: Self.homeNow(),
+                                    includeMarkedAsPlayed: statisticsPreferences?.value.includeMarkedAsPlayed == true)
         var y: CGFloat = 0
         for section in (homePreferences?.value ?? .init()).sections {
-            switch section {
-            case .queue:
-                let items = HomeSectionQueries.continueListening(queue: queuedEpisodes, now: nowMilliseconds)
-                    .compactMap { episode in libraryEpisode(episode.id).map { ($0.feed, episode) } }
-                y = homeHeader(section, more: "queue_label", destination: .queue, y: y)
-                y = items.isEmpty ? homeEmpty("home_continue_empty_text", y: y) : homeCardStrip(items, identifier: "homeQueueStrip", y: y)
-            case .inbox:
-                let inbox = HomeSectionQueries.inbox(feeds, sort: episodeLists.inbox)
-                y = homeHeader(section, more: "inbox_label", destination: .inbox, badge: inbox.items.isEmpty ? nil : HomeSectionQueries.badge(inbox.total), y: y)
-                if inbox.items.isEmpty { y = homeEmpty("home_new_empty_text", y: y) }
-                else { y = homeRows(inbox.items, scope: .inbox, y: y) }
-            case .surprise:
-                let items = HomeSectionQueries.surprise(feeds, seed: Self.homeSurpriseSeed, now: nowMilliseconds)
-                y = homeHeader(section, more: "episodes_label", destination: .episodes, shuffle: !items.isEmpty, y: y)
-                y = items.isEmpty ? homeEmpty("home_no_recent_unplayed_episodes_text", y: y) : homeCardStrip(items, identifier: "homeSurpriseStrip", y: y)
-            case .classics:
-                let classics = (try? HomeSectionQueries.classics(feeds, units: statisticsUnits, includeMarkedAsPlayed: statisticsPreferences?.value.includeMarkedAsPlayed == true, now: now)) ?? []
-                y = homeHeader(section, more: "subscriptions_label", destination: .subscriptions, y: y)
-                let covers = classics.map { feed in
-                    let cover = HomeFeedCover(feed: feed) { [weak self] in self?.push(.feed(feed.id)) }
-                    cover.contextMenu = { [weak self] anchor, fraction in self?.showSearchFeedMenu(feed.id, anchor: anchor, fraction: fraction) }
-                    return cover
-                }
-                // Source: no empty text; the header stays over an empty strip.
-                let strip = HomeStrip(items: covers, pitch: HomeFeedCover.pitch, itemSize: CGSize(width: HomeFeedCover.size, height: HomeFeedCover.size),
-                                      identifier: "homeClassicsStrip")
-                strip.frame = CGRect(x: 0, y: y, width: content.bounds.width, height: HomeFeedCover.pitch + 8)
-                content.addSubview(strip); y = strip.frame.maxY
-            case .downloads:
-                // Only downloaded episodes can be listed without jobs; the rest of the library is not copied.
-                let downloaded = DownloadsList.episodes(feeds.flatMap { $0.episodes.filter(\.userState.isDownloaded) }, jobs: [],
-                                                        order: downloadPreferences?.value.listSortOrder)
-                let rows = downloaded.prefix(2).compactMap { episode in libraryEpisode(episode.id).map { ($0.feed, episode) } }
-                y = homeHeader(section, more: "downloads_label", destination: .downloads, y: y)
-                y = rows.isEmpty ? homeEmpty("home_downloads_empty_text", y: y) : homeRows(Array(rows), scope: .downloads, y: y)
-            }
-            y += 4
+            let state = buildHomeSection(section, top: y)
+            homeSections.append(state)
+            y = state.top + state.height
         }
         content.contentSize.height = max(content.bounds.height, y + 12)
     }
 
-    private static func homeNow() -> Date {
+    /// What one Home section shows now, from the kept sections (`HomeScreenModel`).
+    func homeContent(_ section: HomeSection) -> HomeSectionContent {
+        guard homeModel != nil else { return HomeSectionContent() }
+        var content = HomeSectionContent()
+        func rows(_ ids: [Int64]) -> [(LibraryFeed, LibraryEpisode)] { ids.compactMap { id in libraryEpisode(id).map { ($0.feed, $0.episode) } } }
+        switch section {
+        case .queue: content.rows = rows(homeModel?.continueIDs ?? [])
+        case .inbox:
+            let inbox = homeModel?.inbox() ?? (ids: [], total: 0)
+            content.rows = rows(inbox.ids)
+            content.badge = inbox.ids.isEmpty ? nil : HomeSectionQueries.badge(inbox.total)
+        case .surprise: content.rows = rows(homeModel?.surprise() ?? [])
+        case .classics: content.feeds = (homeModel?.classics ?? []).compactMap(mirror.feed)
+        case .downloads: content.rows = rows(HomeScreenModel.downloads(mirror, order: downloadPreferences?.value.listSortOrder))
+        }
+        return content
+    }
+
+    /// Draws one section from `top`; returns it with the views it added and its height.
+    func buildHomeSection(_ section: HomeSection, top: CGFloat) -> HomeSectionState {
+        let existing = Set(content.subviews.map(ObjectIdentifier.init))
+        let shown = homeContent(section)
+        var y = top
+        switch section {
+        case .queue:
+            y = homeHeader(section, more: "queue_label", destination: .queue, y: y)
+            y = shown.rows.isEmpty ? homeEmpty("home_continue_empty_text", y: y) : homeCardStrip(shown.rows, identifier: "homeQueueStrip", y: y)
+        case .inbox:
+            y = homeHeader(section, more: "inbox_label", destination: .inbox, badge: shown.badge, y: y)
+            if shown.rows.isEmpty { y = homeEmpty("home_new_empty_text", y: y) }
+            else { y = homeRows(shown.rows, scope: .inbox, y: y) }
+        case .surprise:
+            y = homeHeader(section, more: "episodes_label", destination: .episodes, shuffle: !shown.rows.isEmpty, y: y)
+            y = shown.rows.isEmpty ? homeEmpty("home_no_recent_unplayed_episodes_text", y: y) : homeCardStrip(shown.rows, identifier: "homeSurpriseStrip", y: y)
+        case .classics:
+            y = homeHeader(section, more: "subscriptions_label", destination: .subscriptions, y: y)
+            let covers = shown.feeds.map { feed in
+                let cover = HomeFeedCover(feed: feed) { [weak self] in self?.push(.feed(feed.id)) }
+                cover.contextMenu = { [weak self] anchor, fraction in self?.showSearchFeedMenu(feed.id, anchor: anchor, fraction: fraction) }
+                return cover
+            }
+            // Source: no empty text; the header stays over an empty strip.
+            let strip = HomeStrip(items: covers, pitch: HomeFeedCover.pitch, itemSize: CGSize(width: HomeFeedCover.size, height: HomeFeedCover.size),
+                                  identifier: "homeClassicsStrip")
+            strip.frame = CGRect(x: 0, y: y, width: content.bounds.width, height: HomeFeedCover.pitch + 8)
+            content.addSubview(strip); y = strip.frame.maxY
+        case .downloads:
+            y = homeHeader(section, more: "downloads_label", destination: .downloads, y: y)
+            y = shown.rows.isEmpty ? homeEmpty("home_downloads_empty_text", y: y) : homeRows(shown.rows, scope: .downloads, y: y)
+        }
+        y += 4
+        let views = content.subviews.filter { !existing.contains(ObjectIdentifier($0)) }
+        return HomeSectionState(section: section, shown: shown, views: views, top: top, height: y - top)
+    }
+
+    static func homeNow() -> Date {
 #if DEBUG
         // UI tests pin Home's clock so its time-dependent sections match a fixed oracle result.
         let arguments = ProcessInfo.processInfo.arguments
@@ -93,7 +118,7 @@ extension LibraryViewController {
                 var next: Int32 = 0
                 while next == 0 { next = Int32.random(in: .min ... .max) }
                 Self.homeSurpriseSeed = next
-                self?.render()
+                self?.reseedHome(next)
             } : nil,
             onMore: { [weak self] in self?.select(destination) })
         header.frame = CGRect(x: 0, y: y, width: content.bounds.width, height: HomeSectionHeader.height)

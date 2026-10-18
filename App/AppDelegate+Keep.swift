@@ -15,7 +15,10 @@ extension AppDelegate {
     var keepIsPending: Bool {
         guard let root = libraryDirectory else { return false }
         if libraryLocation?.converted != nil { return true }
-        return (try? LibraryRegistryFile(root: root).read())?.keeping != nil
+        // Asked on every player state change: the registry is read again only when its file changed.
+        let probe = keepPendingProbe.flatMap { $0.root == root ? $0 : nil } ?? KeepPendingProbe(root: root)
+        keepPendingProbe = probe
+        return probe.isPending
     }
 
     /// Why keeping the library has not finished, for the page's status row (PROTOCOL §15.5).

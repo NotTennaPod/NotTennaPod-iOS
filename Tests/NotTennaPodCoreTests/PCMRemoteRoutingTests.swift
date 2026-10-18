@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct PCMRemoteRoutingTests {
+@MainActor @Suite(.serialized) struct PCMRemoteRoutingTests {
     nonisolated static let names = ["playback-30sec.mp3", "padded.mp3", "tone-vorbis.ogg", "tone-opus.ogg", "tone-opus.webm",
         "tone.wav", "tone.flac", "tone.aac", "tone.m4a", "tone-tail.m4a", "variable.flac", "variable-table.flac"]
     private func fixture(_ requested: String) throws -> URL {

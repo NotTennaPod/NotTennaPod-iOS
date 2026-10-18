@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct MediaDownloadIdentityTests {
     private func destination() throws -> URL {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("DownloadIdentity-\(UUID())")

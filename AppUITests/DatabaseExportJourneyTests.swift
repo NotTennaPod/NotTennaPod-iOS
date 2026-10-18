@@ -28,9 +28,9 @@ import XCTest
     }
 
     func testDatabaseExportSavesAndSharesBackup() throws {
-        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-m13-statistics-journey"]
+        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-statistics-journey"]
         app.launch()
-        XCTAssertTrue(app.windows["m13StatisticsFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
+        XCTAssertTrue(app.windows["statisticsFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
         tap("navigationMore"); tap("Settings"); tap("Backup & restore")
         let database = app.staticTexts["Database"], opml = app.staticTexts["OPML"]
         XCTAssertTrue(database.waitForExistence(timeout: 10) && opml.exists, app.debugDescription)
@@ -69,7 +69,7 @@ import XCTest
         XCTAssertTrue(app.buttons["databaseExport"].waitForExistence(timeout: 10), "Share cancellation returns to Backup & restore")
         // Export only reads: after relaunch the library still shows the fixture's listening totals.
         app.terminate(); app.launch()
-        XCTAssertTrue(app.windows["m13StatisticsFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
+        XCTAssertTrue(app.windows["statisticsFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
         tap("navigationMore"); tap("Statistics")
         let total = app.staticTexts["statisticsTotal"]
         XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", "3.5 hours"), object: total)], timeout: 10),

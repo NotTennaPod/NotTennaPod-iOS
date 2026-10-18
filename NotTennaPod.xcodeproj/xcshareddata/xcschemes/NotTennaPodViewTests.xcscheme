@@ -43,6 +43,24 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO"
       onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Generate show-notes TLS fixture certificates"
+               scriptText = "mkdir -p &quot;$SRCROOT/.work/test-fixtures&quot;&#10;&quot;$SRCROOT/Tools/shownotes-tls-fixture.sh&quot; &gt; &quot;$SRCROOT/.work/test-fixtures/shownotes-tls.log&quot; 2&gt;&amp;1&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "23BDBA322D08D20A907C3BA0"
+                     BuildableName = "NotTennaPod.app"
+                     BlueprintName = "NotTennaPod"
+                     ReferencedContainer = "container:NotTennaPod.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"

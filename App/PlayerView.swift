@@ -46,6 +46,7 @@ final class PlayerView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegat
     /// Built when the player first opens: a collapsed player never starts WebKit or builds a document.
     private var notes: ShownotesWebView?
     private let shownotesScroll: ShownotesScrollStore
+    private let shownotesNetwork: ShownotesNetworkPolicy
     private var notesPageActive = false
     private var scenePauseObserver: NSObjectProtocol?
     private let miniTitle = Appearance.label(nil, size: 14)
@@ -117,9 +118,10 @@ final class PlayerView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegat
     private let speedLabel = Appearance.label("1.00", size: 12)
     private lazy var speedButton = button("ic_playback_speed", label: Appearance.text("playback_speed"), id: "playerSpeed") { [weak self] in self?.showSpeedDialog?() }
 
-    init(playback: PlaybackCoordinator, timeDisplayPreferences: TimeDisplayPreferenceStore, library: FeedLibraryStore? = nil, intervalPreferences: PlaybackIntervalPreferenceStore? = nil, chapterAccess: EpisodeChapterAccess? = nil, shownotesScroll: ShownotesScrollStore = .init()) {
+    init(playback: PlaybackCoordinator, timeDisplayPreferences: TimeDisplayPreferenceStore, library: FeedLibraryStore? = nil, intervalPreferences: PlaybackIntervalPreferenceStore? = nil, chapterAccess: EpisodeChapterAccess? = nil, shownotesScroll: ShownotesScrollStore = .init(), shownotesNetwork: ShownotesNetworkPolicy = .unrestricted) {
         self.playback = playback
         self.shownotesScroll = shownotesScroll
+        self.shownotesNetwork = shownotesNetwork
         self.intervalPreferences = intervalPreferences
         self.library = library
         self.chapterAccess = chapterAccess
@@ -221,7 +223,7 @@ final class PlayerView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegat
     @discardableResult
     private func loadNotes() -> ShownotesWebView {
         if let notes { return notes }
-        let notes = ShownotesWebView()
+        let notes = ShownotesWebView(network: shownotesNetwork)
         notes.isOpaque = false
         notes.backgroundColor = Appearance.background
         notes.accessibilityIdentifier = "playerShownotesContent"
@@ -310,7 +312,7 @@ final class PlayerView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegat
     /// What a full player update shows besides the position: each second's tick changes only the
     /// position, which needs no new labels, images, artwork or layout.
     private struct Shown: Equatable {
-        let feed: LibraryFeed?
+        let feed: LibraryFeed?, stored: LibraryEpisode?, held: LibraryFeed?
         let episodeID: Int64?, details: ParsedEpisode?
         let wantsPlayback: Bool, buffering: Bool, speed: Float, timer: Bool, useEpisodeCover: Bool
     }
@@ -327,8 +329,12 @@ final class PlayerView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegat
         return speedFormatter?.formatter.string(from: NSNumber(value: speed))
     }
 
-    func update(feed: LibraryFeed?) {
-        let next = Shown(feed: feed, episodeID: playback.episode?.id, details: playback.episode?.details,
+    /// `feed`: the header (no episodes) of the playing episode's podcast as the lists show it, and `stored` that episode as
+    /// stored (the player reads exactly these, never the podcast's episodes). `held`: the podcast of an episode the player
+    /// keeps after its podcast's removal (PROTOCOL §6.8), which no list shows: its title and artwork are shown, with no
+    /// podcast or episode action.
+    func update(feed: LibraryFeed?, stored: LibraryEpisode? = nil, held: LibraryFeed? = nil) {
+        let next = Shown(feed: feed, stored: stored, held: held, episodeID: playback.episode?.id, details: playback.episode?.details,
             wantsPlayback: playback.wantsPlayback, buffering: playback.isBuffering, speed: playback.speed,
             timer: playback.sleepTimerValue != nil, useEpisodeCover: useEpisodeCover)
         if next == shown {
@@ -339,6 +345,8 @@ final class PlayerView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegat
         }
         shown = next
         fullUpdates += 1
+        let actions = feed
+        let feed = feed ?? held
         chapterFeed = feed
         let timerActive = playback.sleepTimerValue != nil
         sleepTimer.setImage(UIImage(named: timerActive ? "ic_sleep_off" : "ic_sleep"), for: .normal)
@@ -351,15 +359,15 @@ final class PlayerView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegat
             setNeedsLayout()
             return
         }
-        overflowContext = feed.flatMap { feed in feed.episodes.first(where: { $0.id == episode.id }).map { (feed, $0) } }
+        let stored = next.stored?.id == episode.id ? next.stored : nil
+        overflowContext = actions.flatMap { feed in stored.map { (feed, $0) } }
         more.isHidden = overflowContext == nil
-        if let feed, !feed.source.isLocalFeedSource,
-           let stored = feed.episodes.first(where: { $0.id == episode.id }) {
+        if let feed = actions, !feed.source.isLocalFeedSource, let stored {
             shareContext = (feed, stored)
         } else { shareContext = nil }
         share.isHidden = shareContext == nil
         // Playback keeps a position snapshot. Library mutations can be newer than that snapshot.
-        updateFavorite(feed?.episodes.first { $0.id == episode.id })
+        updateFavorite(actions == nil ? nil : stored)
         speedLabel.text = Self.formattedSpeed(playback.speed)
         speedButton.accessibilityValue = speedLabel.text
         let source = EpisodeArtworkSelection.source(episode: episode, feed: feed)

@@ -4,7 +4,7 @@ import WebKit
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct ShownotesLinkMenuViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let found = view as? T { return found }

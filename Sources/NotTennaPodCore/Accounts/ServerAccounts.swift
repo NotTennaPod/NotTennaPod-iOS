@@ -38,6 +38,14 @@ public enum ServerAccountError: Error, Equatable, Sendable {
     case libraryInUse
 }
 
+/// Why a first attachment's download waits (PROTOCOL §15.5 status row).
+public enum ServerAttachWait: Equatable, Sendable {
+    /// Mobile data or Low Data Mode while the mobile-data preference does not allow sync, or no network.
+    case network(ServerNetworkWait)
+    /// Too little free space: the download never uses the space the app keeps for its own writes.
+    case space(shortfall: Int64)
+}
+
 /// A question the Synchronization page asks once it is visible.
 public enum ServerAccountQuestion: Equatable, Sendable {
     /// The account has no podcasts yet (PROTOCOL §15.5, "Attachment, empty account").
@@ -86,6 +94,11 @@ public enum ServerAccountQuestion: Equatable, Sendable {
             KeychainSynchronizationCredentials(service: "org.nottennapod.app.feeds")
         }
         public var gate: LibraryGate = .shared
+        /// The network rule of the attach download (the "Synchronization" mobile-data preference, with Low Data Mode
+        /// counting as mobile data): it waits for a network it may use, and starts again when the network changes.
+        public var bulkNetwork: (any ServerSyncNetworkGate)?
+        /// The attach download's disk policy: it never uses the space the app keeps for its own writes.
+        public var disk = ServerBulkDiskPolicy()
 
         public init(root: URL, openLibrary: @escaping @MainActor () -> LibraryReference,
                     requestSwitch: @escaping @MainActor (LibraryReference, LibraryRegistry.SwitchReason, String?) async throws -> Void,
@@ -108,6 +121,17 @@ public enum ServerAccountQuestion: Equatable, Sendable {
     public private(set) var summaries: [String: ServerLibrarySummary] = [:]
     /// Items of the attach snapshot received so far, per attaching library.
     public private(set) var attachProgress: [String: Int] = [:]
+    /// Attaching libraries whose download waits (for a network it may use, or for free space), for the page.
+    public private(set) var attachWaits: [String: ServerAttachWait] = [:]
+    private var bulkNetworkWatcher: Task<Void, Never>?
+    /// An attachment that stopped for space tries again only once this much is free (the shortfall plus 100 MB).
+    private var spaceNeeded: [String: Int64] = [:]
+    /// Attachments asked for while an attempt was running: they run again when it ends.
+    private var attachAgain: Set<String> = []
+    /// Requests to run an attachment so far (tests).
+    private(set) var startAttachmentRequests = 0
+    /// Test hook: runs when an attempt has said it waits for space, before the attempt ends.
+    var afterAttachSpaceWaitForTesting: (@MainActor () async -> Void)?
     /// Attaching libraries whose snapshot needs projection.
     public private(set) var waitingForProjection: Set<String> = []
     public private(set) var question: ServerAccountQuestion?
@@ -199,7 +223,7 @@ public enum ServerAccountQuestion: Equatable, Sendable {
     /// The Synchronization page's server-mode state. `otherProvider`: gpodder.net or Nextcloud is chosen.
     public func page(otherProvider: Bool) -> ServerSynchronizationPage {
         ServerSynchronizationPage.make(registry: registry, open: dependencies.openLibrary(), otherProvider: otherProvider,
-                                       summaries: summaries, attachProgress: attachProgress, exchange: exchange,
+                                       summaries: summaries, attachProgress: attachProgress, attachWaits: attachWaits, exchange: exchange,
                                        castBlocks: dependencies.castBlocks(), keepFailure: dependencies.keepFailure(),
                                        playbackHold: dependencies.playbackHold())
     }
@@ -363,17 +387,28 @@ public enum ServerAccountQuestion: Equatable, Sendable {
         guard let snapshot = pendingSnapshots.removeValue(forKey: id) else { startAttachment(id, scene: scene); return }
         attachTasks[id] = Task { [weak self] in
             await self?.finishAttachment(id, snapshot: snapshot, scene: scene)
-            self?.attachTasks[id] = nil
+            self?.attachmentEnded(id)
         }
     }
 
-    /// Runs (or resumes) a library's attachment unless it is already running.
+    /// Runs (or resumes) a library's attachment. One already running is not started twice, but the request is not
+    /// lost: an attempt that is ending (it has just said it waits for space or a network) may already be past the point
+    /// where it would notice, so the attachment runs again once it ends.
     private func startAttachment(_ id: String, scene: String?) {
-        guard attachTasks[id] == nil, !preparing.contains(id) else { return }
+        guard !preparing.contains(id) else { return }
+        startAttachmentRequests += 1
+        guard attachTasks[id] == nil else { attachAgain.insert(id); return }
         attachTasks[id] = Task { [weak self] in
             await self?.attach(id, scene: scene)
-            self?.attachTasks[id] = nil
+            self?.attachmentEnded(id)
         }
+    }
+
+    /// An attempt ended: one asked for meanwhile runs now (not after a cancellation: logout or expired background time).
+    private func attachmentEnded(_ id: String) {
+        attachTasks[id] = nil
+        guard attachAgain.remove(id) != nil, !Task.isCancelled else { return }
+        startAttachment(id, scene: nil)
     }
 
     private func attach(_ id: String, scene: String?) async {
@@ -393,12 +428,25 @@ public enum ServerAccountQuestion: Equatable, Sendable {
             try? await removeLibrary(id)
             return
         }
+        // Stopped for space: not tried again (the download reused, the library built again) until space grew.
+        if let needed = spaceNeeded[id] {
+            if let free = dependencies.disk.available(location.folder), free < needed { return }
+            spaceNeeded[id] = nil
+        }
         do {
             guard let token = credential.usableToken, let staging = location.staging else { throw ServerClientError.unauthorized }
-            let snapshot = try await ServerAttachSnapshotDownload(client: dependencies.makeClient(address), token: token,
-                installID: install, folder: staging.appendingPathComponent("attach", isDirectory: true)).run { items in
-                    await MainActor.run { [weak self] in self?.attachProgress[id] = items; self?.changed() }
+            var download = ServerAttachSnapshotDownload(client: dependencies.makeClient(address), token: token,
+                installID: install, folder: staging.appendingPathComponent("attach", isDirectory: true))
+            download.network = dependencies.bulkNetwork
+            download.disk = dependencies.disk
+            let snapshot = try await download.run { items in
+                await MainActor.run { [weak self] in
+                    self?.attachProgress[id] = items
+                    self?.attachWaits[id] = nil
+                    self?.changed()
                 }
+            }
+            if attachWaits.removeValue(forKey: id) != nil { changed() }
             try Task.checkCancellation()
             if snapshot.isEmptyAccount, !emptyConfirmed.contains(id) {
                 pendingSnapshots[id] = snapshot
@@ -409,10 +457,42 @@ public enum ServerAccountQuestion: Equatable, Sendable {
             // Started by the page's Confirm, the switch follows that tap: the page reopens after it.
             await finishAttachment(id, snapshot: snapshot, scene: scene)
         } catch is CancellationError {
+        } catch let wait as ServerBulkNetworkWait {
+            // Nothing was asked: it continues from its last page once the network may be used (a network change, the
+            // page opening, the next graph start).
+            attachWaits[id] = .network(wait.reason)
+            watchBulkNetwork()
+            changed()
+        } catch let space as ServerInsufficientSpace {
+            // The pages so far stay; the page opening or the next graph start tries again once space grew.
+            waitForSpace(id, space, location: location)
         } catch {
             if (error as? ServerClientError)?.rejectsCredentials == true { markRejected(id, install: install) }
             if scene != nil { onFailure?(error) }
             await refresh()
+        }
+    }
+
+    /// The attachment waits for free space: the verified download stays, the library is not activated (nothing partial
+    /// shows), and it is tried again once the shortfall plus 100 MB is free.
+    private func waitForSpace(_ id: String, _ space: ServerInsufficientSpace, location: LibraryLocation) {
+        attachWaits[id] = .space(shortfall: space.shortfall)
+        if let free = dependencies.disk.available(location.folder) { spaceNeeded[id] = free + space.shortfall + 100_000_000 }
+        changed()
+    }
+
+    /// While an attachment waits for a network it may use, every network change tries it again.
+    private func watchBulkNetwork() {
+        guard bulkNetworkWatcher == nil, let gate = dependencies.bulkNetwork else { return }
+        let changes = gate.changes()
+        bulkNetworkWatcher = Task { [weak self] in
+            for await _ in changes {
+                guard let self else { return }
+                let waiting = self.attachWaits.filter { if case .network = $0.value { true } else { false } }.map(\.key)
+                if waiting.isEmpty { continue }
+                guard await gate.bulkWaitReason() == nil else { continue }
+                for id in waiting where self.registry.library(id)?.state == .attaching { self.startAttachment(id, scene: nil) }
+            }
         }
     }
 
@@ -428,7 +508,8 @@ public enum ServerAccountQuestion: Equatable, Sendable {
             }
             do {
                 try await dependencies.applier.apply(snapshot, to: ServerAttachmentTarget(
-                    location: location, libraryID: id, installID: install, token: token, client: dependencies.makeClient(address)))
+                    location: location, libraryID: id, installID: install, token: token, client: dependencies.makeClient(address),
+                    disk: dependencies.disk))
             } catch ServerAttachmentError.projectionUnavailable {
                 waitingForProjection.insert(id)
                 await refresh()
@@ -447,6 +528,10 @@ public enum ServerAccountQuestion: Equatable, Sendable {
             await refresh()
             try await requestSwitch(.server(id), reason: .attach, scene: scene)
         } catch is CancellationError {
+        } catch let space as ServerInsufficientSpace {
+            waitForSpace(id, space, location: location)
+            await refresh()
+            await afterAttachSpaceWaitForTesting?()
         } catch {
             if scene != nil { onFailure?(error) }
             await refresh()
@@ -473,6 +558,7 @@ public enum ServerAccountQuestion: Equatable, Sendable {
         await refresh()
         if let entry = registry.libraries.first(where: { $0.state == .attaching }), !opened(entry.id) {
             question = nil
+            attachAgain.remove(entry.id)
             if let task = attachTasks.removeValue(forKey: entry.id) { task.cancel(); await task.value }
             if let address = ServerAddress(stored: entry.serverURL) {
                 for install in (try? dependencies.secrets.installIDs(of: entry.id)) ?? [] {
@@ -662,6 +748,14 @@ public enum ServerAccountQuestion: Equatable, Sendable {
         changed()
     }
 
+    /// Why the open library's exchange cannot run now, or nil once it can (`ServerSyncScheduler.networkWait`). Only the
+    /// page's waiting status changes: never a pause, the last synchronization or the unsent changes.
+    public func networkWaitChanged(_ wait: ServerNetworkWait?) {
+        guard exchange.networkWait != wait else { return }
+        exchange.networkWait = wait
+        changed()
+    }
+
     /// What the open library's exchange reported: the page's status (PROTOCOL §15.5), its last synchronization, its
     /// unsent changes, and "Sign in again" when the server refused the token. Updates only the page's state.
     public func exchangeReported(_ report: ServerExchangeReport) {
@@ -678,6 +772,9 @@ public enum ServerAccountQuestion: Equatable, Sendable {
         if !report.stateOnly {
             signals.unreachable = report.unreachable
             signals.waitingForBackground = report.waitingForBackground
+            signals.insufficientSpace = report.insufficientSpace
+            signals.fullSynchronizing = report.fullSynchronizationHolds
+            signals.fullSynchronizationWaits = report.fullSynchronizationWaitsForNetwork
         }
         signals.attentionItems = report.attentionItems
         signals.recovery = switch report.recovery {
@@ -692,6 +789,8 @@ public enum ServerAccountQuestion: Equatable, Sendable {
         case .lineageMismatch?: signals.pause = .serverRestored
         case .transportConflict?: signals.pause = .sharedInstallation
         case .dependencyLost?: signals.pause = .serverLostChanges
+        case .changeTooLarge?: signals.pause = .changeTooLarge
+        case .changeRefused?: signals.pause = .changeRefused
         case .signIn?, nil: signals.pause = nil
         }
         var summary = summaries[id] ?? ServerLibrarySummary(entry: entry)
@@ -767,7 +866,7 @@ public enum ServerAccountQuestion: Equatable, Sendable {
         try dependencies.secrets.removeLibrary(id)
         if !LibraryLocation.isAbsent(location.folder) { try FileManager.default.removeItem(at: location.folder) }
         try updateRegistry { registry in registry.libraries.removeAll { $0.id == id } }
-        attachProgress[id] = nil; waitingForProjection.remove(id); emptyConfirmed.remove(id); pendingSnapshots[id] = nil
+        attachProgress[id] = nil; attachWaits[id] = nil; attachAgain.remove(id); waitingForProjection.remove(id); emptyConfirmed.remove(id); pendingSnapshots[id] = nil
         if question == .emptyAccount(libraryID: id) { question = nil }
         await refresh()
     }

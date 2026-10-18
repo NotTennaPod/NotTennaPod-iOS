@@ -50,6 +50,13 @@ public struct ServerExchangeReport: Sendable, Equatable {
     public var reprojected = false
     /// Items of the page's "Needs attention" list (PROTOCOL §15.5).
     public var attentionItems = 0
+    /// A requested Force full synchronization's download holds later commits from other devices until it is published.
+    public var fullSynchronizationHolds = false
+    /// A requested Force full synchronization waits for a network its download may use; the ordinary exchange ran.
+    public var fullSynchronizationWaitsForNetwork: ServerNetworkWait?
+    /// A snapshot download or its staging stopped before eating into the space the app keeps for its own writes; it
+    /// continues once space was freed (`download_error_insufficient_space`). No backoff: never retried in a loop.
+    public var insufficientSpace = false
     /// The exchange was stopped before it finished (the graph stopped, background time ended): nothing about the
     /// server is known from it, and it is never a successful synchronization.
     public var cancelled = false
@@ -82,7 +89,7 @@ public struct ServerExchangeReport: Sendable, Equatable {
     /// Nothing went wrong: not cancelled, no pause, no retry, no error, nothing waiting.
     public var completed: Bool {
         !stateOnly && !cancelled && !networkNotPermitted && pause == nil && retryAfter == nil && error == nil && !waitingForPause
-            && !waitingForBackground && !waitingForDependencies
+            && !waitingForBackground && !waitingForDependencies && !insufficientSpace
     }
 
     /// A publication waits (for a pause, or for the app to leave the foreground): later commits wait behind it.
@@ -143,13 +150,19 @@ public struct ServerUnitTiming: Sendable, Equatable {
     public var background = false
     /// This library's own facts the unit retired (a commit bringing back what this phone pushed).
     public var retired = 0
+    /// VM steps the unit ran while it held the lock: its hold's work, whatever the machine's speed or load.
+    public var lockSteps: Int64 = 0
 }
 
 /// A change the screens or the scheduler react to.
 public enum ServerExchangeEvent: Sendable, Equatable {
-    /// Rows the screens show changed: sent after every unit that changed rows, so a long catch-up shows its
-    /// progress (the app reloads at most once a second, PROTOCOL §6.8).
-    case libraryChanged
+    /// Rows the screens show changed, exactly (`LibraryChangeSet`): sent after every step that changed something visible
+    /// (a unit, a staging or shown-ahead batch, a pin release, a removal batch, a recovery step), never for one that
+    /// changed nothing, so a long catch-up shows its progress (the app reloads at most once a second, PROTOCOL §6.8).
+    case libraryChanged(LibraryChangeSet)
+    /// What a paused player's adoption depends on changed: position records or claims, overlays, sessions, pins,
+    /// holds, the recovery state. Sent at once; the app checks adoption.
+    case positionKnowledge(LibraryPositionKnowledge)
     /// A unit deleted feeds or episodes whose files the feed-deletion coordinator now removes.
     case feedsDeleted
     case accountPoliciesChanged
@@ -203,13 +216,27 @@ public actor ServerSyncEngine {
     /// counted, so 24,000 keeps the costliest measured kind near 500 ms of store lock and lets a 5,000-episode listening
     /// commit through with a margin (small units cost more a row with their fixed commit, but stay far below it).
     var backgroundPublishWorkLimit = 24_000
+    /// The disk policy of snapshot downloads and their staging (a reserve they never use).
+    var disk = ServerBulkDiskPolicy()
+    /// The last shortfall: bulk work starts again only once free space grew past it (plus 100 MB).
+    var spaceWait: (free: Int64, shortfall: Int64)?
+    /// Test hook: items per snapshot page (the server's own page size otherwise).
+    var snapshotPageLimit: Int?
+    /// Whether this exchange may start or continue a snapshot download: not in a background app refresh task (only
+    /// processing tasks and the app may), where a large download would be cut off and repeated.
+    var snapshotsAllowed = true
     /// While playing, at most one unit per this interval (PROTOCOL §6.8: 250 ms).
     var playingUnitInterval: Double = 0.25
     /// Force full synchronization projects a library of at most this many records while audio plays; a larger one
     /// waits for a pause or stop (measured: about 14 s of processing for 20,000 episodes on a loaded Mac).
     var fullStagingWhilePlaying = 5_000
+    /// The largest recovery inventory request body, in bytes: under the 64 KiB body limit of every deployed server,
+    /// halved after `payload_too_large` (down to 4 KiB) for the rest of the engine's life.
+    var inventoryBudget = 60 << 10
     /// Operations per push; lowered after `payload_too_large` (PROTOCOL §6.4).
     var operationLimit: Int?
+    /// The server answered `invalid_part` in this exchange: nothing more is pushed until the next one (PROTOCOL §6.4).
+    var pushRefusedThisExchange = false
     /// Secrets the server named missing, sent with the next push.
     var extraSecrets: Set<String> = []
     /// The last pull view's `install_watermark` (PROTOCOL §6.6).
@@ -245,6 +272,26 @@ public actor ServerSyncEngine {
     var blockingBoundary: (@Sendable (String) async throws -> Void)?
     /// Test hook: runs before each bounded staging transaction (local actions while rows are shown ahead).
     var beforeStagingBatch: (@Sendable () async throws -> Void)?
+    /// Test-only fault (mutation check): the steps' change sets are taken but never told.
+    var skipChangeDelivery = false
+    func setSkipChangeDelivery(_ skip: Bool) { skipChangeDelivery = skip }
+    /// Test-only fault (mutation check): what a step commits is told only at the exchange's end, as the first revision
+    /// did (no telling after each recorded step or the recovery's catch-up, no request barrier).
+    var deferDelivery = false
+    func setDeferDeliveryForTesting(_ defer: Bool) { deferDelivery = `defer` }
+    /// Tests only: every change set the engine told, in order (compared with the commits); kept only while recording.
+    var recordsPublishedChanges = false
+    var publishedChanges: [LibraryChangeSet] = []
+    func recordPublishedChangesForTesting() { recordsPublishedChanges = true }
+    func takePublishedChangesForTesting() -> [LibraryChangeSet] {
+        defer { publishedChanges = [] }
+        return publishedChanges
+    }
+    /// Test hook: runs at every request, after what committed before it was told (the request barrier).
+    var requestBarrierHook: (@Sendable (String) async -> Void)?
+    func setRequestBarrierHook(_ hook: (@Sendable (String) async -> Void)?) { requestBarrierHook = hook }
+    /// A visible change told since the exchange's report last took it.
+    private var toldSinceReport = false
 
     public init(store: FeedLibraryStore, database: URL, syncDatabase: URL, staging: URL, transport: any ServerExchangeTransport,
                 vault: any SynchronizationCredentialStore = KeychainSynchronizationCredentials(service: "org.nottennapod.app.feeds"),
@@ -253,12 +300,15 @@ public actor ServerSyncEngine {
                 isForeground: @escaping @Sendable () async -> Bool = { false },
                 eligibility: ServerPublicationEligibility = ServerPublicationEligibility(),
                 installations: ServerInstallationKeychain? = nil) throws {
-        self.store = store; self.transport = transport; self.vault = vault; self.clock = clock; self.isPlaying = isPlaying
+        let barrier = ServerRequestBarrier()
+        self.store = store; self.transport = ServerBarrierTransport(inner: transport, barrier: barrier); self.vault = vault; self.clock = clock
+        self.isPlaying = isPlaying
         self.isForeground = isForeground; self.eligibility = eligibility; self.installations = installations
         databaseURL = database
         self.staging = staging
         archive = try ServerArchive(url: syncDatabase)
         history = try ServerArchiveReader(url: syncDatabase)
+        barrier.engine = self
     }
 
     /// The engine of a library folder (`Server Libraries/<id>/`).
@@ -318,23 +368,37 @@ public actor ServerSyncEngine {
         if let running { return await running.value }
         // Utility priority whoever asks (PROTOCOL §6.8): the exchange never competes with the player for the processor. A
         // caller that is cancelled (background time ended) stops it.
-        let task = Task(priority: .utility) { await self.performExchange() }
+        let task = Task(priority: .utility) { await LibraryChangeOrigin.$current.withValue(.sync) { await self.performExchange() } }
         running = task
         let report = await withTaskCancellationHandler { await task.value } onCancel: { task.cancel() }
         running = nil
         return report
     }
 
+    /// An exchange that starts or continues no snapshot download unless `snapshots` (a background app refresh task:
+    /// its seconds would cut a large download off).
+    public func exchange(snapshots: Bool) async -> ServerExchangeReport {
+        snapshotsAllowed = snapshots
+        defer { snapshotsAllowed = true }
+        return await exchange()
+    }
+
     func performExchange() async -> ServerExchangeReport {
         var report = ServerExchangeReport()
+        pushRefusedThisExchange = false
         do {
             // A library from before the units' indexes gets them here, off the launch and while nothing plays (until
             // then its queries are correct, only slower).
             if !indexesEnsured, !(await isPlaying()) {
                 if try await store.ensureServerIndexes() { log("apply", "indexes built") }
+                // Refresh statuses pulled before they were shown are shown once (PROTOCOL §9.4); a failure never stops
+                // the exchange (the next engine tries again).
+                do { _ = try await store.projectStoredRefreshStatuses(); await publishChanges(&report) }
+                catch { log("apply", "refresh statuses not shown yet: \(ServerLogValue.failure(error))") }
                 indexesEnsured = true
             }
-            if try await store.releaseServerPins() { report.libraryChanged = true; publish(.libraryChanged) }
+            try await store.releaseServerPins()
+            await publishChanges(&report)
             // A copy, another library on this transport and a restored server move this library to a new installation
             // (PROTOCOL §6.10); the exchange then runs again on it, a few times at most.
             for round in 1...3 {
@@ -355,6 +419,8 @@ public actor ServerSyncEngine {
             await refuse(refused.request, &report)
         } catch is ServerRequestGated {
             // What the server refused waits for an explicit retry or an update.
+        } catch let space as ServerInsufficientSpace {
+            noteInsufficientSpace(space, &report)
         } catch is CancellationError {
             report.cancelled = true
         } catch {
@@ -399,7 +465,12 @@ public actor ServerSyncEngine {
     enum Step: Sendable { case push, pull, apply, applyOne }
 
     func run(_ steps: [Step]) async -> ServerExchangeReport {
+        await LibraryChangeOrigin.$current.withValue(.sync) { await runSteps(steps) }
+    }
+
+    private func runSteps(_ steps: [Step]) async -> ServerExchangeReport {
         var report = ServerExchangeReport()
+        pushRefusedThisExchange = false
         do {
             try await store.releaseServerPins()
             guard try await prepareInstallation(&report) else { return await finish(report) }
@@ -418,6 +489,8 @@ public actor ServerSyncEngine {
             await refuse(refused.request, &report)
         } catch is ServerRequestGated {
             // What the server refused waits for an explicit retry or an update.
+        } catch let space as ServerInsufficientSpace {
+            noteInsufficientSpace(space, &report)
         } catch is CancellationError {
             report.cancelled = true
         } catch {
@@ -431,6 +504,8 @@ public actor ServerSyncEngine {
     /// The report's closing facts (the live head, what is unsent) and the events units did not send.
     func finish(_ report: ServerExchangeReport) async -> ServerExchangeReport {
         var report = report
+        // Whatever a step left untold.
+        await publishChanges(&report)
         // A cancellation can surface as any error on its way out (or none, when a step returns early): whatever was
         // caught, an exchange whose task was cancelled did not finish.
         if Task.isCancelled { report.cancelled = true }
@@ -518,11 +593,40 @@ public actor ServerSyncEngine {
         return ServerClient.protocolVersions.upperBound
     }
 
+    /// Bulk work stopped short of the reserve: it waits, without a backoff, until free space grew by the shortfall
+    /// plus 100 MB (checked whenever an exchange runs: at launch, in the foreground, in background tasks).
+    func noteInsufficientSpace(_ space: ServerInsufficientSpace, _ report: inout ServerExchangeReport) {
+        report.insufficientSpace = true
+        spaceWait = (disk.available(staging) ?? 0, space.shortfall)
+        log("waiting", "not enough free space for the snapshot: \(space.shortfall / 1_000_000) MB more needed")
+    }
+
+    /// Whether bulk work may try again after a shortfall: free space grew by it plus 100 MB.
+    func bulkSpaceReturned(_ report: inout ServerExchangeReport) -> Bool {
+        guard let wait = spaceWait else { return true }
+        if let free = disk.available(staging), free >= wait.free + wait.shortfall + 100_000_000 {
+            spaceWait = nil
+            return true
+        }
+        report.insufficientSpace = true
+        return false
+    }
+
     /// Exponential backoff with jitter from 2 s, capped at 5 minutes, forever (PROTOCOL §6).
     func backoff(_ report: inout ServerExchangeReport) {
         failures += 1
         let base = min(300, 2 * pow(2, Double(min(failures - 1, 10))))
         report.retryAfter = base * Double.random(in: 0.8...1.2)
+    }
+
+    /// An explicit retry (Synchronize now, Force full synchronization, Needs attention's "Try again"): a change the server
+    /// refused or found too large is tried once more now, and so is listening refused as too large (PROTOCOL §6.13).
+    public func retryRefusedChanges() async {
+        do {
+            if let cleared = try await store.retryRefusedServerPushes() { log("resumed", cleared.rawValue) }
+            if try await store.retryRefusedListening() { log("requested", "listening or queue additions refused as too large are tried again") }
+            if try await store.resumeRefusedDrafts() { log("requested", "changes waiting behind one too large are sent") }
+        } catch { log("error", "retrying refused changes: \(ServerLogValue.failure(error))") }
     }
 
     /// Clears a pause the person or the scheduler resolved (signed in again, the server or app
@@ -565,12 +669,43 @@ public actor ServerSyncEngine {
 
     /// Applies what waited for the player (PROTOCOL §6.8) as soon as it leaves an episode, without an exchange.
     public func releasePins() async {
-        do {
-            if try await store.releaseServerPins() { publish(.libraryChanged) }
-            // A hidden removal waiting for the player's episode finishes now.
+        await LibraryChangeOrigin.$current.withValue(.sync) {
             var report = ServerExchangeReport()
-            try await finishHiddenRemovals(&report)
-        } catch { log("error", "releasing the player's pins: \(ServerLogValue.failure(error))") }
+            do {
+                try await store.releaseServerPins()
+                await publishChanges(&report)
+                // A hidden removal waiting for the player's episode finishes now.
+                try await finishHiddenRemovals(&report)
+            } catch { log("error", "releasing the player's pins: \(ServerLogValue.failure(error))") }
+            await publishChanges(&report)
+        }
+    }
+
+    /// Publishes what this engine's steps committed since the last call: the exact visible change set (none for a step
+    /// that changed nothing visible) and the position knowledge it touched.
+    func publishChanges(_ report: inout ServerExchangeReport) async {
+        await announceCommitted()
+        if toldSinceReport { report.libraryChanged = true; toldSinceReport = false }
+    }
+
+    /// Tells what the engine's committed steps changed and the position knowledge they touched, now. Every request waits
+    /// for it (`ServerBarrierTransport`), so nothing committed is left untold while the exchange goes on to the network: a
+    /// paused player adopts a position a recovery or full publication made eligible before the person can press Play.
+    func announceCommitted() async {
+        let taken = await store.takeSyncChanges()
+        if skipChangeDelivery { return }
+        if let set = taken.set, !set.isEmpty {
+            toldSinceReport = true
+            publish(.libraryChanged(set))
+            if recordsPublishedChanges { publishedChanges.append(set) }
+        }
+        if let knowledge = taken.knowledge, !knowledge.isEmpty { publish(.positionKnowledge(knowledge)) }
+    }
+
+    /// The request barrier: what committed is told before a request goes out.
+    func beforeRequest(_ path: String) async {
+        if !deferDelivery { await announceCommitted() }
+        await requestBarrierHook?(path)
     }
 
     // MARK: - Pacing (PROTOCOL §6.8)
@@ -633,6 +768,11 @@ public actor ServerSyncEngine {
     }
 
     func setCrashPoint(_ hook: (@Sendable (String) throws -> Void)?) { crashPoint = hook }
+    func setSnapshotTesting(pageLimit: Int? = nil, stagingWhilePlaying: Int? = nil, disk: ServerBulkDiskPolicy? = nil) {
+        snapshotPageLimit = pageLimit
+        if let stagingWhilePlaying { fullStagingWhilePlaying = stagingWhilePlaying }
+        if let disk { self.disk = disk }
+    }
     func setBeforePublish(_ hook: (@Sendable () async throws -> Void)?) { beforePublish = hook }
     func setBlockingBoundary(_ hook: (@Sendable (String) async throws -> Void)?) { blockingBoundary = hook }
 
@@ -646,4 +786,28 @@ public actor ServerSyncEngine {
         }
     }
     func setBeforeStagingBatch(_ hook: (@Sendable () async throws -> Void)?) { beforeStagingBatch = hook }
+}
+
+/// The engine, for its transport's request barrier (set once the engine exists).
+final class ServerRequestBarrier: @unchecked Sendable {
+    private let lock = NSLock()
+    private weak var stored: ServerSyncEngine?
+    var engine: ServerSyncEngine? {
+        get { lock.withLock { stored } }
+        set { lock.withLock { stored = newValue } }
+    }
+}
+
+/// The engine's transport: every request first tells what committed before it (`ServerSyncEngine.beforeRequest`).
+struct ServerBarrierTransport: ServerExchangeTransport {
+    let inner: any ServerExchangeTransport
+    let barrier: ServerRequestBarrier
+
+    func send(_ method: String, _ path: String, body: ContractJSON?) async throws -> ContractJSON {
+        await barrier.engine?.beforeRequest(path)
+        return try await inner.send(method, path, body: body)
+    }
+
+    /// The wrapped transport's network decision (a waiting repair lets ordinary sync go on); its requests still check.
+    func bulkWaitReason() async -> ServerNetworkWait? { await inner.bulkWaitReason() }
 }

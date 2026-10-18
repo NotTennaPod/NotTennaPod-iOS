@@ -14,12 +14,19 @@ extension LibraryViewController {
         lastInformationEpisode = episodeID
         lastInformationStatus = playback?.sample?.status
         lastInformationSpeed = playback?.speed
-        if statusChanged { reloadLibrary(preservingEpisodeDetails: true, keepsUnchangedScreen: true) }
+        // With change sets the screen follows the library by itself; only a screen fed by snapshots reads it again.
+        if statusChanged, screenUpdater == nil { reloadLibrary(preservingEpisodeDetails: true, keepsUnchangedScreen: true) }
         else if speedChanged { updateQueueInformation() }
         let visible = episodeID != nil
         playerView?.isHidden = !visible || settingsVisible
         if !visible { playerView?.setExpanded(false, animated: false) }
-        playerView?.update(feed: episodeID.flatMap { libraryEpisode($0)?.feed })
+        // The playing episode and its podcast's header, keyed (never the podcast's episodes); a podcast no list shows is
+        // read through the player's own visibility (`playerFeedHeader`).
+        let value = episodeID.flatMap(libraryEpisode)
+        let header = value.map { value -> LibraryFeed in var feed = value.feed; feed.episodes = []; return feed }
+        playerView?.update(feed: header, stored: value?.episode, held: header == nil ? episodeID.flatMap(heldFeed) : nil)
+        // Android's Home re-queries Get surprised and Continue on PlayerStatusEvent: the picks are checked against the clock.
+        if statusChanged, screenUpdater != nil, homeModel != nil, case .destination(.home) = path.last { patchHome(LibraryMirrorDelta()) }
         if let id = episodeID,
            requestedVideoEpisodeID == id || (playback?.wantsPlayback == true && id != lastAutomaticVideoEpisodeID),
            playback?.videoPresentation?.videoDisplayLayer != nil {
@@ -35,6 +42,21 @@ extension LibraryViewController {
            let child = preview.contentController as? LibraryViewController {
             child.updatePlayer()
         }
+    }
+
+    /// The podcast of the player's episode when no list shows it (PROTOCOL §6.8): read once per episode through the
+    /// player's own read; the player is updated when it arrives.
+    private func heldFeed(_ episodeID: Int64) -> LibraryFeed? {
+        if let held = heldPlayerFeed, held.episode == episodeID { return held.feed }
+        guard heldPlayerFeedRequest != episodeID, let library else { return nil }
+        heldPlayerFeedRequest = episodeID
+        Task { [weak self] in
+            let feed = try? await library.readers().quick.playerFeedHeader(id: library.feedID(forEpisode: episodeID))
+            guard let self, heldPlayerFeedRequest == episodeID, let feed else { return }
+            heldPlayerFeed = (episodeID, feed)
+            updatePlayer()
+        }
+        return nil
     }
 
     func requestVideo() {

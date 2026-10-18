@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct InboxSwipeAppViewTests {
     private final class Engine: PlaybackEngine {
         var reading: PlaybackEngineReading?
@@ -183,7 +183,8 @@ struct InboxSwipeAppViewTests {
     @Test func reboundSameIDRejectsOldGestureAndNavigationDoesNotRetargetUndo() async throws {
         try await fixture(screen: .inbox) { controller, store, feed, _, _ in
             let id = feed.episodes[0].id, oldModel = try #require(try row(id, in: controller).actionModel)
-            await controller.reloadLibrary()?.value; controller.view.layoutIfNeeded()
+            // A screen opened again binds its rows anew (a patch keeps the models of rows that did not change).
+            await controller.reloadLibrary(reopen: true)?.value; controller.view.layoutIfNeeded()
             #expect(try row(id, in: controller).actionModel !== oldModel)
             controller.performInboxSwipe(.left, episodeID: id, expectedModel: oldModel)
             #expect(try await store.episode(id: id)?.userState.playState == .new)

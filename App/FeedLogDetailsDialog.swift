@@ -50,6 +50,10 @@ final class FeedLogDetailsBody: UIView {
                    id: "feedLogTechnical", gap: 8, copy: copy)
         addSection("download_log_details_file_url_title", value: details.fileURL,
                    id: "feedLogURL", gap: 8, copy: copy)
+        // A server library: when the server and this device last refreshed the podcast.
+        if !details.origins.isEmpty {
+            addSection("ntp_refresh_last_title", value: details.origins.joined(separator: "\n"), id: "feedLogOrigins", gap: 8)
+        }
         registerForTraitChanges([UITraitPreferredContentSizeCategory.self]) { (body: FeedLogDetailsBody, _) in
             body.sections.forEach { $0.heading.font = Appearance.font(16, medium: true); $0.value.font = Appearance.font(14) }
             body.setNeedsLayout(); body.superview?.setNeedsLayout()

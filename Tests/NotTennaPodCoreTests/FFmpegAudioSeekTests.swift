@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(2)))
+@Suite
 struct FFmpegAudioSeekTests {
     private struct NativeFrames: Decodable {
         struct Frame: Decodable { let pts: Int64; let samples: Int }

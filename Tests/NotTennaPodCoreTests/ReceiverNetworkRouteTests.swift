@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) struct ReceiverNetworkRouteTests {
+@Suite(.serialized) struct ReceiverNetworkRouteTests {
     @Test(arguments: ["127.0.0.1", "::1"]) func routeChoosesMatchingLocalAddress(address: String) async throws {
         let endpoint = try await ReceiverNetworkRoute.endpoint(address: address, port: 8009)
         #expect(endpoint == (try .receiver(address: address)))

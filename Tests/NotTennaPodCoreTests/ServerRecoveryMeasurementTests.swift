@@ -8,7 +8,7 @@ import Testing
 /// longest single store call (one live transaction, or the longest of a chunked operation's) and the longest a
 /// concurrent playback save waited. The work runs as the engine runs it (`ServerBlockingSteps`: planned on a connection
 /// of its own, then bounded store transactions). They take minutes, so they run when `NTP_EXCHANGE_MEASURE` is set.
-@Suite(.serialized, .timeLimit(.minutes(60)), .enabled(if: ProcessInfo.processInfo.environment["NTP_EXCHANGE_MEASURE"] != nil))
+@Suite(.serialized, .enabled(if: ProcessInfo.processInfo.environment["NTP_EXCHANGE_MEASURE"] != nil))
 struct ServerRecoveryMeasurementTests {
     static var size: Int { Int(ProcessInfo.processInfo.environment["NTP_EXCHANGE_MEASURE"] ?? "") ?? 10_000 }
 

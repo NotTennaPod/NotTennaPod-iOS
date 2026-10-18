@@ -34,7 +34,7 @@ extension FeedLibraryStore {
                 throw ServerRecordingError.unknownRegistration(opID)
             }
             guard state == "pending" else { return }
-            let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection)
+            let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection, factBound: factBoundOverride)
             let feedID = row[0].integer
             let live = resolution.mode == "stale" ? nil : resolution.generationID
             if let feedID, try storedHeader(feedID) != nil {
@@ -45,12 +45,12 @@ extension FeedLibraryStore {
                                 live.map(LibrarySQLValue.text) ?? .null, .text(opID)])
             if let generation = resolution.generationID {
                 // A copied library forked the registration's author (PROTOCOL §6.10): the copied author's drafts first, then each
-                // fork's, whose first fact names the tip before it.
-                for chain in try registrationChain(opID, current: author) {
+                // fork's, whose first fact names the tip before it. A draft too large to number stops the chain there.
+                chains: for chain in try registrationChain(opID, current: author) {
                     let drafts = try database.rows("SELECT op_id, author_seq, previous_op_id, client_time, kind, template, dependencies, created_at FROM ntp_drafts WHERE author_id = ? ORDER BY author_seq", [.text(chain)])
                     for draft in drafts {
-                        try materialize(draft, authorID: chain, registrationOp: opID, podcast: resolution.podcastID,
-                                        generation: generation, decision: resolution.decisionID, writer: writer)
+                        guard try materialize(draft, authorID: chain, registrationOp: opID, podcast: resolution.podcastID,
+                                              generation: generation, decision: resolution.decisionID, writer: writer) else { break chains }
                     }
                 }
             }
@@ -68,8 +68,128 @@ extension FeedLibraryStore {
         }
     }
 
+    /// "Try again" (and Synchronize now, Force full synchronization) for registrations whose drafts were too large to number
+    /// (PROTOCOL §6.13): each such chain is materialized again from where it stopped, under its registration's stored
+    /// resolution, in author order, each draft with the identity fixed when it was made; the facts redirected behind it
+    /// follow in order. A draft still too large stops its chain there again and stays listed. Returns whether any draft was
+    /// numbered.
+    @discardableResult
+    func resumeRefusedDrafts() throws -> Bool {
+        guard let context = serverContext else { return false }
+        let registrations = try database.rows("SELECT DISTINCT registration_op FROM ntp_drafts WHERE state = 'refused_too_large' ORDER BY registration_op")
+            .compactMap { $0[0].text }
+        guard !registrations.isEmpty else { return false }
+        var numbered = false
+        try database.transaction {
+            let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection, factBound: factBoundOverride)
+            for op in registrations {
+                guard let row = try database.rows("SELECT author_id, podcast_id, generation_id, decision_id FROM ntp_registrations WHERE op_id = ? AND state = 'resolved'",
+                                                  [.text(op)]).first,
+                      let author = row[0].text, let podcast = row[1].text, let generation = row[2].text else { continue }
+                chains: for chain in try registrationChain(op, current: author) {
+                    let drafts = try database.rows("SELECT op_id, author_seq, previous_op_id, client_time, kind, template, dependencies, created_at FROM ntp_drafts WHERE author_id = ? ORDER BY author_seq", [.text(chain)])
+                    for draft in drafts {
+                        guard try materialize(draft, authorID: chain, registrationOp: op, podcast: podcast, generation: generation,
+                                              decision: row[3].text, writer: writer) else { break chains }
+                        numbered = true
+                    }
+                }
+            }
+            // An item stays while its chain waits on a refused draft.
+            try writer.execute("DELETE FROM ntp_attention WHERE kind = 'draft_refused' AND id NOT IN (SELECT op_id FROM ntp_drafts WHERE state = 'refused_too_large')")
+        }
+        if numbered { noteServerOutboxChanged() }
+        return numbered
+    }
+
+    /// A removal closed the podcast of chains stopped at drafts too large to number (PROTOCOL §6.8, §6.13): the removal applies
+    /// here as everywhere. A draft too large ends as a refused registration's drafts end (`terminateRegistration`: with its
+    /// overlays and node); the drafts after it on its author's chain are renumbered so the chain stays contiguous
+    /// (`dropPlacementSnapshot`) and numbered under the closed generation, in author order, as any pending fact of that
+    /// generation is sent and decided by the server; one of them too large ends the same way. Nothing goes to a podcast
+    /// subscribed again (its registration has an author of its own). Their Needs attention items go, and the log says so.
+    /// Runs in the unit that applies the removal.
+    func endRefusedDraftChains(podcast: String) throws {
+        guard let context = serverContext else { return }
+        let registrations = try database.rows("SELECT DISTINCT d.registration_op FROM ntp_drafts d JOIN ntp_registrations r ON r.op_id = d.registration_op WHERE d.state = 'refused_too_large' AND r.state = 'resolved' AND r.podcast_id = ? ORDER BY d.registration_op",
+                                              [.text(podcast)]).compactMap { $0[0].text }
+        guard !registrations.isEmpty else { return }
+        let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection, factBound: factBoundOverride)
+        var ended = 0
+        for op in registrations {
+            guard let row = try database.rows("SELECT author_id, generation_id, decision_id FROM ntp_registrations WHERE op_id = ?", [.text(op)]).first,
+                  let author = row[0].text, let generation = row[1].text else { continue }
+            let chains = try registrationChain(op, current: author)
+            // Nothing another author depends on is ever deleted or renumbered (a restored copy's `installation.fork` names
+            // the chain's writing tip): such a chain stays as it was, listed, with Try again.
+            guard try !chains.contains(where: { try draftsNamedByOthers(author: $0) }) else { continue }
+            for chain in chains {
+                // The removal deletes the overlays of the closed generation's pending facts (the facts stay as recorded):
+                // these drafts' too, so a podcast subscribed again never shows them.
+                try writer.execute("DELETE FROM ntp_overlays WHERE op_id IN (SELECT op_id FROM ntp_drafts WHERE author_id = ?)", [.text(chain)])
+                // Each pass ends the refused drafts and numbers what follows; a draft refused in it is ended by the next.
+                for _ in 0...(try database.scalar("SELECT count(*) FROM ntp_drafts WHERE author_id = ?", [.text(chain)])) {
+                    let refused = try database.rows("SELECT op_id, author_seq FROM ntp_drafts WHERE author_id = ? AND state = 'refused_too_large' ORDER BY author_seq",
+                                                    [.text(chain)])
+                    guard let lowest = refused.first?[1].integer else { break }
+                    for draft in refused {
+                        guard let draftOp = draft[0].text else { continue }
+                        try writer.execute("DELETE FROM ntp_overlays WHERE op_id = ?", [.text(draftOp)])
+                        try writer.execute("DELETE FROM ntp_nodes WHERE node_id = ? AND kind = 'draft'", [.text(draftOp)])
+                        try writer.execute("DELETE FROM ntp_drafts WHERE op_id = ?", [.text(draftOp)])
+                        ended += 1
+                    }
+                    try renumberDrafts(author: chain, from: lowest, writer)
+                    let drafts = try database.rows("SELECT op_id, author_seq, previous_op_id, client_time, kind, template, dependencies, created_at FROM ntp_drafts WHERE author_id = ? ORDER BY author_seq", [.text(chain)])
+                    for draft in drafts {
+                        guard try materialize(draft, authorID: chain, registrationOp: op, podcast: podcast, generation: generation,
+                                              decision: row[2].text, writer: writer) else { break }
+                    }
+                }
+            }
+        }
+        try writer.execute("DELETE FROM ntp_attention WHERE kind = 'draft_refused' AND id NOT IN (SELECT op_id FROM ntp_drafts WHERE state = 'refused_too_large')")
+        if ended > 0 {
+            noteServerDiagnostic("too_large", "\(ended) changes too large for the server ended with their removed podcast; the changes after them are sent")
+            noteServerOutboxChanged()
+        }
+    }
+
+    /// Whether a fact or draft of another author names a draft of `author` (as its predecessor or a dependency).
+    private func draftsNamedByOthers(author: String) throws -> Bool {
+        try database.scalar("""
+            SELECT count(*) FROM ntp_drafts d WHERE d.author_id = ? AND (
+              EXISTS (SELECT 1 FROM ntp_outbox o WHERE o.author_id != d.author_id AND instr(CAST(o.fact AS TEXT), '"' || d.op_id || '"') > 0)
+              OR EXISTS (SELECT 1 FROM ntp_drafts x WHERE x.author_id != d.author_id
+                         AND (x.previous_op_id = d.op_id OR instr(coalesce(x.dependencies, ''), '"' || d.op_id || '"') > 0
+                              OR instr(CAST(x.template AS TEXT), '"' || d.op_id || '"') > 0)))
+            """, [.text(author)]) > 0
+    }
+
+    /// The drafts of `author` from `seq` on, renumbered contiguously after what precedes them on the chain (a draft, or a
+    /// fact already numbered), and the author's position after them.
+    private func renumberDrafts(author: String, from seq: Int64, _ writer: ServerOutboxWriter) throws {
+        var previous = try database.rows("SELECT op_id FROM ntp_drafts WHERE author_id = ? AND author_seq < ? ORDER BY author_seq DESC LIMIT 1",
+                                         [.text(author), .integer(seq)]).first?.first?.text
+            ?? database.rows("SELECT op_id FROM ntp_outbox WHERE author_id = ? AND author_seq < ? ORDER BY author_seq DESC LIMIT 1",
+                             [.text(author), .integer(seq)]).first?.first?.text
+        var next = seq
+        for row in try database.rows("SELECT op_id FROM ntp_drafts WHERE author_id = ? AND author_seq >= ? ORDER BY author_seq", [.text(author), .integer(seq)]) {
+            guard let op = row[0].text else { continue }
+            try writer.execute("UPDATE ntp_drafts SET author_seq = ?, previous_op_id = ? WHERE op_id = ?",
+                               [.integer(next), previous.map(LibrarySQLValue.text) ?? .null, .text(op)])
+            previous = op
+            next += 1
+        }
+        try writer.execute("UPDATE ntp_authors SET next_seq = ?, last_op_id = ? WHERE author_id = ?",
+                           [.integer(next), previous.map(LibrarySQLValue.text) ?? .null, .text(author)])
+    }
+
+    /// Returns false for a draft larger than the server accepts once materialized (PROTOCOL §6.13): it is not numbered; it
+    /// stays a draft (`refused_too_large`) with its overlays, so the change stays shown here, and the drafts after it wait.
+    /// Needs attention says so; the materialization itself goes on, and other chains are unaffected.
     private func materialize(_ row: [LibrarySQLValue], authorID: String, registrationOp: String, podcast: String, generation: String,
-                             decision: String?, writer: ServerOutboxWriter) throws {
+                             decision: String?, writer: ServerOutboxWriter) throws -> Bool {
         guard case .text(let opID) = row[0], let seq = row[1].integer, let clientTime = row[3].integer,
               case .text(let type) = row[4], let templateData = row[5].data, let created = row[7].integer else {
             throw ServerRecordingError.corruptState("ntp_drafts")
@@ -102,6 +222,16 @@ extension FeedLibraryStore {
         let secrets = template["secret_ids"]?.arrayValue?.compactMap(\.stringValue) ?? []
         let fact = ServerOutboxWriter.fact(opID: opID, authorID: authorID, authorSeq: seq, previousOpID: previous, dependencies: dependencies,
                                            type: type, clientTime: clientTime, targets: targets, payload: payload)
+        let size = try fact.canonicalBytes().count
+        if size > writer.factBound {
+            try writer.execute("UPDATE ntp_drafts SET state = 'refused_too_large' WHERE op_id = ?", [.text(opID)])
+            var record: ContractObject = ["registration": .string(registrationOp)]
+            if let feed = try feedIDOfRegistration(registrationOp), let title = try loadFeedHeader(feed)?.title { record["title"] = .string(title) }
+            try writer.execute("INSERT INTO ntp_attention(id, kind, record, created_at) VALUES (?, 'draft_refused', ?, ?) ON CONFLICT(id) DO NOTHING",
+                               [.text(opID), .blob(try ContractJSON.object(record).canonicalData()), .integer(created)])
+            noteServerDiagnostic("too_large", "\(ServerLogValue.type(type)) \(size) bytes: kept on this device; later changes to its podcast wait")
+            return false
+        }
         try writer.insertOutboxEntry(opID: opID, authorID: authorID, authorSeq: seq, type: type, fact: fact, secretIDs: secrets, now: created)
         try writer.execute("DELETE FROM ntp_drafts WHERE op_id = ?", [.text(opID)])
         try writer.execute("UPDATE ntp_nodes SET kind = 'local' WHERE node_id = ?", [.text(opID)])
@@ -113,6 +243,7 @@ extension FeedLibraryStore {
             if let id = Int64(local.dropFirst("local-episode:".count)), try mappedElsewhere(wire, localID: id) { continue }
             try writer.execute("UPDATE OR REPLACE ntp_overlays SET id = ? WHERE op_id = ? AND id = ?", [.text(wire), .text(opID), .text(local)])
         }
+        return true
     }
 
     /// The authors of a registration's chain, oldest first: `current` and the authors it was forked from (copy

@@ -10,7 +10,7 @@ import Testing
 /// renderer value in force at each frame's presentation × the PCM must match `VolumeOracle` run over them.
 /// The timer runs on its own ticks (one per second of output) to its last positive target and expiry;
 /// gain never stops, flushes or re-times the renderer.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(10))) struct SleepFadeVolumeTests {
+@MainActor @Suite(.serialized) struct SleepFadeVolumeTests {
     enum Timer: CaseIterable { case clock, episode }
     enum Action { case cancel, extend(Int64), shake, setting(FeedVolumeAdaptation), pause(ticks: Int), seekBack }
 

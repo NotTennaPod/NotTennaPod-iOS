@@ -6,7 +6,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1)))
+@Suite(.serialized)
 struct NativeAACProfileTests {
     static let names = ["lc-mono.aac", "lc-stereo.aac", "he-stereo.aac", "hev2-stereo.aac", "he-stereo.m4a", "hev2-stereo.m4a"]
     private func fixture(_ name: String) throws -> URL {

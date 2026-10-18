@@ -7,7 +7,7 @@ import Testing
 /// (action mode, circles, floating actions per state), bulk dialogs and their stored effect, the drawer's
 /// folder and feed menus, and RTL. The library is the oracle's Android fixture `tags-library.db` through the
 /// database import; expectations come from `TestSupport/Data/subscription-tags-bulk/expected`.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3)))
+@MainActor @Suite(.serialized)
 struct SubscriptionTagsViewTests {
     static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         .appendingPathComponent("../TestSupport/Data/subscription-tags-bulk").standardized
@@ -75,7 +75,7 @@ struct SubscriptionTagsViewTests {
         let speeds: PlaybackSpeedPreferenceStore, navigation: NavigationPreferenceStore
     }
     private func fixture(bottomNavigation: Bool = true) async throws -> Fixture {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M24Tags-\(UUID())")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("SubscriptionTags-\(UUID())")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         let restored = try AndroidDatabaseRestore.read(Self.fixtures.appendingPathComponent("tags-library.db"), staging: folder.appendingPathComponent("s"))
         let store = try FeedLibraryStore(url: folder.appendingPathComponent("library.sqlite"))

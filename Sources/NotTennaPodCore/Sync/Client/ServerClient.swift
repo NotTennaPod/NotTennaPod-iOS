@@ -141,17 +141,23 @@ public struct ServerClient: Sendable {
     }
 
     /// One page of a snapshot (PROTOCOL §6.4): the request's first page, or the page a token names.
-    public func snapshotPage(token: String, installID: String, page: String?) async throws -> ContractJSON {
+    /// `allowsMobile`: whether the system may use mobile data or a Low Data Mode network for it (the "Synchronization"
+    /// mobile-data preference).
+    public func snapshotPage(token: String, installID: String, page: String?, allowsMobile: Bool = true) async throws -> ContractJSON {
         var body: ContractObject = ["mode": "attach", "install_id": .string(installID), "acked_install_seq": 0]
         if let page { body["page"] = .string(page) }
-        return try await send("POST", "v1/snapshot", body: .object(body), token: token)
+        return try await send("POST", "v1/snapshot", body: .object(body), token: token, allowsMobile: allowsMobile)
     }
 
     // MARK: - Transport
 
     func send(_ method: String, _ path: String, body: ContractJSON? = nil, token: String? = nil,
-              signingIn: Bool = false) async throws -> ContractJSON {
+              signingIn: Bool = false, allowsMobile: Bool = true) async throws -> ContractJSON {
         var request = URLRequest(url: address.endpoint(path), cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
+        if !allowsMobile {
+            request.allowsExpensiveNetworkAccess = false
+            request.allowsConstrainedNetworkAccess = false
+        }
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("1", forHTTPHeaderField: "NotTennaPod-Protocol")

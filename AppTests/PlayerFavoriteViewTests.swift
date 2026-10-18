@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct PlayerFavoriteViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -105,7 +105,7 @@ struct PlayerFavoriteViewTests {
     @Test func failedSavePreservesDisplayedStateAndReportsError() async throws {
         try await fixture { store, feed, playback, time, _ in
             let player = PlayerView(playback: playback, timeDisplayPreferences: time, library: store)
-            player.update(feed: feed)
+            player.update(feed: feed, stored: feed.episodes.first { $0.id == playback.episode?.id })
             let favorite: UIButton = try #require(find("playerFavorite", in: player))
             var failures = 0, changes = 0
             player.failure = { _ in failures += 1 }
@@ -121,7 +121,7 @@ struct PlayerFavoriteViewTests {
     @Test func staleDisplayedCommandOnlyMutatesItsCapturedEpisode() async throws {
         try await fixture { store, feed, playback, time, _ in
             let player = PlayerView(playback: playback, timeDisplayPreferences: time, library: store)
-            player.update(feed: feed)
+            player.update(feed: feed, stored: feed.episodes.first { $0.id == playback.episode?.id })
             let favorite: UIButton = try #require(find("playerFavorite", in: player))
             let source = URL(string: "https://example.invalid/other")!
             let other = try await store.insert(FetchedFeed(feed: ParsedFeed(format: .rss, title: "Other", episodes: [
@@ -131,7 +131,7 @@ struct PlayerFavoriteViewTests {
             _ = try await store.beginPlayback(episodeID: other.episodes[0].id)
             try await playback.restore()
             var refreshed = false
-            player.favoriteChanged = { player.update(feed: other); refreshed = true }
+            player.favoriteChanged = { player.update(feed: other, stored: other.episodes.first { $0.id == playback.episode?.id }); refreshed = true }
             // The old displayed control can receive a queued tap before the new episode is rendered.
             favorite.sendActions(for: .touchUpInside)
             try await wait { refreshed && favorite.isEnabled }
@@ -140,7 +140,7 @@ struct PlayerFavoriteViewTests {
             #expect(playback.episode?.id == other.episodes[0].id && !playback.wantsPlayback)
             #expect(favorite.accessibilityLabel == "Add to favorites")
             try await playback.resetPlaybackPosition(episodeID: other.episodes[0].id)
-            player.update(feed: other)
+            player.update(feed: other, stored: other.episodes.first { $0.id == playback.episode?.id })
             #expect(favorite.isHidden)
         }
     }

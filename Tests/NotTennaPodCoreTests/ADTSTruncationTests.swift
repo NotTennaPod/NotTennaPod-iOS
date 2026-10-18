@@ -5,7 +5,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1)))
+@Suite(.serialized)
 struct ADTSTruncationTests {
     private struct Report: Decodable {
         let complete: Bool

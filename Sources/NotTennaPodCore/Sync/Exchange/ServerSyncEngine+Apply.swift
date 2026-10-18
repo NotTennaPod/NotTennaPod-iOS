@@ -16,6 +16,12 @@ extension ServerSyncEngine {
         // the kept shadow of exactly the next commit (PROTOCOL §6.8: published later, not built again).
         try await drainQueueSafeguards()
         try await reconcileKeptShadow()
+        // A requested repair whose download named its head holds later commits behind it until it is published.
+        var through = through
+        if let fence = try await fullSyncFence() {
+            through = min(through ?? .max, fence)
+            report.fullSynchronizationHolds = true
+        }
         while true {
             try Task.checkCancellation()
             let state = try await store.serverExchangeState()
@@ -40,7 +46,9 @@ extension ServerSyncEngine {
             do { applied = try await applyUnit(input, report: &report) } catch is ServerRequestGated { return false }
             guard let result = applied else { return false }
             report.appliedUnits += 1
-            if !result.alreadyApplied { record(result, into: &report) }
+            if !result.alreadyApplied { await record(result, into: &report) }
+            // Each unit's change is told at once: a long catch-up shows its progress (PROTOCOL §6.8).
+            if !deferDelivery { await publishChanges(&report) }
             if result.queueSafeguard != nil { try await drainQueueSafeguards() }
             try archive.dropPendingCommits(through: next.commit.seq, logID: live.logID)
         }
@@ -86,16 +94,14 @@ extension ServerSyncEngine {
         throw ServerApplyError.missingSecrets([])
     }
 
-    func record(_ result: ServerUnitResult, into report: inout ServerExchangeReport) {
+    /// Notes a committed step in the report and tells what it changed at once (before any later network or long work).
+    func record(_ result: ServerUnitResult, into report: inout ServerExchangeReport) async {
         report.longestLockMilliseconds = max(report.longestLockMilliseconds, result.lockMilliseconds)
         report.units.append(ServerUnitTiming(seq: result.seq, work: result.work, lockMilliseconds: result.lockMilliseconds, published: result.published,
-                                             rowsWritten: result.rowsWritten, background: result.background, retired: result.retired.count))
-        let changed = result.work > 0 || !result.retired.isEmpty
-        report.libraryChanged = report.libraryChanged || changed
+                                             rowsWritten: result.rowsWritten, background: result.background, retired: result.retired.count,
+                                             lockSteps: result.lockSteps))
         report.deletedFeeds += result.deletedFeeds
         report.accountPoliciesChanged = report.accountPoliciesChanged || result.accountPoliciesChanged
-        // Each unit's change is told at once: a long catch-up shows its progress (PROTOCOL §6.8).
-        if changed { publish(.libraryChanged) }
         if !result.deletedFeeds.isEmpty || result.removedEpisodes { publish(.feedsDeleted) }
         if result.releases { publish(.releases) }
         if result.feedsMerged { publish(.feedsMerged) }
@@ -107,6 +113,7 @@ extension ServerSyncEngine {
             report.pause = .transportConflict
             log("paused", "\(ServerPauseReason.transportConflict.rawValue) a slot of this installation holds another library's fact")
         }
+        if !deferDelivery { await publishChanges(&report) }
     }
 
     /// Deletes the rows of hidden removals in bounded transactions, paced like units while audio
@@ -120,6 +127,7 @@ extension ServerSyncEngine {
             let step = try await store.deleteHiddenRemovalBatch()
             report.longestLockMilliseconds = max(report.longestLockMilliseconds, FeedLibraryStore.milliseconds(started.duration(to: clock.now)))
             report.removalBatches += step.progressed ? 1 : 0
+            await publishChanges(&report)
             if step.progressed { publish(.feedsDeleted) }
             if !step.progressed { return }
         }

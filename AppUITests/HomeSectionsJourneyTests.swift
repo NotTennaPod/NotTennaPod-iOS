@@ -3,7 +3,7 @@ import XCTest
 /// Actual journey on a UUID library seeded from an Android database (DEBUG hook, through the database
 /// import) with a pinned Surprise seed and Home clock. The expectation is the independent oracle's output
 /// for the same database, seed and time (`rich.db`, seed 12345, now 1790000000000 ms);
-/// `M20_EXPECTED`/`M20_DATABASE` may override both.
+/// `HOME_SECTIONS_EXPECTED`/`HOME_SECTIONS_DATABASE` may override both.
 /// Home (default page) → sections, order, items, badge and "more" targets match the oracle →
 /// Shuffle draws a different valid selection → Configure: hide Continue listening by dragging it below
 /// "Hidden", OK → hidden and kept after relaunch → Reset restores the default.
@@ -18,12 +18,12 @@ import XCTest
         let environment = ProcessInfo.processInfo.environment
         let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("TestSupport/Data/home-sections")
-        let path = environment["M20_EXPECTED"] ?? fixtures.appendingPathComponent("expected/journey-rich.json").path
+        let path = environment["HOME_SECTIONS_EXPECTED"] ?? fixtures.appendingPathComponent("expected/journey-rich.json").path
         expected = try XCTUnwrap(try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: path))) as? [String: Any])
         let now = try XCTUnwrap(expected["now_ms"] as? NSNumber).int64Value
         app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-home-surprise-seed", "12345",
                                "-test-home-now-ms", String(now),
-                               "-test-seed-android-database", environment["M20_DATABASE"] ?? fixtures.appendingPathComponent("databases/rich.db").path]
+                               "-test-seed-android-database", environment["HOME_SECTIONS_DATABASE"] ?? fixtures.appendingPathComponent("databases/rich.db").path]
     }
     private func section(_ tag: String) -> [String: Any]? {
         (expected["sections"] as? [[String: Any]])?.first { $0["tag"] as? String == tag }

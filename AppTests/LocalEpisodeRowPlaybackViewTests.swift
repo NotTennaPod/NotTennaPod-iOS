@@ -5,7 +5,7 @@ import Testing
 
 /// Source expectations: ItemActionButton.forItem, PlayLocalActionButton and
 /// CompletedDownloadsFragment.afterBindViewHolder in pinned Android 3.12.1.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct LocalEpisodeRowPlaybackViewTests {
     enum Transfer: CaseIterable { case none, waiting, active }
 

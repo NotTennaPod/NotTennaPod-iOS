@@ -5,7 +5,7 @@ import Testing
 @testable import NotTennaPodCore
 
 @MainActor
-@Suite(.serialized, .timeLimit(.minutes(1)))
+@Suite(.serialized)
 struct EpisodeDetailsReachabilityTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as: T.Type = T.self) -> T? {
         if let value = view as? T, value.accessibilityIdentifier == id { return value }

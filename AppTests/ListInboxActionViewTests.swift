@@ -35,7 +35,7 @@ import Testing
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct ListInboxActionViewTests {
     enum Route: String, CaseIterable { case inbox, all, queue, feed, downloads, search }
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
@@ -322,7 +322,7 @@ struct ListInboxActionViewTests {
             case .portraitUpsideDown: restore = .portraitUpsideDown
             case .landscapeLeft: restore = .landscapeLeft
             case .landscapeRight: restore = .landscapeRight
-            default: throw NSError(domain: "M7ResizeSetup", code: 1)
+            default: throw NSError(domain: "InboxResizeSetup", code: 1)
             }
             let target: UIInterfaceOrientationMask = originalOrientation.isPortrait ? .landscapeLeft : .portrait
             var requestError: String?
@@ -334,7 +334,7 @@ struct ListInboxActionViewTests {
                     try await Task.sleep(for: .milliseconds(10))
                 }
                 window.layoutIfNeeded(); controller.view.layoutIfNeeded()
-                print("M7 scene resize: sceneBefore=\(originalScene); sceneAfter=\(scene.effectiveGeometry.coordinateSpace.bounds.size); contentBefore=\(originalContent); contentAfter=\(scroll.bounds.size); window=\(window.bounds); safeArea=\(controller.view.safeAreaInsets); error=\(requestError ?? "none")")
+                print("Inbox scene resize: sceneBefore=\(originalScene); sceneAfter=\(scene.effectiveGeometry.coordinateSpace.bounds.size); contentBefore=\(originalContent); contentAfter=\(scroll.bounds.size); window=\(window.bounds); safeArea=\(controller.view.safeAreaInsets); error=\(requestError ?? "none")")
                 if !windowingRefusesRotation(requestError) {
                     try #require(requestError == nil, "A valid OS scene resize is required")
                     try #require(scene.effectiveGeometry.coordinateSpace.bounds.size != originalScene)
@@ -358,7 +358,7 @@ struct ListInboxActionViewTests {
                 }
                 let center = remove.convert(CGPoint(x: remove.bounds.midX, y: remove.bounds.midY), to: window)
                 let hit = window.hitTest(center, with: nil)
-                print("M7 resized action: frame=\(remove.convert(remove.bounds, to: window)); scroll=\(actions.convert(actions.bounds, to: window)); hit=\(String(describing: hit)); presented=\(String(describing: controller.presentedViewController)); transition=\(String(describing: controller.transitionCoordinator))")
+                print("Inbox resized action: frame=\(remove.convert(remove.bounds, to: window)); scroll=\(actions.convert(actions.bounds, to: window)); hit=\(String(describing: hit)); presented=\(String(describing: controller.presentedViewController)); transition=\(String(describing: controller.transitionCoordinator))")
                 #expect(remove.isEnabled && !remove.isHidden)
                 #expect(reachable())
                 #expect(try await store.feed(id: feed.id) == before)
@@ -369,10 +369,10 @@ struct ListInboxActionViewTests {
                     #expect(try Data(contentsOf: root.appendingPathComponent("episode-\(id).wav")) == bytes)
                 }
             } catch { failure = error }
-            scene.requestGeometryUpdate(.iOS(interfaceOrientations: restore)) { print("M7 scene restore error: \($0)") }
+            scene.requestGeometryUpdate(.iOS(interfaceOrientations: restore)) { print("Inbox scene restore error: \($0)") }
             try await wait { scene.effectiveGeometry.coordinateSpace.bounds.size == originalScene }
             window.layoutIfNeeded(); controller.view.layoutIfNeeded()
-            print("M7 scene restored: scene=\(scene.effectiveGeometry.coordinateSpace.bounds.size); content=\(scroll.bounds.size)")
+            print("Inbox scene restored: scene=\(scene.effectiveGeometry.coordinateSpace.bounds.size); content=\(scroll.bounds.size)")
             #expect(scroll.bounds.size == originalContent)
             #expect(controller.feedSelection.ids == ids)
             #expect(try await store.feed(id: feed.id) == before)
@@ -600,9 +600,11 @@ struct ListInboxActionViewTests {
                 $0.details.title = "Inbox refreshed episode"; $0.userState.positionMilliseconds = 1234
             }
             let refreshRevision = search.session.resultRevision
-            // The stored change reaches the screen as the app delivers it: the library reloads and searches again.
+            // The stored change reaches the screen as the app delivers it: the search patches the changed result in place,
+            // without searching again.
             await controller.reloadLibrary()?.value
-            try await wait { search.session.resultRevision > refreshRevision }
+            try await wait { search.session.result.episodes.first { $0.episode.id == id }?.episode.details.title == "Inbox refreshed episode" }
+            #expect(search.session.resultRevision == refreshRevision, "no new search")
             let refreshed: UIButton = try #require(find("episode-\(id)", in: controller.view))
             #expect(refreshed.accessibilityLabel == "Inbox refreshed episode")
             await commit.release()

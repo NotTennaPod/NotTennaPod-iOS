@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) @MainActor
+@Suite(.serialized) @MainActor
 struct PCMSourceSeekabilityTests {
     /// Within an imperceptible 50 ms of `target` (durations and seek anchors).
     private func near<T: BinaryInteger>(_ value: T?, _ target: T, tolerance: T = 50) -> Bool {

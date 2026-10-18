@@ -34,6 +34,11 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     let podcastSearch: PodcastSearchClient
     let library: FeedLibraryStore?
     let loadSnapshot: (@Sendable () async throws -> FeedLibrarySnapshot)?
+    /// A screen open's full read: the store's screen snapshot (with what patches keep it by), or an injected snapshot.
+    private let loadScreen: (@Sendable () async throws -> LibraryScreenSnapshot)?
+    /// Queues episodes a refresh asked to queue (the scene's enqueue location), also without a full read.
+    let queueEffects: (@MainActor @Sendable () async throws -> Void)?
+    var queueEffectEvents: Task<Void, Never>?
     private var libraryReload: Task<Void, Never>?
     private var pendingLibraryReload: LibraryReloadRequest?
     private var libraryReloadRequests: UInt64 = 0
@@ -60,7 +65,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                 if case .settings = screen { return false }
                 return true
             })
-            self.reloadLibrary()
+            self.reloadLibrary(reopen: true)
         }, notice: { [weak self] in self?.showNotice($0) })
     }()
     func openOPMLDocument(_ url: URL) { opmlImportFlow?.open(url) }
@@ -147,6 +152,8 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     let playback: PlaybackCoordinator?
     let timeDisplayPreferences: TimeDisplayPreferenceStore?
     private let shownotesScroll: ShownotesScrollStore?
+    /// What show notes may load by themselves on the current network.
+    let shownotesNetwork: ShownotesNetworkPolicy
     let speedPreferences: PlaybackSpeedPreferenceStore?
     let intervalPreferences: PlaybackIntervalPreferenceStore?
     let sleepTimerPreferences: SleepTimerPreferenceStore?
@@ -164,6 +171,10 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     var lastInformationEpisode: Int64?
     var lastInformationStatus: LibraryPlaybackSession.Status?
     var lastInformationSpeed: Float?
+    /// The podcast of the player's episode while no list shows it (an episode kept after its podcast's removal, PROTOCOL
+    /// §6.8), and the episode whose podcast was last asked for.
+    var heldPlayerFeed: (episode: Int64, feed: LibraryFeed)?
+    var heldPlayerFeedRequest: Int64?
     let queueInteractionPreferences: QueueInteractionPreferenceStore?
     /// The global new-episodes action, enqueue location and Keep sorted (PROTOCOL §15.4).
     let accountPolicy: AccountPolicy
@@ -194,7 +205,17 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     var subscriptionGrid: LazyContentList?
     /// The episode list's loaded items, from which a row is built when it comes near the screen.
     var displayedEpisodeValues: [Int64: (feed: LibraryFeed, episode: LibraryEpisode)] = [:]
-    var episodePagerList: [EpisodePagerItem] = []
+    /// The podcast of the list's loaded rows as they were placed (a later header change rebuilds rows only when it changes
+    /// what a row shows).
+    var displayedFeedHeaders: [Int64: LibraryFeed] = [:]
+    /// What each built row was painted from (`RowPaint`): a patch repaints a row whose inputs differ, whatever its model.
+    var rowPaints: [Int64: RowPaint] = [:]
+    /// Queue members a patch looked at to repaint rows (tests: bounded by what the patch named, not the queue's size).
+    var queueMembershipChecks = 0
+    /// The covered sequence of the last shown commit of each changed episode (the action fence).
+    var coveredEpisodeChanges: [Int64: Int64] = [:]
+    /// Whether the open list adds its rows page by page.
+    var episodeListPaged = false
     struct EpisodeRowHeightKey: Hashable {
         let title: String, progressLine: Bool, draggable: Bool, action: Bool, queue: Bool
         let width: CGFloat, scale: CGFloat, category: UIContentSizeCategory
@@ -213,6 +234,15 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     /// (See what's new rows act like Inbox rows, Manage downloads rows like Downloads rows).
     var homeCards: [(LibraryEpisode, HomeEpisodeCard, localFeed: Bool)] = []
     var homeRowScopes: [Int64: EpisodeSelectionScope] = [:]
+    /// Home's sections as drawn, each patched alone when what it shows changes (`LibraryViewController+OtherScreens`).
+    var homeSections: [HomeSectionState] = []
+    var homeShowsWelcome = false
+    /// The app went to the background: its return makes the shown screen appear again (Statistics, Classics).
+    var returningFromBackground = false
+    /// The Subscriptions or Archive tiles as drawn: each podcast with its counter, the chips, and the grid's geometry.
+    var subscriptionTiles: [Int64: (feed: LibraryFeed, counter: Int)] = [:]
+    var subscriptionChips: [SubscriptionTagChips.Chip] = []
+    var subscriptionGridGeometry: SubscriptionGridGeometry?
     /// Source `EpisodesSurpriseSection.seed`: process-wide, drawn once and by Shuffle only.
     static var homeSurpriseSeed: Int32 = 0
     /// `HomePreferences` (installed per scene).
@@ -247,6 +277,9 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         let source: String
         let positionRevision: UInt64
         let deletionTarget: EpisodeMediaDeletionTarget?
+        /// The player's position revision when this model's stored position was read and found newer than the player's
+        /// own last write of it (a person's action, an applied remote change): the live overlay waits for a later sample.
+        var storedAhead: UInt64? = nil
     }
     struct CapturedAction {
         let model: EpisodeActionModel
@@ -259,7 +292,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     }
     // These models belong only to the current data presentation, never a global ID cache.
     var actionBindings: [Int64: ActionBinding] = [:]
-    private(set) var deletionTargets: [Int64: EpisodeMediaDeletionTarget] = [:]
+    var deletionTargets: [Int64: EpisodeMediaDeletionTarget] { mirror.deletionTargets }
     var actionPresentation = UUID()
     var actionMutationRevision: UInt64 = 0
     var searchResultRevision: UInt64?
@@ -278,7 +311,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         if let binding = actionBindings[episode.id] { return binding.model }
         let model = EpisodeActionModel(item: .init(episode: episode,
             local: feed.source.isLocalFeedSource, subscription: feed.subscriptionState,
-            queued: queuedEpisodes.contains { $0.id == episode.id },
+            queued: isQueued(episode.id),
             downloading: downloads?.activeJob(source: episode.details.media?.url) != nil))
         let target: EpisodeMediaDeletionTarget?
         if case .search = path.last { target = deletionTarget }
@@ -288,14 +321,46 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                 media: .remote(mediaURL: media.url, originalFile: episode.userState.localFileURL))
         } else { target = nil }
         actionBindings[episode.id] = .init(model: model, feedID: feed.id, source: feed.source,
-            positionRevision: playback?.positionRevision ?? 0, deletionTarget: target)
+            positionRevision: playback?.positionRevision ?? 0, deletionTarget: target, storedAhead: storedAhead(episode))
         return model
+    }
+
+    /// The selected episode's stored position when it differs from what the player last wrote or loaded: someone else
+    /// stored it after the player's samples up to the revision it was first read at (`ActionBinding.storedAhead`).
+    private var storedAheadOfPlayer: (episode: Int64, position: Int32, revision: UInt64)?
+
+    /// The player's revision a stored position of the selected episode is newer than, or nil (the player wrote it, or no
+    /// player holds the episode). Kept across rebuilt rows, so the overlay resumes with the first later sample.
+    private func storedAhead(_ episode: LibraryEpisode) -> UInt64? {
+        guard let playback, let held = playback.episode, held.id == episode.id else { return nil }
+        let position = episode.userState.positionMilliseconds
+        guard held.userState.positionMilliseconds != position else { storedAheadOfPlayer = nil; return nil }
+        if let known = storedAheadOfPlayer, known.episode == episode.id, known.position == position { return known.revision }
+        storedAheadOfPlayer = (episode.id, position, playback.positionRevision)
+        return playback.positionRevision
+    }
+
+    /// The playing episode's row shows the player's live position and duration, not its last save: applied to the
+    /// row's action model whether the model is new or reused, as the position stream would, so a rebuilt row never
+    /// steps back to the stored time. Later position events still apply (the binding's revision is the player's). A
+    /// position stored after the player's samples (`storedAhead`) is never hidden: the overlay resumes with the player's
+    /// next sample.
+    func applyLivePosition(_ model: EpisodeActionModel) {
+        guard let playback, playback.episode?.id == model.episodeID, let sample = playback.sample,
+              let binding = actionBindings[model.episodeID], binding.model === model else { return }
+        if let ahead = binding.storedAhead, playback.positionRevision <= ahead { return }
+        let stored = model.snapshot().episode.details.media?.durationMilliseconds ?? 0
+        model.receivePlaybackPosition(positionMilliseconds: sample.positionMilliseconds,
+                                      durationMilliseconds: sample.durationMilliseconds > 0 ? sample.durationMilliseconds : stored)
+        actionBindings[model.episodeID] = .init(model: model, feedID: binding.feedID, source: binding.source,
+                                                positionRevision: max(binding.positionRevision, playback.positionRevision),
+                                                deletionTarget: binding.deletionTarget)
     }
 
     func contextItem(_ model: EpisodeActionModel) -> EpisodeListItem {
         let item = model.snapshot()
         return .init(episode: item.episode, local: item.local, subscription: item.subscription,
-            queued: queuedEpisodes.contains { $0.id == model.episodeID },
+            queued: isQueued(model.episodeID),
             downloading: downloads?.activeJob(source: item.episode.details.media?.url) != nil)
     }
 
@@ -331,25 +396,37 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
             showRemainingTime: timeDisplayPreferences?.value.showRemainingTime == true)
     }
 
-    func reconcileCommittedAction(_ captured: CapturedAction, delta: EpisodeActionStateDelta) {
-        captured.model.applyCommittedState(delta)
+    /// The fence of every action result (a list action's, a swipe's and its Undo's), checked before anything is changed.
+    /// A shown commit of the episode after the result's receipt is newer than the result, which is then applied to
+    /// nothing: not the action model, not the search, not the library the screens show. Screens already covering the
+    /// receipt show its commit, and the bound model with them (a patch kept or replaced it); only a model no longer bound
+    /// still takes the result.
+    func actionResultSuperseded(_ model: EpisodeActionModel, receipt: Int64) -> Bool {
+        guard let screenUpdater else { return false }
+        return (coveredEpisodeChanges[model.episodeID] ?? .min) > receipt
+            || screenUpdater.covered >= receipt && actionBindings[model.episodeID]?.model === model
+    }
+
+    /// `receipt`: the library's last commit read right after the action's own write returned.
+    func reconcileCommittedAction(_ captured: CapturedAction, delta: EpisodeActionStateDelta, receipt: Int64) {
         let id = captured.model.episodeID
+        if actionResultSuperseded(captured.model, receipt: receipt) { updateQueueInformation(); return }
+        captured.model.applyCommittedState(delta)
         guard actionPresentation == captured.presentation, actionBindings[id]?.model === captured.model else {
             // Read the current presentation after persistence. Never patch a
             // replacement model with the older action's cached row or state.
             lastEpisodeActionReconciliation = reloadLibrary(preservingEpisodeDetails: true, reconcilingPresentation: actionPresentation)
             return
         }
-        for feedIndex in feeds.indices {
-            if let index = feeds[feedIndex].episodes.firstIndex(where: { $0.id == id }) {
-                delta.apply(to: &feeds[feedIndex].episodes[index])
-            }
-        }
-        if let index = queuedEpisodes.firstIndex(where: { $0.id == id }) { delta.apply(to: &queuedEpisodes[index]) }
+        let change = mirror.update(episode: id) { delta.apply(to: &$0) }
+        if !change.isEmpty { libraryRevision &+= 1 }
         if let search = captured.search, let revision = captured.searchRevision {
             _ = search.applyCommittedState(delta, episodeID: id, expectedResultRevision: revision)
             // The search keeps its results; the bottom bar and drawer still count at once (FeedItemEvent).
             refreshNavigationCounters()
+        } else if screenUpdater != nil {
+            // Every screen shows the action's commit as a patch (a list's rows, Home's sections, a tile), after the fence.
+            if !change.isEmpty { screenPatched(change) }
         } else { render() }
         updateQueueInformation()
     }
@@ -379,6 +456,8 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     /// Whether a library snapshot has been applied (a missing visible episode then closes its pager).
     private(set) var libraryLoaded = false
     var feedInformation: FeedInformationScreenView?
+    /// The navigation change at which Feed Information was last shown (a later one is its return).
+    var feedInformationAppearance: UInt64?
     var feedPreferenceWrite: Task<Void, Never>?
     var feedPreferenceWriteID = UUID()
     var visibleSnackbar: Snackbar?
@@ -431,38 +510,73 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         let shown: (() -> Void)?
         let release: (() -> Void)?
     }
-    var feeds: [LibraryFeed] = [] { didSet { episodeLocations = nil; libraryRevision &+= 1 } }
+    /// The library the screens show: feeds with their episodes, queue, deletion targets, statistics units and per-feed
+    /// counts. Read in full when a screen opens (`reloadLibrary`), then kept by patches of each committed change
+    /// (`LibraryScreenUpdater`), never by reading the whole library again on a routine change.
+    var mirror = LibraryScreenMirror()
+    var detailState: (projected: Bool, reader: LibraryDetailReader?) = (false, nil)
+    var feeds: [LibraryFeed] { mirror.feeds }
+    /// Each shown podcast's newest episode date (Subscriptions' and the drawer's "most recent episode" order), kept from
+    /// patches; read from the library once, when first needed after a screen open.
+    var latestDatesStorage: FeedLatestDates?
+    var latestDates: FeedLatestDates {
+        if let latestDatesStorage { return latestDatesStorage }
+        let value = FeedLatestDates(mirror)
+        latestDatesStorage = value
+        return value
+    }
+    /// Home's sections kept from patches while Home shows (`LibraryViewController+Home.swift`).
+    var homeModel: HomeScreenModel?
+    /// The library was read in full: what is kept from patches starts again from it.
+    func mirrorOpened(_ screen: LibraryScreenSnapshot) {
+        latestDatesStorage = nil; homeModel = nil
+        detailReader = screen.projected ? screen.detail : nil
+        libraryProjected = screen.projected
+    }
+    /// The screens' library holds list projections: an episode's page reads its show notes and chapters, and a
+    /// search its text, through `detailReader`.
+    var libraryProjected: Bool { get { detailState.projected } set { detailState.projected = newValue } }
+    var detailReader: LibraryDetailReader? { get { detailState.reader } set { detailState.reader = newValue } }
+    /// An episode of the screens' library whole, for its page: the list projection with the stored show notes and chapters.
+    func detailedEpisode(_ episode: LibraryEpisode) -> LibraryEpisode {
+        guard libraryProjected, let full = try? detailReader?.episode(id: episode.id) else { return episode }
+        var whole = episode
+        whole.details.description = full.details.description
+        whole.details.chapters = full.details.chapters
+        return whole
+    }
     /// The statistics units of the loaded library (schema 20): Home's classics count them as rows, as Android does.
-    var statisticsUnits: [Int64: [LibraryStatisticsUnit]] = [:]
-    /// Changes whenever `feeds` is replaced or edited.
-    private(set) var libraryRevision: UInt64 = 0
+    var statisticsUnits: [Int64: [LibraryStatisticsUnit]] { mirror.statisticsUnits }
+    /// Changes whenever the library the screens show changes.
+    var libraryRevision: UInt64 = 0
     /// The download jobs and library the Downloads list was last checked against.
     private var downloadsRowsCheck: (jobs: [LibraryDownloadJob], library: UInt64)?
-    var queuedEpisodes: [LibraryEpisode] = []
-    /// Episode id → its feed and position in `feeds`, rebuilt after the library changes (lookups
-    /// by id were linear scans of every episode, which a large library turns into multi-second stalls).
-    private var episodeLocations: [Int64: (feed: Int, episode: Int)]?
-    func libraryEpisode(_ id: Int64) -> (feed: LibraryFeed, episode: LibraryEpisode)? {
-        if episodeLocations == nil {
-            var locations: [Int64: (feed: Int, episode: Int)] = [:]
-            locations.reserveCapacity(feeds.reduce(0) { $0 + $1.episodes.count })
-            for (feedIndex, feed) in feeds.enumerated() {
-                for (episodeIndex, episode) in feed.episodes.enumerated() where locations[episode.id] == nil {
-                    locations[episode.id] = (feedIndex, episodeIndex)
-                }
-            }
-            episodeLocations = locations
-        }
-        guard let location = episodeLocations?[id] else { return nil }
-        return (feeds[location.feed], feeds[location.feed].episodes[location.episode])
+    var queuedEpisodes: [LibraryEpisode] { mirror.queue }
+    /// Whether episode `id` is in the queue, from the kept set (never a walk of the queue). Every membership test of a row,
+    /// its model and its paint record goes through here.
+    func isQueued(_ id: Int64) -> Bool {
+        queueEntriesVisited &+= 1
+        return mirror.queuedIDs.contains(id)
     }
+    /// Queue entries membership tests looked at, for the budgets.
+    var queueEntriesVisited = 0
+    func libraryEpisode(_ id: Int64) -> (feed: LibraryFeed, episode: LibraryEpisode)? { mirror.episode(id) }
+    /// Keeps the screens current from committed change sets; nil without a library (a screen fed by snapshots only).
+    var screenUpdater: LibraryScreenUpdater?
+    /// The open list's membership and how it is kept (`LibraryViewController+ScreenPatch.swift`).
+    var listScreen: EpisodeListScreen?
+    /// Screen patches applied and full renders, for the screens' budgets and tests.
+    var screenPatchCount = 0
+    var renderCountForTesting: Int { renderCount }
     /// Android `EpisodesListFragment` / `FeedItemlistFragment.EPISODES_PER_PAGE`: Inbox, Episodes, Favorites,
     /// History and a podcast's episode list show 150 episodes and add the next 150 when scrolled to the
     /// bottom; a reload keeps the pages already shown (`loadItems` reads `page * EPISODES_PER_PAGE`).
     static let episodesPerPage = 150
     var episodePaging: (screen: String, pages: Int) = ("", 1)
     /// The list's items beyond the loaded pages.
-    var remainingEpisodeRows: ArraySlice<(LibraryFeed, LibraryEpisode)>?
+    /// A long list's later pages, read from its membership on demand, and its member count.
+    var episodePageSource: ((Range<Int>) -> [(LibraryFeed, LibraryEpisode)])?
+    var episodeListTotal = 0
     /// Rows a restored reading position needs before the list can scroll back to it.
     private var minimumEpisodeRowCount = 0
     /// The drawer content last applied; nil forces the next render to rebuild it.
@@ -480,6 +594,8 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     var statisticsPagerStorage: StatisticsPagerView?
     private var statisticsEvents: Task<Void, Never>?
     var statisticsActive = false
+    /// Statistics loads (open, return, StatisticsEvent), for tests.
+    var statisticsLoads = 0
     var statisticsVisible: Bool { if case .destination(.statistics) = path.last { true } else { false } }
     var feedSettingsTagDraft: (feedID: Int64, saved: [[UInt16]], draft: FeedTags)?
     /// Changes of `path` since this screen was created, other than restoring its scene's place.
@@ -570,7 +686,13 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         default: nil
         }
     }
-    var feedSelectionIDs: [Int64] = []
+    /// The selectable episodes of the open list, in order (the selection's denominator and select-all): the open list's
+    /// whole membership, read only when a selection uses it.
+    var feedSelectionIDs: [Int64] {
+        get { listScreen?.allIDs ?? feedSelectionIDStorage }
+        set { feedSelectionIDStorage = newValue }
+    }
+    private var feedSelectionIDStorage: [Int64] = []
     var feedContentHeight: CGFloat = 0
     var pageRequestPending = false
     var renderingContent = false
@@ -631,7 +753,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     private var persistentDrawer: Bool { !isPreview && !bottomNavigationEnabled && min(view.bounds.width, view.bounds.height) >= 720 }
 
 
-    init(library: FeedLibraryStore?, startupError: Error?, downloads: DownloadCoordinator?, playback: PlaybackCoordinator?, timeDisplayPreferences: TimeDisplayPreferenceStore?, navigationPreferences: NavigationPreferenceStore?, speedPreferences: PlaybackSpeedPreferenceStore?, mobileNetworkPreferences: MobileNetworkPreferenceStore?, usage: StreamDownloadUsageStore?, loadSnapshot: (@Sendable () async throws -> FeedLibrarySnapshot)? = nil, feedDeletion: FeedDeletionCoordinator? = nil, manualRefresh: ManualFeedRefreshCoordinator? = nil, podcastSearch: PodcastSearchClient = .init(), previewFeedID: Int64? = nil, feedAuthentication: FeedAuthentication? = nil, automaticDownloadPreferences: AutomaticDownloadPreferenceStore? = nil, downloadPreferences: DownloadPreferenceStore? = nil, inboxSwipePreferences: SwipePreferenceStore? = nil, allEpisodesFilterPreferences: AllEpisodesFilterPreferenceStore? = nil, proxyPreferences: ProxyPreferenceStore? = nil, proxyTransport: (any FeedHTTPTransport)? = nil, transcriptLoader: TranscriptLoader? = nil, chapterAccess: EpisodeChapterAccess? = nil, intervalPreferences: PlaybackIntervalPreferenceStore? = nil, sleepTimerPreferences: SleepTimerPreferenceStore? = nil, shownotesScroll: ShownotesScrollStore? = nil, playbackQueuePreferences: PlaybackQueuePreferenceStore? = nil, playbackHardwarePreferences: PlaybackHardwarePreferenceStore? = nil, queueInteractionPreferences: QueueInteractionPreferenceStore? = nil, queueEffects: (@MainActor @Sendable () async throws -> Void)? = nil, castRuntime: CastApplicationRuntime? = nil, synchronizationAccounts: SynchronizationAccounts? = nil, synchronization: SynchronizationCoordinator? = nil, synchronizationDelivery: SynchronizationDelivery? = nil, statisticsPreferences: StatisticsPreferenceStore? = nil, accountPolicy: AccountPolicy? = nil, refreshNetwork: @escaping @Sendable () async throws -> DownloadNetworkState = { try await DownloadNetworkMonitor.shared.observedState() }, serverAccounts: ServerAccounts? = (UIApplication.shared.delegate as? AppDelegate)?.serverAccounts) {
+    init(library: FeedLibraryStore?, startupError: Error?, downloads: DownloadCoordinator?, playback: PlaybackCoordinator?, timeDisplayPreferences: TimeDisplayPreferenceStore?, navigationPreferences: NavigationPreferenceStore?, speedPreferences: PlaybackSpeedPreferenceStore?, mobileNetworkPreferences: MobileNetworkPreferenceStore?, usage: StreamDownloadUsageStore?, loadSnapshot: (@Sendable () async throws -> FeedLibrarySnapshot)? = nil, feedDeletion: FeedDeletionCoordinator? = nil, manualRefresh: ManualFeedRefreshCoordinator? = nil, podcastSearch: PodcastSearchClient = .init(), previewFeedID: Int64? = nil, feedAuthentication: FeedAuthentication? = nil, automaticDownloadPreferences: AutomaticDownloadPreferenceStore? = nil, downloadPreferences: DownloadPreferenceStore? = nil, inboxSwipePreferences: SwipePreferenceStore? = nil, allEpisodesFilterPreferences: AllEpisodesFilterPreferenceStore? = nil, proxyPreferences: ProxyPreferenceStore? = nil, proxyTransport: (any FeedHTTPTransport)? = nil, transcriptLoader: TranscriptLoader? = nil, chapterAccess: EpisodeChapterAccess? = nil, intervalPreferences: PlaybackIntervalPreferenceStore? = nil, sleepTimerPreferences: SleepTimerPreferenceStore? = nil, shownotesScroll: ShownotesScrollStore? = nil, shownotesNetwork: ShownotesNetworkPolicy = .unrestricted, playbackQueuePreferences: PlaybackQueuePreferenceStore? = nil, playbackHardwarePreferences: PlaybackHardwarePreferenceStore? = nil, queueInteractionPreferences: QueueInteractionPreferenceStore? = nil, queueEffects: (@MainActor @Sendable () async throws -> Void)? = nil, castRuntime: CastApplicationRuntime? = nil, synchronizationAccounts: SynchronizationAccounts? = nil, synchronization: SynchronizationCoordinator? = nil, synchronizationDelivery: SynchronizationDelivery? = nil, statisticsPreferences: StatisticsPreferenceStore? = nil, accountPolicy: AccountPolicy? = nil, refreshNetwork: @escaping @Sendable () async throws -> DownloadNetworkState = { try await DownloadNetworkMonitor.shared.observedState() }, serverAccounts: ServerAccounts? = (UIApplication.shared.delegate as? AppDelegate)?.serverAccounts) {
         if let library, let synchronizationAccounts, let synchronization, let synchronizationDelivery {
             synchronizationSettings = SynchronizationSettingsPresentation(store: library, accounts: synchronizationAccounts, coordinator: synchronization, delivery: synchronizationDelivery,
                                                                           server: serverAccounts)
@@ -651,7 +773,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
             })
         }
         else { subscriptionStatistics = nil }
-        let statisticsFeeds: StatisticsPageLoader<YearsStatisticsSnapshot>.Read? = if let library { { try await library.feeds() } }
+        let statisticsFeeds: StatisticsPageLoader<YearsStatisticsSnapshot>.Read? = if let library { { try await library.statisticsFeeds() } }
             else if let loadSnapshot { { try await loadSnapshot().feeds } } else { nil }
         // Years counts the library's statistics units as rows (schema 20); Downloads reads episodes only.
         let statisticsRows: (@Sendable () async throws -> LibraryStatisticsInput)? = if let library { { try await library.statisticsLibrary() } }
@@ -666,6 +788,21 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                 return try await library.snapshot()
             }
         }
+        self.queueEffects = queueEffects
+        if let loadSnapshot { loadScreen = { LibraryScreenSnapshot(snapshot: try await loadSnapshot()) } }
+        else {
+            loadScreen = library.map { library in
+                { @Sendable in
+                    if let queueEffects { try await queueEffects() }
+                    else { _ = try await library.consumeFeedRefreshQueueEffects() }
+                    var screen = try await library.screenSnapshot()
+                    screen.detail = try? await library.readers().detail
+                    return screen
+                }
+            }
+            // Screens patch themselves from the library's committed changes (a screen fed by snapshots only reloads).
+            if let library { screenUpdater = LibraryScreenUpdater(subscription: library.changes.subscribe()) }
+        }
         self.startupError = startupError
         self.downloads = downloads
         self.downloadPreferences = downloadPreferences
@@ -674,13 +811,14 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         self.proxyPreferences = proxyPreferences; self.proxyTransport = proxyTransport ?? URLSessionFeedTransport()
         self.transcriptLoader = transcriptLoader ?? TranscriptLoader(transport: proxyTransport ?? URLSessionFeedTransport(),
             cache: URLCache(memoryCapacity: 8 * 1024 * 1024, diskCapacity: 0),
-            userAgent: HTTPUserAgent.current)
+            userAgent: HTTPUserAgent.current, admission: .unrestricted)
         self.feedDeletion = feedDeletion
         self.manualRefresh = manualRefresh
         self.refreshNetwork = refreshNetwork
         self.playback = playback
         self.timeDisplayPreferences = timeDisplayPreferences
         self.shownotesScroll = shownotesScroll
+        self.shownotesNetwork = shownotesNetwork
         self.speedPreferences = speedPreferences
         self.intervalPreferences = intervalPreferences
         self.queueInteractionPreferences = queueInteractionPreferences
@@ -714,8 +852,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                     return try await downloads.deleteDownloadedMedia(target: target, playback: playback)
                 }
             }
-            coordinator.onEvent = { [weak self] event in self?.receiveInboxSwipe(event) }
-            inboxSwipeCoordinator = coordinator
+            connectInboxSwipe(coordinator)
         }
         let start = startPage(existing: nil)
         rootNavigationTag = start.tag; rootDestination = start.destination; path = [start.screen]
@@ -750,8 +887,11 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                 for await _ in events {
                     guard let self, !Task.isCancelled else { return }
                     if initial { initial = false; continue }
+                    // Feed Information's statistics also follow StatisticsEvent, so an open page never shows counts the
+                    // library no longer has (Android loads them on open only).
+                    if case .feedInformation = path.last { feedInformation?.refreshStatistics() }
                     guard statisticsActive, statisticsVisible else { continue }
-                    refreshSubscriptionStatistics()
+                    refreshSubscriptionStatistics(downloads: false)
                 }
             }
         }
@@ -823,7 +963,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         allEpisodesFilterLabel.isUserInteractionEnabled = true
         allEpisodesFilterLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showAllEpisodesFilter)))
         if !isPreview, let playback, let timeDisplayPreferences {
-            let player = PlayerView(playback: playback, timeDisplayPreferences: timeDisplayPreferences, library: library, intervalPreferences: intervalPreferences, chapterAccess: chapterAccess, shownotesScroll: shownotesScroll ?? .init())
+            let player = PlayerView(playback: playback, timeDisplayPreferences: timeDisplayPreferences, library: library, intervalPreferences: intervalPreferences, chapterAccess: chapterAccess, shownotesScroll: shownotesScroll ?? .init(), shownotesNetwork: shownotesNetwork)
             player.expansionChanged = { [weak self, weak player] in
                 guard let self else { return }
                 // The person opened the player before a restored expansion: theirs stands.
@@ -940,6 +1080,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                 }
             }
         }
+        configureScreenUpdater()
         reloadLibrary()
         if let downloads {
             let events = downloads.events()
@@ -960,7 +1101,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         }
     }
 
-    isolated deinit { statisticsEvents?.cancel(); subscriptionStatistics?.cancel(); queueDragController?.cancel(); queueMoveTask?.cancel(); inboxSwipeCoordinator?.invalidateLibrary(); inboxSwipeOffers?.dismiss(); navigationEvents?.cancel(); downloadEvents?.cancel(); playbackEvents?.cancel(); noticeTask?.cancel(); notice?.removeFromSuperview(); fetchTask?.cancel(); libraryReload?.cancel() }
+    isolated deinit { screenUpdater?.stop(); queueEffectEvents?.cancel(); statisticsEvents?.cancel(); subscriptionStatistics?.cancel(); queueDragController?.cancel(); queueMoveTask?.cancel(); inboxSwipeCoordinator?.invalidateLibrary(); inboxSwipeOffers?.dismiss(); navigationEvents?.cancel(); downloadEvents?.cancel(); playbackEvents?.cancel(); noticeTask?.cancel(); notice?.removeFromSuperview(); fetchTask?.cancel(); libraryReload?.cancel() }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -1001,6 +1142,9 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
 
     /// Playback and download changes received in the background were not drawn; show the current state once.
     @objc func applicationDidBecomeActive() {
+        screenUpdater?.activate()
+        // From the background (not from an alert or the control centre): the shown screen appears again.
+        if returningFromBackground { returningFromBackground = false; screensAppearAgain() }
         if let request = backgroundReload {
             backgroundReload = nil
             reloadLibrary(preservingEpisodeDetails: request.preservingEpisodeDetails,
@@ -1021,7 +1165,9 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
             let check = (jobs: downloads?.jobs ?? [], library: libraryRevision)
             if check.jobs != downloadsRowsCheck?.jobs || check.library != downloadsRowsCheck?.library {
                 downloadsRowsCheck = check
-                if downloadsRows().map({ $0.1.id }) != displayedEpisodeIDs {
+                // With change sets the list patches the rows the jobs added or removed.
+                if screenUpdater != nil, listScreen != nil { patchDownloadsList() }
+                else if downloadsRows().map({ $0.1.id }) != displayedEpisodeIDs {
                     reloadLibrary(preservingEpisodeDetails: true); return
                 }
             }
@@ -1138,10 +1284,17 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     ///   therefore cost one or two reads and one redraw.
     /// - Nothing is read or drawn while the app is in the background; one reload runs when it becomes active.
     /// - The returned task finishes after a reload that started after this call has been applied.
+    /// - With a library, once the screen is open, a committed change reaches it as a change set (`screenUpdater`): a
+    ///   reload then only waits until the screen covers everything committed now (the receipt), without reading the
+    ///   library again. `reopen` reads it in full (an import, a restore, Keep, a notification, the catch-up cap).
     @discardableResult
     func reloadLibrary(preservingEpisodeDetails: Bool = false, reconcilingPresentation: UUID? = nil,
-                       keepsUnchangedScreen: Bool = false) -> Task<Void, Never>? {
-        guard let loadSnapshot else { return nil }
+                       keepsUnchangedScreen: Bool = false, reopen: Bool = false) -> Task<Void, Never>? {
+        guard let loadScreen else { return nil }
+        if let screenUpdater, let library, libraryLoaded, !reopen, libraryReload == nil {
+            let receipt = library.changes.emitted
+            return Task { _ = await screenUpdater.settle(receipt: receipt) }
+        }
         let request = LibraryReloadRequest(preservingEpisodeDetails: preservingEpisodeDetails,
             reconcilingPresentation: reconcilingPresentation, mutationRevision: actionMutationRevision,
             keepsUnchangedScreen: keepsUnchangedScreen)
@@ -1152,7 +1305,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         pendingLibraryReload = pendingLibraryReload.map { $0.merged(with: request) } ?? request
         libraryReloadRequests &+= 1
         let target = libraryReloadRequests
-        if libraryReload == nil { startLibraryReload(loadSnapshot) }
+        if libraryReload == nil { startLibraryReload(loadScreen) }
         return Task { [weak self] in await self?.waitForLibraryReload(target) }
     }
 
@@ -1162,18 +1315,22 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
 
     /// Runs reloads until no request is pending. A result read while a newer request waits is not drawn;
     /// its request merges into the newer one, so nothing it should have shown is lost.
-    private func startLibraryReload(_ loadSnapshot: @escaping @Sendable () async throws -> FeedLibrarySnapshot) {
+    private func startLibraryReload(_ loadScreen: @escaping @Sendable () async throws -> LibraryScreenSnapshot) {
+        // No patch is applied while the screen is read in full; changes after the read's sequence are patched after it.
+        screenUpdater?.beginOpen()
         libraryReload = Task { [weak self] in
+            var opened: Int64?
             while let next = self?.takePendingLibraryReload() {
                 let (request, covered) = next
-                let result: Result<FeedLibrarySnapshot, any Error>
-                do { result = .success(try await loadSnapshot()) } catch { result = .failure(error) }
+                let result: Result<LibraryScreenSnapshot, any Error>
+                do { result = .success(try await loadScreen()) } catch { result = .failure(error) }
                 guard let self, !Task.isCancelled else { return }
                 if let newer = pendingLibraryReload { pendingLibraryReload = request.merged(with: newer); continue }
-                applyLibraryReload(result, request: request)
+                if applyLibraryReload(result, request: request), case .success(let screen) = result { opened = screen.sequence }
                 libraryReloadsApplied = covered
             }
             self?.libraryReload = nil
+            self?.screenUpdater?.opened(at: opened)
         }
     }
 
@@ -1183,23 +1340,27 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         return (request, libraryReloadRequests)
     }
 
-    private func applyLibraryReload(_ result: Result<FeedLibrarySnapshot, any Error>, request: LibraryReloadRequest) {
+    /// Returns whether the read was applied.
+    @discardableResult
+    private func applyLibraryReload(_ result: Result<LibraryScreenSnapshot, any Error>, request: LibraryReloadRequest) -> Bool {
         if let reconcilingPresentation = request.reconcilingPresentation {
             guard actionPresentation == reconcilingPresentation,
-                  actionMutationRevision == request.mutationRevision else { return }
+                  actionMutationRevision == request.mutationRevision else { return false }
         }
-        let snapshot: FeedLibrarySnapshot
+        let screen: LibraryScreenSnapshot
         switch result {
-        case .success(let value): snapshot = value
-        case .failure(let error): showError(error); return
+        case .success(let value): screen = value
+        case .failure(let error): showError(error); return false
         }
+        let snapshot = screen.snapshot
         // D-shell 5: a playback or download event that changed nothing this list shows keeps the list as it is.
         if request.keepsUnchangedScreen, request.reconcilingPresentation == nil, libraryLoaded, showsOnlyLibraryData,
            snapshot.feeds == feeds, snapshot.queue == queuedEpisodes, snapshot.deletionTargets == deletionTargets {
+            mirror = LibraryScreenMirror(screen); mirrorOpened(screen)
             updateDownloadRows()
             updatePlayer()
             forwardReloadToPreview(preservingEpisodeDetails: request.preservingEpisodeDetails, keepsUnchangedScreen: true)
-            return
+            return true
         }
         if case .search(let search) = path.last {
             if request.reconcilingPresentation != nil {
@@ -1209,10 +1370,8 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                 searchNeedsReload = true
             }
         } else { retireActionPresentation() }
-        feeds = snapshot.feeds; libraryLoaded = true
-        statisticsUnits = snapshot.statisticsUnits
-        deletionTargets = snapshot.deletionTargets
-        queuedEpisodes = snapshot.queue
+        mirror = LibraryScreenMirror(screen); mirrorOpened(screen); libraryLoaded = true
+        libraryRevision &+= 1
         // A restored stack drops what the library no longer has before anything is drawn from it, and a remembered
         // start page that is gone gives way.
         let restoredStackChanged = checkRestoredNavigation() || checkStartPage()
@@ -1225,9 +1384,11 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         else { render() }
         updatePlayer()
         forwardReloadToPreview(preservingEpisodeDetails: request.preservingEpisodeDetails, keepsUnchangedScreen: request.keepsUnchangedScreen)
+        return true
     }
 
     private func forwardReloadToPreview(preservingEpisodeDetails: Bool, keepsUnchangedScreen: Bool) {
+        // A preview with a library keeps itself current from the same change sets.
         if let preview = presentedViewController as? FeedPreviewController,
            let child = preview.contentController as? LibraryViewController {
             child.reloadLibrary(preservingEpisodeDetails: preservingEpisodeDetails, keepsUnchangedScreen: keepsUnchangedScreen)
@@ -1256,7 +1417,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         loadViewIfNeeded()
         dismiss(animated: false)
         popup?.removeFromSuperview(); popup = nil
-        await reloadLibrary()?.value
+        await reloadLibrary(reopen: true)?.value
         guard notificationRouteID == route else { return }
         switch destination {
         case .inbox: drawerAction(.destination(.inbox))
@@ -1361,6 +1522,9 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         renderAfterLayout()
     }
 
+    /// After the library changed: a restored or remembered screen whose podcast is gone gives way (as at the first read).
+    func checkLibraryNavigation() -> Bool { checkRestoredNavigation() || checkStartPage() }
+
     /// The first library read after a restoration: a screen whose podcast or episode no longer exists is left out,
     /// so the nearest screen that still exists shows; a root podcast that is gone gives way to the start page, as a new
     /// window opens. Returns whether the stack changed. The restored player then expands.
@@ -1372,7 +1536,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         func exists(_ screen: Screen) -> Bool {
             switch screen {
             case .feed(let id), .feedInformation(let id), .feedSettings(let id): feeds.contains { $0.id == id }
-            case .episode(let feedID, let id): feeds.first { $0.id == feedID }?.episodes.contains { $0.id == id } == true
+            case .episode(let feedID, let id): libraryEpisode(id)?.feed.id == feedID
             case .search(let search): search.session.feedID.map { id in feeds.contains { $0.id == id } } ?? true
             default: true
             }
@@ -1448,7 +1612,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         let readingPosition = pendingReadingPosition ?? captureReadingPosition()
         pendingReadingPosition = nil
         if case .episode(let index, _) = readingPosition { minimumEpisodeRowCount = index + 1 } else { minimumEpisodeRowCount = 0 }
-        remainingEpisodeRows = nil
+        episodePageSource = nil; episodeListTotal = 0; listScreen = nil
         feedScrimAnimator?.stopAnimation(true); feedScrimAnimator = nil
         feedAppBar = nil
         feedPageFooter.isHidden = true
@@ -1466,13 +1630,16 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         // The visible Settings search page keeps its field (and keyboard) across re-renders.
         let retainedSettingsSearch: UIView? = if case .settingsSearch(let search) = path.last { search } else { nil }
         content.subviews.filter { $0 !== retainedPager && $0 !== retainedSettingsSearch }.forEach { $0.removeFromSuperview() }
-        episodeRows.removeAll(); homeCards.removeAll(); homeRowScopes.removeAll()
-        episodeList = nil; subscriptionGrid = nil; displayedEpisodeValues.removeAll()
+        episodeRows.removeAll(); rowPaints.removeAll(); homeCards.removeAll(); homeRowScopes.removeAll(); homeSections.removeAll()
+        subscriptionGridGeometry = nil
+        episodeList = nil; subscriptionGrid = nil; displayedEpisodeValues.removeAll(); displayedFeedHeaders.removeAll()
         navigation.subviews.forEach { $0.removeFromSuperview() }
         content.contentSize = content.bounds.size
         content.isScrollEnabled = true
         content.alwaysBounceVertical = currentRefreshScope != nil
         let current = path.last!
+        // Home's kept sections live while Home shows; its next open reads them again.
+        if case .destination(.home) = current {} else { homeModel = nil }
         let discoverRoot: Bool = if case .discover = current { true } else { false }
         if case .destination(.addPodcast) = current {} else { addPodcastScreen.left() }
         if case .episode = current, let pager = visibleEpisodePager, let page = pager.pages[pager.model.index] {
@@ -1536,7 +1703,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                 if let destination { self?.select(destination) } else { self?.showMore() }
             }
             button.accessibilityIdentifier = destination?.rawValue ?? "navigationMore"
-            if destination == .inbox { button.badgeCount = NavigationCounters.inbox(feeds) }
+            if destination == .inbox { button.badgeCount = mirror.inboxCount }
             navigation.addSubview(button)
         }
         switch current {
@@ -1546,12 +1713,10 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         case .archive: renderSubscriptions(heading: heading, archived: true)
         case .destination(.queue):
             renderQueueToolbar(heading: heading)
-            feedSelectionIDs = queuedEpisodes.map(\.id)
+            let rows = openCollectionList(.queue)
             if queuedEpisodes.isEmpty { feedSelection.end(); selectionScope = nil }
             if queuedEpisodes.isEmpty { empty(title: "no_items_header_label", message: "no_items_label") }
-            else {
-                episodes(queuedEpisodes.compactMap { episode in libraryEpisode(episode.id).map { ($0.feed, episode) } })
-            }
+            else { episodes(rows) }
         case .destination(.inbox): renderInbox(heading: heading)
         case .destination(.favorites): renderFavorites(heading: heading)
         case .destination(.downloads): renderDownloads(heading: heading)
@@ -1569,7 +1734,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         case .feedSettings(let id):
             if let feed = feeds.first(where: { $0.id == id }) { feedSettingsScreen(feed) }
         case .episode(let feedID, let id):
-            if let feed = feeds.first(where: { $0.id == feedID }), let episode = feed.episodes.first(where: { $0.id == id }) { episodeScreen(feed, episode) }
+            if let (feed, episode) = libraryEpisode(id), feed.id == feedID { episodeScreen(feed, episode) }
         }
         rebuildDrawer()
         if let feedAppBar { content.contentSize.height = max(content.contentSize.height, content.bounds.height + feedAppBar.fullHeaderHeight) }
@@ -1590,7 +1755,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     /// FeedListUpdateEvent and QueueEvent, also while a screen keeps its own content (episode details).
     func refreshNavigationCounters() {
         rebuildDrawer()
-        let inbox = NavigationCounters.inbox(feeds)
+        let inbox = mirror.inboxCount
         navigation.subviews.lazy.compactMap { $0 as? NavigationButton }
             .first { $0.accessibilityIdentifier == NavigationDestination.inbox.rawValue }?.badgeCount = inbox
     }
@@ -1602,9 +1767,11 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         let destinations = configuration.visibleDrawerItems.filter { $0 != .subscriptionList }
         // The drawer uses the Subscriptions order, counter and filter (NavDrawerFragment.getNavDrawerData).
         let preferences = subscriptionDisplay
-        let data = SubscriptionListQueries.load(feeds, preferences: preferences, state: .subscribed, globalAutoDownload: globalAutoDownload)
+        // The per-feed counters, played counts and newest dates come from what the screens keep, never from a scan of
+        // every episode.
+        let data = subscriptionList(preferences, state: .subscribed)
         // Queue, Inbox (subscribed feeds only) and Subscriptions counters, as NavDrawerData counts them.
-        let counters = NavigationCounters(feeds: feeds, queueLength: queuedEpisodes.count, feedCounters: data.counters)
+        let counters = NavigationCounters(queueLength: queuedEpisodes.count, inbox: mirror.inboxCount, feedCounters: data.counters)
         let items = destinations.map { destination -> NavigationDrawerView.Item in
             var count = 0
             if destination == .queue { count = counters.queue }
@@ -1834,8 +2001,6 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     private var orderedEpisodeRows: [EpisodeRowView] {
         episodeRows.values.map(\.1).sorted { $0.frame.minY < $1.frame.minY }
     }
-    /// Frames of the episode rows in list order: the whole loaded list, built or not (Home's few rows otherwise).
-    private var episodeRowFrames: [CGRect] { episodeList?.frames ?? orderedEpisodeRows.map(\.frame) }
     /// Episode ids of the list on screen, top to bottom, including rows not built yet.
     var displayedEpisodeIDs: [Int64] {
         episodeList?.ids ?? episodeRows.values.sorted { $0.1.frame.minY < $1.1.frame.minY }.map(\.0.id)
@@ -1861,7 +2026,14 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
 
     private func captureReadingPosition() -> ReadingPosition {
         let y = max(0, content.contentOffset.y)
-        let frames = episodeRowFrames
+        if let list = episodeList {
+            // The first row below the top of the screen, found through the list's chunks (never every loaded frame).
+            if let first = list.item(at: 0), y >= first.frame.minY, let item = list.firstItem(below: y) {
+                return .episode(index: item.index, top: item.frame.minY - y)
+            }
+            return .offset(y)
+        }
+        let frames = orderedEpisodeRows.map(\.frame)
         if let first = frames.first, y >= first.minY,
            let index = frames.firstIndex(where: { $0.maxY > y }) {
             return .episode(index: index, top: frames[index].minY - y)
@@ -1874,7 +2046,15 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         switch position {
         case .offset(let offset): y = offset
         case .episode(let index, let top):
-            let frames = episodeRowFrames
+            if let list = episodeList {
+                // `EpisodeListScrollPosition` over the list's rows: the row's place minus its kept top, within the list.
+                let listHeight = list.bottom - list.top
+                let requested = (list.item(at: index)?.frame.minY).map { $0 - list.top - top }
+                let listOffset = requested.map { min(max(0, listHeight - content.bounds.height), max(0, $0)) } ?? 0
+                y = list.top + listOffset
+                break
+            }
+            let frames = orderedEpisodeRows.map(\.frame)
             // Translate only the episode-list coordinates. Header space must
             // never count as an adapter row or change the retained row index.
             let listOffset = EpisodeListScrollPosition(firstVisibleIndex: index, topOffset: top)
@@ -1887,48 +2067,52 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     /// `paged`: the list shows `episodesPerPage` rows per loaded page (see `episodesPerPage`). Every loaded row
     /// is measured and placed, but built only when it comes near the screen (`LazyContentList`).
     func episodes(_ values: [(LibraryFeed, LibraryEpisode)], top: CGFloat = 0, paged: Bool = false) {
-        if currentSelectionScope != nil { feedSelectionIDs = values.map { $0.1.id } }
-        remainingEpisodeRows = nil
-        var count = values.count
+        if currentSelectionScope != nil, listScreen == nil { feedSelectionIDs = values.map { $0.1.id } }
+        episodes(total: values.count, top: top, paged: paged) { Array(values[$0]) }
+    }
+
+    /// A list of `total` rows read page by page from `page` (its membership): only the loaded pages are placed.
+    func episodes(total: Int, top: CGFloat = 0, paged: Bool = false, page: @escaping (Range<Int>) -> [(LibraryFeed, LibraryEpisode)]) {
+        episodeListTotal = total
+        episodePageSource = page
+        var count = total
         if paged {
-            let screen = "\(String(describing: currentSelectionScope))#\(path.count)"
-            if episodePaging.screen != screen { episodePaging = (screen, 1) }
+            if episodePaging.screen != currentListKey { episodePaging = (currentListKey, 1) }
             let needed = (minimumEpisodeRowCount + Self.episodesPerPage - 1) / Self.episodesPerPage
             episodePaging.pages = max(episodePaging.pages, needed)
             count = min(count, episodePaging.pages * Self.episodesPerPage)
         }
+        episodeListPaged = paged
         let list = LazyContentList(top: top) { [weak self] id in self?.makeListEpisodeRow(id) ?? UIView() }
-        list.released = { [weak self] id in self?.episodeRows[id] = nil }
+        list.released = { [weak self] id in self?.episodeRows[id] = nil; self?.rowPaints[id] = nil }
         list.pinned = { [weak self] id in self?.queueDragController?.holds(id) == true }
         list.ceiling = { [weak self] in self?.feedAppBar }
         list.fittedHeight = { view, width in view.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude)).height }
         list.resized = { [weak self] in self?.episodeListResized() }
         episodeList = list
-        // A tap opens the pager over exactly these displayed rows, in this order.
-        episodePagerList = values.map { EpisodePagerItem(feedID: $0.0.id, episodeID: $0.1.id) }
-        appendEpisodeRows(values[..<count])
-        if count < values.count { remainingEpisodeRows = values[count...] }
+        appendEpisodeRows(page(0..<count)[...])
         content.contentSize.height = max(content.bounds.height, list.bottom)
         if queueVisible { attachQueueDrag() }
     }
 
+    /// The list's rows beyond the loaded pages exist.
+    var hasMoreEpisodeRows: Bool { episodePageSource != nil && (episodeList?.count ?? 0) < episodeListTotal }
+
     /// `EpisodesListFragment.setupLoadMoreScrollListener`: the next page joins the list as its end comes into
     /// view (here one screen early, so scrolling does not stop at the page boundary).
     func loadNextEpisodePageIfNeeded() {
-        guard let remaining = remainingEpisodeRows, let list = episodeList, content.bounds.height > 0,
+        guard hasMoreEpisodeRows, let page = episodePageSource, let list = episodeList, content.bounds.height > 0,
               content.contentOffset.y + 2 * content.bounds.height >= list.bottom else { return }
-        remainingEpisodeRows = nil
-        let next = remaining.prefix(Self.episodesPerPage)
-        appendEpisodeRows(next)
+        let start = list.count
+        appendEpisodeRows(page(start..<min(episodeListTotal, start + Self.episodesPerPage))[...])
         episodePaging.pages += 1
-        if next.count < remaining.count { remainingEpisodeRows = remaining.dropFirst(next.count) }
         episodeListResized()
         guard !renderingContent else { return }
         updateFeedSelection()
     }
 
     /// The content height after the list grew (a page was added, a row's height changed).
-    private func episodeListResized() {
+    func episodeListResized() {
         guard let list = episodeList else { return }
         var height = max(content.bounds.height, list.bottom)
         if let feedAppBar { height = max(height, content.bounds.height + feedAppBar.fullHeaderHeight) }
@@ -1940,41 +2124,54 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     /// Measures and places rows without building them; a row's height depends only on its title and layout.
     private func appendEpisodeRows(_ values: ArraySlice<(LibraryFeed, LibraryEpisode)>) {
         guard let list = episodeList else { return }
-        let onQueue = queueVisible
-        let onFeedScreen: Bool = if case .feed = path.last { true } else { false }
-        let draggable = onQueue && queuePolicy.showsHandle
-        let width = content.bounds.width
-        let scale = view.window?.screen.scale ?? traitCollection.displayScale
-        let category = traitCollection.preferredContentSizeCategory
-        let playingID = playback?.wantsPlayback == true ? playback?.episode?.id : nil
-        var metrics: EpisodeRowMetrics?
+        var measure = rowMeasure()
         var ids: [Int64] = [], heights: [CGFloat] = []
         ids.reserveCapacity(values.count); heights.reserveCapacity(values.count)
         for (feed, stored) in values {
             displayedEpisodeValues[stored.id] = (feed, stored)
-            let episode = actionBindings[stored.id]?.model.snapshot().episode ?? stored
+            displayedFeedHeaders[feed.id] = feed
+            heights.append(measure.height(feed: feed, stored: stored))
+            ids.append(stored.id)
+        }
+        list.append(ids, heights: heights, width: content.bounds.width)
+    }
+
+    /// Measures list rows in the current screen's layout (heights cached by title and layout).
+    struct RowMeasure {
+        unowned let owner: LibraryViewController
+        let onQueue: Bool, onFeedScreen: Bool, draggable: Bool
+        let width: CGFloat, scale: CGFloat, category: UIContentSizeCategory, playingID: Int64?
+        var metrics: EpisodeRowMetrics?
+
+        @MainActor mutating func height(feed: LibraryFeed, stored: LibraryEpisode) -> CGFloat {
+            let episode = owner.actionBindings[stored.id]?.model.snapshot().episode ?? stored
             let key = EpisodeRowHeightKey(title: episode.details.title ?? "",
                 progressLine: EpisodeRowView.showsProgressLine(episode, activelyPlaying: playingID == episode.id),
                 draggable: draggable, action: onFeedScreen ? feed.subscriptionState == .subscribed : true, queue: onQueue,
                 width: width, scale: scale, category: category)
-            if let height = episodeRowHeights[key] { heights.append(height) }
-            else {
-                if metrics == nil { metrics = EpisodeRowMetrics(queueTraits: onQueue ? traitCollection : nil, scale: scale) }
-                let height = metrics!.height(title: key.title, progressLine: key.progressLine, width: width,
-                                             draggable: draggable, showAction: key.action)
-                if episodeRowHeights.count >= 20_000 { episodeRowHeights.removeAll() }
-                episodeRowHeights[key] = height
-                heights.append(height)
-            }
-            ids.append(stored.id)
+            if let height = owner.episodeRowHeights[key] { return height }
+            if metrics == nil { metrics = EpisodeRowMetrics(queueTraits: onQueue ? owner.traitCollection : nil, scale: scale) }
+            let height = metrics!.height(title: key.title, progressLine: key.progressLine, width: width,
+                                         draggable: draggable, showAction: key.action)
+            if owner.episodeRowHeights.count >= 20_000 { owner.episodeRowHeights.removeAll() }
+            owner.episodeRowHeights[key] = height
+            return height
         }
-        list.append(ids, heights: heights, width: width)
+    }
+
+    func rowMeasure() -> RowMeasure {
+        let onQueue = queueVisible
+        let onFeedScreen: Bool = if case .feed = path.last { true } else { false }
+        return RowMeasure(owner: self, onQueue: onQueue, onFeedScreen: onFeedScreen, draggable: onQueue && queuePolicy.showsHandle,
+                          width: content.bounds.width, scale: view.window?.screen.scale ?? traitCollection.displayScale,
+                          category: traitCollection.preferredContentSizeCategory,
+                          playingID: playback?.wantsPlayback == true ? playback?.episode?.id : nil)
     }
 
     /// A long list's row, built as it comes near the screen, in the list's current selection and queue state.
     private func makeListEpisodeRow(_ id: Int64) -> UIView {
         guard let (feed, stored) = displayedEpisodeValues[id] else { return UIView() }
-        let row = makeEpisodeRow(feed: feed, storedEpisode: stored, pagerList: episodePagerList)
+        let row = makeEpisodeRow(feed: feed, storedEpisode: stored, pagerList: nil)
         if currentSelectionScope != nil, feedSelection.active {
             row.setSelected(feedSelection.ids.contains(id), selectionMode: true)
         }
@@ -1997,14 +2194,16 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         return y
     }
 
-    private func makeEpisodeRow(feed: LibraryFeed, storedEpisode: LibraryEpisode, pagerList: [EpisodePagerItem]) -> EpisodeRowView {
+    /// `pagerList`: the rows a tap pages through (Home's section); nil: the open list's members at the time of the tap.
+    private func makeEpisodeRow(feed: LibraryFeed, storedEpisode: LibraryEpisode, pagerList: [EpisodePagerItem]?) -> EpisodeRowView {
         let model = actionModel(feed: feed, episode: storedEpisode)
+        applyLivePosition(model)
         let episode = model.snapshot().episode
         let onQueue: Bool = if case .destination(.queue) = path.last { true } else { false }
         let showsSecondary: Bool = if case .feed = path.last { feed.subscriptionState == .subscribed } else { true }
         // A podcast's own list ignores "Use episode cover" (`FeedItemlistFragment.java:746–758`).
         let onFeedScreen: Bool = if case .feed = path.last { true } else { false }
-        let row = EpisodeRowView(feed: feed, episode: episode, queued: queuedEpisodes.contains { $0.id == episode.id },
+        let row = EpisodeRowView(feed: feed, episode: episode, queued: isQueued(episode.id),
                                  queueScreen: onQueue, showRemainingTime: timeDisplayPreferences?.value.showRemainingTime == true,
                                  activelyPlaying: playback?.episode?.id == episode.id && playback?.wantsPlayback == true,
                                  showsSecondaryAction: showsSecondary, prefersDelete: downloadsDeleteButton, library: library,
@@ -2016,7 +2215,8 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
                                          } else { self?.downloadAction(episode.id) }
                                      }
                                  }) { [weak self] in
-            if self?.toggleFeedSelection(episode.id) != true { self?.openEpisode(feedID: feed.id, episodeID: episode.id, list: pagerList) }
+            guard let self, !toggleFeedSelection(episode.id) else { return }
+            openEpisode(feedID: feed.id, episodeID: episode.id, list: pagerList ?? currentPagerList())
         }
         if currentSelectionScope != nil || homeRowScopes[episode.id] != nil {
             row.contextMenu = { [weak self] anchor, fraction in self?.showListEpisodeMenu(episode.id, feedID: feed.id, anchor: anchor, fraction: fraction) }
@@ -2038,6 +2238,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
             row.setQueueInteraction(queuePolicy)
         }
         episodeRows[episode.id] = (episode, row)
+        rowPaints[episode.id] = RowPaint(episode: episode, queued: isQueued(episode.id), header: .init(feed))
         let job = downloads?.activeJob(source: episode.details.media?.url)
         row.updateDownload(job: job, progress: job.flatMap { downloads?.progress[$0.id] },
                            playing: playback?.episode?.id == episode.id && playback?.wantsPlayback == true,
@@ -2314,7 +2515,8 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     func showError(_ error: Error) {
         // A superseded or refused command (the player of a library being closed) is not a failure to report.
         guard !(error is CancellationError) else { return }
-        let dialog = UIAlertController(title: Appearance.text("error_label"), message: error.localizedDescription, preferredStyle: .alert)
+        let message = ServerSynchronizationText.refusal(error) ?? error.localizedDescription
+        let dialog = UIAlertController(title: Appearance.text("error_label"), message: message, preferredStyle: .alert)
         dialog.addAction(UIAlertAction(title: Appearance.text("confirm_label"), style: .default))
         messages.present(dialog)
     }

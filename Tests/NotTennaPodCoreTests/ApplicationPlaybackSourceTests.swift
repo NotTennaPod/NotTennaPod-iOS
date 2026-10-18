@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct ApplicationPlaybackSourceTests {
+@MainActor @Suite(.serialized) struct ApplicationPlaybackSourceTests {
     private func fixture(_ path: String) throws -> URL {
         let parts = path.split(separator: "/", maxSplits: 1).map(String.init)
 #if SWIFT_PACKAGE

@@ -4,6 +4,8 @@ The app needs two generated dependencies that are not committed: the codec XCFra
 (FFmpeg and dav1d) and the Google Cast SDK. Set both up on a fresh checkout before any
 SwiftPM or Xcode command. SwiftSoup is pinned by `Package.resolved`. Licences are in
 `Licenses/` and attributions in [NOTICE.md](../NOTICE.md).
+The server-backed tests also need the sibling server and web checkouts, Go and Node
+([README: Test prerequisites](../README.md#test-prerequisites)).
 
 ## Codec (FFmpeg and dav1d)
 

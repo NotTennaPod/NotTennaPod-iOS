@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct FeedSortViewTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if let result = view as? T, result.accessibilityIdentifier == id

@@ -23,7 +23,8 @@ public struct FeedRefreshService: Sendable {
                         credentials: FeedCredentials? = nil,
                         options: FeedRefreshOptions = FeedRefreshOptions(), manualRequestID: UUID? = nil) async throws -> Outcome {
         try Task.checkCancellation()
-        guard let feed = try await store.feed(id: feedID) else { throw FeedLibraryError.missingFeed(feedID) }
+        // The header is all a fetch needs: no episode of the feed is read before the merge.
+        guard let feed = try await store.refreshHeader(id: feedID) else { throw FeedLibraryError.missingFeed(feedID) }
         let pageURL = nextPage ? feed.metadata.nextPageURL : nil
         // A server library parses with the parity parse.
         let request = FeedFetchRequest(source: pageURL ?? feed.source, validator: feed.validator,
@@ -41,15 +42,25 @@ public struct FeedRefreshService: Sendable {
         try Task.checkCancellation()
         switch fetched {
         case .notModified:
-            // Unchanged: observations waiting for this feed are recorded now (PROTOCOL §9.4).
+            // Unchanged: this device's attempt is noted for its details only; observations waiting for this feed are
+            // recorded now (PROTOCOL §9.4).
+            try await store.recordUnchangedRefresh(feedID: feedID, date: clock())
             if await store.isServerLibrary { try? await FeedLibraryStore.drainObservations(store, feedID: feedID, catalog: nil, items: [:]) }
             return .unchanged
-        case .updated(let result):
+        case .updated(var result):
             var settings = options
             settings.now = clock()
             settings.refreshAttempt = settings.now
             settings.pageNumber = feed.pageNumber + (pageURL == nil ? 0 : 1)
+            // The parse's digest for the store's unchanged-refresh check (`FeedRefreshMemo`), made here rather than on
+            // the store.
+            if settings.pageNumber == 0 { result.parseDigest = FeedLibraryStore.refreshParseDigest(result) }
             let refreshed = try await store.applyRefresh(result, feedID: feedID, options: settings, manualRequestID: manualRequestID)
+            // An unchanged refresh observed nothing new: observations waiting for this feed are recorded as after a 304.
+            if refreshed.itemsUnchanged {
+                if await store.isServerLibrary { try? await FeedLibraryStore.drainObservations(store, feedID: feedID, catalog: nil, items: [:]) }
+                return .updated(refreshed)
+            }
             // A server library's large batch: its other observations in bounded transactions (PROTOCOL §9.4). The refresh
             // has committed; what this cannot record stays listed for the next push.
             if let catalog = result.catalog, !refreshed.serverItems.isEmpty {

@@ -41,7 +41,7 @@ import XCTest
         let share = app.buttons["opmlExportShare"]
         // iOS QuickLook renders a web preview of the staged .html and then of the saved copy; each render
         // holds a coordinated read, so the picker's move and then the app's coordinated write wait for it.
-        // On a loaded Simulator each render took 18-49 s (Save to "Export successful" 21-72 s, 2026-09-28);
+        // On a loaded Simulator each render took 18-49 s (Save to "Export successful" 21-72 s);
         // the app's own work takes about 2 s, as for OPML. Device latency is a hardware-checklist item.
         XCTAssertTrue(share.waitForExistence(timeout: 150), app.debugDescription)
         XCTAssertTrue(app.staticTexts["Export successful"].exists)

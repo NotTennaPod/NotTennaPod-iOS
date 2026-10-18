@@ -181,9 +181,10 @@ import NotTennaPodCore
         libraryTask = Task { [weak self] in
             do {
                 let feedID = try await library.feedID(forEpisode: id)
-                let feed = try await library.playbackFeed(id: feedID)
+                let feed = try await library.playbackFeedHeader(id: feedID)
+                let episode = feed == nil ? nil : try await library.episode(id: id)
                 guard let self, !Task.isCancelled, playback.episode?.id == id else { return }
-                self.feed = feed; displayedEpisode = feed?.episodes.first { $0.id == id }; update()
+                self.feed = feed; displayedEpisode = episode; update()
             } catch is CancellationError { } catch { self?.showFailure(error.localizedDescription) }
         }
     }

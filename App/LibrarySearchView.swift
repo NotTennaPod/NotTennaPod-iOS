@@ -167,9 +167,70 @@ import NotTennaPodCore
     private func updateResults() {
         pendingPosition = pendingPosition ?? readingPosition()
         willReplaceRows?(session.resultRevision)
-        list?.views.values.forEach { $0.removeFromSuperview() }; cards.forEach { $0.removeFromSuperview() }
+        list?.views.values.forEach { $0.removeFromSuperview() }
         list = nil; listWidth = -1
         hasRows = session.result.episodes.contains { height(of: $0, width: 0) != nil }
+        buildCards()
+        field.rightViewMode = session.query.isEmpty ? .never : .always
+        scope.isHidden = session.feedID == nil && !session.archived
+        online.isHidden = session.feedID != nil
+        feeds.isHidden = cards.isEmpty && online.isHidden
+        let empty = !hasRows && !session.loading
+        emptyIcon.isHidden = !empty; emptyTitle.isHidden = !empty
+        emptyTitle.text = session.query.isEmpty ? Appearance.text("type_to_search")
+            : String(format: Appearance.text("no_results_for_query"), session.query)
+        if session.loading { spinner.startAnimating() } else { spinner.stopAnimating() }
+        // The rows near the screen exist at once, as before; the next layout places everything exactly.
+        if bounds.width > 0 { layOutList(width: bounds.width); list?.update(in: episodes) }
+        updateSelection()
+        setNeedsLayout()
+    }
+
+    /// The results after a library change (`LibrarySearchSession.patch`): rows of episodes that left are removed, rows of
+    /// episodes that joined are inserted at their place, and built rows `repaint` names are built again (the lists' rule);
+    /// every other row keeps its view, and the first visible row stays where it was. Results going to or from empty are
+    /// drawn again.
+    func patchResults(from old: LibrarySearchResult, repaint: (Int64) -> Bool) {
+        guard let list, listWidth == bounds.width, bounds.width > 0 else { updateResults(); return }
+        var newIDs: [Int64] = [], heights: [Int64: CGFloat] = [:]
+        for result in session.result.episodes {
+            guard let height = height(of: result, width: listWidth) else { continue }
+            newIDs.append(result.episode.id); heights[result.episode.id] = height
+        }
+        let oldIDs = list.ids
+        if oldIDs.isEmpty != newIDs.isEmpty { updateResults(); return }
+        let before = Dictionary(old.episodes.map { ($0.episode.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let stale = list.views.keys.filter(repaint)
+        if oldIDs == newIDs, session.result == old, stale.isEmpty { return }
+        // The first visible row and its offset, kept (item anchoring).
+        let anchor = list.firstItem(below: episodes.contentOffset.y).map { ($0.id, $0.frame.minY - episodes.contentOffset.y) }
+        if session.result.feeds != old.feeds {
+            buildCards()
+            feeds.isHidden = cards.isEmpty && online.isHidden
+        }
+        let change = LibraryViewController.collectionChange(oldIDs, newIDs)
+        for removal in change.removed where list.contains(removal.id) { list.remove(removal.id) }
+        for insertion in change.inserted { list.insert(insertion.id, height: heights[insertion.id] ?? 0, at: min(insertion.rank, list.count)) }
+        let inserted = Set(change.inserted.map(\.id))
+        for result in session.result.episodes where !inserted.contains(result.episode.id) && before[result.episode.id] != result {
+            list.setHeight(heights[result.episode.id] ?? 0, of: result.episode.id, in: episodes)
+        }
+        for id in stale where list.contains(id) && !inserted.contains(id) {
+            list.setHeight(heights[id] ?? 0, of: id, in: episodes)
+            list.rebuild(id, in: episodes)
+        }
+        list.restoreViewOrder(in: episodes)
+        if let (id, top) = anchor, let index = list.index(of: id) { pendingPosition = (index, top) }
+        else if let (id, _) = anchor, let next = change.removed.first(where: { $0.id == id }).map({ min($0.rank, max(0, list.count - 1)) }) {
+            pendingPosition = (next, 0)
+        }
+        updateSelection()
+        setNeedsLayout()
+    }
+
+    /// The podcast results' cards.
+    private func buildCards() {
+        cards.forEach { $0.removeFromSuperview() }
         cards = session.result.feeds.map { feed in
             let card = UIButton(type: .custom)
             card.accessibilityIdentifier = "searchFeed-\(feed.id)"; card.accessibilityLabel = feed.title
@@ -185,19 +246,6 @@ import NotTennaPodCore
             })]
             feeds.addSubview(card); return card
         }
-        field.rightViewMode = session.query.isEmpty ? .never : .always
-        scope.isHidden = session.feedID == nil && !session.archived
-        online.isHidden = session.feedID != nil
-        feeds.isHidden = cards.isEmpty && online.isHidden
-        let empty = !hasRows && !session.loading
-        emptyIcon.isHidden = !empty; emptyTitle.isHidden = !empty
-        emptyTitle.text = session.query.isEmpty ? Appearance.text("type_to_search")
-            : String(format: Appearance.text("no_results_for_query"), session.query)
-        if session.loading { spinner.startAnimating() } else { spinner.stopAnimating() }
-        // The rows near the screen exist at once, as before; the next layout places everything exactly.
-        if bounds.width > 0 { layOutList(width: bounds.width); list?.update(in: episodes) }
-        updateSelection()
-        setNeedsLayout()
     }
     private func makeListRow(_ id: Int64) -> UIView {
         guard let result = session.result.episodes.first(where: { $0.episode.id == id }),

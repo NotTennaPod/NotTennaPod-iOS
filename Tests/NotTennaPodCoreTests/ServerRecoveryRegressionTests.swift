@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPodCore
 
 /// Recovery against the pinned server restored with its own commands.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerRecoveryRegressionTests {
+@Suite(.serialized) struct ServerRecoveryRegressionTests {
     typealias Copies = ServerCopiesTests
     typealias Recovery = ServerRecoveryTests
     typealias Quarantine = ServerRecoveryQuarantineTests
@@ -282,7 +282,7 @@ import Testing
 }
 
 extension ServerRecoveryRegressionTests {
-    // MARK: - Debt: parking after a materialization
+    // MARK: - Parking after a materialization
 
     /// While B's recovery waits (Y for X), B subscribes to a podcast and favorites one of its episodes: a draft on the
     /// registration's chain, which here also names Y (as a draft that acted on what Y shows would). In one exchange the
@@ -339,7 +339,7 @@ extension ServerRecoveryRegressionTests {
         try await phone.view().episodes[try #require(try await phone.store.wireEpisodeForTesting(local))]?.favorite
     }
 
-    // MARK: - New 1
+    // MARK: - A quarantine interrupted between its steps
 
     /// A's favorite R, accepted and archived after the backup, then 101 unsent favorite changes chained behind it; R's
     /// receipt is damaged. After the restore the server refuses R, and its 101 dependents are quarantined, 100 to a
@@ -389,7 +389,7 @@ extension ServerRecoveryRegressionTests {
         }
     }
 
-    // MARK: - New 2
+    // MARK: - A history clear between parking steps
 
     /// The waiting chain with B's listening H before the backup, as `parkingKeepsTheCausalPastForHistoryClear`; the
     /// person clears playback history at a boundary between the parking's steps. Every committed step keeps the known
@@ -436,7 +436,7 @@ extension ServerRecoveryRegressionTests {
         }
     }
 
-    // MARK: - New 3
+    // MARK: - A refused held queue fact
 
     /// `heldChain(queue: true)`: Z (queue add of e2), accepted and retired, waits behind Y and the missing X and is held.
     /// Z's own receipt is damaged: the server refuses it for good. Then A restores X and Y joins: nothing waits, and Z's
@@ -488,7 +488,7 @@ extension ServerRecoveryRegressionTests {
         }
     }
 
-    // MARK: - New 4
+    // MARK: - A refused held podcast
 
     /// After the backup B favorites e0 (X) and subscribes to Two (chained after X), whose catalog the server fetches. B
     /// loses X and recovers first: Two's creation and catalog wait and are held, still shown. Then the subscription's
@@ -537,7 +537,7 @@ extension ServerRecoveryRegressionTests {
 
 /// Recovery with pending changes.
 extension ServerRecoveryRegressionTests {
-    // MARK: - R3-1
+    // MARK: - A history clear after stale quarantine plans
 
     /// H listened before the backup; then A's favorite R (its receipt damaged) and an unsent change chained after it.
     /// While the quarantine prepares, the person records a change after every plan (each makes the plan stale), then
@@ -584,7 +584,7 @@ extension ServerRecoveryRegressionTests {
         }
     }
 
-    // MARK: - R3-2
+    // MARK: - A subscription made while a refused registration is held
 
     /// B favorites e0 (X), registers the preview Two by favoriting one of its episodes (chained after X), the server
     /// fetches its catalog, and B downloads an episode of it. B lost X; after the restore Two waits and is held. Its

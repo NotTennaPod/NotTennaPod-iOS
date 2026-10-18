@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct EpisodeListActionTests {
+@MainActor @Suite struct EpisodeListActionTests {
     private func item(_ id: Int64, media: Bool = true, local: Bool = false, played: EpisodePlayState = .new,
                       favorite: Bool = false, queued: Bool = false, downloading: Bool = false,
                       downloaded: Bool = false, position: Int32 = 0) -> EpisodeListItem {

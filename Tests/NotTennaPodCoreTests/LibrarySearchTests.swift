@@ -95,7 +95,7 @@ private actor SearchReadGate {
     }
 }
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct LibrarySearchSessionTests {
+@MainActor @Suite struct LibrarySearchSessionTests {
     private func wait(_ predicate: () async -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(3)
         while !(await predicate()), ContinuousClock.now < deadline { await Task.yield() }

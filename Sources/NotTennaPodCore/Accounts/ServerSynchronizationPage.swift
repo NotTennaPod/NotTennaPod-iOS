@@ -31,6 +31,9 @@ public struct ServerSynchronizationSignals: Equatable, Sendable {
         case sharedInstallation
         /// `dependency_missing` naming a change this library holds: the server lost changes it had accepted.
         case serverLostChanges
+        /// A change made here is larger than the server accepts, or the server refused it three times (PROTOCOL §6.13): it is
+        /// kept, later changes wait behind it, and changes from the server keep arriving.
+        case changeTooLarge, changeRefused
     }
     public enum Recovery: Equatable, Sendable {
         case running
@@ -46,10 +49,19 @@ public struct ServerSynchronizationSignals: Equatable, Sendable {
     public var attentionItems = 0
     /// Large changes from the server wait for the app to leave the foreground.
     public var waitingForBackground = false
+    /// No exchange can run now: no network, or mobile data that sync may not use. From the network itself, not from an
+    /// exchange's result.
+    public var networkWait: ServerNetworkWait?
+    /// A snapshot download or its staging waits for free space.
+    public var insufficientSpace = false
+    /// A requested Force full synchronization holds other devices' changes until it is published.
+    public var fullSynchronizing = false
+    /// A requested Force full synchronization waits for a network its download may use.
+    public var fullSynchronizationWaits: ServerNetworkWait?
     public init(pause: Pause? = nil, recovery: Recovery? = nil, unreachable: Bool = false, attentionItems: Int = 0,
-                waitingForBackground: Bool = false) {
+                waitingForBackground: Bool = false, networkWait: ServerNetworkWait? = nil) {
         self.pause = pause; self.recovery = recovery; self.unreachable = unreachable; self.attentionItems = attentionItems
-        self.waitingForBackground = waitingForBackground
+        self.waitingForBackground = waitingForBackground; self.networkWait = networkWait
     }
 }
 
@@ -71,6 +83,8 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
     /// Something the status row explains (PROTOCOL §15.5 status table); nil: nothing to explain.
     public enum Condition: Equatable, Sendable {
         case attaching(items: Int)
+        /// The attachment's download waits for a network it may use, or for free space.
+        case attachingWaits(ServerAttachWait)
         case ready
         /// Ready, while a Cast session is connecting or has media loaded (PROTOCOL §15.4).
         case readyCast
@@ -96,9 +110,20 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
         case serverRestored
         case sharedInstallation
         case serverLostChanges
+        /// Pushing waits for an explicit retry: a change is too large for the server, or the server refused it.
+        case changeTooLarge
+        case changeRefused
         case unreachable
         /// Large changes from the server are applied when the app is in the background.
         case waitingForBackground
+        /// No network, or only mobile data sync may not use: changes are kept and sent when it may.
+        case waitingForNetwork(ServerNetworkWait)
+        /// A snapshot download or its staging stopped short of the space the app keeps; it continues once space is free.
+        case waitingForSpace
+        /// A requested Force full synchronization is in progress: other devices' changes appear when it finishes.
+        case fullSynchronizing
+        /// A requested Force full synchronization waits for Wi-Fi (or Wi-Fi without Low Data Mode); other changes go on.
+        case fullSynchronizationWaitsForNetwork(ServerNetworkWait)
     }
 
     public enum Row: Equatable, Sendable {
@@ -123,6 +148,7 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
     /// The subtitle under the toolbar title: short and quiet (PROTOCOL §15).
     public enum Subtitle: Equatable, Sendable {
         case preparing, ready, restoring, signInAgain, paused, waitingForServer
+        case waitingForNetwork(ServerNetworkWait)
         /// Today's "Successful (…)" or "Failed (…)".
         case report(ServerLibraryStatus)
     }
@@ -157,10 +183,12 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
     /// `playbackHold`: what of this device's playback holds a waiting switch or Keep (`LibraryActivationState`).
     public static func make(registry: LibraryRegistry, open: LibraryReference, otherProvider: Bool,
                             summaries: [String: ServerLibrarySummary], attachProgress: [String: Int] = [:],
+                            attachWaits: [String: ServerAttachWait] = [:],
                             exchange: ServerSynchronizationSignals = .init(), castBlocks: Bool = false,
                             keepFailure: KeepFailure? = nil, playbackHold: LibraryPlaybackHold? = nil) -> ServerSynchronizationPage {
         var page = makeState(registry: registry, open: open, otherProvider: otherProvider, summaries: summaries,
-                             attachProgress: attachProgress, exchange: exchange, castBlocks: castBlocks, keepFailure: keepFailure)
+                             attachProgress: attachProgress, attachWaits: attachWaits, exchange: exchange, castBlocks: castBlocks,
+                             keepFailure: keepFailure)
         page.previousLibraries = registry.previous.filter { $0.state == .ready }.sorted { ($0.keptAt, $0.id) < ($1.keptAt, $1.id) }
         // Only a switch or Keep that waits for the activation rule waits for playback; Cast names its own wait. A
         // Keep that stalled keeps its explanation and, while playback holds its next attempt, the action too.
@@ -173,6 +201,7 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
 
     private static func makeState(registry: LibraryRegistry, open: LibraryReference, otherProvider: Bool,
                                   summaries: [String: ServerLibrarySummary], attachProgress: [String: Int],
+                                  attachWaits: [String: ServerAttachWait],
                                   exchange: ServerSynchronizationSignals, castBlocks: Bool,
                                   keepFailure: KeepFailure?) -> ServerSynchronizationPage {
         func summary(_ entry: LibraryRegistry.ServerLibrary) -> ServerLibrarySummary {
@@ -181,6 +210,7 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
             return value
         }
         let kept = registry.libraries.filter { $0.state == .inactive }.map(summary)
+        func attaching(_ id: String) -> Condition { attachWaits[id].map(Condition.attachingWaits) ?? .attaching(items: attachProgress[id] ?? 0) }
         if registry.keeping != nil {
             // Logged out, keeping this library (PROTOCOL §15.4): as "No provider", with the status row; the provider choice opens
             // only once the Keep has finished.
@@ -193,7 +223,7 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
             // for the switch, while this one stays open.
             if entry.state == .inactive, !otherProvider, let next = registry.libraries.first(where: { $0.state == .attaching || $0.state == .ready }) {
                 return next.state == .attaching
-                    ? ServerSynchronizationPage(mode: .attaching, condition: .attaching(items: attachProgress[next.id] ?? 0), library: summary(next), exchange: exchange)
+                    ? ServerSynchronizationPage(mode: .attaching, condition: attaching(next.id), library: summary(next), exchange: exchange)
                     : ServerSynchronizationPage(mode: .ready, condition: castBlocks ? .readyCast : .ready, library: summary(next), exchange: exchange)
             }
             if entry.state == .inactive {
@@ -205,22 +235,30 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
             // A server that no longer has this library's history explains itself first: signing in again cannot help.
             let condition: Condition? = if exchange.pause == .lineageUnknown { .lineageUnknown }
                 else if !library.hasUsableToken { .needsSignIn }
+                // What only freeing space unblocks comes first: nothing else moves until then.
+                else if exchange.insufficientSpace { .waitingForSpace }
                 // A running recovery explains itself ("Restoring…"); otherwise the pause that waits for it does.
                 else if exchange.recovery != .running, let stopped = exchange.pause?.stopped { stopped }
                 else if exchange.pause == .serverNeedsUpdate { .serverNeedsUpdate }
                 else if exchange.pause == .appNeedsUpdate { .appNeedsUpdate }
                 else if exchange.recovery == .running { .recovering }
+                // Pushing waits for an explicit retry; changes from the server keep arriving.
+                else if exchange.pause == .changeTooLarge { .changeTooLarge }
+                else if exchange.pause == .changeRefused { .changeRefused }
+                // Nothing can be sent or received now: that comes before what the last exchange found.
+                else if let wait = exchange.networkWait { .waitingForNetwork(wait) }
+                else if let wait = exchange.fullSynchronizationWaits { .fullSynchronizationWaitsForNetwork(wait) }
                 else if exchange.recovery == .waiting { .recoveryWaiting }
                 else if exchange.recovery == .incomplete { .recoveryIncomplete }
                 else if exchange.unreachable { .unreachable }
                 else if exchange.waitingForBackground { .waitingForBackground }
+                else if exchange.fullSynchronizing { .fullSynchronizing }
                 else { nil }
             return ServerSynchronizationPage(mode: .server, condition: condition, library: library, exchange: exchange)
         }
         if !otherProvider {
             if let entry = registry.libraries.first(where: { $0.state == .attaching }) {
-                return ServerSynchronizationPage(mode: .attaching, condition: .attaching(items: attachProgress[entry.id] ?? 0),
-                                                 library: summary(entry), exchange: exchange)
+                return ServerSynchronizationPage(mode: .attaching, condition: attaching(entry.id), library: summary(entry), exchange: exchange)
             }
             if let entry = registry.libraries.first(where: { $0.state == .ready || $0.state == .active }) {
                 return ServerSynchronizationPage(mode: .ready, condition: castBlocks ? .readyCast : .ready, library: summary(entry), exchange: exchange)
@@ -256,13 +294,20 @@ public struct ServerSynchronizationPage: Equatable, Sendable {
     public var subtitle: Subtitle? {
         switch condition {
         case .attaching: return .preparing
+        case .attachingWaits(.network(let wait)): return .waitingForNetwork(wait)
+        case .attachingWaits(.space): return .preparing
         case .ready, .readyCast: return .ready
         case .loggedOut, .loggedOutCast, .keeping, .keepingCast, .keepStalled: return nil
         case .recovering: return .restoring
+        // A recovery that waits for space is still restoring; the status row says what unblocks it.
+        case .waitingForSpace where exchange.recovery == .running: return .restoring
         case .needsSignIn: return .signInAgain
-        case .serverNeedsUpdate, .appNeedsUpdate, .lineageUnknown, .serverRestored, .sharedInstallation, .serverLostChanges: return .paused
+        case .serverNeedsUpdate, .appNeedsUpdate, .lineageUnknown, .serverRestored, .sharedInstallation, .serverLostChanges,
+             .changeTooLarge, .changeRefused: return .paused
         case .unreachable: return .waitingForServer
-        case .recoveryWaiting, .recoveryIncomplete, .waitingForBackground, nil:
+        case .waitingForNetwork(let wait): return .waitingForNetwork(wait)
+        case .recoveryWaiting, .recoveryIncomplete, .waitingForBackground, .waitingForSpace, .fullSynchronizing,
+             .fullSynchronizationWaitsForNetwork, nil:
             guard mode == .server else { return nil }
             return library?.lastSynchronization.map(Subtitle.report)
         }
@@ -279,7 +324,7 @@ extension ServerSynchronizationSignals.Pause {
         case .serverRestored: .serverRestored
         case .sharedInstallation: .sharedInstallation
         case .serverLostChanges: .serverLostChanges
-        case .serverNeedsUpdate, .appNeedsUpdate, .lineageUnknown: nil
+        case .serverNeedsUpdate, .appNeedsUpdate, .lineageUnknown, .changeTooLarge, .changeRefused: nil
         }
     }
 }

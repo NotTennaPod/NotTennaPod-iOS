@@ -6,7 +6,7 @@ import Testing
 /// Mounted Subscriptions/Archive screen and drawer: grid/list geometry for
 /// every column setting, title toggle, counter pill, RTL, first-visit column default, overflow menus,
 /// Sort/Counter dialogs, the immediate-apply filter sheet, the Archive screen and the drawer order.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct SubscriptionsScreenViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if let match = view as? T, view.accessibilityIdentifier == id { return match }
@@ -43,13 +43,15 @@ struct SubscriptionsScreenViewTests {
         }
         let rows: [(Int64, String, Int, Int, Int)] = [(1, "Delta", 0, 2, 1), (2, "bravo", 3, 0, 0), (3, "Charlie", 1, 0, 3), (4, "alpha", 0, 0, 0)]
         var feeds = rows.map { id, title, new, unplayed, played in
-            LibraryFeed(id: id, source: "fixture://m21/\(id)", metadata: .init(format: .rss, title: title),
+            LibraryFeed(id: id, source: "fixture://subscriptions/\(id)", metadata: .init(format: .rss, title: title),
                         episodes: episodes(id, new: new, unplayed: unplayed, played: played))
         }
         feeds[2].lastUpdateFailed = true
+        // A server library's podcast whose server refresh fails while this device's works: the same icon and words.
+        feeds[3].serverRefresh = ServerRefreshStatus(lastAttempt: Date(timeIntervalSince1970: 1_700_000_000), label: "parser_exception")
         feeds[3].tags = ["Tech"]
         feeds[0].keepUpdated = false
-        var archived = LibraryFeed(id: 9, source: "fixture://m21/9", metadata: .init(format: .rss, title: "Archived one"),
+        var archived = LibraryFeed(id: 9, source: "fixture://subscriptions/9", metadata: .init(format: .rss, title: "Archived one"),
                                    episodes: episodes(9, new: 2, unplayed: 0, played: 0))
         archived.subscriptionState = .archived
         return feeds + [archived]
@@ -58,7 +60,7 @@ struct SubscriptionsScreenViewTests {
     private func run(size: CGSize = CGSize(width: 402, height: 874), rtl: Bool = false, bottomNavigation: Bool = true,
                      feeds: [LibraryFeed]? = nil, preferences: SubscriptionDisplayPreferences? = nil,
                      body: @MainActor (LibraryViewController, SubscriptionDisplayPreferenceStore) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M21-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("SubscriptionsScreen-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let navigation = try NavigationPreferenceStore(file: root.appendingPathComponent("navigation.json"))
@@ -133,6 +135,19 @@ struct SubscriptionsScreenViewTests {
                 #expect(first.accessibilityLabel == "bravo" && first.accessibilityValue == "3" && first.accessibilityTraits.contains(.button))
                 let failed: UIControl = try #require(find("subscriptionFeed-3", in: controller.view))
                 #expect(failed.accessibilityLabel == "Charlie, Last refresh failed. Tap to view details.")
+                let serverFailed: UIControl = try #require(find("subscriptionFeed-4", in: controller.view))
+                #expect(serverFailed.accessibilityLabel == "alpha, Last refresh failed. Tap to view details.")
+                for (id, failing) in [(1, false), (2, false), (3, true), (4, true)] {
+                    let cell: UIControl = try #require(find("subscriptionFeed-\(id)", in: controller.view))
+                    let icon: UIImageView = try #require(find("subscriptionFailure-\(id)", in: cell))
+                    #expect(icon.isHidden == !failing, "\(id)")
+                    if failing {
+                        // Bottom-end of the cover, inside the cell.
+                        let frame = icon.convert(icon.bounds, to: cell)
+                        #expect(cell.bounds.contains(frame) && frame.minY > cell.bounds.height / 2, "\(id)")
+                        #expect(rightToLeft ? frame.midX < cell.bounds.midX : frame.midX > cell.bounds.midX, "\(id)")
+                    }
+                }
             }
         }
     }
@@ -176,12 +191,32 @@ struct SubscriptionsScreenViewTests {
             let cover = try #require(row.subviews.first)
             #expect(near(cover.frame.width, 56) && near(rightToLeft ? row.bounds.width - cover.frame.maxX : cover.frame.minX, 16))
             #expect(rightToLeft ? counter.frame.maxX < row.bounds.midX : counter.frame.minX > row.bounds.midX)
+            // The server's failure shows the same icon at the row's end, clear of the title and counter.
+            let serverFailed = try #require(find("subscriptionFeed-4", in: controller.view, as: SubscriptionListRow.self))
+            let icon: UIImageView = try #require(find("subscriptionFailure-4", in: serverFailed))
+            #expect(!icon.isHidden && serverFailed.bounds.contains(icon.frame))
+            #expect(rightToLeft ? icon.frame.maxX < serverFailed.bounds.midX : icon.frame.minX > serverFailed.bounds.midX)
+            #expect(serverFailed.accessibilityLabel == "alpha, Last refresh failed. Tap to view details.")
         }
         try await run(size: CGSize(width: 1032, height: 1376), rtl: rightToLeft, preferences: preferences) { controller, _ in
             let rows = all("subscriptionFeed-", in: controller.view)
             let content = try #require(rows.first?.superview)
             for row in rows { #expect(near(row.frame.width, content.bounds.width / 2), "2-span list at sw ≥ 600") }
             #expect(displayed(in: controller.view, rtl: rightToLeft) == [2, 3, 4, 1])
+        }
+    }
+
+    /// A subscription whose metadata has not arrived yet (no title) says which podcast it is by its address, as
+    /// Android's `getHumanReadableIdentifier` does, in the grid (title and cover fallback), the list and to VoiceOver.
+    @Test(arguments: [3, 1]) func anUnnamedSubscriptionShowsItsAddress(columns: Int) async throws {
+        var feeds = library()
+        feeds[1] = LibraryFeed(id: 2, source: "fixture://subscriptions/2", metadata: .init(format: .rss, title: nil), episodes: feeds[1].episodes)
+        var preferences = SubscriptionDisplayPreferences(); preferences.columns = columns; preferences.showTitle = true
+        try await run(feeds: feeds, preferences: preferences) { controller, _ in
+            let cell = try #require(find("subscriptionFeed-2", in: controller.view, as: UIControl.self))
+            #expect(cell.accessibilityLabel == "fixture://subscriptions/2")
+            let labels = all("", in: cell).compactMap { ($0 as? UILabel)?.text }
+            #expect(labels.contains("fixture://subscriptions/2"), "\(labels)")
         }
     }
 

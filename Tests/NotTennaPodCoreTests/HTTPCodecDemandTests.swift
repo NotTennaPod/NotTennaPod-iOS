@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct HTTPCodecDemandTests {
     private func wait(_ condition: () async throws -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(8)

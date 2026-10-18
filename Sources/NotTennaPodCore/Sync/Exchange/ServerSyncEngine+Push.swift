@@ -3,10 +3,21 @@ import Foundation
 /// Pushing (PROTOCOL §6.4, as the web client's pusher): contiguous `install_seq` from the
 /// acknowledged prefix, facts over the unframed bound framed one part per request, secrets beside their facts,
 /// receipts stored durably with their lineage, `dependency_missing` waited on, gaps repaired from the server's
-/// watermark. Nothing is ever dropped.
+/// watermark. Nothing is ever dropped. A change the server will never accept is never sent in a loop: one over the fact
+/// bound is not sent at all, and one whose parts the server refuses stops pushing for the rest of the exchange, then
+/// waits, longer each time, and after the third refusal waits for an explicit retry (PROTOCOL §6.4, §6.13).
 extension ServerSyncEngine {
     /// Pushes until nothing more can be pushed now.
     func push(_ report: inout ServerExchangeReport) async throws {
+        // After `invalid_part` nothing more is sent in this exchange, whatever the time (one request per refusal).
+        guard !pushRefusedThisExchange else { return }
+        // Nor before the refusal's retry time, at a later exchange whatever started it (a hint, the network, a local
+        // change); pulls go on. It survives a restart.
+        if let notBefore = try await store.serverPushRetryNotBefore(), notBefore > now() {
+            let wait = Double(notBefore - now()) / 1_000
+            report.retryAfter = max(report.retryAfter ?? 0, wait)
+            return
+        }
         try await parkBeforePush()
         // Slots a park, quarantine or transition left to renumber are contiguous before anything is sent.
         try await ServerBlockingSteps.renumber(store)
@@ -35,12 +46,15 @@ extension ServerSyncEngine {
         try await store.replayOwedFacts()
         // Observations a relaunch left listed (PROTOCOL §9.4), one bounded transaction at a time.
         while try await store.recordDeferredObservations(feedID: nil) {}
-        try await store.serverDurabilityBarrier()
-        try crash("push.barrier")
         let state = try await store.serverExchangeState()
         // A `version_unsupported` pause that refused something else lets pushes go on.
         if let pause = state.pause, !(pause == .versionUnsupported && state.permits(.push)) { report.pause = pause; return false }
         guard let cursor = state.cursor else { return false }
+        // Nothing to send (what the steps above recorded included): no barrier, which only makes durable what a request
+        // carries. Every request still follows one.
+        guard try await store.serverOutboxHasEntries(after: state.acked) else { return false }
+        try await store.serverDurabilityBarrier()
+        try crash("push.barrier")
         let bounds = state.bounds
         let limit = min(operationLimit ?? bounds.maxOperations, bounds.maxOperations)
         let entries = try await store.serverOutbox(after: state.acked, limit: limit)
@@ -48,7 +62,18 @@ extension ServerSyncEngine {
         var operations: [ContractJSON] = []
         var included: [ServerOutboxEntry] = []
         var bytes = 1_024
+        /// The framed fact this request sends a part of: its framing transaction.
+        var framed: (seq: Int64, op: String, transaction: String)?
         for entry in entries {
+            if entry.bytes.count > bounds.factBound {
+                guard operations.isEmpty else { break }
+                // Larger than the server accepts (the bound fell after it was numbered): never sent. It is kept, and the
+                // changes after it wait behind it until an explicit retry; pulls go on.
+                try await store.setServerPause(.changeTooLarge)
+                report.pause = .changeTooLarge
+                log("too_large", "\(ServerLogValue.type(entry.type)) \(entry.bytes.count) bytes: kept on this device; later changes wait")
+                return false
+            }
             if entry.bytes.count > bounds.maxUnframedFactBytes {
                 guard operations.isEmpty else { break }
                 // A framed fact goes alone, one part per request; its transaction ID is persisted before the first part.
@@ -57,12 +82,7 @@ extension ServerSyncEngine {
                 let parts = stride(from: 0, to: entry.bytes.count, by: bounds.maxPartBytes).map {
                     Array(entry.bytes[$0..<min(entry.bytes.count, $0 + bounds.maxPartBytes)])
                 }
-                guard parts.count <= bounds.maxPartCount else {
-                    // Larger than the server accepts in any framing: a phone bug; kept, logged, retried later.
-                    log("too_large", "\(ServerLogValue.type(entry.type)) \(entry.bytes.count) bytes")
-                    backoff(&report)
-                    return false
-                }
+                framed = (entry.installSeq, entry.opID, framing.transactionID)
                 let index = (0..<parts.count).first { !framing.present.contains($0) } ?? parts.count - 1
                 operations.append(["install_seq": .integer(entry.installSeq),
                                    "part": ["transaction_id": .string(framing.transactionID), "part_index": .integer(Int64(index)),
@@ -104,6 +124,7 @@ extension ServerSyncEngine {
         }
         var progressed = false
         var conflict = false
+        var refusals: [(op: String, transaction: String)] = []
         /// Nodes a caught-up recovery cannot supply: what waits for them is parked once this answer is recorded (PROTOCOL §6.11).
         var parkBehind = Set<String>()
         for result in answer["results"]?.arrayValue ?? [] {
@@ -164,15 +185,27 @@ extension ServerSyncEngine {
                 progressed = true
                 log("op_id_conflict", ServerLogValue.type(entry?.type))
             case "invalid_part":
+                // The parts are sent again, never in this exchange: pushing stops until the refusal's retry time, which
+                // grows with each refusal of the same framing; the third pauses pushing until an explicit retry.
                 record.resetParts.append(seq)
-                progressed = true
-                log("retry", "invalid_part")
+                if let framed, framed.seq == seq { refusals.append((framed.op, framed.transaction)) }
+                pushRefusedThisExchange = true
             default:
                 log("push", ServerLogValue.status(status))
             }
         }
         try await store.recordServerPush(record)
         try crash("push.recorded")
+        for refusal in refusals {
+            let (count, delay) = try await store.noteServerPushRefusal(opID: refusal.op, transactionID: refusal.transaction, now: now())
+            if count >= FeedLibraryStore.pushRefusalLimit {
+                report.pause = .changeRefused
+                log("paused", "\(ServerPauseReason.changeRefused.rawValue) refused \(count) times: kept on this device; later changes wait")
+            } else {
+                report.retryAfter = max(report.retryAfter ?? 0, Double(delay) / 1_000)
+                log("retry", "invalid_part")
+            }
+        }
         if !parkBehind.isEmpty {
             try await store.updateServerRecovery { $0.missingNodes = Array(Set($0.missingNodes).union(parkBehind)).sorted(); $0.waiting = true }
             // Behind everything the recovery still waits for, so no frontier repair brings a waiting node back.

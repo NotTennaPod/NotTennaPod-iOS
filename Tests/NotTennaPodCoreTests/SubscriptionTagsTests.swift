@@ -18,7 +18,7 @@ import Testing
 
     /// A fresh store holding the fixture library, plus the imported per-feed speeds.
     private func withLibrary(_ body: (FeedLibraryStore, AndroidDatabaseRestore.Library, URL) async throws -> Void) async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M24-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("SubscriptionTags-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let restored = try AndroidDatabaseRestore.read(Self.fixtures.appendingPathComponent("tags-library.db"),
@@ -307,7 +307,7 @@ import Testing
                     reads[(change["episode"] as! NSNumber).int64Value] = (change["after"] as! NSNumber).int64Value
                 }
                 #expect(try readStates(after) == reads, "\(name) episodes")
-                if let keep = ProcessInfo.processInfo.environment["M24_EXPORT_DIR"] {
+                if let keep = ProcessInfo.processInfo.environment["SUBSCRIPTION_TAGS_EXPORT_DIR"] {
                     let target = URL(fileURLWithPath: keep).appendingPathComponent(name, isDirectory: true)
                     try? FileManager.default.removeItem(at: target)
                     try FileManager.default.createDirectory(at: target, withIntermediateDirectories: true)

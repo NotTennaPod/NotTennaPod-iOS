@@ -12,9 +12,9 @@ import XCTest
     override func setUp() { continueAfterFailure = false }
 
     private func launch() {
-        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-m13-statistics-journey"]
+        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-statistics-journey"]
         app.launch()
-        XCTAssertTrue(app.windows["m13StatisticsFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
+        XCTAssertTrue(app.windows["statisticsFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
     }
     private func tap(_ id: String) {
         let button = app.buttons[id]; XCTAssertTrue(button.waitForExistence(timeout: 15), id)

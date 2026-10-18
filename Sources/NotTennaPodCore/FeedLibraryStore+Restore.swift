@@ -33,6 +33,8 @@ extension FeedLibraryStore {
         guard serverContext == nil else { throw ServerRecordingError.refusedInServerLibrary("database import") }
         try database.transaction {
             guard try database.scalar("SELECT count(*) FROM feeds") == 0 else { throw FeedLibraryError.invalidMutation }
+            // The derived list keys are made once for the whole library at the end, not per row (schema 21).
+            try LibrarySchema21.suspendKeys(database)
             for feed in library.feeds { try save(feed) }
             for (position, id) in library.queue.enumerated() {
                 try database.execute("INSERT INTO queue(position, episode_id) VALUES (?, ?)", [.integer(Int64(position)), .integer(id)])
@@ -45,6 +47,7 @@ extension FeedLibraryStore {
             let episodeID = library.feeds.flatMap { $0.episodes.map(\.id) }.max() ?? 0
             try database.execute("UPDATE library_ids SET value = max(value, ?) WHERE kind = 'feed'", [.integer(feedID)])
             try database.execute("UPDATE library_ids SET value = max(value, ?) WHERE kind = 'episode'", [.integer(episodeID)])
+            try LibrarySchema21.rebuild(database)
             let journal = RestoreJournal(feedSpeeds: library.feedSpeeds, feedSilence: library.feedSilence)
             try database.execute("INSERT INTO restore_journal(id, record) VALUES (1, ?)", [.blob(try JSONEncoder().encode(journal))])
             for table in carry.tables where !table.rows.isEmpty {

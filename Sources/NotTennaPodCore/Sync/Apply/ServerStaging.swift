@@ -247,9 +247,7 @@ extension ServerSyncEngine {
         var cursor = ServerStagingCursor()
         var batches = 0, shown = 0
         var longest = 0.0
-        // Rows shown ahead are told as they show, at most about once a second (a long catch-up shows its progress, PROTOCOL §6.8).
         let clock = ContinuousClock()
-        var told = clock.now, untold = false
         while true {
             try Task.checkCancellation()
             try await pace()
@@ -262,10 +260,10 @@ extension ServerSyncEngine {
             if step.shown > 0 {
                 shown += step.shown
                 report.shownAhead += step.shown
-                report.libraryChanged = true
-                untold = true
-                if told.duration(to: clock.now) >= .seconds(1) { publish(.libraryChanged); told = clock.now; untold = false }
             }
+            // Each batch's rows are told as soon as it commits (a long catch-up shows its progress, PROTOCOL §6.8); the
+            // scheduler paces what the screens read.
+            await publishChanges(&report)
             if step.cursor.aheadStopped, !cursor.aheadStopped {
                 log("apply", "commit \(seq): a local change since its build defers it; its remaining content is shown by its unit")
             }
@@ -274,7 +272,6 @@ extension ServerSyncEngine {
             report.stagingBatches += 1
             cursor = step.cursor
         }
-        if untold { publish(.libraryChanged) }
         try crash("staging.staged")
         log("apply", "commit \(seq): \(staging.work) rows of \(staging.created.count) new podcast(s), \(staging.episodes) new episodes, "
             + "\(staging.updates) content records and \(shown) of \(staging.ahead) rows only that content changes staged in \(batches) transactions, "

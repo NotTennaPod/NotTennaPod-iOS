@@ -7,6 +7,13 @@ extension FeedLibraryStore {
     }
 
     /// The queue as the screens show it: in a server library never an episode they do not show.
+    /// The visible queue's episode IDs in order (`loadVisibleQueue` without decoding).
+    func visibleQueueIDs() throws -> [Int64] {
+        let ids = try database.rows("SELECT episode_id FROM queue ORDER BY position").compactMap { $0[0].integer }
+        let hidden = try hiddenEpisodeIDs(ids)
+        return hidden.isEmpty ? ids : ids.filter { !hidden.contains($0) }
+    }
+
     func loadVisibleQueue() throws -> [LibraryEpisode] {
         let queue = try loadQueue()
         let hidden = try hiddenEpisodeIDs(queue.map(\.id))
@@ -219,6 +226,7 @@ extension FeedLibraryStore {
         }
         historyRemovalOffers[receipt.operationID] = nil
         historyRemovalCuts[receipt.operationID] = nil
+        historyRemovalLocalCuts[receipt.operationID] = nil
         return .init(status: status)
     }
 
@@ -226,6 +234,7 @@ extension FeedLibraryStore {
         guard receipt.storeEpoch == swipeUndoEpoch else { return }
         historyRemovalOffers[receipt.operationID] = nil
         historyRemovalCuts[receipt.operationID] = nil
+        historyRemovalLocalCuts[receipt.operationID] = nil
     }
 
     /// Test inspection API: not called by the app.
@@ -355,6 +364,21 @@ extension FeedLibraryStore {
     }
 
     private func removeAutomaticDownloadListener(_ id: UUID) { automaticDownloadListeners[id] = nil }
+
+    /// Wakes when episodes wait to be queued (a refresh's "add to queue", a local folder's, a removal's remainder), and
+    /// once at once: the consumer (`consumeFeedRefreshQueueEffects`) queues them whether or not a screen reads the library.
+    public func queueEffectRequests() -> AsyncStream<Void> {
+        let id = UUID()
+        return AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
+            queueEffectListeners[id] = continuation
+            continuation.yield(())
+            continuation.onTermination = { [weak self] _ in
+                Task { await self?.removeQueueEffectListener(id) }
+            }
+        }
+    }
+
+    private func removeQueueEffectListener(_ id: UUID) { queueEffectListeners[id] = nil }
 
     /// Refresh delivery and startup recovery use the same persisted playback and
     /// download context, including when no library screen is visible.

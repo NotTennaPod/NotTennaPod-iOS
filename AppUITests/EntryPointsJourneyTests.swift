@@ -17,7 +17,7 @@ import XCTest
         XCTAssertTrue(app.buttons["navigationMore"].waitForExistence(timeout: 15))
     }
 
-    private func path(_ tag: String) -> String { "/preview.xml?m34=\(run)-\(tag)" }
+    private func path(_ tag: String) -> String { "/preview.xml?run=\(run)-\(tag)" }
 
     /// Opens a link as another app would: through the system, which may first ask "Open in “NotTennaPod”?".
     private func openFromSystem(_ link: String) {
@@ -82,7 +82,13 @@ import XCTest
         launch()
         let safari = openInSafari("http://127.0.0.1:18774" + path("safari"))
         let open = safari.buttons["Open"]
-        if open.waitForExistence(timeout: 10) {
+        // Safari loads the link (slowly on a fresh Simulator) and may then ask before handing it over: wait for the
+        // question or the app's preview, whichever comes (the app's state can still read foreground under Safari).
+        let preview = app.buttons["subscribeFeed"]
+        let handed = NSPredicate { _, _ in MainActor.assumeIsolated { open.exists || preview.exists } }
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: handed, object: nil)], timeout: 40), .completed,
+                       safari.debugDescription)
+        if open.exists {
             XCTAssertTrue(safari.textViews["Open this page in “NotTennaPod”?"].exists, safari.debugDescription)
             open.tap()
         }
@@ -90,7 +96,7 @@ import XCTest
         waitForPreview()
         closePreview()
 
-        _ = openInSafari("http://127.0.0.1:18820/pages/website-one-link.html?m34=" + run)
+        _ = openInSafari("http://127.0.0.1:18820/pages/website-one-link.html?run=" + run)
         let menu = safari.buttons["MoreMenuButton"]
         XCTAssertTrue(menu.waitForExistence(timeout: 15), safari.debugDescription); menu.tapWhenSettled()
         let share = safari.buttons["ShareButton"]
@@ -226,7 +232,13 @@ import XCTest
         let menu = quickActionMenu()
         XCTAssertTrue(menu["Queue"].waitForExistence(timeout: 5), springboard.debugDescription)
         let items = ["Queue", "Episodes", "Subscriptions", "Refresh"].map { menu[$0] }
-        for (upper, lower) in zip(items, items.dropFirst()) { XCTAssertLessThan(upper.frame.minY, lower.frame.minY) }
+        // iOS lists them from the icon outward, toward its own actions: top down when the menu opens below the icon,
+        // bottom up when it opens above it (as it does when the Simulator raises a keyboard over the Home Screen).
+        let system = menu["Edit Home Screen"]
+        let outward: CGFloat = system.exists && system.frame.midY < items[0].frame.midY ? -1 : 1
+        for (nearer, farther) in zip(items, items.dropFirst()) {
+            XCTAssertLessThan(outward * nearer.frame.minY, outward * farther.frame.minY, springboard.debugDescription)
+        }
         menu["Queue"].tap()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
         screenTitle("Queue")

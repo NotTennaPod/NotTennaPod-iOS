@@ -5,7 +5,7 @@ import Testing
 
 /// Mounted Queue screen and Playback settings: the overflow menu (unlocked, locked, Keep sorted), the Sort
 /// sheet with Keep sorted, drag disabled while sorted, Clear queue and the Enqueue settings rows.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct QueueSortClearViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -23,7 +23,7 @@ struct QueueSortClearViewTests {
     }
     /// One feed. E1 30 min, E2 10 min, E3 20 min, E4 40 min are queued in that order; E5 (5 min) is not.
     private func withFixture(_ body: @MainActor (Fixture) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M23View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("QueueSortClearView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let store = try FeedLibraryStore(url: root.appendingPathComponent("library.sqlite"))

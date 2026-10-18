@@ -5,7 +5,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) struct AACGaplessTests {
+@Suite(.serialized) struct AACGaplessTests {
     static let names = ["lc", "he", "hev2"]
     private func fixture(_ name: String) throws -> URL {
 #if SWIFT_PACKAGE

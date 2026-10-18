@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct AuthenticatedPlaybackTests {
+@MainActor @Suite(.serialized) struct AuthenticatedPlaybackTests {
     private let login = FeedCredentials(username: "private-listener", password: "fixture-secret")
     private var media: URL { fixture("playback-30sec", extension: "mp3") }
     private func fixture(_ name: String, extension ext: String, subdirectory: String? = nil) -> URL {

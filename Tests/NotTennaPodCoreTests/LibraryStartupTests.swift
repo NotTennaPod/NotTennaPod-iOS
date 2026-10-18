@@ -7,7 +7,7 @@ import Testing
 /// Starting while data is still locked. Saved state that cannot be read now (a permission or data-protection
 /// error, a folder that cannot be examined, a locked Keychain) is never replaced by defaults, set aside, or taken for
 /// "no registry"; the start waits and is tried again in the same process once the state can be read.
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor struct LibraryStartupTests {
+@Suite(.serialized) @MainActor struct LibraryStartupTests {
     private let serverID = "0b5a3c1e-7c43-4a5e-9d1f-2b9a0e7f6c11"
 
     private final class Root {

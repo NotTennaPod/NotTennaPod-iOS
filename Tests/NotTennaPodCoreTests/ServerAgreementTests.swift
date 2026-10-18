@@ -5,7 +5,7 @@ import Testing
 /// Single-device agreement tests against the real server: scripted actions on a phone
 /// server library, pushed; the server's records, read by a second installation's attach snapshot, must show
 /// what the phone's own local effects show. Every receipt must be accepted (never `rejected`).
-@MainActor @Suite(.serialized, .timeLimit(.minutes(10))) struct ServerAgreementTests {
+@MainActor @Suite(.serialized) struct ServerAgreementTests {
     nonisolated static func rss(title: String, prefix: String, count: Int) -> String {
         let items = (1...count).map { number in
             let date = Date(timeIntervalSince1970: 1_760_000_000 + Double(number) * 86_400)

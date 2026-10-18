@@ -159,7 +159,7 @@ import Testing
     /// `SearchPreferenceFragment.addHistoryEntry`: newest first, five at most, a known title is neither added
     /// nor moved; Clear history empties it; the history survives a relaunch.
     @MainActor @Test func historyKeepsTheFiveNewestDistinctTitles() throws {
-        let file = FileManager.default.temporaryDirectory.appendingPathComponent("M33History-\(UUID()).json")
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("SettingsSearchHistory-\(UUID()).json")
         defer { try? FileManager.default.removeItem(at: file) }
         let store = try SettingsSearchHistoryStore(file: file)
         #expect(store.terms.isEmpty)

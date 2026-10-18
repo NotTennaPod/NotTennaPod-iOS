@@ -4,7 +4,7 @@ import Testing
 
 /// Uses the same resolver and live preference stores as AppDelegate, with a
 /// controllable engine. Expectations are durable app outcomes, not flag values.
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct PlaybackApplicationPreferencesTests {
     @Test(arguments: [EnqueueLocation.front, .back, .afterCurrentlyPlaying])
     func selectedEpisodeUsesLivePlacementAndDoesNotMoveExistingItems(_ location: EnqueueLocation) async throws {

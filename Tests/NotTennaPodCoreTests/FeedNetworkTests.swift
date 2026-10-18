@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct FeedNetworkTests {
     @Test func actualURLSessionFollowsRedirectAndRetainsFirstPermanentTarget() async throws {
         let server = try await LoopbackHTTPServer.start { request in

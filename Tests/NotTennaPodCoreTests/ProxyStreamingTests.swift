@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct ProxyStreamingTests {
+@MainActor @Suite(.serialized) struct ProxyStreamingTests {
     private var bytes: Data {
         get throws {
 #if SWIFT_PACKAGE

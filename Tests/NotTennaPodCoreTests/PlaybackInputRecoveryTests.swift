@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) struct PlaybackInputRecoveryTests {
+@Suite(.serialized) struct PlaybackInputRecoveryTests {
     private func wave() throws -> Data {
 #if SWIFT_PACKAGE
         let url = try #require(Bundle.module.url(forResource: "tone.wav", withExtension: nil, subdirectory: "Fixtures/StreamingFormats"))

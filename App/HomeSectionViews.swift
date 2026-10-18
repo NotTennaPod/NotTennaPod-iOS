@@ -178,6 +178,8 @@ extension HomeFeedCover {
         items.forEach(addSubview)
     }
     required init?(coder: NSCoder) { fatalError() }
+    /// The cards in order.
+    var itemViews: [UIView] { items }
     override func layoutSubviews() {
         super.layoutSubviews()
         let width = 12 + CGFloat(items.count) * pitch + 12

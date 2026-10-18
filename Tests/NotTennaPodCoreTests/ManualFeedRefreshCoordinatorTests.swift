@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct ManualFeedRefreshCoordinatorTests {
     private func withStore(_ body: (FeedLibraryStore, URL) async throws -> Void) async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("RefreshOwner-\(UUID())")

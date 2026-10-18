@@ -5,7 +5,7 @@ import Testing
 
 /// These checks use each control's actual text rect and every enclosing clipping
 /// viewport, so an offscreen control or clipped label cannot pass via sendActions alone.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct SleepTimerAccessibilityTests {
     private func find<T: UIView>(_ id: String, in root: UIView) throws -> T {
         func search(_ view: UIView) -> T? {

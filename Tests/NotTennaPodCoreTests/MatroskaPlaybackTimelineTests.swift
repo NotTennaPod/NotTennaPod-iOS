@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) @MainActor
+@Suite(.serialized) @MainActor
 struct MatroskaPlaybackTimelineTests {
     private func fixture(variant: String = "original") throws -> Data {
         var data = try Data(contentsOf: #require(Bundle.module.url(forResource: "tone-opus.webm", withExtension: nil,

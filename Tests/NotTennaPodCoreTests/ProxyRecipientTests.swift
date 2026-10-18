@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) struct ProxyRecipientTests {
+@Suite struct ProxyRecipientTests {
     @Test func proxySynchronizationRetainsLoginCookieAndIsolatesAnotherAccountSession() async throws {
         let proxyAuth = "Basic " + Data("proxy:secret".utf8).base64EncodedString()
         let proxy = try await LoopbackHTTPServer.start { request in

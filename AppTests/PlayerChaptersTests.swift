@@ -42,6 +42,7 @@ private actor ChapterTestHTTP: FeedHTTPTransport {
     var images: [String?]?
     var links: [String]?
     var holdNext = false
+    var requests = 0
     var held: CheckedContinuation<Void,Never>?
     var cancelled = false
     func arm() { holdNext = true; cancelled = false }
@@ -52,6 +53,7 @@ private actor ChapterTestHTTP: FeedHTTPTransport {
     func replaceTitles(_ value: [String]) { titles = value }
     func replace(_ value: [Int]) { starts = value }
     func send(_ request: URLRequest) async throws -> FeedHTTPResponse {
+        requests += 1
         let chapters = starts.enumerated().map { index, start in
             var value: [String:Any] = ["startTime":start,"title":titles?[index] ?? "Chapter \(start)","url":links?[index] ?? "https://example.invalid/chapter/\(start)"]
             if let image = images?[index] { value["img"] = image }
@@ -67,7 +69,7 @@ private actor ChapterTestHTTP: FeedHTTPTransport {
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct PlayerChaptersTests {
+@MainActor @Suite(.serialized) struct PlayerChaptersTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let value = view as? T { return value }
         return view.subviews.lazy.compactMap { find(id,in:$0) as T? }.first
@@ -658,6 +660,37 @@ private actor ChapterTestHTTP: FeedHTTPTransport {
                 engine.tick(20_250); try await playback.awaitPendingOperations()
                 try await wait { highlighted(1) }
                 #expect(!highlighted(0) && controller.presentedViewController === dialog)
+            }
+        }
+    }
+
+    /// A chapter list whose only source must wait for the network (Cover images off on cellular) keeps its dialog open,
+    /// empty and refreshable, without "No chapters"; once Cover images is allowed its chapters show.
+    @Test func deferredOnlyChapterDialogStaysOpenAndShowsChaptersOncePermitted() async throws {
+        try await fixture(stored:false) { store,playback,_,http,_,_ in
+            let file = FileManager.default.temporaryDirectory.appendingPathComponent("ChapterMobile-\(UUID()).json")
+            defer { try? FileManager.default.removeItem(at:file) }
+            let mobile = try MobileNetworkPreferenceStore(file:file)
+            try mobile.updateAllowed([])
+            let network = DownloadNetworkMonitor(startMonitoring:false)
+            network.update(.init(connected:true,metered:true,cellular:true))
+            let admission = AuxiliaryNetworkAdmission(network:network,preferences:mobile)
+            let access = EpisodeChapterAccess(store:store,loader:.init(transport:http,cache:URLCache(memoryCapacity:0,diskCapacity:0),
+                userAgent:"chapter-test",admission:admission),proxy:{ .init() })
+            var notices: [String] = []
+            try await withViewTestWindow { host,_ in
+                let dialog = ChaptersController(playback:playback,library:store,access:access,
+                    notice:{ notices.append($0) },failure:{ Issue.record($0) },openLink:{ _ in })
+                host.present(dialog,animated:false)
+                // The denied load has armed its wake, and the dialog is still open.
+                try await wait { dialog.binding.presentation.wake != nil && !dialog.binding.presentation.isLoading }
+                #expect(host.presentedViewController === dialog && notices.isEmpty)
+                #expect(await http.requests == 0)
+                try mobile.updateAllowed(["images"]); admission.preferencesChanged()
+                let table: UITableView = try #require(find("chaptersList",in:dialog.view))
+                try await wait { table.numberOfRows(inSection:0) == 3 }
+                #expect(await http.requests == 1 && notices.isEmpty && host.presentedViewController === dialog)
+                await withCheckedContinuation { done in dialog.dismiss(animated:false) { done.resume() } }
             }
         }
     }

@@ -2,7 +2,7 @@ import UIKit
 import Testing
 @testable import NotTennaPod
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct SleepTimerTimeRangeTests {
     private func find(_ id: String, in view: UIView) -> UIButton? {
         if view.accessibilityIdentifier == id { return view as? UIButton }

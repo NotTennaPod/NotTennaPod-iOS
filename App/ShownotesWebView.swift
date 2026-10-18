@@ -1,6 +1,9 @@
 import UIKit
 import WebKit
 import NotTennaPodCore
+#if DEBUG
+import CryptoKit
+#endif
 
 @MainActor
 final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
@@ -24,7 +27,8 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
     /// Automatic rebuilds per visit. A rebuild's own load never refills it, even one that ends right after finishing;
     /// a new visit (or Retry) does. After that the notes say they could not be displayed.
     static let recoveryLimit = 2
-    private enum PendingLoad { case recovery, newContent }
+    /// `policy`: the Mobile updates options or the network changed what the notes may load; not a recovery.
+    private enum PendingLoad { case recovery, newContent, policy }
     /// The document is gone with its process: it is rendered when the notes are shown in an active scene.
     private var pendingLoad: PendingLoad?
     private var recoveries = 0
@@ -41,6 +45,8 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
     private var pendingScrollTarget: CGFloat?
     /// Changes only when other notes take these notes' place (not for equivalent updates or rebuilds).
     private var notesRevision = 0
+    /// Tests: changes only when other notes are shown (equivalent notes keep their document).
+    var notesRevisionForTesting: Int { notesRevision }
     private var appearancePending = false, appearanceRequest = 0
     private var selectionClearPending = false, selectionClearRequest = 0
     private var readingObservation: NSKeyValueObservation?
@@ -48,6 +54,20 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
     private var unavailableView: ShownotesUnavailableView?
     private(set) var processTerminations = 0
     var isAwaitingLoad: Bool { pendingLoad != nil }
+    /// What the notes may load by themselves on this network (`ShownotesNetworkPolicy`).
+    private let network: ShownotesNetworkPolicy
+    /// The classes the installed rules (or the document's policy) allow; nil until the rules are installed, and no
+    /// notes load before then.
+    private var installedClasses: ShownotesFormatter.SubresourceClasses?
+    private var renderAwaitsRules = false
+    /// The classes the rendered notes may load (kept while a rebuild waits), and those of a live document, which may
+    /// be loading now: nil when there is none (not rendered, retired, or ended with its process).
+    private var documentClasses: ShownotesFormatter.SubresourceClasses = []
+    private var liveClasses: ShownotesFormatter.SubresourceClasses?
+    private(set) var policyRetirements = 0
+    var recoveriesUsed: Int { recoveries }
+    /// Notes to show wait for the content rules (compiled once per process) before their first load.
+    var isAwaitingRules: Bool { renderAwaitsRules }
     var isDocumentReady: Bool { documentReady }
     var showsUnavailableState: Bool { unavailableView != nil }
     var isAppearancePending: Bool { appearancePending }
@@ -96,7 +116,8 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
             """, injectionTime: .atDocumentStart, forMainFrameOnly: false, in: .defaultClient)
     }
 
-    init() {
+    init(network: ShownotesNetworkPolicy = .unrestricted) {
+        self.network = network
         let configuration = WKWebViewConfiguration()
         configuration.defaultWebpagePreferences.allowsContentJavaScript = false
         configuration.dataDetectorTypes = []
@@ -124,6 +145,79 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
         readingObservation = scrollView.observe(\.contentOffset) { [weak self] _, _ in
             MainActor.assumeIsolated { self?.readingPositionChanged() }
         }
+        if let rules = network.rules {
+            network.register(self)
+            if rules.isResolved { installRules(rules.lists) }
+            else { Task { [weak self] in let lists = await rules.resolved(); self?.installRules(lists) } }
+        } else {
+            installedClasses = network.allowed
+        }
+    }
+
+    /// The rules for the current policy are in place before any notes load; nil lists (compilation failed) leave
+    /// the policy to the document's Content-Security-Policy.
+    private func installRules(_ lists: ShownotesContentRules.Lists?) {
+        guard installedClasses == nil else { return }
+        installedClasses = network.allowed
+        if let lists { lists.blocking(network.allowed).forEach(configuration.userContentController.add) }
+        if renderAwaitsRules { renderAwaitsRules = false; render(force: true) }
+    }
+
+    /// The policy changed. Rules change first, so nothing newly denied starts. Loads a live document already has of a
+    /// newly denied class end now, also in covered notes and pager neighbours, by replacing the document: shown notes
+    /// are rebuilt at once at the position read, hidden ones when next shown. (`stopLoading()` alone would leave notes
+    /// stopped before their load event never ready: no restored position and no reading checkpoints.) Newly allowed
+    /// classes the notes use load in a rebuild when shown.
+    func networkPolicyChanged() {
+        guard let previous = installedClasses else { return }
+        let now = network.allowed
+        guard now != previous else { return }
+        installedClasses = now
+        let lists = network.rules?.lists
+        if let lists {
+            configuration.userContentController.removeAllContentRuleLists()
+            lists.blocking(now).forEach(configuration.userContentController.add)
+        }
+        let tightened = previous.subtracting(now).intersection(liveClasses ?? [])
+        if !tightened.isEmpty {
+            policyRetirements += 1
+            retireDocument()
+            return
+        }
+        // A rebuild that already waits (or an unavailable state's Retry) renders under the new policy anyway.
+        let loosened = now.subtracting(previous).intersection(documentClasses)
+        guard !loosened.isEmpty, renderedHTML != nil, pendingLoad == nil, unavailableView == nil else { return }
+        pendingScrollTarget = policyRebuildTarget
+        pendingLoad = .policy
+        updateShown(); loadIfShown()
+    }
+
+    /// Where notes rebuilt for the policy open: the position read, also in notes still loading that a person scrolled;
+    /// nil keeps the owner's saved position for notes not yet shown at one.
+    private var policyRebuildTarget: CGFloat? {
+        if let pendingScrollTarget { return pendingScrollTarget }
+        if documentReady || scrollView.contentOffset.y > 0 { return scrollView.contentOffset.y }
+        return nil
+    }
+
+    /// Ends the live document and every load it has. Shown notes are rebuilt now; hidden ones get an empty document
+    /// and are rebuilt when next shown, at the position read.
+    private func retireDocument() {
+        pendingScrollTarget = policyRebuildTarget
+        updateShown()
+        if shown, pendingLoad == nil || pendingLoad == .policy {
+            pendingLoad = nil
+            render(force: true, forPolicy: true)
+            return
+        }
+        documentGeneration = UUID()
+        documentReady = false; liveClasses = nil
+        selectionToolbarSuppressed = false; selectionInMainFrame = true; selectionProviders = []
+        hideSelectionToolbar()
+        // The empty document is not the notes: none of their scripts run in it.
+        configuration.userContentController.removeAllUserScripts()
+        loadHTMLString("", baseURL: nil)
+        if pendingLoad == nil { pendingLoad = .policy }
     }
     required init?(coder: NSCoder) { fatalError() }
     isolated deinit { sceneObservers.forEach(NotificationCenter.default.removeObserver) }
@@ -417,6 +511,7 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
         selectionToolbarSuppressed = false; selectionInMainFrame = true; selectionProviders = []
         hideSelectionToolbar()
         appearancePending = false; selectionClearPending = false
+        liveClasses = nil
         guard loaded != nil, renderedHTML != nil, unavailableView == nil else { return }
         pendingScrollTarget = target
         if pendingLoad == nil { pendingLoad = .recovery }
@@ -463,7 +558,7 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
             recoveries += 1
         }
         pendingLoad = nil
-        render(force: true)
+        render(force: true, forPolicy: pending == .policy)
     }
 
     private func showUnavailable() {
@@ -514,7 +609,9 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
     }
 
     /// `force` rebuilds a document that ended with its process, whose notes are unchanged.
-    private func render(html formatted: String? = nil, force: Bool = false) {
+    /// `forPolicy` rebuilds notes a person was reading after a policy change: they are ready, and restore the position,
+    /// as soon as their own layout is (below), rather than at the load event.
+    private func render(html formatted: String? = nil, force: Bool = false, forPolicy: Bool = false) {
         guard let loaded else { return }
         do {
             // Source ItemDescriptionFragment compares cleaned HTML, so metadata
@@ -522,13 +619,20 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
             // Owned appearance variables are updated in the existing document.
             let html = try formatted ?? formattedHTML(loaded)
             guard force || renderedHTML != html else { return }
+            // Nothing loads before the rules for the current policy are in place.
+            guard let classes = installedClasses else { renderAwaitsRules = true; return }
             // Android treats the whole anchor as an image hit when it contains
             // an image, including a hold on that anchor's text portion.
             let defaults = " :root { --ap-foreground: \(cssColor(Appearance.foreground)); --ap-accent: \(cssColor(Appearance.accent)); }"
                 + " img, a:has(img) { -webkit-touch-callout: none; -webkit-user-select: var(--ap-image-selection, auto); }"
             // The 3.2 MB inlined font joins the finished document instead of passing through the HTML parser
             //. WebKit only accepts it inline: a page from https://127.0.0.1 may not load app URLs.
-            let document = try ShownotesFormatter.webKitDocument(html, defaultFontCSS: defaults, leadingCSS: Self.fontCSS)
+            let policy = network.rules != nil && network.rules?.lists == nil
+                ? ShownotesFormatter.contentSecurityPolicy(allowing: classes) : nil
+            let prepared = try ShownotesFormatter.preparedWebKitDocument(html, defaultFontCSS: defaults, leadingCSS: Self.fontCSS,
+                                                                         contentSecurityPolicy: policy)
+            let document = prepared.html
+            documentClasses = prepared.classes; liveClasses = prepared.classes
             renderedHTML = html
             documentGeneration = UUID()
             documentReady = false; selectionClearPending = false
@@ -545,7 +649,27 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
                     // didFinish can precede the viewport reset. The document
                     // reports rendered readiness without retaining an offscreen
                     // WebView in an awaiting native task.
-                    window.addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(() => send({type: 'ready'}))), {once: true});
+                    // Notes rebuilt for a policy change are ready with their own
+                    // layout: the parsed document, its pictures (loaded or refused)
+                    // and fonts, two frames later. An embedded frame or media file
+                    // still loading has a fixed box and does not hold back the
+                    // position a person was reading. Otherwise, and as a fallback,
+                    // readiness is the load event.
+                    let ready = false;
+                    const sendReady = () => { if (!ready) { ready = true; send({type: 'ready'}); } };
+                    const afterFrames = () => requestAnimationFrame(() => requestAnimationFrame(sendReady));
+                    window.addEventListener('load', afterFrames, {once: true});
+                    if (\(forPolicy)) document.addEventListener('DOMContentLoaded', async () => {
+                        const pending = Array.from(document.images).filter(image => !image.complete && image.loading !== 'lazy');
+                        await Promise.all(pending.map(image => new Promise(resolve => {
+                            image.addEventListener('load', resolve, {once: true});
+                            image.addEventListener('error', resolve, {once: true});
+                        })));
+                        // Not document.fonts.ready: it also waits for the load event.
+                        await Promise.all(Array.from(document.fonts).filter(font => font.status === 'loading')
+                            .map(font => font.loaded.catch(() => {})));
+                        afterFrames();
+                    }, {once: true});
                     const update = () => {
                         scheduled = false;
                         const selection = getSelection();
@@ -612,12 +736,37 @@ final class ShownotesWebView: WKWebView, WKNavigationDelegate, WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-        guard navigationAction.navigationType == .linkActivated,
-              let destination = navigationAction.request.url?.absoluteString else { return .allow }
-        if let time = ShownotesFormatter.timecodeMilliseconds(for: destination) { selectTimecode?(time) }
-        else { openLink?(destination) }
-        return .cancel
+        if navigationAction.navigationType == .linkActivated, let destination = navigationAction.request.url?.absoluteString {
+            if let time = ShownotesFormatter.timecodeMilliseconds(for: destination) { selectTimecode?(time) }
+            else { openLink?(destination) }
+            return .cancel
+        }
+        // Only the notes' own document loads in the main frame; nothing else replaces it by itself.
+        if navigationAction.targetFrame?.isMainFrame == true, !Self.isNotesDocument(navigationAction.request.url) { return .cancel }
+        return .allow
     }
+
+    private static func isNotesDocument(_ url: URL?) -> Bool {
+        guard let url else { return true }
+        if url.absoluteString == "about:blank" { return true }
+        return url.scheme == "https" && url.host == "127.0.0.1" && url.port == nil && ["", "/"].contains(url.path)
+    }
+
+    #if DEBUG
+    /// Debug builds only, for tests: the SHA-256 digest of the one loopback test certificate trusted for the notes'
+    /// subresources (generated at test startup). Release builds have no such hook and use the system's evaluation.
+    var trustedCertificateSHA256ForTesting: Data?
+
+    func webView(_ webView: WKWebView, respondTo challenge: URLAuthenticationChallenge) async
+        -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        guard let pinned = trustedCertificateSHA256ForTesting,
+              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+              challenge.protectionSpace.host == "127.0.0.1", let trust = challenge.protectionSpace.serverTrust,
+              let leaf = (SecTrustCopyCertificateChain(trust) as? [SecCertificate])?.first,
+              Data(SHA256.hash(data: SecCertificateCopyData(leaf) as Data)) == pinned else { return (.performDefaultHandling, nil) }
+        return (.useCredential, URLCredential(trust: trust))
+    }
+    #endif
 }
 
 /// The notes' own state when WebKit could not keep them after its automatic rebuilds: what happened and Retry, in

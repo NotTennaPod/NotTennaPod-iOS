@@ -10,7 +10,7 @@ import NotTennaPodCore
     private struct Configuration: Codable { let library: UUID; let mode: String }
     private static var marker: URL? {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
-            .appendingPathComponent("M11-opml-journey-active.json")
+            .appendingPathComponent("opml-journey-active.json")
     }
     static func arguments(_ supplied: [String]) -> [String] {
         guard let marker else { return supplied }
@@ -32,7 +32,7 @@ import NotTennaPodCore
               let idIndex = args.firstIndex(of: "-test-library-id"), idIndex + 1 < args.count,
               let id = UUID(uuidString: args[idIndex + 1]), let marker else { return nil }
         let gate = CommitGate(mode: args[modeIndex + 1], journal: marker.deletingLastPathComponent()
-            .appendingPathComponent("UITests-" + id.uuidString).appendingPathComponent("m11-opml-events.json"))
+            .appendingPathComponent("UITests-" + id.uuidString).appendingPathComponent("opml-journey-events.json"))
         let session = OPMLImportSession(read: { url in
             if gate.mode == "refresh-lifecycle" { try await gate.prepareRetainedLibrary(store: store, library: id) }
             let bytes = try await OPMLDocumentReader().read(url)

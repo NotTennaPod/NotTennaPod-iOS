@@ -143,7 +143,7 @@ extension FeedLibraryStore {
             if episode.userState.playState == .new { episode.userState.playState = .unplayed }
             let feedID = try database.scalar("SELECT feed_id FROM episodes WHERE id = ?", [.integer(episode.id)])
             guard let feed = try loadFeedHeader(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
-            try saveEpisode(episode, feedID: feedID)
+            try saveEpisode(episode, feedID: feedID, scope: .media)
             job.state = .completed
             job.updatedAt = now
             job.logs = (job.logs ?? []) + [.init(date: now, attempt: attempt, failure: nil, title: episode.details.title)]
@@ -194,7 +194,7 @@ extension FeedLibraryStore {
                 try saveQueue(queue)
             }
             episode.userState.autoDownloadEnabled = false
-            try saveEpisode(episode, feedID: feedID)
+            try saveEpisode(episode, feedID: feedID, scope: .media)
             job.state = .cancelled
             job.updatedAt = now
             try saveDownloadJob(job)

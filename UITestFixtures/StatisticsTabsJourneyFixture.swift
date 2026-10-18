@@ -13,10 +13,10 @@ enum StatisticsTabsJourneyFixture {
     struct Download: Sendable { let episodeID: Int64, size: Int64, date: Int64 }
 
     static func markDownloads(from source: URL, directory: URL) throws {
-        let marker = directory.appendingPathComponent("m28-downloads-seeded")
+        let marker = directory.appendingPathComponent("statistics-downloads-seeded")
         guard !FileManager.default.fileExists(atPath: marker.path) else { return }
         let downloads = try read(source)
-        let files = directory.appendingPathComponent("m28-downloads", isDirectory: true)
+        let files = directory.appendingPathComponent("statistics-downloads", isDirectory: true)
         try FileManager.default.createDirectory(at: files, withIntermediateDirectories: true)
         let library = directory.appendingPathComponent("library.sqlite")
         let done = DispatchSemaphore(value: 0)

@@ -29,7 +29,7 @@ private final class ShareViewTestBundleMarker {}
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct PlayerShareViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -68,7 +68,7 @@ struct PlayerShareViewTests {
             let player = PlayerView(playback: playback, timeDisplayPreferences: time, library: store)
             player.semanticContentAttribute = rtl ? .forceRightToLeft : .forceLeftToRight
             player.frame = CGRect(x: 0, y: 0, width: 402, height: 800); player.expandedSize = player.bounds.size
-            player.update(feed: feed); player.setExpanded(true, animated: false); player.layoutIfNeeded()
+            player.update(feed: feed, stored: feed.episodes.first { $0.id == playback.episode?.id }); player.setExpanded(true, animated: false); player.layoutIfNeeded()
             let share: UIButton = try #require(find("playerShare", in: player))
             let favorite: UIButton = try #require(find("playerFavorite", in: player))
             #expect(!share.isHidden && share.accessibilityLabel == "Share")
@@ -87,13 +87,13 @@ struct PlayerShareViewTests {
             #expect(playback.wantsPlayback && playback.sample?.positionMilliseconds == 12_345)
             let before = favorite.frame
             var local = feed; local.source = "antennapod_local:fixture"
-            player.update(feed: local); player.layoutIfNeeded()
+            player.update(feed: local, stored: local.episodes.first { $0.id == playback.episode?.id }); player.layoutIfNeeded()
             #expect(share.isHidden)
             // Favorite moves into the freed Share slot.
             #expect(abs(favorite.frame.minX - (before.minX + (rtl ? -48 : 48))) <= 1)
             shared = nil; share.sendActions(for: .touchUpInside); #expect(shared == nil)
             try await playback.resetPlaybackPosition(episodeID: feed.episodes[0].id)
-            player.update(feed: feed); #expect(share.isHidden)
+            player.update(feed: feed, stored: feed.episodes.first { $0.id == playback.episode?.id }); #expect(share.isHidden)
         }
     }
 

@@ -14,6 +14,13 @@ public enum ServerRecordingError: Error, Equatable, Sendable, CustomStringConver
     case corruptState(String)
     /// Test failure injection (`FeedLibraryStore.recorderFailureInjection`).
     case injectedFailure
+    /// A fact larger than the server accepts (PROTOCOL §6.13 `max_framed_fact_bytes`): it is never numbered. A person's
+    /// action that needs it changes nothing (a queue sort of a very long queue); playback keeps its listening here.
+    case factTooLarge(type: String, bytes: Int)
+    /// A history removal, history clear or statistics reset would cover listening the server refused (its export is too
+    /// large): nothing changes until that listening is sent or kept on this device (Settings → Synchronization → Needs
+    /// attention).
+    case cutBlockedByRefusedListening(intent: String)
 
     public var description: String {
         switch self {
@@ -25,6 +32,8 @@ public enum ServerRecordingError: Error, Equatable, Sendable, CustomStringConver
         case .unknownRegistration(let op): "unknown registration \(op)"
         case .corruptState(let detail): "corrupt server state: \(detail)"
         case .injectedFailure: "injected recorder failure"
+        case .factTooLarge(let type, let bytes): "a \(type) fact of \(bytes) bytes is larger than the server accepts"
+        case .cutBlockedByRefusedListening(let intent): "a \(intent) would cover listening the server refused"
         }
     }
 }
@@ -123,6 +132,9 @@ enum ServerIntent: Equatable, Sendable {
     /// and the save commits with `export_owed` set. The play load is held to the same rule: the coordinator has already
     /// retired the previous episode when it calls `beginPlayback`, so a failed recording must not stop the load.
     var neverFails: Bool { self == .playbackSave || self == .playbackEnd || self == .playLoad }
+
+    /// A local cut (PROTOCOL §8.2): recorded only after every unexported save it covers was exported.
+    var isCut: Bool { self == .historyRemove || self == .historyClear || self == .statisticsReset }
 
     /// Whether the write first records what earlier writes owe. Never for playback writes, which are
     /// latency-sensitive and must not wait on recovery work, nor for projecting pulled records.
@@ -245,6 +257,8 @@ final class ChangeCapture: @unchecked Sendable {
     var playbackDue = false
     /// Episodes whose playback write is no listening (a pending session's save, PROTOCOL §8): nothing marks them.
     var playbackUnmarked: Set<Int64> = []
+    /// The recorder found a session's export too large and refused it (kept here even when the transaction rolls back).
+    var refusedExport = false
 
     init(clientTime: Date) { self.clientTime = clientTime }
 

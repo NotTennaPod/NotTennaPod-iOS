@@ -80,21 +80,27 @@ extension LibraryViewController {
                 item: item)
         }
     }
+    /// The screen's swipe owner: its results reach the models through the screen's action fence.
+    func connectInboxSwipe(_ coordinator: EpisodeSwipeCoordinator) {
+        coordinator.onEvent = { [weak self] event in self?.receiveInboxSwipe(event) }
+        coordinator.superseded = { [weak self] model, receipt in self?.actionResultSuperseded(model, receipt: receipt) ?? false }
+        inboxSwipeCoordinator = coordinator
+    }
     func receiveInboxSwipe(_ event: EpisodeSwipeCoordinator.Event) {
         switch event {
         case .committed(let commit):
-            reconcileInboxSwipe(modelIdentity: commit.modelIdentity, delta: commit.delta)
-        case .undone(_, let identity, _, let delta):
-            if let delta { reconcileInboxSwipe(modelIdentity: identity, delta: delta) }
+            reconcileInboxSwipe(modelIdentity: commit.modelIdentity, delta: commit.delta, receipt: commit.sequence)
+        case .undone(_, let identity, _, let delta, let receipt):
+            if let delta { reconcileInboxSwipe(modelIdentity: identity, delta: delta, receipt: receipt) }
         case .cleanupFinished: break // The guarded owner already publishes its library change.
         case .failed: break // The presenter routes the actual error, including unavailable capture.
         }
         inboxSwipeOffers?.receive(event)
     }
-    private func reconcileInboxSwipe(modelIdentity: UUID, delta: EpisodeActionStateDelta) {
+    private func reconcileInboxSwipe(modelIdentity: UUID, delta: EpisodeActionStateDelta, receipt: Int64) {
         actionMutationRevision &+= 1
         if let id = actionBindings.first(where: { $0.value.model.identity == modelIdentity })?.key,
-           let captured = captureAction(id) { reconcileCommittedAction(captured, delta: delta) }
+           let captured = captureAction(id) { reconcileCommittedAction(captured, delta: delta, receipt: receipt) }
         else { lastEpisodeActionReconciliation = reloadLibrary(preservingEpisodeDetails: true, reconcilingPresentation: actionPresentation) }
     }
     private func performOrdinaryInboxSwipe(_ decision: SwipeDecision, model: EpisodeActionModel, target: EpisodeMediaDeletionTarget?) {
@@ -132,7 +138,7 @@ extension LibraryViewController {
             guard let self, let library else { return }
             do {
                 guard let episode = try await library.episode(id: episodeID),
-                      let feed = try await library.feed(id: library.feedID(forEpisode: episodeID)) else { return }
+                      let feed = try await library.listedFeedHeader(id: library.feedID(forEpisode: episodeID)) else { return }
                 let item = EpisodeListItem(episode: episode, local: feed.source.isLocalFeedSource, subscription: feed.subscriptionState,
                     queued: try await library.queue().contains { $0.id == episodeID }, downloading: downloads?.activeJob(source: episode.details.media?.url) != nil)
                 if let operation = action.action(for: item) { performEpisodeListAction(operation, ids: [episodeID], resetPosition: action != .played) }

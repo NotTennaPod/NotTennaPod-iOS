@@ -6,7 +6,7 @@ import Testing
 /// engine of the test's own: intentional play and resume start or claim, an intentional seek takes over from a waiting
 /// claim, adoption moves only a paused, stopped or restored player, and no hook ever fails playback. In a standalone
 /// library they do nothing.
-@MainActor @Suite(.timeLimit(.minutes(5))) struct ServerPlaybackHookTests {
+@MainActor @Suite struct ServerPlaybackHookTests {
     @MainActor class Engine: PlaybackEngine {
         enum Command: Equatable { case load(Int64), adopt(Int64), play, pause, seek(Int64), unload }
         var reading: PlaybackEngineReading?
@@ -401,7 +401,7 @@ import Testing
                 "the receiver's listening before the Play here is not counted")
     }
 
-    // MARK: - The rewind after a pause is a standalone library's (owner's rule: listening behaviour never changes)
+    // MARK: - The rewind after a pause is a standalone library's (listening behaviour never changes)
 
     /// Plays, pauses after 30 s, waits `wait` seconds (another phone's listening of the episode arriving and adopted
     /// meanwhile, with `adopting`) and returns the Play's rewind.

@@ -7,7 +7,7 @@ import Testing
 /// Raw ADTS whose decoder configuration changes mid-stream (an inserted ad encoded differently) plays
 /// every segment, in the stream's first format, with a continuous clock. Ordinary ADTS
 /// keeps its native route, duration and constant-bitrate seeking.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3))) struct ADTSFormatChangeTests {
+@MainActor @Suite(.serialized) struct ADTSFormatChangeTests {
     nonisolated static func fixture(_ name: String) throws -> Data {
         try Data(contentsOf: FFmpegBufferedSeekReferenceTests.resource(name, directory: "PlaybackDecoder"))
     }

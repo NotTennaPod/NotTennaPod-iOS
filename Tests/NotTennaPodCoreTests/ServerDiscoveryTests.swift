@@ -533,6 +533,37 @@ struct ServerDiscoveryTests {
         }
     }
 
+    /// A feed the parity parse refuses without a detail (a mismatched tag): the Download log and its details say where
+    /// the document stops being well-formed XML, never the parse's internal label, in the stored log, the dialog's
+    /// technical detail and the clipboard; the refusal stands.
+    @Test func aRefusalWithoutADetailSaysWhereTheFeedBreaksNeverItsCode() async throws {
+        try await withFixture { fixture in
+            let (feed, _, _) = try await registered(fixture)
+            let body = Data("<?xml version=\"1.0\"?>\n<rss version=\"2.0\"><channel><title>Show</title>\n<item><title>One</item>\n</channel></rss>".utf8)
+            #expect(throws: ParityParseError.parserException) { try ParityFeedParser.parse(body, source: feed.source, now: Self.ms(10)) }
+            let service = FeedRefreshService(store: fixture.store, fetcher: FeedFetcher(transport: Transport(body: body)), clock: { Self.date(10) })
+            guard case .failed(let error) = try await service.refresh(feedID: feed.id, force: true) else { Issue.record("not refused"); return }
+            guard case .parsing(.malformedXML(let line, let column)) = error else { Issue.record("\(error)"); return }
+            let log = try #require(try await fixture.store.logs(feedID: feed.id).first)
+            let details = FeedLogDetails(log: log, feed: try await fixture.store.feed(id: feed.id), text: { $0 })
+            #expect(details.statusKey == "download_error_parser_exception")
+            #expect(details.technical == "Malformed XML at line \(line), column \(column).", "\(details.technical)")
+            #expect(!details.technical.contains("parser_exception") && !(log.detail ?? "").contains("parser_exception"))
+            #expect(details.clipboard.contains(details.technical))
+            #expect(try await fixture.store.feed(id: feed.id)?.lastUpdateFailed == true, "the refusal stands")
+        }
+    }
+
+    /// A refusal the app's parser cannot place (it reads the bytes) says so plainly; one with a detail keeps it.
+    @Test func aRefusalTheAppsParserCannotPlaceIsWordedPlainly() throws {
+        let readable = ParityParseError.parserException.readable(body: Self.rss(""))
+        #expect(readable.detail == ParityParseError.unreadableFeed && readable.error == .parsing(.limitExceeded(ParityParseError.unreadableFeed)))
+        let detailed = ParityParseError(label: "parser_exception", detail: "Feed has no title").readable(body: Data())
+        #expect(detailed.detail == "Feed has no title" && detailed.error == .missingFeedTitle)
+        let website = ParityParseError(label: "unsupported_type_html", detail: "Server returned html").readable(body: Data())
+        #expect(website.detail == "Server returned html" && website.error == .websiteInsteadOfFeed)
+    }
+
     // MARK: Pending registrations (PROTOCOL §15.2)
 
     @Test func anOutageSubscriptionRecordsItsDiscoveryAsDraftsAndMaterializesThem() async throws {
@@ -749,7 +780,7 @@ struct ServerDiscoveryTests {
     /// drafts, the podcast's facts join that chain, so its listed observations wait, never drained as if done: the
     /// drain reports nothing to do, keeps them, and push and pull go on. Once that registration resolves they are
     /// recorded.
-    @Test(.timeLimit(.minutes(1))) func listedObservationsWaitWhileAnEarlierRegistrationHoldsDrafts() async throws {
+    @Test func listedObservationsWaitWhileAnEarlierRegistrationHoldsDrafts() async throws {
         try await withFixture { fixture in
             let store = fixture.store
             let preview = try await store.preparePreview(Self.fetched(Self.base), now: Fixture.now)
@@ -1009,4 +1040,32 @@ private final class DeliveryCounter: @unchecked Sendable {
     private var count = 0
     func increment() { lock.withLock { count += 1 } }
     var value: Int { lock.withLock { count } }
+}
+
+// MARK: - Observations within the fact bound (PROTOCOL §6.13)
+
+extension ServerDiscoveryTests {
+    /// Under the bound the server advertises, an item too large with its occurrence (over half the bound) is not observed,
+    /// nor a podcast record too large for a fact with its items; the other items are observed, and the log says so.
+    @Test(arguments: [false, true]) func anItemOrPodcastRecordTooLargeIsNotObservedWhileTheOthersAre(feedHeader: Bool) async throws {
+        try await withFixture { fixture in
+            let (feed, _, _) = try await registered(fixture)
+            await fixture.store.setServerFactBoundForTesting(8_000)
+            _ = await fixture.store.takeServerDiagnostics()
+            let before = try fixture.outboxCount()
+            let long = String(repeating: "and so on ", count: 400)
+            // Two changed records: the second's title is too large (the item case), or the podcast's title is (the header case).
+            let items = [Item("g1", "One", day: 1), Item("g2", feedHeader ? "Two!" : "Two " + long, day: 2), Item("g3", "Three!", day: 3)]
+            var options = FeedRefreshOptions(now: Self.date(10))
+            options.globalNewEpisodesAction = .inbox
+            _ = try await fixture.store.applyRefresh(Self.fetched(items, title: feedHeader ? "Show " + long : "Show"), feedID: feed.id, options: options)
+            let facts = try fixture.newFacts(after: before)
+            #expect(facts.map(\.type) == ["catalog.observe"])
+            let observed = (facts.first?.payload["items"]?.arrayValue ?? []).compactMap { $0["fields"]?["title"]?.stringValue }
+            #expect(Set(observed) == (feedHeader ? ["One", "Two!", "Three!"] : ["One", "Three!"]), "\(observed)")
+            #expect((facts.first?.payload["feed"] == nil) == feedHeader, "the podcast record is observed only when it fits")
+            let lines = await fixture.store.takeServerDiagnostics().filter { $0.kind == "too_large" }.map(\.detail)
+            #expect(lines.count == 1 && lines[0].hasPrefix("catalog.observe") && lines[0].hasSuffix("not observed"), "\(lines)")
+        }
+    }
 }

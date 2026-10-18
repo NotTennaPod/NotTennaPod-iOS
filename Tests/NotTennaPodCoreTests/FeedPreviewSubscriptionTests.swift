@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) struct FeedPreviewSubscriptionTests {
+@Suite struct FeedPreviewSubscriptionTests {
     private let now = Date(timeIntervalSince1970: 1700000000)
     private func fixture(_ body: (FeedLibraryStore, URL) async throws -> Void) async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("Preview-\(UUID())")

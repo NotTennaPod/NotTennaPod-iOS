@@ -9,7 +9,7 @@ struct ServerRecordingTests {
         let fixture = try await ServerLibraryFixture(server: false)
         defer { Task { await fixture.close() } }
         let store = fixture.store
-        #expect(try fixture.rows("PRAGMA user_version") == [["20"]])
+        #expect(try fixture.rows("PRAGMA user_version") == [["22"]])
         #expect(await store.isServerLibrary == false)
         let feed = try await store.insert(ServerLibraryFixture.fetched())
         let ids = feed.episodes.map(\.id)

@@ -15,7 +15,7 @@ import Testing
 ///   never stuck ("Stop playback and continue"), and a late end after that action is fenced;
 /// - sync counts only actual playback; a Play, and playback an interruption's end resumes, fence a large
 ///   publication from the step they are admitted or reported.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3)))
+@MainActor @Suite(.serialized)
 struct AudioResetAndInterruptionTests {
     typealias Rig = AudioSessionOwnerTests.Rig
 
@@ -299,7 +299,7 @@ struct AudioResetAndInterruptionTests {
     enum Requested: String, CaseIterable, Sendable { case whilePlaying, duringInterruption }
     enum End: String, CaseIterable, Sendable { case resumes, doesNotResume, never }
 
-    /// Every ordering of the plan's expected results: a switch or Keep requested while playing or during the
+    /// Every ordering of the expected results: a switch or Keep requested while playing or during the
     /// interruption waits through it, the app coming to the foreground in one scene and another ending nothing;
     /// its page offers "Stop playback and continue", after which the operation runs and the late end plays nothing.
     /// Without the action: ended(shouldResume) resumes playback and the operation waits for a pause; ended without

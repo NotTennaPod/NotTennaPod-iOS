@@ -28,6 +28,23 @@ public struct EpisodeUserState: Equatable, Codable, Sendable {
     public init() {}
 }
 
+extension LibraryEpisode {
+    /// An episode as lists show it: without its show notes (`details.description`) and chapters, which only an
+    /// episode's own page and the player read. Never saved: every writer refuses to change the stored details
+    /// (`EpisodeWriteScope`).
+    public var listProjection: LibraryEpisode {
+        var episode = self
+        episode.details.description = nil
+        episode.details.chapters = nil
+        return episode
+    }
+
+    /// `listProjection` made by SQLite from a record column, as JSON text: the left-out values are never decoded.
+    static func listProjectionSQL(_ column: String) -> String {
+        "json_remove(CAST(\(column) AS TEXT), '$.details.description', '$.details.chapters')"
+    }
+}
+
 public struct LibraryEpisode: Equatable, Codable, Sendable {
     public var id: Int64
     public var details: ParsedEpisode
@@ -182,7 +199,17 @@ public struct LibraryFeed: Equatable, Codable, Sendable {
         subscriptionState == .notSubscribed &&
             (lastRefreshAttempt ?? Date(timeIntervalSince1970: 0)) < now.addingTimeInterval(-86_400)
     }
+    /// This device's last refresh of the feed failed (cleared by its next successful refresh). Android's flag, exported.
     public var lastUpdateFailed = false
+    /// In a server library, the server's latest known refresh status of the podcast (its `refresh_status` record):
+    /// kept apart from this device's own (`lastUpdateFailed`), so neither erases the other. Device-only; never exported.
+    public var serverRefresh: ServerRefreshStatus?
+    /// When this device last refreshed the feed: a refresh that read it, or one that failed; nil until it does. Unlike
+    /// `lastRefreshAttempt`, never set by a server library's projection nor by a preview's aging. Device-only.
+    public var localRefreshAttempt: Date?
+    /// The icon and notice of a failed refresh: this device's last refresh failed, or the server reports that its own
+    /// fails. A healthy refresh on one side does not hide a failure on the other; the details show both.
+    public var refreshFailed: Bool { lastUpdateFailed || serverRefresh?.failed == true }
     /// Original SortOrder code. Nil retains the existing/default presentation.
     public var episodeSortOrderCode: Int?
     /// Optional so existing stored headers decode as unfiltered.
@@ -205,6 +232,13 @@ public struct LibraryFeed: Equatable, Codable, Sendable {
     public var title: String? {
         if let customTitle, !customTitle.isEmpty { return customTitle }
         return metadata.title
+    }
+
+    /// Android's `Feed.getHumanReadableIdentifier`: the title, else the feed's address (a subscription whose metadata
+    /// has not arrived yet still says which podcast it is).
+    public var humanReadableIdentifier: String {
+        if let title, !title.isEmpty { return title }
+        return source
     }
 
     public var identifyingValue: String? {
@@ -240,6 +274,9 @@ public struct LibraryFeed: Equatable, Codable, Sendable {
             if options.refreshAttempt > (lastRefreshAttempt ?? Date(timeIntervalSince1970: 0)) {
                 lastRefreshAttempt = options.refreshAttempt
             }
+            if options.refreshAttempt > (localRefreshAttempt ?? Date(timeIntervalSince1970: 0)) {
+                localRefreshAttempt = options.refreshAttempt
+            }
             if !metadata.isPaged && other.isPaged {
                 metadata.isPaged = true
                 metadata.nextPageURL = other.nextPageURL
@@ -270,4 +307,57 @@ extension LibraryFeed {
         metadata.language = language; metadata.link = link; metadata.imageURL = imageURL; metadata.funding = funding
         if let format { metadata.format = format }
     }
+}
+
+/// A podcast's `refresh_status` record as a server library shows it (PROTOCOL §9.4): the server's last attempt, its last
+/// success, and the failure of the last attempt with Android's DownloadError label, the HTTP status for `http_status` and
+/// a sanitized detail. Published when its outcome or error changes, and at most once a day otherwise, so `lastAttempt` is
+/// when the server last published, not necessarily its latest attempt.
+public struct ServerRefreshStatus: Equatable, Codable, Sendable {
+    public var lastAttempt: Date?
+    public var lastSuccess: Date?
+    /// The failure's label; nil when the last attempt succeeded.
+    public var label: String?
+    public var code: Int?
+    public var detail: String?
+
+    public init(lastAttempt: Date?, lastSuccess: Date? = nil, label: String? = nil, code: Int? = nil, detail: String? = nil) {
+        self.lastAttempt = lastAttempt; self.lastSuccess = lastSuccess; self.label = label; self.code = code; self.detail = detail
+    }
+
+    /// The record's value (`{last_attempt, last_success, error: {label, code, detail} or null, next_attempt}`); nil for
+    /// no record or a null one.
+    init?(record value: ContractJSON?) {
+        guard let value, value.objectValue != nil else { return nil }
+        func date(_ name: String) -> Date? { value[name]?.integerValue.map { Date(timeIntervalSince1970: Double($0) / 1_000) } }
+        lastAttempt = date("last_attempt"); lastSuccess = date("last_success")
+        if let error = value["error"], error.objectValue != nil {
+            label = error["label"]?.stringValue.flatMap { $0.isEmpty ? nil : $0 } ?? "unknown"
+            code = error["code"]?.integerValue.map { Int(clamping: $0) }
+            detail = error["detail"]?.stringValue.flatMap { $0.isEmpty ? nil : $0 }
+        }
+    }
+
+    public var failed: Bool { label != nil }
+
+    /// The Download log's wording of the label (Android's DownloadErrorLabel, as the web shows it).
+    public var statusKey: String {
+        switch label {
+        case nil: "download_successful"
+        case "unauthorized": "download_error_unauthorized"
+        case "forbidden": "download_error_forbidden"
+        case "not_found": "download_error_not_found"
+        case "http_status": "download_error_http_data_error"
+        case "io", "too_many_redirects": "download_error_io_error"
+        case "time_limit": "download_error_connection_error"
+        case "refused_destination": "download_error_unknown_host"
+        case "parser_exception": "download_error_parser_exception"
+        case "unsupported_type": "download_error_unsupported_type"
+        case "unsupported_type_html": "download_error_unsupported_type_html"
+        default: "download_error_error_unknown"
+        }
+    }
+
+    /// The technical detail: the server's sanitized detail, else the HTTP status; nothing else (never the label).
+    public var technical: String? { detail ?? code.map(String.init) }
 }

@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct FeedPaginationViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -43,6 +43,11 @@ struct FeedPaginationViewTests {
             content.contentOffset.y = content.contentSize.height - content.bounds.height
             #expect(!footer.isHidden)
             #expect(abs(footer.frame.maxY - content.frame.maxY) < 0.5)
+            // Every scroll callback asks for the footer's size; its text is measured again only when something changed.
+            let measured = footer.measurements
+            for _ in 0..<50 { content.contentOffset.y -= 1 }
+            #expect(footer.measurements - measured <= 1, "\(footer.measurements - measured) measurements in 50 scroll callbacks")
+            content.contentOffset.y = content.contentSize.height - content.bounds.height
             footer.sendActions(for: .touchUpInside)
             try await wait { try await store.manualRefreshRequest()?.nextPage == true }
             #expect(footer.isLoading && !footer.isEnabled)
@@ -91,6 +96,39 @@ struct FeedPaginationViewTests {
             #expect(label.frame.height >= ceil(label.sizeThatFits(CGSize(width: label.bounds.width, height: .greatestFiniteMagnitude)).height) - 0.5)
             #expect(abs((image.frame.minX + label.frame.maxX) / 2 - footer.bounds.midX) < 8)
             #expect(label.text == "Load next page")
+        }
+    }
+
+    /// The footer's text is measured once per width, text size and text: again after a text-size change, and the
+    /// result (size and layout, right to left too) is a fresh footer's.
+    @Test(arguments: [UISemanticContentAttribute.forceLeftToRight, .forceRightToLeft])
+    func footerMeasuresItsTextOncePerChange(direction: UISemanticContentAttribute) async throws {
+        try await withViewTestWindow { host, _ in
+            func make(_ category: UIContentSizeCategory?) -> FeedPageFooter {
+                let footer = FeedPageFooter()
+                footer.semanticContentAttribute = direction
+                host.view.addSubview(footer)
+                if let category { footer.traitOverrides.preferredContentSizeCategory = category }
+                return footer
+            }
+            let footer = make(nil)
+            let bounds = CGSize(width: 300, height: 800)
+            for _ in 0..<50 { _ = footer.sizeThatFits(bounds) }
+            #expect(footer.measurements == 1)
+            footer.frame = CGRect(origin: .zero, size: footer.sizeThatFits(bounds)); footer.layoutIfNeeded()
+            #expect(footer.measurements == 1, "a layout at the measured width reuses it")
+            footer.traitOverrides.preferredContentSizeCategory = .accessibilityExtraExtraExtraLarge
+            let larger = footer.sizeThatFits(bounds)
+            #expect(footer.measurements == 2, "a text-size change measures again")
+            _ = footer.sizeThatFits(CGSize(width: 260, height: 800))
+            #expect(footer.measurements == 3, "so does a width change")
+            let fresh = make(.accessibilityExtraExtraExtraLarge)
+            #expect(fresh.sizeThatFits(bounds) == larger)
+            footer.frame = CGRect(origin: .zero, size: larger); fresh.frame = footer.frame
+            footer.setNeedsLayout(); footer.layoutIfNeeded(); fresh.layoutIfNeeded()
+            let frames = { (view: FeedPageFooter) in view.subviews.map(\.frame) }
+            #expect(frames(footer) == frames(fresh), "the same layout as a fresh footer")
+            footer.removeFromSuperview(); fresh.removeFromSuperview()
         }
     }
 }

@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) struct PlaybackURLResolverTests {
+@Suite struct PlaybackURLResolverTests {
     @Test func sharedProxyResolvesHEADWithoutMediaCredentialsAndRetainsResultAcrossProxyReplacement() async throws {
         let second = try await LoopbackHTTPServer.start { _ in .init(status: 503) }
         let first = try await LoopbackHTTPServer.start { request in

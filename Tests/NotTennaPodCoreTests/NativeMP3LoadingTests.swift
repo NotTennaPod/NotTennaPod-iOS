@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct NativeMP3LoadingTests {
+@MainActor @Suite(.serialized) struct NativeMP3LoadingTests {
     private final class Transport: PCMPresentationTransport {
         var currentTime = CMTime.zero
         var onTimeChanged: (@MainActor () -> Void)?

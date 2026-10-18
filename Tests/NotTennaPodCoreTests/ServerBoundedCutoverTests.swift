@@ -207,6 +207,14 @@ import Testing
         return engine
     }
 
+    /// VM steps the unit revealing a 300-episode catalog may run inside its lock for the derived data: 204,257 measured
+    /// (before the change capture), and a fifth more. The change capture adds its own work on top,
+    /// proportional to the keys its set reports (each revealed episode's relations imaged before and after, and
+    /// compared): about 740 a key measured here (648,707 steps for the 602 keys of 300 episodes), 850 allowed. A scan of
+    /// the library for each revealed episode (the witness, 1,193,513 steps) still exceeds the gate.
+    static let catalogRevealLockSteps: Int64 = 250_000
+    static let captureStepsPerRevealKey: Int64 = 850
+
     static func arrived(_ store: FeedLibraryStore) async throws -> LibraryFeed? {
         try await store.feeds().first { $0.source == "https://example.test/arriving.xml" }
     }
@@ -369,16 +377,44 @@ import Testing
 
     /// The common way a podcast arrives: it shows (empty) first, then its catalog's 300 episodes arrive. They are
     /// staged hidden, one at a time, and the unit reveals them; a crash after staging leaves the podcast as it was.
-    @Test func aCatalogArrivingIsStagedHiddenAndRevealedByASmallUnit() async throws {
+    /// `scanning`: the gate's witness, the reveal doing more work inside the lock with the same rows written (a scan of
+    /// the episodes for each revealed one, from a temporary trigger): its VM steps exceed the gate.
+    @Test(arguments: [false, true])
+    func aCatalogArrivingIsStagedHiddenAndRevealedByASmallUnit(scanning: Bool) async throws {
+        let (steps, keys) = try await Self.revealCatalog(scanning: scanning)
+        // The lock's work, whatever the machine's speed or load: VM steps inside the unit's transaction (the test's write
+        // log included), calibrated on this reveal with a margin, and the capture's per key of its set. The time is
+        // reported by the reveal.
+        #expect(keys >= 300, "the set reports every revealed episode: \(keys)")
+        #expect(steps > 0 && (steps <= Self.catalogRevealLockSteps + Self.captureStepsPerRevealKey * keys) != scanning,
+                "\(steps) VM steps inside the lock, \(keys) keys")
+    }
+
+    /// The control: the reveal's work does not grow with the library it arrives in (the existing podcasts' episodes are
+    /// never visited).
+    @Test func aCatalogRevealIsFlatInTheExistingLibrary() async throws {
+        let alone = try await Self.revealCatalog(scanning: false)
+        let amid = try await Self.revealCatalog(scanning: false, existing: 2_000)
+        #expect(abs(amid.keys - alone.keys) <= 2, "the same reveal: \(amid) vs \(alone)")
+        #expect(amid.steps <= alone.steps + alone.steps / 100, "\(amid.steps) VM steps amid 2,000 episodes, \(alone.steps) alone")
+    }
+
+    /// The reveal of a 300-episode catalog (`existing`: episodes of another podcast already in the library): its unit's
+    /// VM steps inside the lock and the keys its change set reports.
+    static func revealCatalog(scanning: Bool, existing: Int = 0) async throws -> (steps: Int64, keys: Int64) {
         let fixture = try await ServerLibraryFixture()
         let store = fixture.store
+        if existing > 0 {
+            _ = try await fixture.subscribeRegistered(ServerLibraryFixture.fetched("https://example.test/existing.xml", title: "Existing", count: existing))
+        }
         let podcast = try await Self.registeredElsewhere(fixture)
         #expect(podcast.episodes.count == 1)
         let foreground = PlayingFlag()
         foreground.value = true
         let engine = try await Self.serve(fixture, try Self.episodeRecords(2...301), foreground: foreground)
-        // With the budget below the catalog's size: only what the unit itself writes counts, and that is small.
-        await engine.setBudgets(publish: 200)
+        // With the budget below the catalog's size: only what the unit itself writes counts, and that is small (the rest
+        // and, since schema 21, the reveal of its 300 staged episodes).
+        await engine.setBudgets(publish: 500)
         await engine.setCrashPoint(ServerExchangePushPullTests.crashOnce(at: "staging.staged"))
         let crashed = await engine.exchange()
         #expect(crashed.error == "InjectedCrash()", "\(crashed)")
@@ -388,23 +424,38 @@ import Testing
         #expect(try await store.statistics().feeds.first { $0.feedID == podcast.id }?.episodes == 1)
         // A screen reads the podcast while it is staged (its image is cached): the unit's reveal still shows the rest.
         let read = PlayingFlag()
+        try await DerivedWriteBudgetTests.install(store)
         await engine.setBeforePublish {
             guard !read.value else { return }
             read.value = true
             _ = try await store.feeds()
+            // From here, only the unit's own writes are logged.
+            _ = try await DerivedWriteBudgetTests.take(store)
+            if scanning {
+                try await store.withDatabaseForTesting { try $0.execute("CREATE TEMP TRIGGER test_scan_on_reveal AFTER UPDATE OF hidden ON main.episode_list_keys BEGIN SELECT count(*) FROM main.episodes WHERE length(record) > 0; END") }
+            }
         }
+        let log = await store.recordCommitsForTesting()
         let report = await engine.exchange()
         #expect(report.completed && report.stagingBatches == 6, "3 x 100 episodes, their 300 mappings, their 604 records: \(report)")
         #expect(try await Self.arrived(store)?.episodes.count == 301)
         #expect(try await store.search(query: "Arriving 250").episodes.count == 1, "the new episodes are found")
         #expect(try await store.statistics().feeds.first { $0.feedID == podcast.id }?.episodes == 301)
         let unit = try #require(report.units.first)
-        // Besides clearing the 300 episodes' hidden marks, the unit writes only the rest.
-        #expect(unit.published && unit.rowsWritten < 450, "\(unit)")
+        // The reveal's derived writes, exactly: each revealed episode's key row and its podcast's counts once (schema 21).
+        let derived = try await DerivedWriteBudgetTests.take(store)
+        #expect(derived.keyUpdates == Array(repeating: "hidden", count: 300) && derived.countWrites == 300 && derived.keyInserts == 0, "\(derived)")
+        // Besides clearing the 300 episodes' hidden marks, the unit writes only the rest (its rows written less the derived
+        // rows and the test log's own rows).
+        let canonical = unit.rowsWritten - derived.derivedWrites - derived.entries
+        #expect(unit.published && canonical < 450, "\(unit), \(canonical) canonical rows")
+        let keys = Int64(log.sets.filter { $0.episodes.count >= 300 }.reduce(0) { $0 + $1.keyCount })
+        print("DERIVED catalog reveal of 300 (\(existing) existing): \(canonical) canonical rows, \(derived.derivedWrites) derived rows, lock \(unit.lockMilliseconds) ms, \(unit.lockSteps) VM steps, \(keys) keys")
         #expect(try fixture.rows("SELECT count(*) FROM episodes WHERE feed_id = \(podcast.id)") == [["301"]], "nothing of the first staging is left")
         #expect(try fixture.rows("SELECT (SELECT count(*) FROM ntp_hidden_episodes) + (SELECT count(*) FROM ntp_staging)") == [["0"]])
         await engine.close()
         await fixture.close()
+        return (unit.lockSteps, keys)
     }
 
     /// A download finishing (a change no fact records) on an episode the commit changes, between two staging
@@ -510,7 +561,7 @@ import Testing
         let store = fixture.store
         #expect(try await store.deleteHiddenRemovalBatch().progressed)
         let pending = try #require(try await store.pendingEffects().first { if case .removeEpisodes = $0.effect.kind { true } else { false } })
-        let reloads = await store.feedEpisodeReloads
+        let reloads = await store.feedEpisodeReads
         let removed = RemovedFiles()
         // The recipient's store steps (the app's playback and download retirement in between are not the store's).
         let clock = ContinuousClock(), start = clock.now
@@ -518,7 +569,7 @@ import Testing
         try await store.removeFilesForRemovedEpisodes(effectID: pending.id, removeFile: { removed.append($0) })
         try await store.completeRemovedEpisodeCleanup(effectID: pending.id)
         let elapsed = FeedLibraryStore.milliseconds(start.duration(to: clock.now))
-        return (removed.urls, elapsed, await store.feedEpisodeReloads - reloads)
+        return (removed.urls, elapsed, await store.feedEpisodeReads - reloads)
     }
 
     final class RemovedFiles: @unchecked Sendable {

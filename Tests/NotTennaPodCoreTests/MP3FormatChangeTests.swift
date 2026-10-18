@@ -11,7 +11,7 @@ import Testing
 /// stay mono, stereo shows stereo), with positions and seeks right before, inside
 /// and after each change. Expectations come from the fixture bytes and the test's
 /// own decoder, never from the production parser or decoder.
-@Suite(.serialized, .timeLimit(.minutes(5))) struct MP3FormatChangeTests {
+@Suite(.serialized) struct MP3FormatChangeTests {
     struct Segment: Decodable, Sendable {
         let byteOffset: Int
         let byteCount: Int

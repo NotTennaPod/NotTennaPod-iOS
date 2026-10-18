@@ -3,6 +3,8 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
+#if DEBUG
+
 /// The DEBUG hooks the app's hub bridge installs (`ServerDebugHooks`, PROTOCOL §16): the observer
 /// hears a recorded fact only after its transaction committed, and every playback save with its durability; the
 /// action clock offset moves the fact's `client_time` and nothing the rows keep. The hooks are process-wide, so this
@@ -68,3 +70,4 @@ import Testing
         await fixture.close()
     }
 }
+#endif

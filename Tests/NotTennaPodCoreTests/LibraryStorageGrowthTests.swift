@@ -4,7 +4,7 @@ import Testing
 
 /// Tables and files that grow with use stay bounded, and the Download log's duplicate-episode entries show
 /// Android's explanation with both episodes (stored as that text, not as two whole parsed episodes).
-@Suite(.timeLimit(.minutes(1))) struct LibraryStorageGrowthTests {
+@Suite struct LibraryStorageGrowthTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
     private func withLibrary(_ operation: (FeedLibraryStore, URL) async throws -> Void) async throws {

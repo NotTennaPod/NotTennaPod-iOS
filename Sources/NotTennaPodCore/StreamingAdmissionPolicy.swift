@@ -54,6 +54,11 @@ public struct StreamingAdmissionPolicy: Equatable, Sendable {
         return .proceed
     }
 
+    /// A route that fetches through the phone refused a load this policy let through (a Cast relay on a network that
+    /// does not admit streaming). The episode becomes the pending confirmation item, as a refused load's would, so the
+    /// affirmative Play reloads it with Once consent.
+    public mutating func requireConfirmation(mediaID: Int64) -> Decision { confirm(mediaID) }
+
     private mutating func confirm(_ id: Int64) -> Decision {
         pendingMediaID = id
         return .confirm(mediaID: id)

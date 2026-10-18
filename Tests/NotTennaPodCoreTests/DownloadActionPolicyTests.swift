@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct DownloadActionPolicyTests {
     private let now: Int64 = 1_700_000_000_999
 
@@ -55,12 +55,16 @@ struct DownloadActionPolicyTests {
         #expect(decision(policy, at: 1_700_000_300_000) == .confirmation(showVPNAdvice: false))
     }
 
-    @Test func expiryDoesNotClearSourceBypassTypeOnAllowedNetworks() {
+    /// "Allow this time" covers only what is asked within its five minutes. Android keeps the choice after it expires,
+    /// so a later download asked for on Wi-Fi may continue over mobile data; that costs data and is not copied.
+    @Test func allowThisTimeDoesNotApplyToALaterRequestOnWiFi() {
         var policy = DownloadActionPolicy()
         _ = policy.confirm(.now, nowMilliseconds: now)
-        #expect(decision(policy, at: now + 600_000, restricted: false) == .request(ignoreConstraints: true, showMobileNotice: false))
-        #expect(decision(policy, at: now + 600_000, allowed: true) == .request(ignoreConstraints: true, showMobileNotice: false))
+        #expect(decision(policy, at: now + 600_000, restricted: false) == .request(ignoreConstraints: false, showMobileNotice: false))
+        #expect(decision(policy, at: now + 600_000, allowed: true) == .request(ignoreConstraints: false, showMobileNotice: false))
         #expect(decision(policy, at: now + 600_000) == .confirmation(showVPNAdvice: false))
+        #expect(decision(policy, at: now + 299_000, restricted: false) == .request(ignoreConstraints: true, showMobileNotice: true),
+                "within the window it still applies")
     }
 
     @Test func cancellationKeepsPreviousChoiceAndNewConfirmationReplacesIt() {

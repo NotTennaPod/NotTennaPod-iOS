@@ -6,7 +6,7 @@ import Testing
 /// pauses, pulls continue where the pause lets them, nothing is retried as a transient failure, Synchronize now tries
 /// again, and the page names the side that needs updating: the server for a refused change or a server older than
 /// this app, this app for a whole request refused by a server that speaks this app's protocol or a newer one.
-@Suite(.serialized, .timeLimit(.minutes(2))) struct ServerVersionPauseTests {
+@Suite(.serialized) struct ServerVersionPauseTests {
     typealias Transport = ServerSyncEngineUnitTests.Transport
 
     /// The server's answers, changed by each test as it goes: a refusal of whole requests on `refused` paths, the

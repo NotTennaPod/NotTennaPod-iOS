@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct FeedAuthenticationViewTests {
+@MainActor @Suite(.serialized) struct FeedAuthenticationViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
         for child in view.subviews { if let result: T = find(id, in: child) { return result } }

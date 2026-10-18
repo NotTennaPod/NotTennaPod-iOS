@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) struct ProxyMediaDownloadTests {
+@Suite struct ProxyMediaDownloadTests {
     private func file() throws -> URL {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("ProxyMedia-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)

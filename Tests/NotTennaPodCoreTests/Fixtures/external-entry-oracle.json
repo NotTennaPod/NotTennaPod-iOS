@@ -1,6 +1,6 @@
 {
   "reference": "AntennaPod 3.12.1 f8c641887e4677237b01b6e942ff8fe20fc8beec",
-  "generator": "an independent Python probe of the pinned source (m34-entry-oracle.py)",
+  "generator": "an independent Python probe of the pinned source",
   "cases": [
     {
       "group": "urlCheckerTest",
@@ -526,7 +526,7 @@
       "android": {
         "url": "https://example.com/feed.xml"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/feed.xml"
       }
     },
@@ -536,7 +536,7 @@
       "android": {
         "url": "https://example.com/feed.xml"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/feed.xml"
       }
     },
@@ -546,7 +546,7 @@
       "android": {
         "url": "http://example.com/feed.xml"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "http://example.com/feed.xml"
       }
     },
@@ -556,7 +556,7 @@
       "android": {
         "url": "https://example.com/feed.xml"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/feed.xml"
       }
     },
@@ -566,7 +566,7 @@
       "android": {
         "url": "http://example.com/rss?id=5&x=y"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "http://example.com/rss?id=5&x=y"
       }
     },
@@ -576,7 +576,7 @@
       "android": {
         "androidCrash": "UnsupportedOperationException"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/feed.xml"
       }
     },
@@ -586,7 +586,7 @@
       "android": {
         "url": "https://example.com/feed.xml"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/feed.xml"
       }
     },
@@ -596,7 +596,7 @@
       "android": {
         "noPodcast": true
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "noPodcast": true
       }
     },
@@ -606,7 +606,7 @@
       "android": {
         "noPodcast": true
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "noPodcast": true
       }
     },
@@ -616,7 +616,7 @@
       "android": {
         "url": "http://"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "http://"
       }
     },
@@ -626,7 +626,7 @@
       "android": {
         "androidCrash": "IllegalArgumentException"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "noPodcast": true
       }
     },
@@ -636,7 +636,7 @@
       "android": {
         "url": "http://Listen to this https://example.com/feed.xml"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/feed.xml"
       }
     },
@@ -646,7 +646,7 @@
       "android": {
         "androidCrash": "StackOverflowError"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "noPodcast": true
       }
     },
@@ -656,7 +656,7 @@
       "android": {
         "url": "http://itp"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "http://itp"
       }
     },
@@ -666,7 +666,7 @@
       "android": {
         "url": "http://Listen to this: https://example.com/feed.xml"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/feed.xml"
       }
     },
@@ -676,7 +676,7 @@
       "android": {
         "url": "http://Try https://example.com/feed.xml, it is great!"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/feed.xml"
       }
     },
@@ -686,7 +686,7 @@
       "android": {
         "url": "http://Two feeds: https://example.com/first.xml and https://example.com/second.xml"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "https://example.com/first.xml"
       }
     },
@@ -696,7 +696,7 @@
       "android": {
         "url": "http://New show (itpc://example.com/rss) via my phone"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "http://example.com/rss"
       }
     },
@@ -706,7 +706,7 @@
       "android": {
         "url": "http://Subscribe: pcast:example.com/feed today"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "url": "http://example.com/feed"
       }
     },
@@ -716,7 +716,7 @@
       "android": {
         "url": "http://Podcast: a show without any link"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "noPodcast": true
       }
     },
@@ -726,7 +726,7 @@
       "android": {
         "url": "http://"
       },
-      "iosUserDecision": {
+      "iosOutcome": {
         "noPodcast": true
       }
     }

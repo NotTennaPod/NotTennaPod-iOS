@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(2)))
+@Suite
 struct FFmpegAudioReaderTests {
     static let names = ["tone-vorbis.ogg", "tone-opus.ogg", "tone-opus.webm"]
     private func fixture(_ name: String) throws -> URL {

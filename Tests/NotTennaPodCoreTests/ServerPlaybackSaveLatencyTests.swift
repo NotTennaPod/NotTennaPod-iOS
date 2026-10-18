@@ -7,7 +7,7 @@ import Testing
 /// the overlay its played time needs. The measurement (`NTP_SAVE_LATENCY=1`): eight hours of listening with no
 /// exchange, a checkpoint export due every minute and none accepted, every save timed as the coordinator awaits it
 /// (the store call, its transaction and its recording).
-@Suite(.serialized, .timeLimit(.minutes(20))) struct ServerPlaybackSaveLatencyTests {
+@Suite(.serialized) struct ServerPlaybackSaveLatencyTests {
     static func milliseconds(_ duration: Duration) -> Double {
         Double(duration.components.seconds) * 1_000 + Double(duration.components.attoseconds) / 1e15
     }

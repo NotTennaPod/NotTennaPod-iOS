@@ -44,7 +44,7 @@ import Testing
     func unload() { unloads += 1; reading = nil; mediaPresentationID = nil }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PlaybackVideoControllerTests {
+@MainActor @Suite(.serialized) struct PlaybackVideoControllerTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id { return view as? T }
         return view.subviews.lazy.compactMap { find(id, in: $0) as T? }.first

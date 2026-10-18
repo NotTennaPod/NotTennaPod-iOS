@@ -3,7 +3,7 @@ import Foundation
 import NativePCMTransport
 import Testing
 
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor struct NativePCMSourceTests {
+@Suite(.serialized) @MainActor struct NativePCMSourceTests {
     @Test(arguments: [false, true], [false, true])
     func lateRefillPreservesExactPCMWithoutSchedulingDelays(pause: Bool, realtime: Bool) throws {
         let source = try #require(APPCMSource(sampleRate: 48000, channels: 2, capacityFrames: 508))

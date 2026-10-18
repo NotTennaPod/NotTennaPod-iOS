@@ -11,7 +11,11 @@ public struct LibrarySearchResult: Equatable, Sendable {
     }
     public var feeds: [LibraryFeed] = []
     public var episodes: [Episode] = []
+    /// Every match of the query, kept as the library changes (a search over the screens' library); nil for a store read.
+    public var matches: LibrarySearchMatches?
     public init() {}
+    /// What the result shows (its matches beyond the first 300 are not part of it).
+    public static func == (lhs: Self, rhs: Self) -> Bool { lhs.feeds == rhs.feeds && lhs.episodes == rhs.episodes }
 }
 
 extension FeedLibraryStore {
@@ -48,7 +52,7 @@ extension FeedLibraryStore {
             result.episodes = try database.rows(sql, bindings).map { row in
                 try Task.checkCancellation()
                 guard let id = row[0].integer, let data = row[1].data else { throw FeedLibraryError.corruptRecord }
-                let episode = try JSONDecoder().decode(LibraryEpisode.self, from: data)
+                let episode = try JSONDecoder.libraryRecord(LibraryEpisode.self, from: data)
                 return .init(feedID: id, episode: episode, deletionTarget: try loadMediaDeletionTarget(episodeID: episode.id))
             }
             if feedID == nil {
@@ -61,7 +65,7 @@ extension FeedLibraryStore {
                 result.feeds = try database.rows(sql, values).map { row in
                     try Task.checkCancellation()
                     guard let data = row[0].data else { throw FeedLibraryError.corruptRecord }
-                    return try JSONDecoder().decode(LibraryFeed.self, from: data)
+                    return try JSONDecoder.libraryRecord(LibraryFeed.self, from: data)
                 }
             }
             return result

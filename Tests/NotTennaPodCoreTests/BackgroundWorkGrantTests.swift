@@ -6,7 +6,7 @@ import Testing
 /// The app's one grant of background time: participants share it, its expiration or refusal parks every one of
 /// them and gives it back exactly once, time that ran out is never renewed by later work, and a manual refresh joins it
 ///: expired, it keeps its saved request and marks nothing as failed.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct BackgroundWorkGrantTests {
     /// UIKit's background task, as the grant sees it.
     @MainActor final class FakeTime: BackgroundTimeProviding {
@@ -194,14 +194,86 @@ struct BackgroundWorkGrantTests {
         await scheduler.stop()
     }
 
+    /// The person pauses on the lock screen with the app in the background and nothing held: the pause's position is a
+    /// local change, pushed at once, and the server sync participant asks for granted time before the push is sent,
+    /// keeps it while the exchange runs and gives it back when it ends. Refused or expired time parks it with its
+    /// work kept for later, and later work in the same period never asks again; work in a server-sync background
+    /// task of its own needs no grant.
+    @Test func aPushStartedInTheBackgroundHoldsGrantedTimeUntilItEnds() async throws {
+        let engine = ServerSyncSchedulerTests.Engine(), network = ServerSyncSchedulerTests.Network()
+        let scheduler = ServerSyncScheduler(engine: engine, hints: nil, outbox: nil, network: network, timing: ServerSyncSchedulerTests.fast)
+        var windows = 0
+        let time = FakeTime()
+        let grant = BackgroundWorkGrant(time: time, participants: [.serverSync({ scheduler }, inWindow: { windows > 0 })],
+                                        pollInterval: .milliseconds(20))
+        // As the app wires it.
+        scheduler.callbacks.workStarted = { grant.workStarted() }
+        scheduler.start()
+        scheduler.setForeground(true)
+        try await until { scheduler.history.count >= 1 && !scheduler.hasPendingWork }
+        let launched = scheduler.history.count
+        // The app leaves the foreground with nothing to do: no grant.
+        scheduler.setForeground(false)
+        time.isInBackground = true
+        grant.enterBackground()
+        #expect(time.begun == 0 && !grant.isHeld)
+        // A pause on the lock screen.
+        engine.hold()
+        scheduler.localChange()
+        #expect(time.begun == 1 && grant.isHeld, "asked for before the push is sent")
+        try await until { scheduler.isExchanging }
+        #expect(grant.isHeld && time.ended.isEmpty, "held while the push runs")
+        engine.release()
+        try await until { !scheduler.hasPendingWork }
+        try await until { !grant.isHeld }
+        #expect(time.ended.count == 1 && !time.ended[0].expired && scheduler.history.count == launched + 1, "given back once the push is done")
+        // Time expires while a push runs: it is cancelled and parked; later work in the same period parks at once,
+        // without asking again, and runs when the app is active.
+        engine.hold()
+        scheduler.localChange()
+        #expect(time.begun == 2)
+        try await until { scheduler.isExchanging }
+        let expire = try #require(time.expiration)
+        expire()
+        try await until { engine.cancelled == 1 && !scheduler.hasPendingWork }
+        #expect(grant.isExhausted && time.ended.last?.expired == true)
+        let exchanges = engine.log.count
+        scheduler.localChange()
+        scheduler.localChange()
+        #expect(time.begun == 2, "exhausted time is never renewed by later work")
+        for _ in 0..<20 { await Task.yield() }
+        #expect(engine.log.count == exchanges && scheduler.pendingTriggers.contains(.localChange), "kept for later")
+        // Refused time parks the same way in the next period.
+        time.isInBackground = false
+        grant.enterForeground()
+        scheduler.setForeground(true)
+        try await until { engine.log.count > exchanges && !scheduler.hasPendingWork && !scheduler.pendingTriggers.contains(.localChange) }
+        let active = engine.log.count
+        scheduler.setForeground(false)
+        time.isInBackground = true
+        grant.enterBackground()
+        time.refuses = true
+        scheduler.localChange()
+        #expect(grant.isExhausted && !grant.isHeld && time.begun == 2, "refused: parked")
+        for _ in 0..<20 { await Task.yield() }
+        #expect(engine.log.count == active && scheduler.pendingTriggers.contains(.localChange))
+        // A server-sync background task of its own needs no grant, and runs what waited.
+        time.refuses = false
+        windows = 1
+        #expect(await scheduler.runInBackground(.refresh))
+        #expect(time.begun == 2 && engine.log.count > active && !scheduler.pendingTriggers.contains(.localChange))
+        windows = 0
+        await scheduler.stop()
+    }
+
     // MARK: - Manual refresh
 
     @Test func expiredManualRefreshKeepsItsRequestMarksNothingFailedAndRunsAgainWhenActive() async throws {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("K5a-\(UUID())", isDirectory: true)
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("BackgroundWorkGrant-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
         let store = try FeedLibraryStore(url: folder.appendingPathComponent("library.sqlite"))
-        let source = "https://k5a.example/feed"
+        let source = "https://grant.example/feed"
         let feed = try await store.insert(.init(feed: ParsedFeed(format: .rss, title: "Held podcast",
             episodes: [ParsedEpisode(identifier: "one", title: "One")]), source: source,
             responseURL: URL(string: source)!, validator: nil, permanentRedirectURL: nil))

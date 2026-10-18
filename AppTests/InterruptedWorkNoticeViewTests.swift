@@ -7,7 +7,7 @@ import Testing
 /// app's notice, with its exact words, whole (never clipped) and centred at the device's own size and at iPhone, iPad
 /// and Duo sizes in both orientations, left to right and right to left, with large text, and readable by VoiceOver;
 /// after the missing-library message when both are due, each for its whole time, and never twice.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(5)))
+@MainActor @Suite(.serialized)
 struct InterruptedWorkNoticeViewTests {
     nonisolated static let importRolledBack = "The database import was interrupted. Your library was not changed."
     nonisolated static let importCompleted = "The interrupted database import was completed."

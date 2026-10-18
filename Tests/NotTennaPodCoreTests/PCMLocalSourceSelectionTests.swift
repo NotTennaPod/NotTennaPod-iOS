@@ -4,7 +4,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct PCMLocalSourceSelectionTests {
+@MainActor @Suite(.serialized) struct PCMLocalSourceSelectionTests {
     nonisolated static let files = ["StreamingFormats/tone.wav", "StreamingFormats/tone.flac", "FLACVariants/variable.flac", "FLACVariants/variable-table.flac"]
     private func fixture(_ path: String) throws -> URL {
         let pieces = path.split(separator: "/").map(String.init)

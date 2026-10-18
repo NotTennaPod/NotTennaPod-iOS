@@ -12,10 +12,10 @@ import XCTest
     }
 
     private func launch(failOnce: Bool = false) {
-        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-m12-opml-export"]
-        if failOnce { app.launchArguments.append("-test-m12-export-fail-once") }
+        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-opml-export-journey"]
+        if failOnce { app.launchArguments.append("-test-opml-export-fail-once") }
         app.launch()
-        XCTAssertTrue(app.windows["m12ExportFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
+        XCTAssertTrue(app.windows["opmlExportFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
     }
     private func tap(_ id: String) {
         let button = app.buttons[id]; XCTAssertTrue(button.waitForExistence(timeout: 15), id)
@@ -90,7 +90,8 @@ import XCTest
         while Date() < deadline {
             if app.buttons["opmlExportShare"].exists || app.staticTexts["Export error"].exists || app.otherElements["opmlExportProgress"].exists { return }
             if let replace = candidates.first(where: { $0.exists }) {
-                replace.tap(); return
+                // A tap while the prompt is still appearing is lost and leaves it open.
+                replace.tapWhenSettled(); return
             }
             if !app.buttons["DOCPicker.actionButton"].exists && !app.navigationBars["FullDocumentManagerViewControllerNavigationBar"].exists { return }
             usleep(200_000)
@@ -104,7 +105,7 @@ import XCTest
         saveInLocalRoot()
         let error = app.staticTexts["Export error"]
         XCTAssertTrue(error.waitForExistence(timeout: 15), app.debugDescription)
-        XCTAssertTrue(app.staticTexts["M12 controlled export failure"].exists)
+        XCTAssertTrue(app.staticTexts["Controlled export failure"].exists)
         tap("sourceMessageOK")
         XCTAssertTrue(error.waitForNonExistence(timeout: 10))
         XCTAssertFalse(app.buttons["opmlExportShare"].exists, "A failed write never offers success")

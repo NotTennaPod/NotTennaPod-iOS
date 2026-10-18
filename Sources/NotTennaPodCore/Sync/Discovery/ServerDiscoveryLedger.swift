@@ -54,17 +54,28 @@ extension FeedLibraryStore {
         var notified: Bool
     }
 
-    /// The releases still to download or to notify, with their local episodes (an entry whose episode is not here yet,
-    /// or no longer, is left out).
-    func serverLedgerEntries() throws -> [ServerLedgerEntry] {
+    /// Which ledger entries a read takes: those still to download, or those still to notify.
+    enum ServerLedgerSelection { case pending, unnotified }
+
+    /// The releases still to download (`pending`) or to notify (`unnotified`), with their local episodes (an entry whose
+    /// episode is not here yet, or no longer, is left out), in the order they were recorded. Each predicate alone is a
+    /// partial index of the ledger (`ntp_ledger_pending_occurrence`, `ntp_ledger_unnotified`), so a read is
+    /// proportional to the entries it takes, never to the settled releases.
+    func serverLedgerEntries(_ selection: ServerLedgerSelection) throws -> [ServerLedgerEntry] {
         guard serverContext != nil else { return [] }
-        var result: [ServerLedgerEntry] = []
-        for row in try database.rows("SELECT l.generation_id, l.occurrence, l.state, l.notified, e.id, e.feed_id FROM ntp_ledger l LEFT JOIN ntp_episodes n ON n.episode_id = l.occurrence JOIN episodes e ON e.id = coalesce(n.local_id, CASE WHEN l.occurrence LIKE 'local-episode:%' THEN CAST(substr(l.occurrence, 15) AS INTEGER) END) WHERE l.state = 'pending' OR l.notified = 0") {
-            guard let generation = row[0].text, let occurrence = row[1].text, let local = row[4].integer, let feed = row[5].integer else { continue }
-            result.append(.init(generation: generation, occurrence: occurrence, localID: local, feedID: feed,
-                                pending: row[2].text == "pending", notified: row[3].integer == 1))
+        let condition = switch selection {
+        case .pending: "l.state = 'pending'"
+        case .unnotified: "l.notified = 0"
         }
-        return result
+        var result: [(rowid: Int64, entry: ServerLedgerEntry)] = []
+        // Ordered here, not by SQLite: an ORDER BY the table's order would make it scan the whole ledger instead.
+        for row in try database.rows("SELECT l.generation_id, l.occurrence, l.state, l.notified, e.id, e.feed_id, l.rowid FROM ntp_ledger l LEFT JOIN ntp_episodes n ON n.episode_id = l.occurrence JOIN episodes e ON e.id = coalesce(n.local_id, CASE WHEN l.occurrence LIKE 'local-episode:%' THEN CAST(substr(l.occurrence, 15) AS INTEGER) END) WHERE \(condition)") {
+            guard let generation = row[0].text, let occurrence = row[1].text, let local = row[4].integer, let feed = row[5].integer,
+                  let rowid = row[6].integer else { continue }
+            result.append((rowid, .init(generation: generation, occurrence: occurrence, localID: local, feedID: feed,
+                                        pending: row[2].text == "pending", notified: row[3].integer == 1)))
+        }
+        return result.sorted { $0.rowid < $1.rowid }.map(\.entry)
     }
 
     /// The local episodes of releases the automatic download takes in place of NEW episodes (PROTOCOL §9.9, §9.10): pending
@@ -72,7 +83,7 @@ extension FeedLibraryStore {
     public func serverReleaseCandidates() throws -> Set<Int64>? {
         guard serverContext != nil else { return nil }
         return try database.transaction(write: false) {
-            Set(try serverLedgerEntries().filter(\.pending).map(\.localID))
+            Set(try serverLedgerEntries(.pending).map(\.localID))
         }
     }
 
@@ -81,7 +92,7 @@ extension FeedLibraryStore {
     public func finishServerReleases(_ localIDs: Set<Int64>) throws {
         guard serverContext != nil, !localIDs.isEmpty else { return }
         try write(.local) {
-            for entry in try serverLedgerEntries() where entry.pending && localIDs.contains(entry.localID) {
+            for entry in try serverLedgerEntries(.pending) where localIDs.contains(entry.localID) {
                 try database.execute("UPDATE ntp_ledger SET state = 'done' WHERE generation_id = ? AND occurrence = ?",
                                      [.text(entry.generation), .text(entry.occurrence)])
             }
@@ -95,7 +106,7 @@ extension FeedLibraryStore {
         guard serverContext != nil else { return [] }
         return try database.transaction(write: false) {
             var byFeed: [Int64: [ServerLedgerEntry]] = [:]
-            for entry in try serverLedgerEntries() where !entry.notified { byFeed[entry.feedID, default: []].append(entry) }
+            for entry in try serverLedgerEntries(.unnotified) { byFeed[entry.feedID, default: []].append(entry) }
             var result: [ServerReleaseNotification] = []
             for (feedID, entries) in byFeed.sorted(by: { $0.key < $1.key }) {
                 guard let feed = try loadFeedHeader(feedID), try !isHiddenFeed(feedID) else { continue }
@@ -104,9 +115,12 @@ extension FeedLibraryStore {
                     result.append(.init(feedID: feedID, title: nil, imageURL: nil, count: 0, keys: keys))
                     continue
                 }
-                // NEW is −1 (`EpisodePlayState.new`); staged episodes no list shows are left out.
-                let newCount = Int(try database.scalar("SELECT count(*) FROM episodes WHERE feed_id = ? AND json_extract(CAST(record AS TEXT), '$.userState.playState') = -1 AND id NOT IN (SELECT episode_id FROM ntp_hidden_episodes)",
-                                                       [.integer(feedID)]))
+                // NEW is −1 (`EpisodePlayState.new`); staged episodes no list shows are left out: the visible counts
+                // (schema 21) once complete, else the records.
+                let newCount = keyedReads
+                    ? Int(try database.rows("SELECT new_count FROM feed_list_counts WHERE feed_id = ?", [.integer(feedID)]).first?.first?.integer ?? 0)
+                    : Int(try database.scalar("SELECT count(*) FROM episodes WHERE feed_id = ? AND json_extract(CAST(record AS TEXT), '$.userState.playState') = -1 AND id NOT IN (SELECT episode_id FROM ntp_hidden_episodes)",
+                                              [.integer(feedID)]))
                 result.append(.init(feedID: feedID, title: feed.title, imageURL: feed.metadata.imageURL, count: max(newCount, entries.count), keys: keys))
             }
             return result

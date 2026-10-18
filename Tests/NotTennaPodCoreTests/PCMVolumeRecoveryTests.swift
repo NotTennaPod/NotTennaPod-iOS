@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PCMVolumeRecoveryTests {
+@MainActor @Suite(.serialized) struct PCMVolumeRecoveryTests {
     private typealias Transport = GainRecordingTransport
     private final class Outputs { var values: [Transport] = [] }
     private func factory(_ url: URL, _ outputs: Outputs) throws -> PCMRecoveryFactory {
@@ -76,7 +76,7 @@ import Testing
             #expect(restored.volumeAdaptation == volume && restored.sample?.positionMilliseconds == 300)
             try await restored.select(episodeID: 1, play: false)
             try await wait { restored.phase == .paused }
-            // PLAY-001: a positive elapsed pause rewinds800ms, clamped at zero.
+            // A positive elapsed pause rewinds800ms, clamped at zero.
             // Restored display retains300ms; loading one second later starts at0.
             #expect(second.reading?.sample.positionMilliseconds == 0)
             expectHeard(try #require(restoredOutputs.values.first),

@@ -19,7 +19,7 @@ import Testing
                                             "date": "Date", "random": "Random", "smart_shuffle": "Smart shuffle"]
 
     private func withLibrary(_ body: (FeedLibraryStore, URL) async throws -> Void) async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M23-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("QueueSort-\(UUID())", isDirectory: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let restored = try AndroidDatabaseRestore.read(Self.fixtures.appendingPathComponent("queue.db"), staging: directory.appendingPathComponent("s"))
         let url = directory.appendingPathComponent("library.sqlite")
@@ -204,7 +204,7 @@ import Testing
     }
 
     @Test func keepSortedAppliesToRefreshAddToQueueButNotToDownloadCompletion() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M23Refresh-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("QueueSortRefresh-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let store = try FeedLibraryStore(url: directory.appendingPathComponent("library.sqlite"))
@@ -303,7 +303,7 @@ import Testing
     }
 
     private func androidQueue(_ data: Data) throws -> [Int64] {
-        let file = FileManager.default.temporaryDirectory.appendingPathComponent("M23-backup-\(UUID()).db")
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("QueueSortBackup-\(UUID()).db")
         try data.write(to: file)
         defer { try? FileManager.default.removeItem(at: file) }
         var db: OpaquePointer?

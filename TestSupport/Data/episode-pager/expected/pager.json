@@ -1651,7 +1651,7 @@
   ]
  },
  "cross_oracle": {
-  "m22_lists": {
+  "episode_lists": {
    "source": "TestSupport/Data/episode-list-menus/expected/lists.json",
    "screens": {
     "inbox": {
@@ -1720,7 +1720,7 @@
     }
    }
   },
-  "m23_queue": {
+  "queue_sort": {
    "source": "TestSupport/Data/queue-sort-clear/expected/queue-sort.json",
    "cases": [
     {
@@ -1845,7 +1845,7 @@
     }
    ]
   },
-  "m20_home": {
+  "home_sections": {
    "source": "TestSupport/Data/home-sections/expected/rich.json",
    "sections": [
     {

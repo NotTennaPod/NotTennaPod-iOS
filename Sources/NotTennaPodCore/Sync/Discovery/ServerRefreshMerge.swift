@@ -32,6 +32,9 @@ struct ServerDiscoveryBatch: Sendable {
     var releases: [ServerRelease]
     /// A subscription's first population (PROTOCOL §15.2): nothing is proposed, and observations wait (PROTOCOL §9.4).
     var firstPopulation: Bool
+    /// The last observed parse hashes of the feed's episodes (by local ID) as the merge read them in this transaction;
+    /// nil when it did not read them (the recorder reads them then).
+    var observedHashes: [Int64: String]?
 }
 
 /// A release (PROTOCOL §9.5): a playable discovery that is new to the phone's replica (or proves a gained enclosure),
@@ -66,14 +69,21 @@ extension FeedLibraryStore {
     /// The identity evidence of a feed's local episodes (`ntp_local_items`; an episode projected from the server's
     /// records without one is described by its identity record's occurrence, else by its row).
     func serverLocalItems(of feed: LibraryFeed) throws -> [Int64: ServerEpisodeIdentity.LocalItem] {
+        try serverLocalItemsAndStored(of: feed).items
+    }
+
+    /// `serverLocalItems`, and the local IDs that have an `ntp_local_items` row.
+    func serverLocalItemsAndStored(of feed: LibraryFeed) throws -> (items: [Int64: ServerEpisodeIdentity.LocalItem], stored: Set<Int64>) {
         var result: [Int64: ServerEpisodeIdentity.LocalItem] = [:]
+        var stored = Set<Int64>()
         for row in try database.rows("SELECT local_id, kind, value, guid, enclosure, publication_time FROM ntp_local_items WHERE feed_id = ?", [.integer(feed.id)]) {
+            if let id = row[0].integer { stored.insert(id) }
             guard let id = row[0].integer, let kind = row[1].text, let value = row[2].text else { continue }
             result[id] = .init(localID: id, key: ServerEpisodeKey(kind: kind, value: value), guid: row[3].text, enclosure: row[4].text,
                                publicationTime: row[5].integer)
         }
         let missing = feed.episodes.filter { result[$0.id] == nil }
-        guard !missing.isEmpty else { return result }
+        guard !missing.isEmpty else { return (result, stored) }
         var mapped: [Int64: (key: ServerEpisodeKey, occurrence: ContractJSON?)] = [:]
         for row in try database.rows("SELECT n.local_id, n.kind, n.value, n.occurrence FROM ntp_episodes n JOIN episodes e ON e.id = n.local_id WHERE e.feed_id = ?", [.integer(feed.id)]) {
             guard let id = row[0].integer, let kind = row[1].text, let value = row[2].text else { continue }
@@ -97,7 +107,7 @@ extension FeedLibraryStore {
                                            enclosure: evidence.normalizedEnclosure, publicationTime: evidence.publicationTime)
             }
         }
-        return result
+        return (result, stored)
     }
 
     func saveServerLocalItem(_ item: ServerEpisodeIdentity.LocalItem, feedID: Int64) throws {
@@ -158,20 +168,12 @@ extension FeedLibraryStore {
     func serverMerge(_ incoming: ParsedFeed, catalog: ServerCatalogParse, into saved: LibraryFeed,
                      options: FeedRefreshOptions) throws -> (FeedRefreshResult, [ServerEpisodeIdentity.LocalItem]) {
         guard let context = serverContext else { throw ServerRecordingError.notAServerLibrary }
-        var feed = saved
-        feed.updateMetadata(incoming, options: options)
         let registered = try serverPodcast(ofFeed: saved.id)
-        // A parse unchanged since this phone last observed it never replaces canonical metadata
-        // shown since: what changed is shown until the server answers its observation; what did not
-        // stays canonical.
-        if let registered, try serverRecord("podcast", registered.podcast, "metadata") != nil,
-           try database.rows("SELECT parse_hash FROM ntp_observed WHERE entity = 'podcast' AND id = ?", [.text("local-feed:\(saved.id)")]).first?.first?.text == catalog.feedHash {
-            let shown = saved.metadata
-            feed.applyCanonicalMetadata(title: shown.title, description: shown.description, author: shown.author, language: shown.language,
-                                        link: shown.link, imageURL: shown.imageURL, funding: shown.funding, format: nil)
-        }
+        var feed = try serverRefreshedHeader(incoming, catalog: catalog, saved: saved, registered: registered?.podcast, options: options)
         var observedHashes: [Int64: String] = [:], canonicalShown = Set<Int64>()
+        var byWire: [String: Int64] = [:]
         if registered != nil {
+            // Also handed to the recorder (`ServerDiscoveryBatch.observedHashes`), which needs the same hashes.
             for row in try database.rows("SELECT CAST(substr(o.id, 15) AS INTEGER), o.parse_hash FROM ntp_observed o WHERE o.entity = 'episode' AND o.id IN (SELECT 'local-episode:' || id FROM episodes WHERE feed_id = ?)",
                                          [.integer(saved.id)]) {
                 if let local = row[0].integer, let hash = row[1].text { observedHashes[local] = hash }
@@ -180,16 +182,16 @@ extension FeedLibraryStore {
                                          [.integer(saved.id)]) {
                 if let local = row[0].integer { canonicalShown.insert(local) }
             }
-        }
-        var locals = try serverLocalItems(of: saved)
-        let stored = Set(try database.rows("SELECT local_id FROM ntp_local_items WHERE feed_id = ?", [.integer(saved.id)]).compactMap { $0[0].integer })
-        let original = locals
-        var byWire: [String: Int64] = [:]
-        if registered != nil {
             for row in try database.rows("SELECT n.episode_id, n.local_id FROM ntp_episodes n JOIN episodes e ON e.id = n.local_id WHERE e.feed_id = ?", [.integer(saved.id)]) {
                 if let wire = row[0].text, let local = row[1].integer { byWire[wire] = local }
             }
         }
+        // The local identities and which of them have a row, in one read.
+        var (locals, stored) = try serverLocalItemsAndStored(of: saved)
+        if !refreshSharesReads {
+            stored = Set(try database.rows("SELECT local_id FROM ntp_local_items WHERE feed_id = ?", [.integer(saved.id)]).compactMap { $0[0].integer })
+        }
+        let original = locals
         func wire(_ key: ServerEpisodeKey) throws -> String? {
             guard let registered, !key.isNone else { return nil }
             return try ServerEpisodeIdentity.id(key, namespace: context.namespace, podcast: registered.podcast)
@@ -380,7 +382,8 @@ extension FeedLibraryStore {
         activeCapture?.discovery = ServerDiscoveryBatch(
             feedID: saved.id, batchID: batchID, fetchTime: try milliseconds(options.refreshAttempt), newestBeforeBatch: newestBefore,
             feedFields: catalog.feedFields, feedHash: catalog.feedHash, feedCanonical: catalog.feedCanonical, items: resolved.compactMap { localOf[$0.index].flatMap { batchItems[$0] } },
-            releases: releases, firstPopulation: false)
+            releases: releases, firstPopulation: false,
+            observedHashes: registered != nil && refreshSharesReads ? observedHashes : nil)
         var result = FeedRefreshResult(feed: feed, queueEpisodeIDs: queue, removedEpisodes: [], duplicates: [], completedEpisodeSync: [])
         result.serverItems = Dictionary(localOf.map { ($0.value, $0.key) }, uniquingKeysWith: { first, _ in first })
         // Only identities that are new or whose evidence changed are written.
@@ -388,6 +391,23 @@ extension FeedLibraryStore {
             guard let item = locals[id], !stored.contains(id) || original[id] != item else { return nil }
             return item
         })
+    }
+
+    /// A refresh's feed header in a server library: `saved` with the parse's metadata (as `updateMetadata` merges it), except
+    /// that a parse unchanged since this phone last observed it never replaces canonical metadata shown since: what changed
+    /// is shown until the server answers its observation; what did not stays canonical. `registered`: the podcast the feed
+    /// is registered as. Keyed reads only; the episodes of `saved` are kept as they are.
+    func serverRefreshedHeader(_ incoming: ParsedFeed, catalog: ServerCatalogParse, saved: LibraryFeed, registered: String?,
+                               options: FeedRefreshOptions) throws -> LibraryFeed {
+        var feed = saved
+        feed.updateMetadata(incoming, options: options)
+        if let registered, try serverRecord("podcast", registered, "metadata") != nil,
+           try database.rows("SELECT parse_hash FROM ntp_observed WHERE entity = 'podcast' AND id = ?", [.text("local-feed:\(saved.id)")]).first?.first?.text == catalog.feedHash {
+            let shown = saved.metadata
+            feed.applyCanonicalMetadata(title: shown.title, description: shown.description, author: shown.author, language: shown.language,
+                                        link: shown.link, imageURL: shown.imageURL, funding: shown.funding, format: nil)
+        }
+        return feed
     }
 
     /// Durable evidence that someone acted on an episode's filing: its `play_state` or

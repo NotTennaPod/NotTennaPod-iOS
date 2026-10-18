@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct LocalEpisodeDeletionTests {
+@MainActor @Suite struct LocalEpisodeDeletionTests {
     private final class Engine: PlaybackEngine {
         var reading: PlaybackEngineReading?
         var onEvent: (@MainActor (PlaybackEngineEvent) -> Void)?

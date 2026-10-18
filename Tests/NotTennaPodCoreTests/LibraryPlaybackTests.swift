@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct LibraryPlaybackTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 

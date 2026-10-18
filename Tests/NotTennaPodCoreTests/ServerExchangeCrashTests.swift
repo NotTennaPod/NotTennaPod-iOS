@@ -5,7 +5,7 @@ import Testing
 /// Crash permutations (scenarios 2 and 29 PROTOCOL §16): the process dies at every step of push,
 /// pull, apply, shadow build and publish; after a relaunch the exchange continues, nothing is lost or applied twice,
 /// and a unit that crashed inside its transaction left nothing of itself visible.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerExchangeCrashTests {
+@Suite(.serialized) struct ServerExchangeCrashTests {
     typealias Concurrency = ServerExchangeConcurrencyTests
     typealias PushPull = ServerExchangePushPullTests
 

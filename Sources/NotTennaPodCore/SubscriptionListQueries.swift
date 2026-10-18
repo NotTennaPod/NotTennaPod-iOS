@@ -28,13 +28,54 @@ public enum SubscriptionListQueries {
 
     public static func load(_ all: [LibraryFeed], preferences: SubscriptionDisplayPreferences,
                             state: FeedSubscriptionState, globalAutoDownload: Bool) -> Result {
-        let counters = counters(all, preferences.counter)
+        load(all, counters: counters(all, preferences.counter), preferences: preferences, state: state, globalAutoDownload: globalAutoDownload)
+    }
+
+    /// With the per-feed counters already known for `preferences.counter` (the screens keep them as counts).
+    public static func load(_ all: [LibraryFeed], counters: [Int64: Int], preferences: SubscriptionDisplayPreferences,
+                            state: FeedSubscriptionState, globalAutoDownload: Bool) -> Result {
+        let order = preferences.order
+        return load(all, counters: counters, played: order == .mostPlayed ? playedCounts(all) : [:],
+                    latest: order == .mostRecentEpisode ? latestDates(all) : [:], preferences: preferences, state: state,
+                    globalAutoDownload: globalAutoDownload)
+    }
+
+    /// With every per-feed value it orders by already known: the counters, the played episodes of subscribed feeds
+    /// (`playedCounts`, most played) and each feed's newest episode date (`latestDates`, most recent episode).
+    public static func load(_ all: [LibraryFeed], counters: [Int64: Int], played: [Int64: Int], latest: [Int64: Int64],
+                            preferences: SubscriptionDisplayPreferences, state: FeedSubscriptionState,
+                            globalAutoDownload: Bool) -> Result {
         // The archive loads with an empty filter (SubscriptionFragment:368–369).
         let filter = state == .archived ? SubscriptionsFilter(stored: "") : preferences.filter
         let typed = preOrder(all).filter { $0.subscriptionState == state }
         let kept = filter.apply(typed, counters: counters, globalAutoDownload: globalAutoDownload)
-        let ordered = sort(kept, order: preferences.order, counters: counters, all: all)
+        let ordered = sort(kept, order: preferences.order, counters: counters, played: played, latest: latest)
         return Result(feeds: ordered, counters: counters, folders: folders(ordered))
+    }
+
+#if DEBUG
+    /// Tests: episodes visited by the full scans below (the screens keep these values instead, `FeedLatestDates`).
+    nonisolated(unsafe) public static var episodesScanned = 0
+#endif
+
+    /// Played episodes per subscribed feed, above zero.
+    public static func playedCounts(_ all: [LibraryFeed]) -> [Int64: Int] {
+#if DEBUG
+        episodesScanned += all.reduce(0) { $0 + $1.episodes.count }
+#endif
+        return count(all) { $0.userState.playState == .played }
+    }
+
+    /// Each feed's newest publication date in milliseconds (a missing date counts as 0; 0 without episodes).
+    public static func latestDates(_ all: [LibraryFeed]) -> [Int64: Int64] {
+#if DEBUG
+        episodesScanned += all.reduce(0) { $0 + $1.episodes.count }
+#endif
+        var recent: [Int64: Int64] = [:]
+        for feed in all {
+            recent[feed.id] = feed.episodes.map { $0.details.publicationDate.map { Int64(($0.timeIntervalSince1970 * 1000).rounded()) } ?? 0 }.max() ?? 0
+        }
+        return recent
     }
 
     /// `getAllFeedsCursor`: raw feed title `COLLATE NOCASE` (ASCII fold, then UTF-8 bytes), NULL
@@ -56,6 +97,13 @@ public enum SubscriptionListQueries {
     /// The four stable comparators. A null display title in a counter tie throws in the source
     /// (reference defect); it sorts after non-null titles here, as ALPHABETICAL does.
     public static func sort(_ feeds: [LibraryFeed], order: FeedOrder, counters: [Int64: Int], all: [LibraryFeed]) -> [LibraryFeed] {
+        sort(feeds, order: order, counters: counters, played: order == .mostPlayed ? playedCounts(all) : [:],
+             latest: order == .mostRecentEpisode ? latestDates(all) : [:])
+    }
+
+    /// With the played counts and newest dates already known (missing values count as 0).
+    public static func sort(_ feeds: [LibraryFeed], order: FeedOrder, counters: [Int64: Int], played: [Int64: Int],
+                            latest recent: [Int64: Int64]) -> [LibraryFeed] {
         func titleOrder(_ l: LibraryFeed, _ r: LibraryFeed) -> Int {
             switch (l.title, r.title) {
             case (nil, nil): return 0
@@ -67,7 +115,7 @@ public enum SubscriptionListQueries {
         let comparison: (LibraryFeed, LibraryFeed) -> Int
         switch order {
         case .counter, .mostPlayed:
-            let values = order == .counter ? counters : count(all) { $0.userState.playState == .played }
+            let values = order == .counter ? counters : played
             comparison = { l, r in
                 let a = values[l.id, default: 0], b = values[r.id, default: 0]
                 return a != b ? (a > b ? -1 : 1) : titleOrder(l, r)
@@ -75,10 +123,6 @@ public enum SubscriptionListQueries {
         case .alphabetical:
             comparison = titleOrder
         case .mostRecentEpisode:
-            var recent: [Int64: Int64] = [:]
-            for feed in all {
-                recent[feed.id] = feed.episodes.map { $0.details.publicationDate.map { Int64(($0.timeIntervalSince1970 * 1000).rounded()) } ?? 0 }.max() ?? 0
-            }
             comparison = { l, r in
                 let a = recent[l.id, default: 0], b = recent[r.id, default: 0]
                 return a == b ? 0 : (b > a ? 1 : -1)

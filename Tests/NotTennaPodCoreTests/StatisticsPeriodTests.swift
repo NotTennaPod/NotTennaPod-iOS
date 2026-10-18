@@ -185,7 +185,7 @@ struct StatisticsPeriodTests {
                   to: [1_790_838_000_000, Int64.max], confirmed: .init(timeFrom: 1_788_246_000_000))
         ]
         #expect(cases.count == 10)
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M13Midnight-" + UUID().uuidString)
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("StatisticsMidnight-" + UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         for item in cases {

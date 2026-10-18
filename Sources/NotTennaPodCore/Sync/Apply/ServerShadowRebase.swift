@@ -8,6 +8,9 @@ struct ServerProjectionContext: Sendable, Equatable {
     /// Episodes a retiring queue add or a discovery filing the server refused had shown as queued (the retirement's
     /// `withdrawnQueue`): they leave the queue unless something else supports them.
     var withdrawnQueue: Set<String> = []
+    /// Episodes whose queue membership the commit removed (its tombstones, a closed generation's): an authoritative
+    /// removal a live re-projection must still know once the base no longer holds the record.
+    var removedMemberships: Set<String> = []
     /// A Force full synchronization: the snapshot's absence and membership semantics (`ServerProjector.fullBase`, the
     /// staged snapshot attached as `full`), and its admissions are seen.
     var full = false
@@ -326,6 +329,7 @@ extension FeedLibraryStore {
         let projector = try unitProjector(context: context, now: now)
         projector.history = history
         projector.commitResets = basis.context.commitResets
+        projector.removedRecords = Set(basis.context.removedMemberships.map { ServerRecordKey(entity: "episode", id: $0, fieldGroup: "queue_membership") })
         if basis.context.full {
             projector.fullBase = "full"
             projector.admissionsSeen = basis.context.admissionsSeen

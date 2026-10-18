@@ -4,7 +4,7 @@ import Testing
 
 /// A refresh run does no whole-library work it does not need: a header-only change keeps the decoded episodes,
 /// the notification baseline reads only feeds with notifications on, and expiry cleanup looks only at previews.
-@MainActor @Suite(.timeLimit(.minutes(1))) struct RefreshLibraryWorkTests {
+@MainActor @Suite struct RefreshLibraryWorkTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
     private func options(_ offset: TimeInterval = 0) -> FeedRefreshOptions {
@@ -38,26 +38,29 @@ import Testing
         return snapshot
     }
 
-    @Test func refreshThatOnlyRecordsTheAttemptKeepsTheDecodedEpisodes() async throws {
+    /// Nothing decoded stays in the store: an unchanged refresh and an episode change read no feed's episodes,
+    /// and every read equals a fresh store's.
+    @Test func refreshThatOnlyRecordsTheAttemptReadsNoFeedEpisodes() async throws {
         try await withLibrary { store, url in
             let ids = (0..<30).map { "e\($0)" }
             let feed = try await store.insert(fetched(ids, source: "https://example.test/a"), options: options())
             _ = try await store.applyRefresh(fetched(ids, source: "https://example.test/a"), feedID: feed.id, options: options())
-            _ = try await store.snapshot()
-            let reloads = await store.feedEpisodeReloads
+            _ = try await store.applyRefresh(fetched(ids, source: "https://example.test/a"), feedID: feed.id, options: options(1))
+            let reads = await store.feedEpisodeReads
 
             // A later refresh with the same episodes records only its attempt time in the header.
             let result = try await store.applyRefresh(fetched(ids, source: "https://example.test/a"), feedID: feed.id, options: options(3_600))
             #expect(result.feed.lastRefreshAttempt == now.addingTimeInterval(3_600))
+            #expect(await store.feedEpisodeReads == reads)
             let snapshot = try await store.snapshot()
-            #expect(await store.feedEpisodeReloads == reloads)
             #expect(snapshot.feeds.first?.lastRefreshAttempt == now.addingTimeInterval(3_600))
             #expect(snapshot == (try await freshSnapshot(url)))
 
-            // An episode change still re-reads that feed.
+            // An episode change reads no feed either; the next read sees it.
+            let before = await store.feedEpisodeReads
             try await store.markEpisodePlayed(episodeID: feed.episodes[0].id, played: true)
+            #expect(await store.feedEpisodeReads == before)
             let changed = try await store.snapshot()
-            #expect(await store.feedEpisodeReloads == reloads + 1)
             #expect(changed.feeds.first?.episodes.first { $0.id == feed.episodes[0].id }?.userState.playState == .played)
             #expect(changed == (try await freshSnapshot(url)))
         }

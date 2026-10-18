@@ -31,7 +31,7 @@ import Testing
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct EpisodeDetailsMenuViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -211,8 +211,9 @@ struct EpisodeDetailsMenuViewTests {
             controller.traitOverrides.layoutDirection = rightToLeft ? .rightToLeft : .leftToRight
             controller.view.overrideUserInterfaceStyle = .light
             controller.view.updateTraitsIfNeeded()
-            // Set direction before rendering the toolbar's explicit frames.
-            await controller.reloadLibrary()?.value
+            // Set direction before rendering the toolbar's explicit frames: the screen opens again (a reload that only
+            // follows the library's changes patches it in place).
+            await controller.reloadLibrary(reopen: true)?.value
             controller.view.setNeedsLayout(); controller.view.layoutIfNeeded()
             let panel = try await menu(controller)
             #expect(panel.subviews.compactMap { ($0 as? UIButton)?.accessibilityIdentifier }

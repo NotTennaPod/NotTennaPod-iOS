@@ -11,6 +11,10 @@ public struct ServerAttachSnapshot: Sendable {
     /// Podcasts the account holds (a `podcast` `subscription` record whose state is not `removed`).
     public let podcastCount: Int
     let pages: [URL]
+    /// The pages' bytes as downloaded (decoded).
+    public internal(set) var bytes: Int64 = 0
+    /// Its records with a value: the base staging it writes.
+    public internal(set) var records = 0
 
     /// An account with no podcast: first attachment asks before going on (PROTOCOL §15.5, "Attachment, empty account").
     public var isEmptyAccount: Bool { podcastCount == 0 }
@@ -54,14 +58,20 @@ public enum ServerSnapshotError: Error, Equatable, Sendable {
 }
 
 /// Downloads an attach snapshot (PROTOCOL §15.4): `POST /v1/snapshot {mode: attach, install_id, acked_install_seq: 0}`,
-/// pages spooled until `has_more` is false, then the manifest's item count and `snapshot_digest` checked over the
-/// whole (reassembled) items. `view_expired` restarts from the beginning, discarding what was staged.
+/// spooled page by page (`ServerSnapshotSpool`, resumed after an interruption) until `has_more` is false, then the
+/// manifest's item count and `snapshot_digest` checked over the whole (reassembled) items. `view_expired` restarts from
+/// the beginning, discarding what was staged.
 public struct ServerAttachSnapshotDownload: Sendable {
     public let client: ServerClient
     public let token: String
     public let installID: String
     /// `staging/attach/` of the new library.
     public let folder: URL
+    /// Checked before each page request (`ServerBulkNetworkWait` when the download may not use the network now); each
+    /// page asks the system not to use mobile data or Low Data Mode unless the mobile-data preference allows sync.
+    public var network: (any ServerSyncNetworkGate)?
+    /// The bulk disk policy: admission before the first page, then a check before every page.
+    public var disk: ServerBulkDiskPolicy?
 
     public init(client: ServerClient, token: String, installID: String, folder: URL) {
         self.client = client; self.token = token; self.installID = installID; self.folder = folder
@@ -69,72 +79,51 @@ public struct ServerAttachSnapshotDownload: Sendable {
 
     /// `progress` receives the number of items received so far.
     public func run(progress: @Sendable (Int) async -> Void = { _ in }) async throws -> ServerAttachSnapshot {
-        let client = client, token = token, installID = installID
-        return try await ServerSnapshotDownload(folder: folder, fetch: { page in
-            try await client.snapshotPage(token: token, installID: installID, page: page)
-        }, isViewExpired: { ($0 as? ServerClientError) == .viewExpired }).run(progress: progress)
+        let client = client, token = token, installID = installID, folder = folder, disk = disk, network = network
+        var spool = ServerSnapshotSpool(folder: folder, identity: .init(mode: "attach", installID: installID), fetch: { page in
+            try await client.snapshotPage(token: token, installID: installID, page: page, allowsMobile: await network?.allowsMobile() ?? true)
+        }, restarts: { error, resumed in
+            let failure = error as? ServerClientError
+            return failure == .viewExpired || (resumed && failure == .server(status: 400, code: "invalid_request"))
+        })
+        spool.beforeRequest = {
+            if let wait = await network?.bulkWaitReason() { throw ServerBulkNetworkWait(reason: wait) }
+        }
+        disk?.guarding(&spool, estimate: ServerSnapshotEstimate.read(folder.deletingLastPathComponent())?.bytes)
+        let snapshot = try await spool.run(progress: progress)
+        ServerSnapshotEstimate.record(snapshot, in: folder.deletingLastPathComponent())
+        return snapshot
     }
 
     static func hex(_ bytes: [UInt8]) -> String { bytes.map { String(format: "%02x", $0) }.joined() }
 }
 
-/// A snapshot of any mode (PROTOCOL §6.4), spooled page by page into `folder` and verified: the manifest's item
-/// count and `snapshot_digest` over the whole (reassembled) items. `view_expired` restarts from the beginning,
-/// discarding what was staged. First attachment (PROTOCOL §15.4) and Force full synchronization (PROTOCOL §6.14) use it.
-struct ServerSnapshotDownload: Sendable {
-    let folder: URL
-    /// One page: the request's first page (nil) or the page a token names.
-    let fetch: @Sendable (String?) async throws -> ContractJSON
-    let isViewExpired: @Sendable (any Error) -> Bool
+/// A whole-library download waits for a network it may use (PROTOCOL §15.5): nothing was requested.
+public struct ServerBulkNetworkWait: Error, Equatable, Sendable {
+    public var reason: ServerNetworkWait
+}
 
-    func run(progress: @Sendable (Int) async -> Void = { _ in }) async throws -> ServerAttachSnapshot {
-        for round in 0..<3 {
-            do { return try await attempt(progress: progress) }
-            catch where isViewExpired(error) && round < 2 { continue }
-        }
-        throw ServerClientError.viewExpired
+/// The size of the last snapshot downloaded into a library (`staging/last-snapshot.json`): the base of the next
+/// download's estimate (Force full synchronization's confirmation, the disk admission), scaled by the items now.
+struct ServerSnapshotEstimate: Codable, Equatable, Sendable {
+    var bytes: Int64
+    var items: Int
+
+    static func read(_ staging: URL) -> ServerSnapshotEstimate? {
+        guard let data = try? Data(contentsOf: staging.appendingPathComponent("last-snapshot.json")) else { return nil }
+        return try? JSONDecoder().decode(Self.self, from: data)
     }
 
-    private func attempt(progress: @Sendable (Int) async -> Void) async throws -> ServerAttachSnapshot {
-        try? FileManager.default.removeItem(at: folder)
-        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-        var pages: [URL] = [], received = 0, page: String?
-        var last: ContractJSON
-        repeat {
-            try Task.checkCancellation()
-            last = try await fetch(page)
-            let url = folder.appendingPathComponent(String(format: "page-%06d.json", pages.count + 1))
-            try last.canonicalData().write(to: url, options: .atomic)
-            pages.append(url)
-            received += last["items"]?.arrayValue?.count ?? 0
-            await progress(received)
-            if last["has_more"]?.boolValue == true {
-                guard let next = last["next"]?.stringValue, !next.isEmpty else {
-                    throw ServerSnapshotError.invalidSnapshot("a page without a next token")
-                }
-                page = next
-            } else { page = nil }
-        } while page != nil
-        guard let head = last["head"]?.stringValue, (try? SyncCursor(encoded: head)) != nil,
-              let manifest = last["manifest"], let expectedCount = manifest["item_count"]?.integerValue,
-              let expectedDigest = manifest["snapshot_digest"]?.stringValue else {
-            throw ServerSnapshotError.invalidSnapshot("the last page has no head or manifest")
-        }
-        let snapshot = ServerAttachSnapshot(head: head, installWatermark: last["install_watermark"]?.integerValue ?? 0,
-                                            itemCount: 0, podcastCount: 0, pages: pages)
-        var digest = ContractHash.zeroDigest, count: Int64 = 0
-        var live = Set<String>()
-        try snapshot.forEachItem { item in
-            digest = try ContractHash.nextDigest(previous: digest, item)
-            count += 1
-            if let record = item["record"], record["entity"]?.stringValue == "podcast",
-               record["field_group"]?.stringValue == "subscription", let id = record["id"]?.stringValue {
-                if let state = record["value"]?["state"]?.stringValue, state != "removed" { live.insert(id) }
-            }
-        }
-        guard count == expectedCount, ServerAttachSnapshotDownload.hex(digest) == expectedDigest else { throw ServerSnapshotError.verificationFailed }
-        return ServerAttachSnapshot(head: head, installWatermark: snapshot.installWatermark, itemCount: Int(count),
-                                    podcastCount: live.count, pages: pages)
+    static func record(_ snapshot: ServerAttachSnapshot, in staging: URL) {
+        guard snapshot.bytes > 0, snapshot.itemCount > 0,
+              let data = try? JSONEncoder().encode(ServerSnapshotEstimate(bytes: snapshot.bytes, items: snapshot.itemCount)) else { return }
+        try? data.write(to: staging.appendingPathComponent("last-snapshot.json"), options: .atomic)
+    }
+
+    /// The estimate for a library now holding `items` snapshot items (nil: no earlier download).
+    func scaled(to items: Int) -> Int64 {
+        guard self.items > 0, items > 0 else { return bytes }
+        return Int64((Double(bytes) * Double(items) / Double(self.items)).rounded())
     }
 }
 
@@ -157,9 +146,14 @@ public struct ServerAttachmentTarget: Sendable {
     public let installID: String
     public let token: String
     public let client: ServerClient
+    /// The bulk disk policy: the library's archive, base and projection writes are made under its write budget, so they
+    /// never use the space the app keeps for its own writes (nil: unlimited).
+    public var disk: ServerBulkDiskPolicy?
 
-    public init(location: LibraryLocation, libraryID: String, installID: String, token: String, client: ServerClient) {
+    public init(location: LibraryLocation, libraryID: String, installID: String, token: String, client: ServerClient,
+                disk: ServerBulkDiskPolicy? = nil) {
         self.location = location; self.libraryID = libraryID; self.installID = installID; self.token = token; self.client = client
+        self.disk = disk
     }
 }
 

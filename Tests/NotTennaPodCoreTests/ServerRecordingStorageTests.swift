@@ -21,8 +21,8 @@ import Testing
                    "PRAGMA user_version = 18"])
         let before = try fixture.libraryRows()
         let reopened = try FeedLibraryStore(url: fixture.url)
-        // Schema 19, then schema 20's library tables (PROTOCOL §15.2).
-        #expect(try fixture.rows("PRAGMA user_version") == [["20"]])
+        // Schema 19, then schema 20's library tables (PROTOCOL §15.2), then schema 21's derived tables.
+        #expect(try fixture.rows("PRAGMA user_version") == [["22"]])
         #expect(try fixture.rows("PRAGMA application_id") == [["1095782212"]])
         // A schema-19 library made before the owed table existed gets it at open, without other changes.
         try await reopened.close()
@@ -34,7 +34,8 @@ import Testing
         let reopenedAgain = try FeedLibraryStore(url: fixture.url)
         #expect(try fixture.libraryRows() == before)
         let tables = try fixture.serverTables()
-        #expect(tables.count == 19)
+        // Schema 19's tables and the two hidden-row tables schema 21's derived triggers read in every library.
+        #expect(tables.count == 21)
         #expect(tables.values.allSatisfy { $0.isEmpty })
         #expect(await reopenedAgain.isServerLibrary == false)
         // Standalone behaviour is unchanged: the credential trigger still retires a replaced credential.

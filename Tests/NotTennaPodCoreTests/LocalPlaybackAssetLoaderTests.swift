@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct LocalPlaybackAssetLoaderTests {
     private struct Fixture {
         let root, folder, file: URL

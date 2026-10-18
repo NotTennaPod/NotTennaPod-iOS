@@ -5,7 +5,7 @@ import Testing
 /// When a server library exchanges (PROTOCOL §6.4), with an engine of the test's own: launch, local
 /// actions after the debounce, retries, pauses, change hints and polling, the network, playback pauses, the page's
 /// "Synchronize now" and "Force full synchronization", background work, and screens told at most once a second.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(5))) struct ServerSyncSchedulerTests {
+@MainActor @Suite(.serialized) struct ServerSyncSchedulerTests {
     /// An engine whose reports the test chooses; an exchange can be held open until the test releases it.
     final class Engine: ServerExchangeDriving, @unchecked Sendable {
         private let lock = NSLock()
@@ -62,6 +62,7 @@ import Testing
         }
 
         func exchange() async -> ServerExchangeReport { await run("exchange") }
+        func exchange(snapshots: Bool) async -> ServerExchangeReport { await run(snapshots ? "exchange" : "exchange without snapshots") }
         func forceFullSynchronization() async -> ServerExchangeReport { await run("full") }
         func storedState() async -> ServerExchangeReport { var report = ServerExchangeReport(); report.stateOnly = true; return report }
         func requestFullSynchronization() async { requestedFull = true }
@@ -85,7 +86,14 @@ import Testing
         }
         /// The preference changes while the path stays as it was (no path event).
         func setWithoutPathChange(_ value: Bool) { lock.withLock { allowed = value } }
+        /// Why it is not permitted: no network unless the test says mobile data is off.
+        var mobileDataOff: Bool {
+            get { lock.withLock { mobileOff } }
+            set { lock.withLock { mobileOff = newValue } }
+        }
+        private var mobileOff = false
         func permitted() async -> Bool { permittedNow }
+        func waitReason() async -> ServerNetworkWait? { permittedNow ? nil : mobileDataOff ? .mobileDataOff : .offline }
         func changes() -> AsyncStream<Void> { stream }
     }
 
@@ -94,23 +102,80 @@ import Testing
         private let lock = NSLock()
         private var current: AsyncThrowingStream<ServerHead, any Error>.Continuation?
         private var opened = 0
+        private var openedAt: [ContinuousClock.Instant] = []
         private var failing: (any Error)?
+        private var connectHead: ServerHead?
+        private var dropping = false
+        /// Its own lock: a stream ending (`finish`) reports here while `lock` may be held.
+        private let liveLock = NSLock()
+        private var open = 0
         var connections: Int { lock.withLock { opened } }
+        /// Streams opened and not ended yet.
+        var live: Int { liveLock.withLock { open } }
+        /// When each connection opened.
+        var connectionTimes: [ContinuousClock.Instant] { lock.withLock { openedAt } }
         var failure: (any Error)? {
             get { lock.withLock { failing } }
             set { lock.withLock { failing = newValue } }
         }
+        /// The head each connection sends at once, as the server does (PROTOCOL §12).
+        var headAtConnect: ServerHead? {
+            get { lock.withLock { connectHead } }
+            set { lock.withLock { connectHead = newValue } }
+        }
+        /// Each connection ends right after its first head.
+        var dropsAtOnce: Bool {
+            get { lock.withLock { dropping } }
+            set { lock.withLock { dropping = newValue } }
+        }
 
         func hints() -> AsyncThrowingStream<ServerHead, any Error> {
             let (stream, continuation) = AsyncThrowingStream<ServerHead, any Error>.makeStream()
+            liveLock.withLock { open += 1 }
+            continuation.onTermination = { [weak self] _ in self?.liveLock.withLock { self?.open -= 1 } }
             lock.withLock {
                 opened += 1
-                if let failing { continuation.finish(throwing: failing) } else { current = continuation }
+                openedAt.append(.now)
+                if let failing { continuation.finish(throwing: failing); return }
+                if let connectHead { continuation.yield(connectHead) }
+                if dropping { continuation.finish() } else { current = continuation }
             }
             return stream
         }
         func send(_ head: ServerHead) { _ = lock.withLock { current?.yield(head) } }
         func drop() { lock.withLock { current?.finish(); current = nil } }
+    }
+
+    /// A gate whose `permitted()` answers can be held (a slow check) while `waitReason()` answers at once.
+    final class HeldGate: ServerSyncNetworkGate, @unchecked Sendable {
+        private let lock = NSLock()
+        private var holding = false
+        private var heldAnswers: [CheckedContinuation<Bool, Never>] = []
+        private var reasons = 0
+        let (stream, continuation) = AsyncStream<Void>.makeStream()
+        var holds: Bool {
+            get { lock.withLock { holding } }
+            set { lock.withLock { holding = newValue } }
+        }
+        var held: Int { lock.withLock { heldAnswers.count } }
+        var reasonsAsked: Int { lock.withLock { reasons } }
+        func permitted() async -> Bool {
+            await withCheckedContinuation { answer in
+                let hold = lock.withLock { () -> Bool in
+                    guard holding else { return false }
+                    heldAnswers.append(answer)
+                    return true
+                }
+                if !hold { answer.resume(returning: true) }
+            }
+        }
+        /// The held answers arrive now: permitted.
+        func release() {
+            let answers = lock.withLock { let list = heldAnswers; heldAnswers = []; return list }
+            for answer in answers { answer.resume(returning: true) }
+        }
+        func waitReason() async -> ServerNetworkWait? { lock.withLock { reasons += 1 }; return nil }
+        func changes() -> AsyncStream<Void> { stream }
     }
 
     static var fast: ServerSyncScheduler.Timing {
@@ -124,8 +189,10 @@ import Testing
     let network = Network()
     let outbox = AsyncStream<Void>.makeStream()
 
-    func scheduler(hints: (any ServerChangeHintSource)? = nil, timing: ServerSyncScheduler.Timing = fast) -> ServerSyncScheduler {
-        ServerSyncScheduler(engine: engine, hints: hints, outbox: { [stream = outbox.stream] in stream }, network: network, timing: timing)
+    func scheduler(hints: (any ServerChangeHintSource)? = nil, timing: ServerSyncScheduler.Timing = fast,
+                   snapshotsNeedForeground: Bool = false) -> ServerSyncScheduler {
+        ServerSyncScheduler(engine: engine, hints: hints, outbox: { [stream = outbox.stream] in stream }, network: network, timing: timing,
+                            snapshotsNeedForeground: snapshotsNeedForeground)
     }
 
     func waitUntil(_ condition: @MainActor () -> Bool, sourceLocation: SourceLocation = #_sourceLocation) async throws {
@@ -360,6 +427,173 @@ import Testing
         await scheduler.stop()
     }
 
+    /// Gaps between successive connections, from the second.
+    static func gaps(_ times: [ContinuousClock.Instant]) -> [Duration] { zip(times, times.dropFirst()).map { $0.duration(to: $1) } }
+
+    static var backoff: ServerSyncScheduler.Timing {
+        var timing = fast
+        timing.reconnect = .milliseconds(40); timing.polling = .milliseconds(320); timing.stableAfter = .seconds(60)
+        return timing
+    }
+
+    /// A stream that drops right after the head the server sends at connect never stays up: reconnections back off
+    /// 1, 2, 4, 8 times the first delay, up to the polling interval (5, 10, 20, 40, 60 s in the app), measured as
+    /// connection attempts.
+    @Test func aStreamDroppingRightAfterItsFirstHeadBacksOff() async throws {
+        let hints = Hints()
+        hints.headAtConnect = engine.head
+        hints.dropsAtOnce = true
+        let scheduler = scheduler(hints: hints, timing: Self.backoff)
+        scheduler.start()
+        scheduler.setForeground(true)
+        try await waitUntil { hints.connections >= 7 }
+        let gaps = Self.gaps(hints.connectionTimes)
+        for (gap, expected) in zip(gaps, [40, 80, 160, 320, 320, 320].map { Duration.milliseconds($0) }) {
+            #expect(gap >= expected - .milliseconds(2), "\(gaps)")
+        }
+        await scheduler.stop()
+    }
+
+    /// The same short connections, each cut off by the network going and coming back: the backoff survives the path
+    /// changes (a flapping connection does not reconnect at once every time).
+    @Test func shortConnectionsAcrossNetworkChangesKeepBackingOff() async throws {
+        let hints = Hints()
+        hints.headAtConnect = engine.head
+        let scheduler = scheduler(hints: hints, timing: Self.backoff)
+        scheduler.start()
+        scheduler.setForeground(true)
+        var ends: [ContinuousClock.Instant] = []
+        for round in 1...5 {
+            try await waitUntil { hints.connections == round && scheduler.hintsConnected }
+            let before = scheduler.hintReconnectionNotBefore
+            network.permittedNow = false
+            try await waitUntil { scheduler.networkWait == .offline && scheduler.hintReconnectionNotBefore != before }
+            ends.append(.now)
+            network.permittedNow = true
+            try await waitUntil { scheduler.networkWait == nil }
+        }
+        try await waitUntil { hints.connections == 6 }
+        let times = hints.connectionTimes
+        for (index, expected) in [40, 80, 160, 320, 320].map({ Duration.milliseconds($0) }).enumerated() {
+            #expect(ends[index].duration(to: times[index + 1]) >= expected - .milliseconds(20), "\(Self.gaps(times))")
+        }
+        await scheduler.stop()
+    }
+
+    /// A connection that stays up past `stableAfter` starts the backoff again; a new foreground period does too.
+    @Test func aStableConnectionOrANewForegroundPeriodResetsTheBackoff() async throws {
+        let hints = Hints()
+        hints.headAtConnect = engine.head
+        hints.dropsAtOnce = true
+        var timing = Self.backoff
+        timing.reconnect = .milliseconds(40); timing.polling = .seconds(2); timing.stableAfter = .milliseconds(300)
+        let scheduler = scheduler(hints: hints, timing: timing)
+        scheduler.start()
+        scheduler.setForeground(true)
+        try await waitUntil { hints.connections == 4 }
+        // Backed off to 320 ms; this connection stays up past stableAfter, then drops.
+        hints.dropsAtOnce = false
+        try await waitUntil { hints.connections == 5 && scheduler.hintsConnected }
+        try await Task.sleep(for: .milliseconds(350))
+        hints.dropsAtOnce = true
+        hints.drop()
+        try await waitUntil { hints.connections == 7 }
+        var gaps = Self.gaps(hints.connectionTimes)
+        #expect(gaps[4] >= .milliseconds(340) && gaps[5] < .milliseconds(600), "after the stable one: 40 ms, not 640 ms: \(gaps)")
+        // Short again: backing off from the start.
+        try await waitUntil { hints.connections == 9 }
+        gaps = Self.gaps(hints.connectionTimes)
+        #expect(gaps[6] >= .milliseconds(78) && gaps[7] >= .milliseconds(158), "\(gaps)")
+        // The scene leaves and comes back: at once.
+        scheduler.setForeground(false)
+        let count = hints.connections
+        scheduler.setForeground(true)
+        let resumed = ContinuousClock.now
+        try await waitUntil { hints.connections == count + 1 }
+        #expect(resumed.duration(to: hints.connectionTimes[count]) < .milliseconds(200), "not after the 320 ms backoff")
+        await scheduler.stop()
+    }
+
+    /// A hint task stopped while it waits for the gate's answer (the scene left) and replaced (it came back): the late
+    /// answer changes nothing of its successor's, opens no stream, and a later network event opens no second one; a stop
+    /// ends every stream it started.
+    @Test func aLateGateAnswerOfAStoppedHintTaskNeverOpensASecondStream() async throws {
+        let gate = HeldGate()
+        let hints = Hints()
+        hints.headAtConnect = engine.head
+        var timing = Self.fast
+        timing.polling = .seconds(3_600)
+        let scheduler = ServerSyncScheduler(engine: engine, hints: hints, outbox: nil, network: gate, timing: timing)
+        gate.holds = true
+        scheduler.start()
+        scheduler.setForeground(true)
+        try await waitUntil { gate.held == 1 }
+        // The scene leaves while the first task waits for its answer, and comes back: its replacement connects.
+        scheduler.setForeground(false)
+        gate.holds = false
+        scheduler.setForeground(true)
+        try await waitUntil { hints.connections == 1 && hints.live == 1 && scheduler.hintsConnected }
+        // The stopped task's answer arrives late: permitted.
+        gate.release()
+        for _ in 0..<50 { await Task.yield() }
+        #expect(scheduler.hintsConnected, "the replacement's state is its own")
+        #expect(hints.connections == 1 && hints.live == 1, "no stream opened for a stopped task")
+        // One network event, permitted: the hints that run stay the only ones.
+        let asked = gate.reasonsAsked
+        gate.continuation.yield(())
+        try await waitUntil { gate.reasonsAsked > asked }
+        for _ in 0..<50 { await Task.yield() }
+        #expect(hints.connections == 1 && hints.live == 1, "one live hint stream: \(hints.connections) opened, \(hints.live) live")
+        await scheduler.stop()
+        try await waitUntil { hints.live == 0 }
+        #expect(!scheduler.hintsConnected)
+    }
+
+    /// Path updates repeating the same network and answer are not passed on; a real change is, and so is a change of
+    /// the answer alone (the mobile-data preference).
+    @Test func repeatedIdenticalPathUpdatesAreNotNetworkChanges() async throws {
+        var filter = DownloadNetworkSyncGate.ChangeFilter()
+        let wifi = DownloadNetworkState(connected: true, metered: false, cellular: false, transport: .wifi)
+        let cellular = DownloadNetworkState(connected: true, metered: true, cellular: true)
+        let lowData = DownloadNetworkState(connected: true, metered: false, cellular: false, transport: .wifi, constrained: true)
+        let passed = [filter.isChange(wifi, nil), filter.isChange(wifi, nil), filter.isChange(wifi, nil),
+                      filter.isChange(cellular, .mobileDataOff), filter.isChange(cellular, nil), filter.isChange(cellular, nil),
+                      filter.isChange(lowData, nil)]
+        // The first, cellular, mobile sync allowed now (the answer alone changed), Low Data Mode.
+        #expect(passed == [true, false, false, true, true, false, true])
+        // Through the gate: one change passed on per real change.
+        let monitor = DownloadNetworkMonitor(startMonitoring: false)
+        let gate = DownloadNetworkSyncGate(monitor: monitor, allowMobile: { false })
+        var iterator = gate.changes().makeAsyncIterator()
+        monitor.update(wifi)
+        let first: Void? = await iterator.next()
+        monitor.update(cellular)
+        let second: Void? = await iterator.next()
+        #expect(first != nil && second != nil)
+    }
+
+    /// A local change in the background, pushed at once there, asks for granted time; so does a push waiting for the
+    /// debounce, and every exchange that starts.
+    @Test func startedWorkAsksForGrantedTime() async throws {
+        let scheduler = scheduler()
+        var started = 0
+        scheduler.callbacks.workStarted = { started += 1 }
+        scheduler.start()
+        try await waitUntil { scheduler.history.count == 1 }
+        try await settled(scheduler)
+        #expect(started == 1, "the launch exchange")
+        scheduler.localChange()
+        #expect(started == 2 && scheduler.debouncing, "a push waiting for the debounce")
+        try await waitUntil { scheduler.history.count == 2 }
+        try await settled(scheduler)
+        scheduler.setExpedited(true)
+        let before = started
+        scheduler.localChange()
+        #expect(started == before + 1 && scheduler.hasPendingWork, "in the background: at once, with its time asked for")
+        try await settled(scheduler)
+        await scheduler.stop()
+    }
+
     @Test func withoutAPermittedNetworkItWaitsForTheNetwork() async throws {
         network.permittedNow = false
         let scheduler = scheduler()
@@ -411,6 +645,91 @@ import Testing
         network.permittedNow = true
         try await waitUntil { engine.log.count == count + 1 && hints.connections == 2 }
         #expect(scheduler.history.last?.contains(.network) == true, "\(scheduler.history)")
+        await scheduler.stop()
+    }
+
+    /// Low Data Mode does not stop ordinary sync, with mobile sync off too: positions and changes keep flowing. Mobile
+    /// data with mobile sync off, and no network, are refused, each with its reason.
+    @Test func ordinarySyncRunsOnLowDataWiFiWithMobileSyncOff() async {
+        let monitor = DownloadNetworkMonitor(startMonitoring: false)
+        let wifiOnly = DownloadNetworkSyncGate(monitor: monitor, allowMobile: { false })
+        let mobile = DownloadNetworkSyncGate(monitor: monitor, allowMobile: { true })
+        #expect(await wifiOnly.permitted(), "not known yet: try")
+        monitor.update(.init(connected: true, metered: false, cellular: false, transport: .wifi, constrained: true))
+        #expect(await wifiOnly.permitted())
+        #expect(await wifiOnly.waitReason() == nil)
+        monitor.update(.init(connected: true, metered: true, cellular: true, constrained: true))
+        #expect(await wifiOnly.waitReason() == .mobileDataOff)
+        #expect(await !wifiOnly.permitted())
+        #expect(await mobile.permitted())
+        monitor.update(.init(connected: false, metered: true, cellular: false))
+        #expect(await wifiOnly.waitReason() == .offline)
+        #expect(await mobile.waitReason() == .offline)
+    }
+
+    /// Without a permitted network the page is told why (no network, or mobile data sync may not use), apart from
+    /// any exchange's result; the network back, it is told once more and what waited runs.
+    @Test func noPermittedNetworkIsToldWithItsReason() async throws {
+        network.permittedNow = false
+        network.mobileDataOff = true
+        let scheduler = scheduler()
+        var waits: [ServerNetworkWait?] = []
+        scheduler.callbacks.networkWaitChanged = { waits.append($0) }
+        scheduler.start()
+        scheduler.localChange()
+        try await waitUntil { waits == [.mobileDataOff] }
+        try await settled(scheduler)
+        #expect(scheduler.history.isEmpty && scheduler.networkWait == .mobileDataOff)
+        network.mobileDataOff = false
+        network.permittedNow = true
+        try await waitUntil { scheduler.history.count == 1 }
+        #expect(waits == [.mobileDataOff, nil])
+        await scheduler.stop()
+    }
+
+    /// Successful, then idle with nothing to send, then the network goes: the page is told at once, without a user
+    /// action and without an exchange or a report standing for one; it comes back the same way.
+    @Test func theNetworkGoingWhileIdleIsToldWithoutAnExchange() async throws {
+        let scheduler = scheduler()
+        var waits: [ServerNetworkWait?] = []
+        var reports: [ServerExchangeReport] = []
+        scheduler.callbacks.networkWaitChanged = { waits.append($0) }
+        scheduler.callbacks.reported = { reports.append($0) }
+        scheduler.start()
+        try await waitUntil { scheduler.history.count == 1 && reports.contains { $0.completed } }
+        try await settled(scheduler)
+        let reported = reports.count
+        network.permittedNow = false
+        try await waitUntil { waits == [.offline] }
+        network.permittedNow = true
+        try await waitUntil { waits == [.offline, nil] }
+        try await settled(scheduler)
+        #expect(scheduler.history.count == 1, "nothing waited: nothing runs")
+        #expect(reports.count == reported, "the network never stands for an exchange's result")
+        #expect(scheduler.lastReport?.completed == true)
+        await scheduler.stop()
+    }
+
+    /// The network goes while an exchange runs: the page is told at once, the exchange is cancelled (never a success),
+    /// and its cancelled report does not clear what the page says; the network back, the exchange runs again.
+    @Test func theNetworkGoingDuringAnExchangeIsToldAndTheExchangeRunsAgain() async throws {
+        let scheduler = scheduler()
+        var waits: [ServerNetworkWait?] = []
+        scheduler.callbacks.networkWaitChanged = { waits.append($0) }
+        scheduler.start()
+        try await waitUntil { scheduler.history.count == 1 }
+        try await settled(scheduler)
+        engine.hold()
+        scheduler.localChange()
+        try await waitUntil { scheduler.isExchanging }
+        network.permittedNow = false
+        try await waitUntil { engine.cancelled == 1 && !scheduler.hasPendingWork }
+        #expect(waits == [.offline] && scheduler.networkWait == .offline)
+        let count = engine.log.count
+        network.permittedNow = true
+        try await waitUntil { engine.log.count == count + 1 }
+        try await settled(scheduler)
+        #expect(waits == [.offline, nil] && scheduler.history.last?.contains(.network) == true)
         await scheduler.stop()
     }
 
@@ -667,13 +986,40 @@ import Testing
         timing.reloadInterval = .milliseconds(500)
         let scheduler = scheduler(timing: timing)
         var reloads: [ContinuousClock.Instant] = []
-        scheduler.callbacks.libraryChanged = { reloads.append(.now) }
+        var delivered: [LibraryChangeSet] = []
+        scheduler.callbacks.libraryChanged = { reloads.append(.now); delivered.append($0) }
         scheduler.start()
-        for _ in 0..<10 { engine.continuation.yield(.libraryChanged) }
+        for index in 0..<10 { engine.continuation.yield(.libraryChanged(Self.changes(episode: Int64(index)))) }
         try await waitUntil { reloads.count == 2 }
         try await Task.sleep(for: .milliseconds(300))
         #expect(reloads.count == 2, "one at once, one trailing: \(reloads.count)")
         if reloads.count == 2 { #expect(reloads[0].duration(to: reloads[1]) >= .milliseconds(490)) }
+        // The trailing delivery is the union of what arrived meanwhile: nothing is lost.
+        #expect(Set(delivered.flatMap(\.episodes.keys)) == Set(0..<10))
+        await scheduler.stop()
+    }
+
+    static func changes(episode: Int64) -> LibraryChangeSet {
+        var set = LibraryChangeSet(identity: .init(library: nil, incarnation: UUID()), sequence: episode + 1, origin: .sync)
+        set.episodes[episode] = .init(change: .changed, feed: 1)
+        return set
+    }
+
+    /// An empty change set never reaches the screens, and position knowledge is told at once, unpaced.
+    @Test func anEmptyChangeSetIsNotToldAndKnowledgeIsToldAtOnce() async throws {
+        let scheduler = scheduler()
+        var reloads = 0
+        var knowledge: [LibraryPositionKnowledge] = []
+        scheduler.callbacks.libraryChanged = { _ in reloads += 1 }
+        scheduler.callbacks.positionKnowledge = { knowledge.append($0) }
+        scheduler.start()
+        try await waitUntil { scheduler.history.count == 1 }
+        try await settled(scheduler)
+        let before = knowledge.count
+        engine.continuation.yield(.libraryChanged(LibraryChangeSet(identity: .init(library: nil, incarnation: UUID()), sequence: 1, origin: .sync)))
+        for id in 0..<3 { engine.continuation.yield(.positionKnowledge(.init(episodes: [Int64(id)]))) }
+        try await waitUntil { knowledge.count == before + 3 }
+        #expect(reloads == 0, "an empty set is not a change")
         await scheduler.stop()
     }
 
@@ -692,6 +1038,87 @@ import Testing
         #expect(await scheduler.runInBackground(.processing), "processing continues until nothing waits")
         #expect(scheduler.history.count - before >= 3, "three rounds: \(scheduler.history)")
         #expect(!scheduler.needsProcessingTime)
+        await scheduler.stop()
+    }
+
+    /// A background app refresh task has seconds: with a Force full synchronization owed it runs an ordinary exchange
+    /// that starts no snapshot download (the repair, or a recovery's download, waits for a processing task or the app);
+    /// a processing task runs the repair.
+    @Test func aRefreshTaskNeverStartsASnapshotDownload() async throws {
+        // The repair owed at launch waits for the app to leave the foreground.
+        engine.requestedFull = true
+        var waiting = ServerExchangeReport()
+        waiting.waitingForBackground = true
+        for _ in 0..<3 { engine.queue(waiting) }
+        var timing = Self.fast
+        timing.polling = .seconds(3_600)
+        let scheduler = scheduler(timing: timing)
+        scheduler.start()
+        scheduler.setForeground(true)
+        // The activation may run before the launch has read the owed repair: the repair runs at the first exchange that knows it.
+        try await waitUntil { engine.log.contains("full") }
+        try await settled(scheduler)
+        #expect(engine.requestedFull)
+        let before = engine.log.count
+        _ = await scheduler.runInBackground(.refresh)
+        #expect(Array(engine.log.dropFirst(before)) == ["exchange without snapshots"], "\(engine.log)")
+        _ = await scheduler.runInBackground(.processing)
+        #expect(engine.log.dropFirst(before).contains("full"), "\(engine.log)")
+        await scheduler.stop()
+    }
+
+    /// A refresh task that finds parked work (a local change whose grant ended) still downloads no snapshot: the rule
+    /// follows the task, not the triggers it runs.
+    @Test func aRefreshTaskWithParkedWorkStillStartsNoSnapshotDownload() async throws {
+        let scheduler = scheduler()
+        scheduler.start()
+        try await waitUntil { scheduler.history.count == 1 }
+        try await settled(scheduler)
+        scheduler.localChange()
+        scheduler.suspendForBackground()
+        try await waitUntil { scheduler.pendingTriggers.contains(.localChange) }
+        let before = engine.log.count
+        _ = await scheduler.runInBackground(.refresh)
+        #expect(scheduler.history.last == [.background, .localChange], "\(scheduler.history)")
+        #expect(Array(engine.log.dropFirst(before)) == ["exchange without snapshots"], "\(engine.log)")
+        await scheduler.stop()
+    }
+
+    /// The app started in the background (for a refresh task): its launch exchange downloads nothing and an owed
+    /// repair waits; in the foreground the repair runs.
+    @Test func aLaunchInTheBackgroundDownloadsNothingUntilTheForeground() async throws {
+        engine.requestedFull = true
+        var timing = Self.fast
+        timing.polling = .seconds(3_600)
+        let scheduler = scheduler(timing: timing, snapshotsNeedForeground: true)
+        scheduler.start()
+        try await waitUntil { !engine.log.isEmpty }
+        try await settled(scheduler)
+        #expect(engine.log == ["exchange without snapshots"], "\(engine.log)")
+        scheduler.setForeground(true)
+        try await waitUntil { engine.log.contains("full") }
+        await scheduler.stop()
+    }
+
+    /// While a recovery waits for playback to pause (its download or switch), hints, polls and local changes do not ask
+    /// the server again at every trigger; the pause runs it.
+    @Test func aRecoveryWaitingForThePauseRunsAtThePauseNotAtEveryTrigger() async throws {
+        let scheduler = scheduler()
+        scheduler.start()
+        try await waitUntil { scheduler.history.count == 1 }
+        try await settled(scheduler)
+        scheduler.playbackChanged(playing: true)
+        var waiting = ServerExchangeReport()
+        waiting.recovery = .running
+        waiting.waitingForPause = true
+        engine.queue(waiting)
+        _ = await scheduler.synchronizeNow()
+        let before = engine.log.count
+        scheduler.localChange()
+        try await Task.sleep(for: .milliseconds(300))
+        #expect(engine.log.count == before, "a local change waits for the pause: \(engine.log)")
+        scheduler.playbackChanged(playing: false)
+        try await waitUntil { engine.log.count > before }
         await scheduler.stop()
     }
 

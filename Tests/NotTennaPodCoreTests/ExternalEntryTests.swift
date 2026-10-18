@@ -2,19 +2,19 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-/// External entry host checks against the Android oracle (Fixtures/m34-entry-oracle.json).
+/// External entry host checks against the Android oracle (Fixtures/external-entry-oracle.json).
 struct ExternalEntryTests {
     private struct Oracle: Decodable {
         struct Case: Decodable {
             struct Android: Decodable { var url: String?; var noPodcast: Bool?; var androidCrash: String? }
             /// Android's outcome, and for shared text the iOS outcome (shared text opens its first link).
-            var group: String; var input: String; var android: Android; var iosUserDecision: Android?
+            var group: String; var input: String; var android: Android; var iosOutcome: Android?
         }
         var cases: [Case]
     }
 
     private func oracle() throws -> Oracle {
-        let file = try #require(Bundle.module.url(forResource: "m34-entry-oracle", withExtension: "json", subdirectory: "Fixtures"))
+        let file = try #require(Bundle.module.url(forResource: "external-entry-oracle", withExtension: "json", subdirectory: "Fixtures"))
         return try JSONDecoder().decode(Oracle.self, from: Data(contentsOf: file))
     }
 
@@ -50,15 +50,15 @@ struct ExternalEntryTests {
 
     /// Deliberate iOS deviation: shared text opens its first link. Every
     /// shared-text oracle case carries the iOS expectation next to Android's result.
-    @Test func everySharedTextOracleCaseFollowsTheUserDecision() throws {
+    @Test func everySharedTextOracleCaseFollowsTheIOSDeviation() throws {
         let shared = try oracle().cases.filter { $0.group == "sharedText" }
         #expect(shared.count == 21)
         for entry in shared {
-            let expected = try #require(entry.iosUserDecision, "\(entry.input.debugDescription)")
+            let expected = try #require(entry.iosOutcome, "\(entry.input.debugDescription)")
             #expect(try sharedOutcome(entry.input) == expected.url, "\(entry.input.debugDescription)")
         }
         // The deviation changes Android's outcome only where Android fetched the words or crashed.
-        #expect(shared.filter { $0.android.url != nil && $0.android.url != $0.iosUserDecision?.url }
+        #expect(shared.filter { $0.android.url != nil && $0.android.url != $0.iosOutcome?.url }
             .allSatisfy { $0.input.contains(" ") || $0.input.isEmpty })
     }
 

@@ -105,7 +105,7 @@ extension LibraryViewController {
     }
 
     func episodeListItems(_ ids: [Int64]) -> [EpisodeListItem] {
-        let queued = Set(queuedEpisodes.map(\.id))
+        let queued = mirror.queuedIDs
         return ids.compactMap { id in
             guard let (feed, storedEpisode) = libraryEpisode(id) else { return nil }
             let episode = actionBindings[id]?.model.snapshot().episode ?? storedEpisode
@@ -124,7 +124,7 @@ extension LibraryViewController {
                 var items: [EpisodeListItem] = capturedItem.map { [$0] } ?? []
                 for id in capturedItem == nil ? ids : [] {
                     guard let episode = try await library.episode(id: id),
-                          let feed = try await library.feed(id: library.feedID(forEpisode: id)) else { continue }
+                          let feed = try await library.listedFeedHeader(id: library.feedID(forEpisode: id)) else { continue }
                     items.append(.init(episode: episode, local: feed.source.isLocalFeedSource, subscription: feed.subscriptionState,
                         queued: queue.contains { $0.id == id }, downloading: downloads.activeJob(source: episode.details.media?.url) != nil))
                 }
@@ -139,7 +139,7 @@ extension LibraryViewController {
                 }
                 if action == .share {
                     let episode = items[0].episode
-                    guard let feed = try await library.feed(id: library.feedID(forEpisode: episode.id)) else { return }
+                    guard let feed = try await library.listedFeedHeader(id: library.feedID(forEpisode: episode.id)) else { return }
                     presentEpisodeShare(feed: feed, episode: episode); return
                 }
                 let executor = EpisodeListActionExecutor(store: library,
@@ -156,7 +156,7 @@ extension LibraryViewController {
                             return
                         }
                         let feedID = try await library.feedID(forEpisode: id)
-                        if try await library.feed(id: feedID)?.source.isLocalFeedSource == true {
+                        if try await library.listedFeedHeader(id: feedID)?.source.isLocalFeedSource == true {
                             guard let localFolders else { throw FeedLibraryError.invalidMutation }
                             try await localFolders.deleteMedia(episodeID: id, playback: playback, removeFromQueue: downloads.deletionRemovesFromQueue)
                         } else if let episode = try await library.episode(id: id), episode.userState.isDownloaded {
@@ -165,9 +165,11 @@ extension LibraryViewController {
                     }, reset: { try await playback.resetPlaybackPosition(episodeID: $0) })
                 if captured != nil { try await beforeEpisodeActionCommit?() }
                 let count = try await executor.perform(action, items: items, resetPosition: resetPosition, selection: selection)
+                // The write's receipt, read as it returns: what fences this result later.
+                let receipt = library.changes.emitted
                 actionMutationRevision &+= 1
                 if !selection, action == .removeInbox, let captured {
-                    reconcileCommittedAction(captured, delta: .init(playState: .unplayed))
+                    reconcileCommittedAction(captured, delta: .init(playState: .unplayed), receipt: receipt)
                     scheduleMediaDeletionAfterMark(captured)
                 } else {
                     if (!selection && action == .removeInbox)
@@ -282,8 +284,8 @@ extension LibraryViewController {
         Task { [weak self] in
             guard let self, let library else { return }
             do {
-                guard let feed = try await library.feed(id: feedID),
-                      let episode = feed.episodes.first(where: { $0.id == episodeID }),
+                guard let feed = try await library.listedFeedHeader(id: feedID), try await library.feedID(forEpisode: episodeID) == feedID,
+                      let episode = try await library.episode(id: episodeID),
                       case .episode(let visibleFeed, let visibleEpisode) = path.last,
                       visibleFeed == feedID, visibleEpisode == episodeID else { return }
                 // Playback saves can update position without recreating shownotes.
@@ -299,7 +301,7 @@ extension LibraryViewController {
         let overlay = UIControl(frame: surface.bounds)
         overlay.addAction(UIAction { [weak self] _ in self?.popup?.removeFromSuperview(); self?.popup = nil }, for: .touchUpInside)
         let actions = EpisodeMenu.actions(episode: episode, feed: feed,
-            queued: queuedEpisodes.contains { $0.id == episode.id },
+            queued: isQueued(episode.id),
             isSelectedMedia: playback?.episode?.id == episode.id)
         let titles = actions.map { Appearance.text($0.titleKey(hasMedia: episode.details.media != nil)) }
         let widths = titles.map { ($0 as NSString).size(withAttributes: [.font: Appearance.font(16)]).width }

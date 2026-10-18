@@ -46,6 +46,10 @@ extension AppDelegate {
                 return LibraryActivationState(playback, castBlocks: false).playbackHold
             }
             dependencies.stopPlayback = { [weak self] in try? await self?.playback?.stop() }
+            // The attach download follows the "Synchronization" mobile-data preference, Low Data Mode counting as mobile data.
+            dependencies.bulkNetwork = DownloadNetworkSyncGate(allowMobile: { [weak self] in
+                await MainActor.run { self?.mobileNetworkPreferences?.allows(.sync) ?? false }
+            })
             serverAccounts = ServerAccounts(dependencies)
             // Signed in again: the open library's exchange continues (PROTOCOL §15.4).
             serverAccounts?.onSignedInAgain = { [weak self] in
@@ -124,17 +128,30 @@ extension AppDelegate {
         let hints = ServerEventStream(base: base, proxy: proxy?.isConfigured == true ? proxy : nil, userAgent: HTTPUserAgent.current,
                                       allowsMobile: allowsMobile, token: token)
         let scheduler = ServerSyncScheduler(engine: engine, hints: hints, outbox: { await store.serverOutboxChanges() }, network: network,
-                                            eligibility: eligibility)
+                                            eligibility: eligibility, snapshotsNeedForeground: true)
         scheduler.callbacks.reported = { [weak self] report in
             self?.serverAccounts?.exchangeReported(report)
             self?.scheduleServerSyncBackgroundTasks(refresh: report.completed)
         }
+        // No network, or mobile data sync may not use: the page says so, also while nothing waits to be sent.
+        scheduler.callbacks.networkWaitChanged = { [weak self] wait in self?.serverAccounts?.networkWaitChanged(wait) }
+        // Work started in the background (a pause on the lock screen pushes its position) asks for granted time.
+        scheduler.callbacks.workStarted = { [weak self] in self?.backgroundWork.workStarted() }
         // A remote position waiting for the player's paused episode is adopted after each catch-up and at each pause
         // (PROTOCOL §8.6); sync never moves playing audio.
         let adoption = playback.map { ServerPlaybackAdoption(store: store, playback: $0) }
-        // At most once a second during catch-up (PROTOCOL §6.8); each screen coalesces its own reloads.
-        scheduler.callbacks.libraryChanged = {
-            for controller in Self.libraryControllers { _ = controller.reloadLibrary(preservingEpisodeDetails: true, keepsUnchangedScreen: true) }
+        // At most once a second during catch-up (PROTOCOL §6.8), and only when a sync step changed something the screens
+        // show (its exact change set); each screen coalesces its own reloads.
+        scheduler.callbacks.libraryChanged = { changes in
+            guard !changes.isEmpty else { return }
+            for controller in Self.libraryControllers where controller.screenUpdater == nil {
+                _ = controller.reloadLibrary(preservingEpisodeDetails: true, keepsUnchangedScreen: true)
+            }
+            adoption?.attempt()
+        }
+        // What adoption depends on changed: checked at once, whatever the screens show.
+        scheduler.callbacks.positionKnowledge = { [weak self] knowledge in
+            guard knowledge.concerns(self?.playback?.episode?.id) else { return }
             adoption?.attempt()
         }
         scheduler.callbacks.feedsDeleted = { [weak self] in self?.feedDeletion?.resume() }

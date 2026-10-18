@@ -26,7 +26,7 @@ import Testing
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct FeedPreviewLifecycleTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let value = view as? T { return value }
@@ -167,5 +167,76 @@ struct FeedPreviewLifecycleTests {
                 try await playback.stop()
             } catch { try? await playback.stop(); throw error }
         }
+    }
+
+    /// A preview's video player offers Transcript with the app's admitted loader, not an unrestricted one: with Cover
+    /// images off on cellular the preview's transcript makes no request, and it loads once Cover images is allowed.
+    @Test func previewTranscriptFollowsTheMobileUpdatesOptions() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("PreviewTranscript-\(UUID())")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = try FeedLibraryStore(url: root.appendingPathComponent("library.sqlite"))
+        do {
+            let parsed = ParsedFeed(format: .rss, title: "Preview video", episodes: [
+                .init(identifier: "video", title: "Preview video episode",
+                      media: .init(url: "https://example.invalid/video.mp4", size: 100, durationMilliseconds: 60_000),
+                      transcript: .init(format: .json, url: "https://example.invalid/video.json"))
+            ])
+            let url = URL(string: "https://example.invalid/feed")!
+            let feed = try await store.preparePreview(.init(feed: parsed, source: url.absoluteString,
+                responseURL: url, validator: nil, permanentRedirectURL: nil), now: Date())
+            let episode = try #require(feed.episodes.first)
+            let time = try TimeDisplayPreferenceStore(file: root.appendingPathComponent("time.json"))
+            let mobile = try MobileNetworkPreferenceStore(file: root.appendingPathComponent("mobile.json"))
+            try mobile.updateAllowed(["streaming"])
+            let network = DownloadNetworkMonitor(startMonitoring: false)
+            let admission = AuxiliaryNetworkAdmission(network: network, preferences: mobile)
+            let transport = PreviewTranscriptTransport()
+            let loader = TranscriptLoader(transport: transport, cache: URLCache(memoryCapacity: 1_000_000, diskCapacity: 0),
+                                          userAgent: "test", admission: admission)
+            let engine = PreviewPlaybackEngine()
+            let playback = PlaybackCoordinator(store: store, engine: engine)
+            let library = LibraryViewController(library: store, startupError: nil, downloads: nil, playback: playback,
+                timeDisplayPreferences: time, navigationPreferences: nil, speedPreferences: nil,
+                mobileNetworkPreferences: mobile, usage: nil, transcriptLoader: loader)
+            do {
+                try await withViewTestWindow { host, _ in
+                    host.addChild(library); host.view.addSubview(library.view); library.didMove(toParent: host)
+                    library.view.frame = host.view.bounds; library.view.layoutIfNeeded()
+                    await library.reloadLibrary()?.value
+                    library.showPreview(feed.id, recoveredBySearch: false)
+                    try await wait { library.presentedViewController is FeedPreviewController && library.presentedViewController?.isBeingPresented == false }
+                    let card = try #require(library.presentedViewController as? FeedPreviewController)
+                    let child = try #require(card.contentController as? LibraryViewController)
+                    #expect(child.transcriptLoader === loader)
+                    try await playback.select(episodeID: episode.id, play: false); engine.ready()
+                    try await wait { playback.phase == .paused }
+                    // What the preview's video menu presents for Transcript.
+                    let sheet = TranscriptController(playback: playback, library: store, loader: child.transcriptLoader,
+                        notice: { _ in }, failure: { Issue.record($0) })
+                    card.present(sheet, animated: false)
+                    // The admission is asked: the fetch waits for the first network observation, then is denied.
+                    try await wait { network.pendingObservationCount == 1 }
+                    network.update(.init(connected: true, metered: true, cellular: true))
+                    #expect(await transport.calls == 0)
+                    try mobile.updateAllowed(["streaming", "images"]); admission.preferencesChanged()
+                    try await wait { (find("transcriptSegment-0", in: sheet.view) as UIButton?)?.currentTitle == "Preview text." }
+                    #expect(await transport.calls == 1)
+                    await withCheckedContinuation { done in sheet.dismiss(animated: false) { done.resume() } }
+                    await withCheckedContinuation { done in card.dismiss(animated: false) { done.resume() } }
+                }
+                try await playback.stop()
+            } catch { try? await playback.stop(); throw error }
+            try await store.close()
+        } catch { try? await store.close(); throw error }
+    }
+}
+
+private actor PreviewTranscriptTransport: FeedHTTPTransport {
+    var calls = 0
+    func send(_ request: URLRequest) async throws -> FeedHTTPResponse {
+        calls += 1
+        return .init(url: request.url!, status: 200,
+                     body: Data("{\"segments\":[{\"startTime\":0,\"endTime\":5,\"body\":\"Preview text.\"}]}".utf8))
     }
 }

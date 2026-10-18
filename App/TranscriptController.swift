@@ -27,6 +27,13 @@ import NotTennaPodCore
     private var initialScroll = true
     private let scrollAnimator = TranscriptScrollAnimator()
     private var loadingTask: Task<Void, Never>?, eventsTask: Task<Void, Never>?
+    /// One wake per deferred load: it loads again once its condition holds (`AuxiliaryNetworkAdmission.wait`).
+    private var wakeTask: Task<Void, Never>?
+    /// A Refresh asked for and not yet done. It survives play/pause reloads of the same episode, a denial, a byte-limit
+    /// deferral, an interruption and a cancellation. A refresh that ran settles it, whether it succeeded or failed (the
+    /// same failed document is not fetched again on every play/pause; only another Refresh asks again), and so do an
+    /// episode change, no selection and closing the screen.
+    private(set) var pendingForceEpisodeID: Int64?
     private var requestID = UUID()
     private var observedEpisode: Int64?
     private var observedPhase: PlaybackCoordinator.Phase?
@@ -50,7 +57,7 @@ import NotTennaPodCore
         modalPresentationStyle = .overFullScreen; modalTransitionStyle = .crossDissolve
     }
     required init?(coder: NSCoder) { fatalError() }
-    deinit { loadingTask?.cancel(); eventsTask?.cancel() }
+    deinit { loadingTask?.cancel(); eventsTask?.cancel(); wakeTask?.cancel() }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.32); view.accessibilityViewIsModal = true
@@ -108,7 +115,7 @@ import NotTennaPodCore
     private func stop() {
         scrollAnimator.cancel()
         isClosed = true; requestID = UUID(); loadingTask?.cancel(); loadingTask = nil
-        eventsTask?.cancel(); eventsTask = nil
+        eventsTask?.cancel(); eventsTask = nil; wakeTask?.cancel(); wakeTask = nil; pendingForceEpisodeID = nil
     }
     @objc private func close() { stop(); dismiss(animated: true) }
     @objc private func outside(_ gesture: UITapGestureRecognizer) {
@@ -117,11 +124,18 @@ import NotTennaPodCore
     override func accessibilityPerformEscape() -> Bool { close(); return true }
     override var keyCommands: [UIKeyCommand]? { [UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(close))] }
 
-    private func loadSelected(force: Bool) {
-        loadingTask?.cancel(); requestID = UUID()
-        guard let episodeID = playback.episode?.id else { isLoading = false; spinner.stopAnimating(); view.setNeedsLayout(); return }
+    private func loadSelected(force asked: Bool) {
+        loadingTask?.cancel(); wakeTask?.cancel(); wakeTask = nil; requestID = UUID()
+        guard let episodeID = playback.episode?.id else {
+            pendingForceEpisodeID = nil
+            isLoading = false; spinner.stopAnimating(); view.setNeedsLayout(); return
+        }
+        if pendingForceEpisodeID != episodeID { pendingForceEpisodeID = nil }
+        // A Refresh is owed from the moment it is pressed, so a play/pause reload before its result still refreshes.
+        if asked { pendingForceEpisodeID = episodeID }
+        let force = pendingForceEpisodeID != nil
         let token = requestID, library = library, loader = loader
-        if force { isLoading = true; spinner.startAnimating(); view.setNeedsLayout() }
+        if asked { isLoading = true; spinner.startAnimating(); view.setNeedsLayout() }
         loadingTask = Task { [weak self] in
             do {
                 guard let episode = try await library.episode(id: episodeID) else {
@@ -133,17 +147,32 @@ import NotTennaPodCore
                     guard let self, requestID == token, !isClosed else { return }
                     stop(); dismiss(animated: true) { self.notice(Appearance.text("no_transcript_label")) }; return
                 }
-                let loaded = try await loader.load(descriptor, localMediaPath: episode.userState.localFileURL, forceRefresh: force)
+                let loaded = try await loader.loadTranscript(descriptor, localMediaPath: episode.userState.localFileURL, forceRefresh: force)
                 try Task.checkCancellation()
                 guard let self, requestID == token, !isClosed, playback.episode?.id == episodeID else { return }
-                apply(loaded, episodeID: episodeID)
+                // Only a refresh that ran settles what is owed.
+                if force, !loaded.refreshPending { pendingForceEpisodeID = nil }
+                apply(loaded.transcript, episodeID: episodeID)
+                if let wake = loaded.deferred { armWake(wake, token: token) }
             } catch is CancellationError { }
             catch {
                 guard let self, requestID == token, !isClosed else { return }
+                // The refresh ran and failed: it is settled. A cancelled transfer has not run.
+                if force, (error as? URLError)?.code != .cancelled, pendingForceEpisodeID == episodeID { pendingForceEpisodeID = nil }
                 // Source nil parse/network content yields an empty, refreshable list.
                 // Also terminate the verified parser-exception loading dead end.
                 apply(nil, episodeID: episodeID)
             }
+        }
+    }
+    /// Subscribes, then checks, so a permission that returned before this was armed is seen at once. The retry keeps a
+    /// pending refresh's force.
+    private func armWake(_ condition: AuxiliaryNetworkAdmission.Wake, token: UUID) {
+        let admission = loader.admission
+        wakeTask = Task { [weak self] in
+            do { try await admission.wait(until: condition) } catch { return }
+            guard let self, requestID == token, !isClosed else { return }
+            loadSelected(force: false)
         }
     }
     private func apply(_ value: EpisodeTranscript?, episodeID: Int64) {

@@ -31,8 +31,9 @@ public struct ServerExchangeAttachApplier: ServerAttachSnapshotApplier {
 
     public func apply(_ snapshot: ServerAttachSnapshot, to library: ServerAttachmentTarget) async throws {
         let exchange = transport?(library) ?? ServerClientExchangeTransport(client: library.client, token: library.token)
-        try await ServerAttachBuilder(location: library.location, transport: exchange, vault: vault())
-            .build(head: snapshot.head, watermark: snapshot.installWatermark, items: snapshot.forEachItem)
+        var builder = ServerAttachBuilder(location: library.location, transport: exchange, vault: vault())
+        builder.disk = library.disk
+        try await builder.build(head: snapshot.head, watermark: snapshot.installWatermark, items: snapshot.forEachItem)
     }
 }
 
@@ -69,6 +70,11 @@ struct ServerAttachBuilder {
     let transport: any ServerExchangeTransport
     let vault: any SynchronizationCredentialStore
     var batch = 2_000
+    /// Each bulk write (archive batch, base batch, the projection through its COMMIT) is armed with the free space
+    /// left beyond the reserve, read anew; a refusal rolls it back and stops with `ServerInsufficientSpace`.
+    var disk: ServerBulkDiskPolicy?
+
+    private var budget: Int64? { disk?.budget(at: location.folder) }
 
     /// The work the library-building transaction did, for measurements.
     struct Report: Sendable { var entries = 0; var decisions = 0; var records = 0; var feeds = 0; var episodes = 0 }
@@ -88,7 +94,7 @@ struct ServerAttachBuilder {
                                                   transport: transport, vault: vault)
                 try await engine.fetchSecrets(secrets)
                 await engine.close()
-                let projected = try await store.projectAttachSnapshot(head: headCursor, watermark: watermark)
+                let projected = try await store.projectAttachSnapshot(head: headCursor, watermark: watermark, budget: budget)
                 report.feeds = projected.feeds; report.episodes = projected.episodes
                 try await store.close()
             } catch {
@@ -115,20 +121,21 @@ struct ServerAttachBuilder {
         let database = try LibrarySQLite(url: location.database)
         defer { try? database.close() }
         guard try database.scalar("SELECT count(*) FROM ntp_library") == 1 else { throw ServerRecordingError.notAServerLibrary }
-        // An earlier attempt's base is not this snapshot's (a record may have been removed since): start again.
-        try database.transaction {
+        // An earlier attempt's base is not this snapshot's (a record may have been removed since): start again, under
+        // the write budget too (deleting a large base writes pages).
+        try database.withWriteBudget(budget) { try database.transaction {
             for table in ["ntp_records", "ntp_nodes", "ntp_episodes", "ntp_podcasts"] { try database.execute("DELETE FROM \(table)") }
-        }
+        } }
         var report = Report()
         var entries: [ServerAcceptedEntry] = [], decisions: [ServerDecision] = [], records: [ServerRecord] = []
         let now = Int64(Date().timeIntervalSince1970 * 1_000)
         func flush() throws {
-            if !entries.isEmpty || !decisions.isEmpty { try archive.archive(entries: entries, decisions: decisions, now: now) }
-            try database.transaction {
+            if !entries.isEmpty || !decisions.isEmpty { try archive.archive(entries: entries, decisions: decisions, now: now, budget: budget) }
+            try database.withWriteBudget(budget) { try database.transaction {
                 for entry in entries where entry.isCausalNode { try Self.addNode(entry.opID, entry.dependencies, to: database) }
                 for decision in decisions { try Self.addNode(decision.decisionID, decision.dependencies, to: database) }
                 for record in records { try FeedLibraryStore.writeRecord(record, to: database) }
-            }
+            } }
             report.entries += entries.count; report.decisions += decisions.count; report.records += records.count
             entries.removeAll(keepingCapacity: true); decisions.removeAll(keepingCapacity: true); records.removeAll(keepingCapacity: true)
         }
@@ -216,10 +223,10 @@ enum ServerAttachBuilderError: Error, Equatable, Sendable {
 extension FeedLibraryStore {
     /// Projects every record of an attach snapshot onto this new library's rows, in one transaction (PROTOCOL §15.4):
     /// the podcasts with their episodes, then the queue; admissions are seen; the cursor is the snapshot's head.
-    func projectAttachSnapshot(head: SyncCursor, watermark: Int64) throws -> (feeds: Int, episodes: Int) {
+    func projectAttachSnapshot(head: SyncCursor, watermark: Int64, budget: Int64? = nil) throws -> (feeds: Int, episodes: Int) {
         guard let context = serverContext else { throw ServerRecordingError.notAServerLibrary }
         try ensureServerExchangeTables()
-        return try write(.remote, durable: true) {
+        return try database.withWriteBudget(budget) { try write(.remote, durable: true) {
             guard try database.rows("SELECT cursor FROM ntp_library WHERE id = 1").first?.first?.text == nil else { return (0, 0) }
             let now = try milliseconds(Date())
             let projector = try unitProjector(context: context, now: now)
@@ -239,7 +246,7 @@ extension FeedLibraryStore {
             try database.execute("UPDATE ntp_library SET acked_install_seq = ? WHERE id = 1", [.integer(watermark)])
             try setCursor(head, watermark: watermark)
             return (plan.createdFeeds.count, plan.createdEpisodes.count)
-        }
+        } }
     }
 
     /// The server's podcasts this library maps, with their normalized aliases (PROTOCOL §15.4 reuse).

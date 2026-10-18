@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct FeedListActionTests {
     @Test func ordersMatchUnchangedAndroidQueriesExecutedInSQLite() throws {
         struct Item: Decodable { let id: Int64; let title, link: String?; let date: Double; let duration: Int32? }

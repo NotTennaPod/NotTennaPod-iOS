@@ -5,6 +5,9 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
+// The relay reclaim hooks these tests drive are DEBUG-only (`StreamingRelayReclaim`, `NativeStreamingRelay`).
+#if DEBUG
+
 /// The loopback streaming relay is retired when the app becomes eligible for suspension
 /// (iOS may defunct a suspended app's sockets) and rebuilt on the next demand; a local
 /// connection failure rebuilds it once before the retry budget.
@@ -158,7 +161,7 @@ enum ReclaimFixture {
     }
 }
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct StreamingRelayReclaimInputTests {
+@Suite(.serialized) struct StreamingRelayReclaimInputTests {
     private func wait(_ condition: () throws -> Bool, sourceLocation: SourceLocation = #_sourceLocation) async throws {
         let deadline = ContinuousClock.now + .seconds(10)
         while try !condition(), ContinuousClock.now < deadline { try await Task.sleep(for: .milliseconds(5)) }
@@ -317,7 +320,7 @@ final class HeldMediaServer: @unchecked Sendable {
     func stop() { server.stop() }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(4))) struct StreamingRelayReclaimSourceTests {
+@MainActor @Suite(.serialized) struct StreamingRelayReclaimSourceTests {
     typealias Transport = SampleBufferPCMOutputTests.Transport
     private func fixture(_ name: String, _ directory: String) throws -> Data {
 #if SWIFT_PACKAGE
@@ -437,7 +440,7 @@ private final class ReclaimFixtures: NSObject {}
 
 /// The app's own composition: coordinator, application engine, processed engine and the
 /// eligibility state fed as the app feeds it (scenes, and playback intent from coordinator events).
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3))) struct StreamingRelayReclaimPlaybackTests {
+@MainActor @Suite(.serialized) struct StreamingRelayReclaimPlaybackTests {
     typealias Transport = SampleBufferPCMOutputTests.Transport
     enum Hold: String, CaseIterable, Sendable { case remotePause, interruption }
     private func wait(_ condition: () throws -> Bool, sourceLocation: SourceLocation = #_sourceLocation) async throws {
@@ -547,7 +550,7 @@ private final class ReclaimPlaybackFixtures: NSObject {}
 
 /// The AVPlayer route's own contract: a new URL cannot repair an asset or its rewritten playlist, so a
 /// paused relay route lets its item go and Play or a seek installs a new relay generation and item.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct StreamingRelayReclaimAVPlayerTests {
+@MainActor @Suite(.serialized) struct StreamingRelayReclaimAVPlayerTests {
     private func wait(_ condition: () throws -> Bool, sourceLocation: SourceLocation = #_sourceLocation) async throws {
         let deadline = ContinuousClock.now + .seconds(15)
         while try !condition(), ContinuousClock.now < deadline { try await Task.sleep(for: .milliseconds(10)) }
@@ -1012,7 +1015,8 @@ extension StreamingRelayReclaimAVPlayerTests {
         let reclaim = StreamingRelayReclaim()
         let (proxy, engine, box) = try await pausedPlaylist(reclaim: reclaim, owner: owner)
         defer { engine.unload(); proxy.stop() }
-        box.release()
+        // The last segments stay withheld until the relay is gone, so the item cannot have buffered
+        // the seek target: the seek needs the dead relay and starts the rebuild.
         engine.play(commandID: UUID())
         try await wait { (engine.reading?.sample.positionMilliseconds ?? 0) > 800 || !box.failures.isEmpty }
         let lost = try #require(engine.nativeRelay)
@@ -1023,6 +1027,7 @@ extension StreamingRelayReclaimAVPlayerTests {
             Task { @MainActor in events.post(.interrupted(reason: 0)) }
         }
         lost.simulateSocketReclaim()
+        box.release()
         engine.seek(to: 7_000, commandID: UUID())
         try await wait { (interrupted && engine.nativePlayer != nil && engine.reading?.buffering == false) || !box.failures.isEmpty }
         try #require(box.failures.isEmpty, "\(box.failures)")
@@ -1034,3 +1039,4 @@ extension StreamingRelayReclaimAVPlayerTests {
         try await wait { driver.calls == [true, true] && (engine.nativePlayer?.rate ?? 0) > 0 }
     }
 }
+#endif

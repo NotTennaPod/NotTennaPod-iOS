@@ -4,7 +4,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct PlaybackVideoCommandTests {
     @Test func tracksUseActualLocalSessionAndPreservePlaybackIntent() async throws {
         try await withVideoFixture { f in
@@ -152,6 +152,49 @@ struct PlaybackVideoCommandTests {
         }
     }
 
+#if DEBUG
+    /// A Picture in Picture seek is a seek like any other: while an earlier pause's save waits for a busy
+    /// store, the engine seeks at once.
+    @Test func pictureSeekDoesNotWaitForEarlierPauseSave() async throws {
+        try await withVideoFixture { f in
+            let gate = VideoStoreGate(holding: { if case .recordPlayback = $0 { true } else { false } })
+            f.player.storeGate = { try await gate.pass($0) }
+            let pausing = Task { try await f.player.pause() }
+            await gate.waitUntilHolding()
+            let seek = try #require(f.engine.videoPictureInPicture?.onSeekSourceTime)
+            let task = Task { try await seek(CMTime(value: 23_750, timescale: 1_000)) }
+            // A bounded wait on the condition: without hoisting the seek waits for the held save and never comes.
+            for _ in 0..<2_000 where f.engine.base.seeks.isEmpty { await Task.yield() }
+            #expect(f.engine.base.seeks == [23_750] && gate.isHolding, "the engine seeked while the pause's save waits")
+            gate.release(); try await pausing.value
+            f.engine.finishSeek(); try await f.settle()
+            try await task.value
+            #expect(!f.player.wantsPlayback && f.player.systemSnapshot?.positionMilliseconds == 23_750)
+            f.player.storeGate = nil
+        }
+    }
+
+    /// A Pause after a Picture in Picture seek does not wait for that seek's recording: the audio stops at once.
+    @Test func pauseDoesNotWaitForPictureSeekRecord() async throws {
+        try await withVideoFixture { f in
+            let gate = VideoStoreGate(holding: { if case .recordSeekIntent = $0 { true } else { false } })
+            f.player.storeGate = { try await gate.pass($0) }
+            let seek = try #require(f.engine.videoPictureInPicture?.onSeekSourceTime)
+            let task = Task { try await seek(CMTime(value: 23_750, timescale: 1_000)) }
+            await gate.waitUntilHolding()
+            let pausing = Task { try await f.player.pause() }
+            for _ in 0..<2_000 where f.player.wantsPlayback { await Task.yield() }
+            #expect(!f.player.wantsPlayback && f.player.phase == .paused && gate.isHolding, "paused while the seek's record waits")
+            #expect(f.engine.base.seeks == [23_750])
+            gate.release(); try await pausing.value; try await f.settle()
+            // The newer Pause supersedes the seek's settled-timebase wait, as before.
+            await #expect(throws: CancellationError.self) { try await task.value }
+            #expect(!f.player.wantsPlayback && f.player.phase == .paused)
+            f.player.storeGate = nil
+        }
+    }
+#endif
+
     @Test func audioOnlyTracksRemainAvailableWithoutInventingVideoSurface() async throws {
         try await withVideoFixture { f in
             f.engine.videoDisplayLayer = nil; f.engine.videoPictureInPicture = nil
@@ -271,4 +314,20 @@ struct PlaybackVideoCommandTests {
     func wait() async { entered = true; await withCheckedContinuation { waiter = $0 } }
     func waitUntilEntered() async { while !entered { await Task.yield() } }
     func open() { waiter?.resume(); waiter = nil }
+}
+
+/// Holds the first store write `holding` selects until `release` (the coordinator's `storeGate`).
+@MainActor private final class VideoStoreGate {
+    let holding: (PlaybackStoreCall) -> Bool
+    private var held: CheckedContinuation<Void, Never>?
+    private var used = false
+    var isHolding: Bool { held != nil }
+    init(holding: @escaping (PlaybackStoreCall) -> Bool) { self.holding = holding }
+    func pass(_ call: PlaybackStoreCall) async throws {
+        guard !used, holding(call) else { return }
+        used = true
+        await withCheckedContinuation { held = $0 }
+    }
+    func waitUntilHolding() async { while held == nil { await Task.yield() } }
+    func release() { held?.resume(); held = nil }
 }

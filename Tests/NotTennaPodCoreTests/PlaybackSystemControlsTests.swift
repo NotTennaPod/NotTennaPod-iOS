@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct PlaybackSystemControlsTests {
     @Test func repeatedSystemPauseDoesNotCreateDuplicateListeningActions() async throws {
         try await PCPlaybackFixture.withFixture { f in

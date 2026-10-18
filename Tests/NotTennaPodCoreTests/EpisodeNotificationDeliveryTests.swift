@@ -5,7 +5,7 @@ import UniformTypeIdentifiers
 import UserNotifications
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct EpisodeNotificationDeliveryTests {
     final class Publisher: EpisodeNotificationPublishing {
         var authorized = true

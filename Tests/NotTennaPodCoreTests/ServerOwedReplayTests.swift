@@ -570,3 +570,262 @@ extension ServerOwedReplayProjectionTests {
 extension FeedLibraryStore {
     func owedCountForTesting() throws -> Int64 { try database.scalar("SELECT count(*) FROM ntp_owed") }
 }
+
+// MARK: - Listening too large for the server (PROTOCOL §6.13)
+
+extension ServerOwedReplayTests {
+    /// The bound the oversized episode's facts are over and the others' under.
+    static let smallBound = 3_000
+    static let largeTitle = "Episode 3 " + String(repeating: "and so on ", count: 600)
+
+    /// A registered podcast whose third episode's title makes every fact naming it about 7 KB, every episode queued (no
+    /// load adds one), and the fact bound then lowered: facts naming the other episodes fit, the third's are too large.
+    static func oversizedEpisode() async throws -> (fixture: ServerLibraryFixture, small: [Int64], large: Int64) {
+        let fixture = try await ServerLibraryFixture()
+        var fetched = ServerLibraryFixture.fetched(count: 3)
+        fetched.feed.episodes[2].title = largeTitle
+        let feed = try await fixture.subscribeRegistered(fetched).feed
+        let ids = feed.episodes.map(\.id).sorted()
+        let large = try #require(feed.episodes.first { $0.details.identifier == "guid-3" }).id
+        _ = try await fixture.store.enqueue(ids)
+        await fixture.store.setServerFactBoundForTesting(smallBound)
+        _ = await fixture.store.takeServerDiagnostics()
+        try await Self.setCursor(fixture.store)
+        return (fixture, ids.filter { $0 != large }, large)
+    }
+
+    /// A cursor at seq 0 of a lineage, so a full reprojection (`rebuildDifferences`) has a base to project from.
+    static func setCursor(_ store: FeedLibraryStore) async throws {
+        try await store.setCursorForTesting(try SyncCursor(logID: ContractIdentity.randomUUID(), epoch: 1, seq: 0,
+                                                           digest: String(repeating: "0", count: 64)))
+    }
+
+    static let playback: Set<String> = ServerPlaybackRecorderTests.playback
+
+    static func refusals(_ store: FeedLibraryStore) async -> Int { await store.takeServerDiagnostics().filter { $0.kind == "too_large" }.count }
+
+    /// Listening whose export is too large: the saves commit and show (position, played time, last played), nothing of
+    /// the session is numbered, it is tried once and listed under Needs attention by its episode; later saves and other
+    /// writes never try it again, and another episode's listening exports as usual.
+    @Test func listeningTooLargeForTheServerIsTriedOnceAndKeptWhileOtherListeningExports() async throws {
+        let (fixture, small, large) = try await Self.oversizedEpisode()
+        do {
+            let store = fixture.store
+            let before = try fixture.outboxCount()
+            let player = StorePlayer(store)
+            try await player.load(large)
+            try await player.play()
+            try await player.listen(65)
+            try await player.pause()
+            let state = try #require(try await store.episode(id: large)).userState
+            #expect(state.positionMilliseconds == 65_000 && state.playedDurationMilliseconds == 65_000 && state.lastPlayedTimeMilliseconds > 0,
+                    "the listening shows here")
+            #expect(try fixture.newFacts(after: before).filter { Self.playback.contains($0.type) }.isEmpty, "nothing of it is numbered")
+            #expect(await Self.refusals(store) == 1, "tried once")
+            let items = try await store.serverAttentionItems()
+            #expect(items.map(\.kind) == [.refusedListening(episodeTitle: Self.largeTitle)])
+            #expect(!(try await store.serverExportOwedForTesting()), "nothing is owed: it is refused, never retried by itself")
+            // Later saves, a resume and other writes do not try it again.
+            try await player.play()
+            try await player.listen(70)
+            try await player.pause()
+            try await store.setFavorite(episodeID: small[0], favorite: true)
+            #expect(await Self.refusals(store) == 0)
+            #expect(try await store.episode(id: large)?.userState.playedDurationMilliseconds == 135_000)
+            // Another episode's listening exports as usual.
+            let count = try fixture.outboxCount()
+            try await player.load(small[1])
+            try await player.play()
+            try await player.listen(10)
+            try await player.pause()
+            let facts = try fixture.newFacts(after: count).filter { Self.playback.contains($0.type) }
+            #expect(facts.map(\.type) == ["session.start", "session.checkpoint"])
+            let wire = try #require(try fixture.wireID(small[1]))
+            #expect(facts.allSatisfy { $0.episodeIDs == [wire] })
+            #expect(try await store.serverAttentionItems().count == 1)
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
+
+    /// A play load's queue add too large for the server is owed like any other, then refused once by the replay: it is not
+    /// tried again by itself, the episode stays in this device's queue, the other owed adds of the same step are recorded,
+    /// and Needs attention names it until Try again sends it once it fits.
+    @Test func anOwedAddTooLargeIsNeverRetriedAndTheOthersReplay() async throws {
+        let fixture = try await ServerLibraryFixture()
+        do {
+            let store = fixture.store
+            var fetched = ServerLibraryFixture.fetched(count: 3)
+            fetched.feed.episodes[2].title = Self.largeTitle
+            let feed = try await fixture.subscribeRegistered(fetched).feed
+            let large = try #require(feed.episodes.first { $0.details.identifier == "guid-3" }).id
+            let small = feed.episodes.map(\.id).filter { $0 != large }.sorted()
+            await store.setServerFactBoundForTesting(Self.smallBound)
+            _ = await store.takeServerDiagnostics()
+            try await Self.setCursor(store)
+            _ = try await store.beginPlayback(episodeID: large)
+            await store.injectRecorderFailure(after: 1)
+            _ = try await store.beginPlayback(episodeID: small[0])
+            await store.injectRecorderFailure(after: nil)
+            #expect(try fixture.rows("SELECT intent FROM ntp_owed ORDER BY subject").map { $0[0] ?? "" }.filter { $0 == "queue.add" }.count == 2)
+            let before = try fixture.outboxCount()
+            try await store.replayOwedFacts()
+            let facts = try fixture.newFacts(after: before)
+            let wire = try #require(try fixture.wireID(small[0]))
+            #expect(facts.map(\.type) == ["queue.add"] && facts.first?.episodeIDs == [wire])
+            #expect(await Self.refusals(store) == 1)
+            #expect(try fixture.rows("SELECT intent FROM ntp_owed") == [["queue.add.refused"]])
+            try await store.setFavorite(episodeID: small[1], favorite: true)
+            try await store.replayOwedFacts()
+            #expect(await Self.refusals(store) == 0, "never tried again")
+            #expect(try await store.queue().map(\.id).contains(large), "kept in this device's queue")
+            let differences = try await ServerChangeSetCaptureTests.rebuildDifferences(store, ownedRoot: fixture.directory, archive: nil)
+            #expect(differences.isEmpty, "\(differences.prefix(3))")
+            // Needs attention names the episode; never dismissed, it is sent by Try again once it fits.
+            let item = try #require(try await store.serverAttentionItems().first)
+            #expect(item.kind == .refusedQueueAdd(episodeTitle: Self.largeTitle))
+            try await store.dismissServerAttention(item)
+            #expect(try await store.serverAttentionItems() == [item], "not dismissed")
+            await store.setServerFactBoundForTesting(nil)
+            let count = try fixture.outboxCount()
+            #expect(try await store.retryRefusedListening())
+            try await store.replayOwedFacts()
+            let added = try fixture.newFacts(after: count).filter { $0.type == "queue.add" }
+            let largeWire = try #require(try fixture.wireID(large))
+            #expect(added.count == 1 && added.first?.episodeIDs == [largeWire])
+            #expect(try fixture.rows("SELECT count(*) FROM ntp_owed") == [["0"]])
+            #expect(try await store.serverAttentionItems().isEmpty)
+            #expect(try fixture.queueOrderMatchesKeys())
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
+
+    /// "Try again" (and Synchronize now) tries refused listening once: still too large, it is refused again and stays
+    /// listed; once it fits, its start and exports are recorded, the item goes, and history can be cleared.
+    @Test func tryAgainSendsRefusedListeningOnceItFits() async throws {
+        let (fixture, _, large) = try await Self.oversizedEpisode()
+        do {
+            let store = fixture.store
+            let player = StorePlayer(store)
+            try await player.load(large)
+            try await player.play()
+            try await player.listen(65)
+            try await player.pause()
+            #expect(await Self.refusals(store) == 1)
+            #expect(try await store.retryRefusedListening())
+            #expect(await Self.refusals(store) == 1, "tried once more, refused again")
+            #expect(try await store.serverAttentionItems().count == 1, "still listed")
+            let before = try fixture.outboxCount()
+            await store.setServerFactBoundForTesting(nil)
+            #expect(try await store.retryRefusedListening())
+            let facts = try fixture.newFacts(after: before).filter { Self.playback.contains($0.type) }
+            #expect(facts.first?.type == "session.start" && facts.dropFirst().allSatisfy { $0.type == "session.checkpoint" } && facts.count >= 2,
+                    "\(facts.map(\.type))")
+            let wire = try #require(try fixture.wireID(large))
+            #expect(facts.allSatisfy { $0.episodeIDs == [wire] })
+            #expect(facts.last?.payload["position"]?.integerValue == 65_000)
+            #expect(try await store.serverAttentionItems().isEmpty)
+            #expect(!(try await store.retryRefusedListening()), "nothing is refused any more")
+            _ = try await store.clearPlaybackHistory()
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
+}
+
+/// Work refused as too large against the server (PROTOCOL §6.13): Try again sends it once it fits, and a fresh
+/// attachment shows what this phone shows.
+@Suite(.serialized) struct ServerOwedReplayRefusedExchangeTests {
+    static let largeTitle = "One 3 " + String(repeating: "and so on ", count: 600)
+    static let smallBound = 3_000
+
+    /// The loopback feed as this phone parsed it, its third episode with a title that makes every fact naming it too large.
+    static func fetched(_ url: String) -> FetchedFeed {
+        let items = (1...3).map { number in
+            ParsedEpisode(identifier: "one-\(number)", title: number == 3 ? largeTitle : "One \(number)",
+                          publicationDate: Date(timeIntervalSince1970: 1_760_000_000 + Double(number) * 86_400),
+                          media: ParsedMedia(url: "https://media.example/one-\(number).mp3", size: 1_000, durationMilliseconds: 0))
+        }
+        return FetchedFeed(feed: ParsedFeed(format: .rss, title: "One", episodes: items), source: url, responseURL: URL(string: url)!,
+                           validator: nil, permanentRedirectURL: nil)
+    }
+
+    /// The account's view on a fresh attachment matches this phone's, titles aside (this phone's own parse of the large
+    /// episode has a title the server's feed does not).
+    static func expectFreshAttachmentMatches(_ world: ExchangeWorld, _ phone: ExchangePhone) async throws {
+        let fresh = try await world.attach("fresh")
+        let mine = try await phone.view().withoutTitles, served = try await fresh.view().withoutTitles
+        #expect(mine.differences(from: served).isEmpty, "\(mine.differences(from: served))")
+    }
+
+    /// A pending podcast: a play of one episode (its queue add and session start are drafts), then a favorite of the
+    /// large episode. The bound falls before the registration resolves: the favorite is refused and its chain waits; the
+    /// session's later checkpoint is redirected behind it. Once the bound is restored, Try again numbers the chain in
+    /// order, and a fresh attachment matches.
+    @Test func aRefusedDraftChainResumesWithTheCheckpointRedirectedBehindIt() async throws {
+        try await ExchangeWorld.run(feeds: ["/one.xml": ("One", "one", 3)]) { w in
+            let a = try await w.attach("A")
+            let feed = try await a.store.insert(Self.fetched(w.url("one.xml")))
+            let large = try #require(feed.episodes.first { $0.details.identifier == "one-3" }).id
+            let small = try #require(feed.episodes.first { $0.details.identifier == "one-1" }).id
+            let player = StorePlayer(a.store, realTime: ())
+            try await player.load(small); try await player.play(); try await player.listen(5); try await player.pause()
+            try await a.store.setFavorite(episodeID: large, favorite: true)
+            await a.store.setServerFactBoundForTesting(Self.smallBound)
+            try await ServerExchangeAgreementTests.waitForCatalog(a, feedID: feed.id)
+            #expect(try a.rows("SELECT kind, state FROM ntp_drafts") == [["favorite.set", "refused_too_large"]])
+            #expect(try await a.store.serverAttentionItems().map(\.kind) == [.refusedTooLarge(podcastTitle: "One")])
+            // The session goes on: its next checkpoint, small, waits behind the refused draft on the same author.
+            try await player.play(); try await player.listen(5); try await player.pause()
+            let waiting = try a.rows("SELECT kind, state FROM ntp_drafts ORDER BY author_seq")
+            #expect(waiting.first == ["favorite.set", "refused_too_large"] && waiting.count >= 2
+                    && waiting.dropFirst().allSatisfy { $0 == ["session.checkpoint", "waiting"] }, "\(waiting)")
+            await a.exchange()
+            // Still too large: Try again keeps it listed and the chain waiting.
+            await a.engine.retryRefusedChanges()
+            let listed = try await a.store.serverAttentionItems().count
+            #expect(try a.rows("SELECT count(*) FROM ntp_drafts") == [["\(waiting.count)"]] && listed == 1)
+            await a.store.setServerFactBoundForTesting(nil)
+            await a.engine.retryRefusedChanges()
+            #expect(try a.rows("SELECT count(*) FROM ntp_drafts") == [["0"]])
+            #expect(try await a.store.serverAttentionItems().isEmpty)
+            let types = try a.rows("SELECT type FROM ntp_outbox WHERE receipt IS NULL ORDER BY install_seq").map { $0[0] ?? "" }
+            #expect(Array(types.suffix(waiting.count)) == ["favorite.set"] + Array(repeating: "session.checkpoint", count: waiting.count - 1),
+                    "in author order: \(types)")
+            await a.exchange()
+            await a.exchange()
+            try await Self.expectFreshAttachmentMatches(w, a)
+        }
+    }
+
+    /// The same feed as the server fetches it, the large title included (so the server's own catalog keeps it).
+    static func document() -> String {
+        ServerAgreementTests.rss(title: "One", prefix: "one", count: 3).replacingOccurrences(of: "<title>One 3</title>", with: "<title>\(largeTitle)</title>")
+    }
+
+    /// A play load's queue add too large is refused by the replay and listed; once the bound is restored, Try again sends
+    /// it, and a fresh attachment has the episode queued.
+    @Test func aRefusedQueueAddIsSentByTryAgainAndAFreshAttachmentHasItQueued() async throws {
+        try await ExchangeWorld.run(feeds: ["/one.xml": ("One", "one", 3)]) { w in
+            w.setResponse("/one.xml", .init(headers: ["Content-Type": "application/rss+xml"], body: Data(Self.document().utf8)))
+            let a = try await w.attach("A")
+            let feed = try await a.store.insert(Self.fetched(w.url("one.xml")))
+            try await ServerExchangeAgreementTests.waitForCatalog(a, feedID: feed.id)
+            let large = try #require(feed.episodes.first { $0.details.identifier == "one-3" }).id
+            await a.store.setServerFactBoundForTesting(Self.smallBound)
+            _ = try await a.store.beginPlayback(episodeID: large)
+            try await a.store.replayOwedFacts()
+            // Named by the episode's title as the library shows it (the server's parse of the feed).
+            let shown = try await a.store.episode(id: large)?.details.title
+            #expect(try await a.store.serverAttentionItems().map(\.kind) == [.refusedQueueAdd(episodeTitle: shown)] && shown?.hasPrefix("One 3 and so on") == true)
+            await a.exchange()
+            await a.store.setServerFactBoundForTesting(nil)
+            await a.engine.retryRefusedChanges()
+            await a.exchange()
+            #expect(try a.rows("SELECT count(*) FROM ntp_owed") == [["0"]])
+            #expect(try await a.store.serverAttentionItems().isEmpty)
+            let wire = try #require(try await a.store.wireEpisodeForTesting(large))
+            let fresh = try await w.attach("fresh")
+            #expect(try await fresh.view().queue == [wire], "the server has it queued")
+            #expect(try await a.view().queue == [wire])
+        }
+    }
+}

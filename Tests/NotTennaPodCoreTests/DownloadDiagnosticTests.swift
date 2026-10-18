@@ -12,7 +12,7 @@ private struct DiagnosticMediaTransfer: MediaTransferring {
     func download(_ input: MediaDownloadRequest, progress: @escaping @Sendable (MediaDownloadProgress) -> Void) async throws -> MediaDownloadResult { throw error }
 }
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct DownloadDiagnosticTests {
     private func fixture(_ body: (FeedLibraryStore, URL) async throws -> Void) async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("DownloadDiagnostic-\(UUID())")

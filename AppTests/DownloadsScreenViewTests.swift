@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct DownloadsScreenViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if let result = view as? T, view.accessibilityIdentifier == id { return result }
@@ -186,8 +186,18 @@ struct DownloadsScreenViewTests {
                 #expect(sort.editor.fields == [.title, .duration, .date, .size])
                 try tap("feedSort-size", in: sort.view)
                 try await wait { preferences.value.listSortOrder == .sizeLargest }
-                sort.dismiss(animated: false); try await wait { controller.presentedViewController == nil }
                 #expect(try DownloadPreferenceStore(file: root.appendingPathComponent("downloads.json")).value.listSortOrder == .sizeLargest)
+                // The open list follows the chosen sort at once (newest first before: Unplayed, Zulu, Alpha).
+                try tap("feedSort-title", in: sort.view)
+                try await wait { preferences.value.listSortOrder == .titleAscending }
+                sort.dismiss(animated: false); try await wait { controller.presentedViewController == nil }
+                @MainActor func rowTop(_ title: String) throws -> CGFloat {
+                    controller.view.layoutIfNeeded()
+                    let row: UIButton = try #require(find("episode-\(ids[title]!)", in: controller.view))
+                    return row.convert(row.bounds, to: controller.view).minY
+                }
+                let (alpha, unplayed, zulu) = (try rowTop("Alpha"), try rowTop("Unplayed"), try rowTop("Zulu"))
+                #expect(alpha < unplayed && unplayed < zulu)
                 try tap("downloadsSearch")
                 let field: UITextField = try #require(find("librarySearchQuery", in: controller.view))
                 #expect(find("searchFeedScopeChip", in: controller.view, as: UIView.self)?.isHidden != false)

@@ -6,6 +6,8 @@ import NotTennaPodCore
 @MainActor
 final class FeedInformationScreenView: UIView {
     let feedID: Int64
+    /// The podcast's header as shown.
+    private(set) var feed: LibraryFeed
     let appBar: FeedAppBarView
     private var header: SubscribedFeedHeaderView { appBar.header }
     private let body: FeedInformationBodyView
@@ -16,6 +18,7 @@ final class FeedInformationScreenView: UIView {
 
     init(feed: LibraryFeed, library: FeedLibraryStore?, readStatistics: @escaping FeedStatisticsLoader.Read) throws {
         feedID = feed.id
+        self.feed = feed
         appBar = FeedAppBarView(header: SubscribedFeedHeaderView(feed: feed, library: library, informationScreen: true), information: true)
         body = FeedInformationBodyView(feedID: feed.id,
             information: try Self.information(feed), sourceURL: feed.source, readStatistics: readStatistics)
@@ -41,10 +44,13 @@ final class FeedInformationScreenView: UIView {
     }
     func update(_ feed: LibraryFeed) throws {
         precondition(feed.id == feedID)
+        self.feed = feed
         header.update(feed: feed, hasFilter: false, keepUpdated: true)
         body.update(information: try Self.information(feed), sourceURL: feed.source)
     }
-    func refreshStatistics() { body.loadStatistics() }
+    /// Statistics loads (open, return, StatisticsEvent), for tests.
+    private(set) var statisticsLoads = 1
+    func refreshStatistics() { statisticsLoads += 1; body.loadStatistics() }
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         body.windowWidth = window?.bounds.width ?? size.width
         return CGSize(width: size.width, height: header.sizeThatFits(size).height + body.sizeThatFits(size).height)

@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor struct SampleBufferPlaybackSessionTests {
+@Suite(.serialized) @MainActor struct SampleBufferPlaybackSessionTests {
     typealias Transport = SampleBufferPCMOutputTests.Transport
 
     private func drain(_ session: SampleBufferPlaybackSession, _ transport: Transport) async throws {

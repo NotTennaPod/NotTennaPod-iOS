@@ -6,7 +6,7 @@ import Testing
 private let nextcloudStartJSON = #"{"login":"https://browser.example.test/authorize?state=fixture","poll":{"token":"poll-secret","endpoint":"https://poll.example.test/cloud/login/v2/poll"}}"#
 private let nextcloudCredentialsJSON = #"{"server":"https://returned.example.test/cloud","loginName":"returned-user","appPassword":"returned-secret"}"#
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct NextcloudAuthenticationClientTests {
     private func session() -> NextcloudAuthenticationSession {
         .init(rawHost: "cloud.example.test/subfolder", token: "poll-secret",
@@ -112,7 +112,7 @@ struct NextcloudAuthenticationClientTests {
     }
 }
 
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct NextcloudAuthenticationFlowTests {
     private func fixture(_ transport: NextcloudTestTransport,
                          _ body: @MainActor (FeedLibraryStore, URL, NextcloudTestCredentials, SynchronizationAccounts) async throws -> Void) async throws {

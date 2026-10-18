@@ -13,14 +13,24 @@ extension LibraryViewController {
     /// search parsed every episode record per query. Same results and order (host-tested against the store).
     nonisolated static func searchLibrary(_ controller: LibraryViewController?, store: FeedLibraryStore, query: String,
                                           feedID: Int64?, archived: Bool) async throws -> LibrarySearchResult {
-        let loaded = await MainActor.run { () -> (feeds: [LibraryFeed], targets: [Int64: EpisodeMediaDeletionTarget])? in
+        let loaded = await MainActor.run { () -> (mirror: LibraryScreenMirror, projected: Bool)? in
             guard let controller, controller.libraryLoaded else { return nil }
-            return (controller.feeds, controller.deletionTargets)
+            return (controller.mirror, controller.libraryProjected)
         }
         guard let loaded else { return try await store.search(query: query, feedID: feedID, archived: archived) }
+        // Every match, kept by the session as the library changes; the shown 300 are taken from the screens' library when
+        // the scan arrives (`LibrarySearchSession`). The screens' library holds no show notes: the episodes'
+        // text is matched in SQLite, on the bulk reader.
+        let reader = loaded.projected ? try await store.readers().bulk : nil
         let worker = Task.detached(priority: .userInitiated) {
-            try LibrarySearchResult.search(query: query, feeds: loaded.feeds, deletionTargets: loaded.targets,
-                                           feedID: feedID, archived: archived)
+            var result = LibrarySearchResult()
+            if let reader {
+                // The query's read is interrupted when the query is superseded (`LibrarySearchMatches.scan`).
+                result.matches = try await LibrarySearchMatches.scan(query: query, reader: reader, mirror: loaded.mirror, feedID: feedID, archived: archived)
+            } else {
+                result.matches = try LibrarySearchMatches(query: query, feeds: loaded.mirror.feeds, feedID: feedID, archived: archived)
+            }
+            return result
         }
         return try await withTaskCancellationHandler { try await worker.value } onCancel: { worker.cancel() }
     }
@@ -33,6 +43,15 @@ extension LibraryViewController {
     func makeLibrarySearch(session: LibrarySearchSession) -> LibrarySearchView? {
         guard let library else { return nil }
         let search = LibrarySearchView(session: session)
+        session.library = { [weak self] in self?.libraryLoaded == true ? self?.mirror : nil }
+        // The screens' library holds list projections: a patch matches its changed episodes' text in SQLite.
+        session.textMatches = { [weak self] ids, words in
+            try MainActor.assumeIsolated { () throws -> Set<Int64>? in
+                guard let self, self.libraryProjected else { return nil }
+                guard let reader = self.detailReader else { throw FeedLibraryError.closed }
+                return try reader.episodes(ids, matching: words)
+            }
+        }
         search.willReplaceRows = { [weak self, weak search] revision in
             guard let self, case .search(let active) = path.last, active === search else { return }
             if searchResultRevision != revision {
@@ -41,11 +60,12 @@ extension LibraryViewController {
             episodeRows.removeAll()
         }
         search.makeRow = { [weak self, weak search] feedID, episode in
-            guard let self, case .search(let active) = path.last, active === search, let feed = feeds.first(where: { $0.id == feedID }) else { return nil }
-            let target = search?.session.result.episodes.first { $0.episode.id == episode.id }?.deletionTarget
+            guard let self, case .search(let active) = path.last, active === search, let feed = mirror.feed(feedID) else { return nil }
+            let target = mirror.deletionTargets[episode.id]
             let model = actionModel(feed: feed, episode: episode, deletionTarget: target)
+            applyLivePosition(model)
             let episode = model.snapshot().episode
-            let row = EpisodeRowView(feed: feed, episode: episode, queued: queuedEpisodes.contains { $0.id == episode.id },
+            let row = EpisodeRowView(feed: feed, episode: episode, queued: isQueued(episode.id),
                 queueScreen: false, showRemainingTime: timeDisplayPreferences?.value.showRemainingTime == true,
                 activelyPlaying: playback?.episode?.id == episode.id && playback?.wantsPlayback == true, library: library,
                 episodeCover: usesEpisodeCover,
@@ -55,12 +75,13 @@ extension LibraryViewController {
                 open: { [weak self, weak search] in
                     guard let self, let search, !search.toggleSelection(episode.id) else { return }
                     // The pager gets the episode results shown now (rows exist only for loaded feeds).
-                    let list = search.session.result.episodes.filter { result in feeds.contains { $0.id == result.feedID } }
+                    let list = search.session.result.episodes.filter { result in mirror.contains(feed: result.feedID) }
                         .map { EpisodePagerItem(feedID: $0.feedID, episodeID: $0.episode.id) }
                     openEpisode(feedID: feed.id, episodeID: episode.id, list: list)
                 })
             row.actionModel = model
             episodeRows[episode.id] = (episode, row)
+            rowPaints[episode.id] = RowPaint(episode: episode, queued: isQueued(episode.id), header: .init(feed))
             let job = downloads?.activeJob(source: episode.details.media?.url)
             row.updateDownload(job: job, progress: job.flatMap { downloads?.progress[$0.id] },
                 playing: playback?.episode?.id == episode.id && playback?.wantsPlayback == true,
@@ -68,7 +89,7 @@ extension LibraryViewController {
             return row
         }
         search.rowHeight = { [weak self] feedID, episode, width in
-            guard let self, let feed = feeds.first(where: { $0.id == feedID }) else { return nil }
+            guard let self, let feed = mirror.feed(feedID) else { return nil }
             return width > 0 ? searchRowHeight(feed: feed, episode: episode, width: width) : 0
         }
         search.selectedItems = { [weak self] ids in self?.episodeListItems(ids) ?? [] }

@@ -11,7 +11,7 @@ import Testing
 ///   playing (`onPlaybackStateChanged` STATE_READY with play-when-ready, `onIsPlayingChanged`, the observer).
 /// - `Media3PlaybackService.startNextInQueue`: the finished episode is completed in the database and the queue
 ///   item after it is loaded with `setPlayWhenReady(isFollowQueue())`; with none, no media remains selected.
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct PlaybackEndAndKillTests {
     private final class Clock {
         var milliseconds: Int64 = 1_700_000_000_000

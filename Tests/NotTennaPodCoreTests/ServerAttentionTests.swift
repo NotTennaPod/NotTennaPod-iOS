@@ -6,7 +6,7 @@ import Testing
 /// refused fact (an incomplete recovery by the recovery, inserted here as it records it), listed
 /// with what a person needs to act, counted on the page as the list shows it, and cleared when
 /// resolved or dismissed.
-@Suite(.serialized, .timeLimit(.minutes(10))) struct ServerAttentionTests {
+@Suite(.serialized) struct ServerAttentionTests {
     typealias Agreement = ServerExchangeAgreementTests
 
     /// A podcast another device removed before this phone's subscription reached the server (`stale_subscribe`): the

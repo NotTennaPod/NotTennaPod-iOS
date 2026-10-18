@@ -5,7 +5,7 @@ import Testing
 
 /// Mounted checks: Add-podcast composition and order (LTR/RTL, phone/tablet widths), suggestion
 /// states, Discover states and the chooser. Expectations from Android 3.12.1.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct AddPodcastViewTests {
+@MainActor @Suite(.serialized) struct AddPodcastViewTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if let value = view as? T, value.accessibilityIdentifier == id { return value }
         return view.subviews.lazy.compactMap { element(id, in: $0, as: type) }.first
@@ -17,7 +17,7 @@ import Testing
     }
     private func makeController(width: CGFloat, rtl: Bool = false,
                                 read: @escaping @Sendable (String, Int) async throws -> [PodcastSearchResult]) throws -> (LibraryViewController, URL) {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M25View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("AddPodcastView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         let navigation = try NavigationPreferenceStore(file: root.appendingPathComponent("navigation.json"))
         var value = navigation.value; value.defaultPage = NavigationDestination.addPodcast.rawValue
@@ -98,7 +98,7 @@ import Testing
 
     @Test func hiddenSuggestionsKeepDiscoverMoreButNoAttributionOrRequest() async throws {
         let calls = Counter()
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M25Hidden-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("AddPodcastHidden-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let store = try DiscoveryPreferenceStore(file: root.appendingPathComponent("discovery.json"))

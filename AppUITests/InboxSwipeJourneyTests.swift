@@ -142,23 +142,23 @@ final class InboxSwipeJourneyTests: XCTestCase {
         // VoiceOver is the scenario here: the test turns it on itself and restores it in teardown.
         continueAfterFailure = false
         let app = configuredApplication(), voiceOver = XCUIDevice.shared.voiceOverService
-        app.launchArguments.append("-test-m9-voiceover")
+        app.launchArguments.append("-test-inbox-swipe-voiceover")
         let libraryID = app.launchArguments[1], initiallyEnabled = voiceOver.isEnabled
-        print("M9_A16_SESSION \(libraryID) baselineVoiceOver=\(initiallyEnabled)")
+        print("VOICEOVER_UNDO_SESSION \(libraryID) baselineVoiceOver=\(initiallyEnabled)")
         // XCTest teardown also runs when a fatal assertion bypasses Swift defer.
         addTeardownBlock { @MainActor in
             if voiceOver.isEnabled != initiallyEnabled {
                 if initiallyEnabled { try voiceOver.enable() } else { try voiceOver.disable() }
             }
             XCTAssertEqual(voiceOver.isEnabled, initiallyEnabled)
-            print("M9_A16_RESTORED \(libraryID) voiceOver=\(voiceOver.isEnabled)")
+            print("VOICEOVER_UNDO_RESTORED \(libraryID) voiceOver=\(voiceOver.isEnabled)")
             app.terminate()
         }
         if initiallyEnabled { try voiceOver.disable() }
         app.launch(); openEpisodes(app)
         let target = row("target", app), survivor = row("survivor", app)
         // Only configuration is ordinary input. Offer creation below is labelled
-        // controlled setup; A15 separately proves the physical-left gesture.
+        // controlled setup; the swipe journey above proves the physical-left gesture.
         swipeLeftAcrossRow(target)
         XCTAssertTrue(app.buttons["inboxSwipeChange-left"].waitForExistence(timeout: 5))
         app.buttons["inboxSwipeChange-left"].tap()
@@ -170,20 +170,20 @@ final class InboxSwipeJourneyTests: XCTestCase {
         let initialSpeech = try voiceOver.currentSpeech().utterance
         XCTAssertFalse(initialSpeech.isEmpty)
         // The fixture now removes the target from the inbox through the real recipient, once.
-        print("M9_A16_READY \(libraryID)")
+        print("VOICEOVER_UNDO_READY \(libraryID)")
         let undo = app.buttons["inboxSwipeUndo"], message = app.staticTexts["Removed from inbox"]
         guard message.waitForExistence(timeout: 5) else {
-            throw NSError(domain: "M9AccessibilitySetup", code: 3,
+            throw NSError(domain: "InboxSwipeAccessibilitySetup", code: 3,
                 userInfo: [NSLocalizedDescriptionKey: "No live message after VoiceOver-active controlled recipient admission"])
         }
         // Give a person time to reach an unvisited offer, beyond the unchanged
         // ordinary 2.75 s deadline: the unvisited offer must still be live.
-        print("M9_A17_UNVISITED_START \(libraryID)")
+        print("VOICEOVER_UNVISITED_START \(libraryID)")
         let prematureDismissal = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !undo.exists }, object: nil)
         prematureDismissal.isInverted = true
         XCTAssertEqual(XCTWaiter.wait(for: [prematureDismissal], timeout: 4), .completed)
         XCTAssertTrue(voiceOver.isEnabled && undo.exists)
-        print("M9_A17_UNVISITED_END \(libraryID)")
+        print("VOICEOVER_UNVISITED_END \(libraryID)")
         // With VoiceOver enabled, the documented single tap explores/selects.
         // No focus callback, announcement focus request or direct action is used.
         message.tap()
@@ -193,7 +193,7 @@ final class InboxSwipeJourneyTests: XCTestCase {
         XCTAssertTrue(undoSpeech.contains("Undo"), "Actual message→Undo traversal must be delivered")
         XCTAssertTrue(voiceOver.isEnabled && undo.exists)
         XCTAssertFalse(target.exists); XCTAssertTrue(survivor.exists)
-        print("M9_A16_FOCUSED_UNDO \(libraryID)")
+        print("VOICEOVER_UNDO_FOCUSED \(libraryID)")
         let vanished = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !undo.exists }, object: nil)
         vanished.isInverted = true
         XCTAssertEqual(XCTWaiter.wait(for: [vanished], timeout: 4), .completed)
@@ -205,13 +205,13 @@ final class InboxSwipeJourneyTests: XCTestCase {
         undo.doubleTap()
         XCTAssertTrue(target.waitForExistence(timeout: 5)); XCTAssertTrue(survivor.exists)
         XCTAssertTrue(undo.waitForNonExistence(timeout: 5))
-        print("M9_A16_ACTIVATED \(libraryID)")
+        print("VOICEOVER_UNDO_ACTIVATED \(libraryID)")
         try voiceOver.disable(); XCTAssertFalse(voiceOver.isEnabled)
         app.terminate(); app.launch(); openEpisodes(app)
         XCTAssertTrue(target.exists && survivor.exists)
         XCTAssertFalse(app.buttons["inboxSwipeUndo"].exists)
         XCTAssertTrue(app.buttons["allEpisodesFiltered"].exists)
-        print("M9_A16_RELAUNCHED \(libraryID)")
+        print("VOICEOVER_UNDO_RELAUNCHED \(libraryID)")
     }
 
 }

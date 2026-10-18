@@ -19,8 +19,8 @@ enum InboxSwipeJourneyFixture {
         let source = "https://example.invalid/inbox-swipe-journey"
         let body = Data("""
         <rss version="2.0"><channel><title>Swipe journey</title>
-        <item><guid>m9-target</guid><title>Swipe journey target</title></item>
-        <item><guid>m9-survivor</guid><title>Swipe journey survivor</title></item>
+        <item><guid>swipe-target</guid><title>Swipe journey target</title></item>
+        <item><guid>swipe-survivor</guid><title>Swipe journey survivor</title></item>
         </channel></rss>
         """.utf8)
         let response = try await FeedFetcher(transport: Transport(url: URL(string: source)!, body: body))
@@ -37,7 +37,7 @@ enum InboxSwipeJourneyFixture {
     }
     @MainActor private static func installAccessibilityProbe(root: URL, store: FeedLibraryStore) throws {
         let arguments = ProcessInfo.processInfo.arguments
-        guard arguments.contains("-test-m9-voiceover"),
+        guard arguments.contains("-test-inbox-swipe-voiceover"),
               let index = arguments.firstIndex(of: "-test-library-id"), index + 1 < arguments.count,
               let id = UUID(uuidString: arguments[index + 1]),
               root.deletingLastPathComponent().lastPathComponent == "UITests-" + id.uuidString else { return }
@@ -120,14 +120,14 @@ enum InboxSwipeJourneyFixture {
         try Task.checkCancellation()
         guard !stopped else { throw CancellationError() }
         let targets = state.feeds.filter { $0.source == "https://example.invalid/inbox-swipe-journey" }
-            .flatMap(\.episodes).filter { $0.details.identifier == "m9-target" }
+            .flatMap(\.episodes).filter { $0.details.identifier == "swipe-target" }
         guard UIAccessibility.isVoiceOverRunning, targets.count == 1,
               let target = targets.first, target.userState.playState == .new,
               let controller = controller(), controller.presentedViewController == nil,
               controller.view.window != nil,
               let configuration = controller.inboxSwipeConfiguration(.left, episodeID: target.id),
               configuration.inboxAction == .removeInbox, configuration.removes else {
-            throw NSError(domain: "M9AccessibilitySetup", code: 2,
+            throw NSError(domain: "InboxSwipeAccessibilitySetup", code: 2,
                 userInfo: [NSLocalizedDescriptionKey: "VoiceOver, NEW target, mounted route or configured real recipient missing"])
         }
         try record("controlled-recipient-admission", extra: ["nonce": command.nonce.uuidString, "episodeID": target.id])
@@ -200,7 +200,7 @@ enum InboxSwipeJourneyFixture {
     }
     private func recordSafely(_ event: String, extra: [String: Any] = [:]) {
         do { try record(event, extra: extra) }
-        catch { print("M9_A16_PROBE_WRITE_FAILURE \(libraryID.uuidString): \(error)"); stop() }
+        catch { print("VOICEOVER_UNDO_PROBE_WRITE_FAILURE \(libraryID.uuidString): \(error)"); stop() }
     }
 }
 #endif

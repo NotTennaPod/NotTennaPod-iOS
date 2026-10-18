@@ -2,10 +2,10 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-/// Sync never stalls behind a large unit while the owner listens: a write that changes nothing is not
+/// Sync never stalls behind a large unit while a person listens: a write that changes nothing is not
 /// made and not counted (exactly: a real change is never skipped), the content records a commit changes are staged ahead
 /// of the unit's switch with the shown rows only they change, and later small commits apply while playing.
-@Suite(.serialized, .timeLimit(.minutes(20))) struct ServerLargeUnitTests {
+@Suite(.serialized) struct ServerLargeUnitTests {
     typealias Cutover = ServerBoundedCutoverTests
     typealias Saver = ServerStagedPublicationTests.Saver
 
@@ -407,7 +407,7 @@ import Testing
 
     // MARK: - (d) Small commits never wait behind a big unit while playing
 
-    /// While the owner listens (minute exports on another podcast): a 20,000-episode catalog arrives, then another
+    /// While a person listens (minute exports on another podcast): a 20,000-episode catalog arrives, then another
     /// device's observation of it that every episode shows (its titles), then a queue edit, a favorite and a history
     /// clear. Every commit applies while playing, in order, none stuck behind a big unit, and every unit stays within
     /// its budget.

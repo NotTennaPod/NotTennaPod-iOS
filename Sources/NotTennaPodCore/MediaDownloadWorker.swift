@@ -31,6 +31,8 @@ public actor MediaDownloadWorker {
     private let artwork: @Sendable (URL) async throws -> Bool
     private let network: DownloadNetworkMonitor
     private let transcriptLoader: TranscriptLoader?
+    /// Tests: runs after the media transfer, before the transcript sidecar.
+    private let beforeSidecar: @Sendable () async -> Void
     private var running: [Int64: Running] = [:]
     private var cancelling: Set<Int64> = []
     private var recovering = false
@@ -43,6 +45,19 @@ public actor MediaDownloadWorker {
                 transcriptLoader: TranscriptLoader? = nil,
                 duration: @escaping @Sendable (URL) async throws -> Int32? = MediaDownloadWorker.mediaDuration,
                 artwork: @escaping @Sendable (URL) async throws -> Bool = EpisodeArtworkReader.hasArtwork) {
+        self.init(store: store, transfer: transfer, clock: clock, wait: wait, network: network, transcriptLoader: transcriptLoader,
+                  duration: duration, artwork: artwork, beforeSidecar: {})
+    }
+
+    init(store: FeedLibraryStore, transfer: any MediaTransferring = MediaDownloadTransfer(),
+         clock: @escaping @Sendable () -> Date = { Date() },
+         wait: @escaping @Sendable (TimeInterval) async throws -> Void = { try await Task.sleep(for: .seconds($0)) },
+         network: DownloadNetworkMonitor = .shared,
+         transcriptLoader: TranscriptLoader? = nil,
+         duration: @escaping @Sendable (URL) async throws -> Int32? = MediaDownloadWorker.mediaDuration,
+         artwork: @escaping @Sendable (URL) async throws -> Bool = EpisodeArtworkReader.hasArtwork,
+         beforeSidecar: @escaping @Sendable () async -> Void) {
+        self.beforeSidecar = beforeSidecar
         self.store = store
         self.transfer = transfer
         self.clock = clock
@@ -64,9 +79,10 @@ public actor MediaDownloadWorker {
         if let existing = running[id] { return try await existing.task.value }
         try Task.checkCancellation()
         let token = UUID()
-        let task = Task { [store, transfer, clock, wait, duration, artwork, network, transcriptLoader] in
+        let task = Task { [store, transfer, clock, wait, duration, artwork, network, transcriptLoader, beforeSidecar] in
             try await Self.execute(id: id, store: store, transfer: transfer, clock: clock, wait: wait,
-                                   duration: duration, artwork: artwork, network: network, transcriptLoader: transcriptLoader, credentials: credentials, progress: progress,
+                                   duration: duration, artwork: artwork, network: network, transcriptLoader: transcriptLoader,
+                                   beforeSidecar: beforeSidecar, credentials: credentials, progress: progress,
                                    attemptFailed: attemptFailed, accessDenied: accessDenied)
         }
         running[id] = Running(token: token, task: task)
@@ -145,7 +161,7 @@ public actor MediaDownloadWorker {
     }
 
     private func refreshAfterLocalDeletion(_ pending: PendingFeedLibraryEffect, identity: String) async throws {
-        if let feed = try await store.feed(id: pending.effect.feedID),
+        if let feed = try await store.listedFeedHeader(id: pending.effect.feedID),
            let folder = try await store.localFolder(feedID: feed.id), folder.directoryIdentity == identity {
             let result = try await LocalFeedRefreshService(store: store).refresh(feedID: feed.id,
                 description: feed.metadata.description ?? "", author: feed.metadata.author ?? "")
@@ -207,6 +223,7 @@ public actor MediaDownloadWorker {
                                             artwork: @Sendable (URL) async throws -> Bool,
                                             network: DownloadNetworkMonitor,
                                             transcriptLoader: TranscriptLoader?,
+                                            beforeSidecar: @Sendable () async -> Void,
                                             credentials: FeedCredentials?,
                                             progress: @escaping @Sendable (MediaDownloadProgress) -> Void,
                                             attemptFailed: @Sendable (LibraryDownloadJob, MediaDownloadFailure) async -> Void,
@@ -273,9 +290,13 @@ public actor MediaDownloadWorker {
                 }
                 if let transcriptLoader, let episode = try await store.episode(id: job.episodeID),
                    let descriptor = episode.details.transcript {
-                    do { try await transcriptLoader.storeSidecar(descriptor, media: job.destination) }
+                    await beforeSidecar()
+                    // Under the download's own constraint: a Wi-Fi-only download never fetches its transcript over
+                    // mobile data, even when the network changed after the media arrived.
+                    do { try await transcriptLoader.storeSidecar(descriptor, media: job.destination,
+                                                                 constraint: job.networkConstraint ?? .unmetered, network: network) }
                     catch {
-                        // Missing/offline transcript never turns successful media into a failed download.
+                        // Missing/offline/refused/over-budget transcript never turns successful media into a failed download.
                         try Task.checkCancellation()
                         if error is CancellationError { throw error }
                     }

@@ -32,12 +32,13 @@ enum ServerFullReprojection {
 
     /// Writes the snapshot's records and episode identities as the staged base. Returns their counts.
     @discardableResult
-    static func stageBase(_ snapshot: ServerAttachSnapshot, into url: URL) throws -> (records: Int, identities: Int) {
+    /// `budget`: the bytes its writes may add (`SQLiteWriteBudget`; nil: no limit).
+    static func stageBase(_ snapshot: ServerAttachSnapshot, into url: URL, budget: Int64? = nil) throws -> (records: Int, identities: Int) {
         for suffix in ["", "-wal", "-shm", "-journal"] { try? FileManager.default.removeItem(at: URL(fileURLWithPath: url.path + suffix)) }
         let file = try open(url)
         defer { try? file.close() }
         var count = 0, identities = 0
-        try file.transaction {
+        try file.withWriteBudget(budget) { try file.transaction {
             for statement in schema + ServerShadow.schema.filter({ !$0.contains(" records ") && !$0.contains(" identities ") }) {
                 try file.execute(statement)
             }
@@ -57,7 +58,7 @@ enum ServerFullReprojection {
                                       try occurrence.map { .blob(try $0.canonicalData()) } ?? .null, value["merged_into"]?.stringValue.map(LibrarySQLValue.text) ?? .null])
                 }
             }
-        }
+        } }
         return (count, identities)
     }
 
@@ -121,7 +122,7 @@ enum ServerFullReprojection {
         var changed = Set<Int64>()
         for (id, entry) in plan.episodes where !plan.createdEpisodes.contains(id) {
             guard let row = try connection.rows("SELECT record FROM episodes WHERE id = ?", [.integer(id)]).first, let data = row[0].data else { continue }
-            if try JSONDecoder().decode(LibraryEpisode.self, from: data).userState.playState != entry.episode.userState.playState { changed.insert(id) }
+            if try JSONDecoder.libraryRecord(LibraryEpisode.self, from: data).userState.playState != entry.episode.userState.playState { changed.insert(id) }
         }
         // Every podcast, episode and the queue are its scope; its context is the snapshot's.
         var projected = try ServerShadowScope(projector, player: try player(connection), live: connection)
@@ -146,7 +147,7 @@ enum ServerFullReprojection {
     /// projected onto that feed, never matched by URL (a pending URL edit) or created anew.
     static func build(database: URL, file url: URL, history: ServerHistoryOracle?, now: Int64,
                       feedIDs: ClosedRange<Int64>, episodeIDs: ClosedRange<Int64>, touches: ServerTouchWatermark, target: SyncCursor? = nil,
-                      admissionsSeen: Bool = true, resolvedFeeds: [String: Int64] = [:]) throws -> ServerFullBuild {
+                      admissionsSeen: Bool = true, resolvedFeeds: [String: Int64] = [:], budget: Int64? = nil) throws -> ServerFullBuild {
         let connection = try LibrarySQLite(readingOnly: database)
         defer { try? connection.close() }
         try connection.execute("ATTACH DATABASE ? AS full", [.text(url.path)])
@@ -180,7 +181,7 @@ enum ServerFullReprojection {
         // The images and the record differences go to the staging file; the publication copies them.
         let file = try open(url)
         defer { try? file.close() }
-        try file.transaction {
+        try file.withWriteBudget(budget) { try file.transaction {
             for table in ["feeds", "episodes", "mappings", "record_changes"] { try file.execute("DELETE FROM \(table)") }
             let encoder = JSONEncoder()
             encoder.outputFormatting = .sortedKeys
@@ -206,7 +207,7 @@ enum ServerFullReprojection {
                 try file.execute("INSERT OR REPLACE INTO record_changes(entity, id, field_group, deleted) VALUES (?, ?, ?, ?)",
                                  [.text(change.entity), .text(change.id), .text(change.group), .integer(change.deleted ? 1 : 0)])
             }
-        }
+        } }
         var small = plan
         small.feeds = [:]; small.episodes = [:]; small.episodeMappings = [:]
         return ServerFullBuild(url: url, plan: small, work: plan.work + stage.changes.count, recordChanges: stage.changes.count,
@@ -249,15 +250,16 @@ extension FeedLibraryStore {
     func publishFullReprojection(_ build: ServerFullBuild, head: SyncCursor, now: Int64,
                                  crash: (@Sendable (String) throws -> Void)?, ticket: ServerPublicationTicket? = nil,
                                  workLimit: Int? = nil, history: ServerHistoryOracle? = nil,
-                                 resolutions: [ServerDecision] = []) throws -> ServerUnitResult {
+                                 resolutions: [ServerDecision] = [], budget: Int64? = nil) throws -> ServerUnitResult {
         guard let context = serverContext else { throw ServerRecordingError.notAServerLibrary }
         try ensureServerExchangeTables()
         try database.execute("ATTACH DATABASE ? AS full", [.text(build.url.path)])
         defer { try? database.execute("DETACH DATABASE full") }
         let clock = ContinuousClock(), started = clock.now
-        let changes = try database.scalar("SELECT total_changes()")
+        let changes = database.totalChanges
         let kind = workLimit == nil && ticket?.budget != nil ? ServerTransactionKind.backgroundPublication : ServerTransactionKind.publication
-        var result = try syncTransactions(kind) { try write(.remote, durable: true) {
+        // Its writes, through COMMIT, never use the space the app keeps (`budget`): a refusal rolls it back whole.
+        var result = try database.withWriteBudget(budget) { try syncTransactions(kind) { try write(.remote, durable: true) {
             var result = ServerUnitResult(seq: head.seq)
             guard let source = build.revisions.source, build.revisions.target == head,
                   let live = try serverExchangeState().cursor, live == source else {
@@ -319,9 +321,9 @@ extension FeedLibraryStore {
             try crash?("full.written")
             return result
             }
-        } }
+        } } }
         result.lockMilliseconds = Self.milliseconds(started.duration(to: clock.now))
-        result.rowsWritten = Int(try database.scalar("SELECT total_changes()") - changes)
+        result.rowsWritten = Int(database.totalChanges - changes)
         result.published = true
         return result
     }

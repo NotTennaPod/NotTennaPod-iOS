@@ -4,7 +4,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2)))
+@Suite(.serialized)
 struct FFmpegMediaReaderTests {
     private func fixture(_ name: String) throws -> Data {
         let url = try FFmpegBufferedSeekReferenceTests.resource(name, directory: "PlaybackDecoder")

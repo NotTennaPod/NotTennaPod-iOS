@@ -812,13 +812,19 @@ extension FeedLibraryStore {
             }
         }
         s.account(.episode(id, .history))
+        // Listening kept on this device is covered here (PROTOCOL §8.8), and given back by the Undo.
+        let local = try noteLocalHistoryCut(s, episode: id, time: s.clientTime)
         let operation = removal.operationID
-        s.capture.afterCommit.append { store in store.historyRemovalCuts[operation] = cuts }
+        s.capture.afterCommit.append { store in
+            store.historyRemovalCuts[operation] = cuts
+            if !local.isEmpty { store.historyRemovalLocalCuts[operation] = local }
+        }
     }
 
     /// One `history.restore {removal, time}` per cut of the removal, each depending on its removal (PROTOCOL §15.2).
     private func mapHistoryRestore(_ s: RecordingSession) throws {
         guard let restore = s.capture.historyRestore else { return }
+        try restoreLocalHistoryCuts(s, historyRemovalLocalCuts[restore.operationID] ?? [])
         for cut in historyRemovalCuts[restore.operationID] ?? [] {
             guard let feed = try feedOf(restore.episodeID, s) else { continue }
             let binding: PodcastBinding
@@ -854,8 +860,9 @@ extension FeedLibraryStore {
                                                           overlays: [ServerOverlay(entity: "account", id: s.context.accountID, property: property, kind: kind, value: nil)],
                                                           clientTime: s.clientTime, now: s.now)
         }
-        // The sessions it covers are cut at their latest exports (PROTOCOL §8.8).
+        // The sessions it covers are cut at their latest exports (PROTOCOL §8.8); listening kept on this device is cut here.
         if type == "statistics.reset" { try notePendingStatisticsCut(s, main: main, deferred: deferred) }
+        else { _ = try noteLocalHistoryCut(s, episode: nil, time: s.clientTime) }
         let field: SyncedChange.EpisodeField = type == "history.clear" ? .history : .playedDuration
         for change in s.pending { if case .episode(_, field) = change { s.account(change) } }
     }

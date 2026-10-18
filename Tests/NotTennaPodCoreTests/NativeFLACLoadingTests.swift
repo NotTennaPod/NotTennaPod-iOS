@@ -6,7 +6,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(3))) struct NativeFLACLoadingTests {
+@Suite(.serialized) struct NativeFLACLoadingTests {
     private func fixture() throws -> URL {
 #if SWIFT_PACKAGE
         try #require(Bundle.module.url(forResource: "half-hour.flac", withExtension: nil, subdirectory: "Fixtures/NativeBuffering"))

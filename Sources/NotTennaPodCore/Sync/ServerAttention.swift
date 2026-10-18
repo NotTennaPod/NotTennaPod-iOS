@@ -14,6 +14,25 @@ public struct ServerAttentionItem: Equatable, Sendable {
         case refusedChanges(count: Int)
         /// A recovery after a server restore that could not restore every change.
         case incompleteRecovery(problems: Int)
+        /// Listening on an episode whose export is larger than the server accepts (PROTOCOL §6.13): kept on this device until
+        /// "Try again" sends it or "Keep only on this device" keeps it here for good. Never dismissed: until then it holds
+        /// back history and statistics cuts.
+        case refusedListening(episodeTitle: String?)
+        /// A change to a podcast added while its registration was pending, too large for the server once its IDs were known:
+        /// kept on this device, and the podcast's later changes made then wait behind it until "Try again" sends them.
+        /// Never dismissed while they wait.
+        case refusedTooLarge(podcastTitle: String?)
+        /// A play load's queue add larger than the server accepts: the episode stays in this device's queue until "Try
+        /// again" sends it or "Keep only on this device" keeps it there for good.
+        case refusedQueueAdd(episodeTitle: String?)
+    }
+
+    /// Whether the item stands for work kept waiting on this device, which is sent or kept, never dismissed.
+    public var waits: Bool {
+        switch kind {
+        case .refusedListening, .refusedTooLarge, .refusedQueueAdd: true
+        default: false
+        }
     }
 
     public var kind: Kind
@@ -56,6 +75,12 @@ extension FeedLibraryStore {
                                                      ownerTitle: record?["owner_title"]?.stringValue), ids: [id], createdAt: time))
             case "recovery_incomplete":
                 items.append(.init(kind: .incompleteRecovery(problems: Int(record?["problems"]?.integerValue ?? 0)), ids: [id], createdAt: time))
+            case "listening_refused":
+                items.append(.init(kind: .refusedListening(episodeTitle: record?["title"]?.stringValue), ids: [id], createdAt: time))
+            case "draft_refused":
+                items.append(.init(kind: .refusedTooLarge(podcastTitle: record?["title"]?.stringValue), ids: [id], createdAt: time))
+            case "queue_add_refused":
+                items.append(.init(kind: .refusedQueueAdd(episodeTitle: record?["title"]?.stringValue), ids: [id], createdAt: time))
             default:
                 continue
             }
@@ -67,10 +92,83 @@ extension FeedLibraryStore {
         return items.sorted { $0.createdAt > $1.createdAt }
     }
 
-    /// Removes the item ("Dismiss"); the refusals stay in the sync log.
+    /// Removes the item ("Dismiss"); the refusals stay in the sync log. Work kept waiting on this device is not dismissed:
+    /// it is sent ("Try again") or kept here.
     public func dismissServerAttention(_ item: ServerAttentionItem) throws {
-        guard serverContext != nil else { return }
+        guard serverContext != nil, !item.waits else { return }
         try removeServerAttention(item.ids)
+    }
+
+    /// "Try again" (and Synchronize now, Force full synchronization): what the server refused as too large is tried once more
+    /// now (PROTOCOL §6.13): listening (sessions, leaves and finalizations) and owed queue adds here; refused again, it stays
+    /// listed. Drafts are tried by `resumeRefusedDrafts`. Returns whether there was any.
+    @discardableResult
+    public func retryRefusedListening() throws -> Bool {
+        guard serverContext != nil else { return false }
+        // The next recording, this write's own, tries the listening: refused again, it is listed again in the same
+        // transaction. An owed add is tried by the next replay (the next write, or the push).
+        return try write(.local) {
+            let refused = try refusedSessions()
+            var transitions = try transitionState()
+            let leaves = transitions.due.indices.filter { transitions.due[$0].refused == .tooLarge }
+            let adds = try database.rows("SELECT subject FROM ntp_owed WHERE intent = 'queue.add.refused'").compactMap { $0[0].text }
+            guard !refused.isEmpty || !leaves.isEmpty || !adds.isEmpty else { return false }
+            for var session in refused {
+                session.exportRefused = nil
+                try storeSyncSession(session, journal)
+                try database.execute("DELETE FROM ntp_attention WHERE id = ?", [.text(session.id)])
+            }
+            for index in leaves {
+                transitions.due[index].refused = nil
+                try database.execute("DELETE FROM ntp_attention WHERE id = ?", [.text(transitions.due[index].op)])
+            }
+            if !leaves.isEmpty { try storeTransitionState(transitions, journal) }
+            for subject in adds {
+                try database.execute("UPDATE ntp_owed SET intent = 'queue.add' WHERE intent = 'queue.add.refused' AND subject = ?", [.text(subject)])
+                try database.execute("DELETE FROM ntp_attention WHERE id = ?", [.text(Self.refusedAddAttention(subject))])
+            }
+            if !refused.isEmpty || !leaves.isEmpty { try database.execute("UPDATE ntp_library SET export_owed = 1 WHERE id = 1") }
+            return true
+        }
+    }
+
+    /// "Keep only on this device": the person's consent that what the server refused stays here (PROTOCOL §6.13). A session's
+    /// unexported saves become this device's own listening: shown as now in history and played time, never exported (nor
+    /// its end), and covered by later history and statistics cuts here; a leave or finalization the same; an owed queue
+    /// add keeps the episode in this device's queue, never sent.
+    public func keepRefusedListeningOnThisDevice(_ item: ServerAttentionItem) throws {
+        guard serverContext != nil, let id = item.ids.first else { return }
+        switch item.kind {
+        case .refusedListening, .refusedQueueAdd: break
+        default: return
+        }
+        try write(.local) {
+            var transitions = try transitionState()
+            var changed = false
+            if var session = try syncSession(id), session.exportRefused == .tooLarge {
+                session.exportRefused = .keptLocal
+                try storeSyncSession(session, journal)
+                for index in transitions.due.indices where transitions.due[index].transition.kind == .finalize && transitions.due[index].transition.session == id {
+                    transitions.due[index].refused = .keptLocal
+                    changed = true
+                }
+            }
+            for index in transitions.due.indices where transitions.due[index].op == id && transitions.due[index].refused == .tooLarge {
+                transitions.due[index].refused = .keptLocal
+                changed = true
+            }
+            if changed { try storeTransitionState(transitions, journal) }
+            if case .refusedQueueAdd = item.kind, let subject = Self.refusedAddSubject(id) {
+                try database.execute("UPDATE ntp_owed SET intent = 'queue.add.kept' WHERE intent = 'queue.add.refused' AND subject = ?", [.text(subject)])
+            }
+            try database.execute("DELETE FROM ntp_attention WHERE id = ?", [.text(id)])
+        }
+    }
+
+    /// The attention row of a refused owed queue add (`ntp_owed` subject `episode:<id>`), and back.
+    static func refusedAddAttention(_ subject: String) -> String { "queue.add:" + subject }
+    static func refusedAddSubject(_ attention: String) -> String? {
+        attention.hasPrefix("queue.add:") ? String(attention.dropFirst("queue.add:".count)) : nil
     }
 
     /// Items of the "Needs attention" list (PROTOCOL §15.5), as the list shows them: the refusals count once.

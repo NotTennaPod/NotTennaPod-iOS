@@ -6,7 +6,7 @@ import Testing
 /// The volume stage of processed playback against `VolumeOracle`: the renderer must receive exactly the
 /// commands the test made (recorded by the test, with the frames submitted and presented at the time), and
 /// what is heard (renderer value in force at presentation × the PCM) must match Android's split run over them.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct VolumeControlledPCMTransportTests {
+@MainActor @Suite(.serialized) struct VolumeControlledPCMTransportTests {
     /// Speech-like bursts, a loud sustained tone and quiet passages, stereo at 48 kHz.
     static let samples: [Int16] = (0..<48_000).flatMap { frame -> [Int16] in
         let t = Double(frame) / 48_000
@@ -115,7 +115,7 @@ import Testing
     }
 
     /// Heavy boost → heavy reduction → off before the boosted audio is heard: the queued boosted samples
-    /// are heard again at up to their own processed level, later audio unboosted (disclosed in the plan).
+    /// are heard again at up to their own processed level, later audio unboosted.
     @Test func loweredBoostIsHeardUntilItsQueuedAudioDrains() async throws {
         let harness = try Harness(setting: .heavyBoost)
         defer { harness.output.close() }

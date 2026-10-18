@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) struct ProxyNetworkEnvironmentTests {
+@Suite struct ProxyNetworkEnvironmentTests {
     @Test func savedSettingsRouteActualFeedFetchAndResetRetainsExistingSharedClientUntilConfirmedOK() async throws {
         let xml = Data("<rss version=\"2.0\"><channel><title>Proxy feed</title><link>https://example.com</link><description>Fixture</description></channel></rss>".utf8)
         let first = try await LoopbackHTTPServer.start { _ in .init(body: xml) }

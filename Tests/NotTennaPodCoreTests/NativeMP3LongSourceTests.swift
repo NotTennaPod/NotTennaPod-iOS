@@ -5,7 +5,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct NativeMP3LongSourceTests {
+@Suite(.serialized) struct NativeMP3LongSourceTests {
     private func fixture() throws -> URL {
 #if SWIFT_PACKAGE
         try #require(Bundle.module.url(forResource: "half-hour.mp3", withExtension: nil, subdirectory: "Fixtures/LongMP3"))

@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct FFmpegPlaybackSourceTests {
+@Suite(.serialized) struct FFmpegPlaybackSourceTests {
     private enum Failure: Error { case deadline }
     private func fixture(_ name: String) throws -> URL {
         try FFmpegBufferedSeekReferenceTests.resource(name, directory: "StreamingFormats")

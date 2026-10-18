@@ -60,6 +60,8 @@ final class ServerProjector {
     let accountID: String
     /// Commit records not yet in `ntp_records` (a shadow's post-commit base).
     var delta: [ServerRecordKey: ServerRecord] = [:]
+    /// The records a unit's commit removed from the base (its tombstones; a shadow's are in `delta`).
+    var removedRecords: Set<ServerRecordKey> = []
     /// Ops whose overlays no longer apply (retired by the commit, in a shadow).
     var excludedOps: Set<String> = []
     /// Registrations resolved by the commit: podcast → the registration's local feed.
@@ -176,8 +178,71 @@ final class ServerProjector {
 
     /// The latest pending statistics reset's knowledge clock, without the facts the commit retires (PROTOCOL §6.8).
     private lazy var statisticsResetClock: Int64? = try? ServerStatisticsUnits.pendingResetClock(db, excluding: excludedOps)
-    /// Whether the library table holds any unit (most libraries have none: nothing to compare then).
-    private lazy var libraryHasStatisticsUnits = ((try? db.scalar("SELECT count(*) FROM statistics_units")) ?? 0) > 0
+    /// Whether the library table holds any unit (most libraries have none: nothing to compare then). A probe, not a count:
+    /// routine work must not grow with the library.
+    private lazy var libraryHasStatisticsUnits = countsStatisticsUnits
+        ? ((try? db.scalar("SELECT count(*) FROM statistics_units")) ?? 0) > 0
+        : ((try? db.scalar("SELECT EXISTS (SELECT 1 FROM statistics_units)")) ?? 0) == 1
+    /// Only for the budget's performance mutation: the count the probe replaced.
+    var countsStatisticsUnits = false
+    /// Off only for its mutation check: last played and history include this device's unexported listening
+    /// instead of being frozen by its marks.
+    var journalAwareListening = true
+    /// Test-only (a mutation check): this device's unexported listening taken from what the row showed, as the first
+    /// revision did, instead of from the journal.
+    var listeningFromDisplayedRow = false
+
+    /// Test-only: a full projection that drops the device's own resume points (a mutation check).
+    nonisolated(unsafe) static var dropsDevicePositionsForTesting = false
+
+    /// In a full projection (Force full synchronization, a recovery's switch), whether the episode's displayed position is
+    /// the device's own: nothing pending sets its position (no claim, register or completion overlay), and the base's
+    /// position record is exactly the one the live library had, so the live position was never the record's to replace.
+    /// An incremental projection reaches the same rule by not projecting the position until its record changes.
+    private func keepsDevicePosition(_ episode: String, overlays: [ServerOverlayRow]) throws -> Bool {
+        guard let full = fullBase, !Self.dropsDevicePositionsForTesting,
+              !overlays.contains(where: { $0.property == "position" || $0.kind == "completion" }) else { return false }
+        let live = try db.scalar("SELECT count(*) FROM ntp_records WHERE entity = 'episode' AND id = ? AND field_group = 'position'", [.text(episode)])
+        let base = try db.scalar("SELECT count(*) FROM \(full).records WHERE entity = 'episode' AND id = ? AND field_group = 'position'", [.text(episode)])
+        guard live == base else { return false }
+        guard live > 0 else { return true }
+        return try db.scalar("""
+            SELECT count(*) FROM ntp_records AS r JOIN \(full).records AS f ON f.entity = r.entity AND f.id = r.id AND f.field_group = r.field_group
+            WHERE r.entity = 'episode' AND r.id = ? AND r.field_group = 'position' AND f.value IS r.value AND f.provenance IS r.provenance
+            """, [.text(episode)]) > 0
+    }
+
+    /// The journal's owed transition facts (an end's or leave's history entry), read once.
+    private lazy var dueTransitions: [ServerTransitionFact] = {
+        guard let data = try? db.rows("SELECT pending_transition FROM ntp_library WHERE id = 1").first?.first?.data,
+              let state = try? JSONDecoder().decode(ServerTransitionState.self, from: data) else { return [] }
+        return state.due
+    }()
+
+    /// This device's unexported listening of an episode (PROTOCOL §8.7, the pending entries): the activity of starts not
+    /// recorded yet, of saves not exported and of ends covering such a save; for history also the entries of ends and
+    /// transitions (leave, finalize) not recorded yet. They become overlays when recorded and accepted entries when applied.
+    func pendingListening(_ localID: Int64) throws -> (lastPlayed: Int64?, history: Int64?) {
+        var activity: Int64?, history: Int64?
+        // A session kept on this device: its history entries up to a local history cut are covered (PROTOCOL §8.8).
+        var historyCut: Int64?
+        func note(_ time: Int64, listening: Bool) {
+            if listening { activity = max(activity ?? time, time) }
+            if historyCut.map({ time > $0 }) ?? true { history = max(history ?? time, time) }
+        }
+        for session in try ServerSyncSession.load(db, episode: localID) {
+            historyCut = session.exportRefused == .keptLocal ? session.localHistoryCut : nil
+            if !session.startRecorded { note(session.startTime, listening: true) }
+            for save in session.unexported { note(save.time, listening: true) }
+            if let end = session.end, !end.recorded {
+                let fresh = (session.last?.index ?? 0) > session.exportedIndex
+                if fresh { note(end.time, listening: true) } else if end.history { note(end.time, listening: false) }
+            }
+        }
+        historyCut = nil
+        for fact in dueTransitions where fact.transition.episodeID == localID && fact.showsHistory { note(fact.time, listening: false) }
+        return (activity, history)
+    }
 
     func record(_ entity: String, _ id: String, _ group: String) throws -> ContractJSON? {
         let key = ServerRecordKey(entity: entity, id: id, fieldGroup: group)
@@ -226,7 +291,9 @@ final class ServerProjector {
         guard !ids.isEmpty else { return [] }
         let marks = Array(repeating: "?", count: ids.count).joined(separator: ", ")
         let only = property == nil ? "" : " AND property = ?"
-        return try db.rows("SELECT op_id, entity, id, property, kind, value, clock FROM ntp_overlays WHERE entity = ? AND id IN (\(marks))\(only) ORDER BY clock, op_id, property",
+        // Within one fact its completion comes last: an end is a checkpoint, then its completion (PROTOCOL §8.3), so a
+        // pending end that completes shows position 0, not the position it ended at.
+        return try db.rows("SELECT op_id, entity, id, property, kind, value, clock FROM ntp_overlays WHERE entity = ? AND id IN (\(marks))\(only) ORDER BY clock, op_id, property = 'completion', property",
                            [.text(entity)] + ids.map(LibrarySQLValue.text) + (property.map { [.text($0)] } ?? [])).compactMap { row in
             guard case .text(let op) = row[0], !excludedOps.contains(op), case .text(let entity) = row[1], case .text(let id) = row[2],
                   case .text(let property) = row[3], case .text(let kind) = row[4], let clock = row[6].integer else { return nil }
@@ -242,11 +309,12 @@ final class ServerProjector {
     func owedQueue() throws -> ServerOwedQueue {
         if let owedCache { return owedCache }
         var owed = ServerOwedQueue()
-        for row in try db.rows("SELECT intent, subject FROM ntp_owed WHERE intent IN ('queue.add', 'queue.place', 'queue.settle')") {
+        // An add refused as too large (`queue.add.refused`) or kept on this device (`queue.add.kept`) stays this device's, as owed.
+        for row in try db.rows("SELECT intent, subject FROM ntp_owed WHERE intent IN ('queue.add', 'queue.place', 'queue.settle', 'queue.add.refused', 'queue.add.kept')") {
             guard let intent = row[0].text, let subject = row[1].text else { continue }
             if intent == "queue.settle" { owed.unsettled = true; continue }
             guard subject.hasPrefix("episode:"), let id = Int64(subject.dropFirst("episode:".count)) else { continue }
-            if intent == "queue.add" { owed.adds.insert(id) } else { owed.placements.insert(id) }
+            if intent == "queue.place" { owed.placements.insert(id) } else { owed.adds.insert(id) }
         }
         owedCache = owed
         return owed
@@ -261,8 +329,10 @@ final class ServerProjector {
     // MARK: - Rows
 
     /// Hidden feeds: a removal's whose rows are going, or a new podcast staged for a unit that has
-    /// not revealed it. Gone for every projection.
-    private lazy var removingFeeds: Set<Int64> = Set(((try? db.rows("SELECT feed_id FROM ntp_hidden_feeds")) ?? []).compactMap { $0[0].integer })
+    /// not revealed it, and the detached feed of an episode the player kept after its podcast's removal (PROTOCOL §6.8).
+    /// Gone for every projection: nothing is projected onto them or matched to them.
+    private lazy var removingFeeds: Set<Int64> = Set((((try? db.rows("SELECT feed_id FROM ntp_hidden_feeds")) ?? [])
+        + ((try? db.rows("SELECT feed_id FROM pinned_feed_removals")) ?? [])).compactMap { $0[0].integer })
 
     /// Rows decoded from the store while `project` runs (nothing writes them meanwhile): each read and decoded once
     /// (a unit reads the same feed and member rows many times inside the live lock).
@@ -276,11 +346,11 @@ final class ServerProjector {
 
     func feedHeader(_ id: Int64) throws -> LibraryFeed? {
         if let image = plan.feeds[id] { return image }
-        if plan.removedFeeds.contains(id) || plan.hiddenRemovedFeeds.contains(id) || removingFeeds.contains(id) { return nil }
+        if plan.removedFeeds.contains(id) || plan.hiddenRemovedFeeds.contains(id) || removingFeeds.contains(id) || detaching(id) { return nil }
         if projecting, let stored = storedFeeds[id] { return stored }
         var feed: LibraryFeed?
         if let row = try db.rows("SELECT record FROM feeds WHERE id = ?", [.integer(id)]).first, let data = row[0].data {
-            feed = try JSONDecoder().decode(LibraryFeed.self, from: data)
+            feed = try JSONDecoder.libraryRecord(LibraryFeed.self, from: data)
             rowDecodes += 1
         }
         if projecting { storedFeeds[id] = .some(feed) }
@@ -294,14 +364,21 @@ final class ServerProjector {
         if projecting, let stored = storedEpisodes[id] { row = stored } else {
             if let read = try db.rows("SELECT feed_id, record FROM episodes WHERE id = ?", [.integer(id)]).first,
                let feed = read[0].integer, let data = read[1].data {
-                row = (feed, try JSONDecoder().decode(LibraryEpisode.self, from: data))
+                row = (feed, try JSONDecoder.libraryRecord(LibraryEpisode.self, from: data))
                 rowDecodes += 1
             } else { row = nil }
             if projecting { storedEpisodes[id] = .some(row) }
         }
         guard let row else { return nil }
-        guard !plan.removedFeeds.contains(row.feedID), !plan.hiddenRemovedFeeds.contains(row.feedID), !removingFeeds.contains(row.feedID) else { return nil }
+        guard !plan.removedFeeds.contains(row.feedID), !plan.hiddenRemovedFeeds.contains(row.feedID), !removingFeeds.contains(row.feedID),
+              !detaching(row.feedID) else { return nil }
         return row
+    }
+
+    /// A feed this plan detaches (a removal of the player's episode's podcast, PROTOCOL §6.8): gone for the rest of the
+    /// projection, as for every later one.
+    private func detaching(_ feedID: Int64) -> Bool {
+        !plan.mergeRemovals.contains(feedID) && plan.pinnedRemovals.contains { $0.feedID == feedID }
     }
 
     private func isLocalFolder(_ feedID: Int64) throws -> Bool { try feedHeader(feedID)?.source.isLocalFeedSource == true }
@@ -401,7 +478,7 @@ final class ServerProjector {
             for row in try db.rows("SELECT e.id, e.record\(hasItems ? ", i.kind, i.value, i.guid, i.enclosure, i.publication_time" : "") FROM episodes e LEFT JOIN ntp_episodes n ON n.local_id = e.id\(hasItems ? " LEFT JOIN ntp_local_items i ON i.local_id = e.id" : "") WHERE e.feed_id = ? AND n.local_id IS NULL ORDER BY e.id",
                                    [.integer(feedID)]) {
                 guard let id = row[0].integer, let data = row[1].data else { continue }
-                let local = try JSONDecoder().decode(LibraryEpisode.self, from: data)
+                let local = try JSONDecoder.libraryRecord(LibraryEpisode.self, from: data)
                 let atom = header.metadata.format == .atom
                 var evidence = ServerItemEvidence(guid: local.details.identifier, enclosureURL: local.details.media?.url,
                                                   publicationTime: nil, title: nil, atom: atom)
@@ -463,6 +540,9 @@ final class ServerProjector {
         case "removed":
             plan.podcastMappings[podcast] = (feedID, nil)
             removedPodcasts.insert(podcast)
+            // Its generation closes whether or not this phone still shows the feed (a removal made here deleted it before
+            // the server's commit came back): its obsolete work ends either way (PROTOCOL §6.8).
+            plan.closedPodcasts.insert(podcast)
             if let feedID { try remove(feedID: feedID, podcast: podcast) }
             return
         default:
@@ -520,6 +600,10 @@ final class ServerProjector {
         if fields.contains(.identityRules) {
             plan.identityRules[podcast] = .some(try record("podcast", podcast, "identity_rules"))
         }
+        // The server's own refresh status, beside this device's (never in place of it).
+        if fields.contains(.refreshStatus) {
+            header.serverRefresh = ServerRefreshStatus(record: try record("podcast", podcast, "refresh_status"))
+        }
         let storedHeader = try feedHeader(feedID)
         if header != storedHeader || created { plan.feeds[feedID] = header }
         if created {
@@ -537,8 +621,8 @@ final class ServerProjector {
         if let url = identity["refresh_url"]?.stringValue { aliases.insert(ContractURL.normalize(ContractURL.stripUserinfo(url))) }
         for row in try db.rows("SELECT id, record FROM feeds ORDER BY id") {
             guard let id = row[0].integer, let data = row[1].data, !plan.removedFeeds.contains(id), !plan.hiddenRemovedFeeds.contains(id),
-                  !removingFeeds.contains(id) else { continue }
-            let feed = try JSONDecoder().decode(LibraryFeed.self, from: data)
+                  !removingFeeds.contains(id), !detaching(id) else { continue }
+            let feed = try JSONDecoder.libraryRecord(LibraryFeed.self, from: data)
             guard !feed.source.isLocalFeedSource,
                   aliases.contains(ContractURL.normalize(ContractURL.stripUserinfo(feed.source))) else { continue }
             if let other = try mappedPodcast(ofFeed: id), other != podcast,
@@ -582,8 +666,18 @@ final class ServerProjector {
     /// A remote removal (PROTOCOL §6.8): the existing feed deletion, unless the player's current episode belongs to the
     /// podcast; then its other episodes go, the playing one keeps only what the player needs, and the podcast leaves
     /// every library-wide read until the selection leaves it.
-    func remove(feedID: Int64, podcast: String) throws {
+    /// `merged`: the podcast merged into a live one (PROTOCOL §9.7): no generation closes, and the player's episode keeps
+    /// its sync identity.
+    func remove(feedID: Int64, podcast: String, merged: Bool = false) throws {
         guard let header = try feedHeader(feedID), !header.source.isLocalFeedSource else { return }
+        if merged {
+            plan.mergeRemovals.insert(feedID)
+        } else {
+            plan.closedPodcasts.insert(podcast)
+            if let live = try db.rows("SELECT live_generation FROM ntp_podcasts WHERE podcast_id = ?", [.text(podcast)]).first?.first?.text {
+                plan.closedGenerations[feedID] = live
+            }
+        }
         // Whether it is large is read from at most one more than the bound of the feed's index entries: a large podcast's
         // episodes are never listed inside the unit (they go afterwards).
         let large = try db.scalar("SELECT count(*) FROM (SELECT 1 FROM episodes WHERE feed_id = ? LIMIT ?)",
@@ -698,8 +792,23 @@ final class ServerProjector {
         }
         let before = image
         // Listening this device did that no exported fact carries yet keeps its fields; everything else is projected.
-        if !created, let mark = localPlayback[localID] { fields.subtract(mark.fields) }
+        // Last played and history are projected too (PROTOCOL §8.7), from the accepted entries, the pending overlays and
+        // this device's unexported listening read from its journal (`pendingListening`), never from what the row showed:
+        // so other devices' newer listening, normalized times and remote cuts show at once, and this device's own
+        // receipt never rolls its unexported listening back.
+        let marked = created ? [] : localPlayback[localID]?.fields ?? []
+        if !created, let mark = localPlayback[localID] {
+            fields.subtract(journalAwareListening ? mark.fields.subtracting([.lastPlayed, .history]) : mark.fields)
+        }
         try apply(fields, to: &image, episode: episode, localID: localID, occurrence: occurrence)
+        if listeningFromDisplayedRow {
+            if fields.contains(.lastPlayed), marked.contains(.lastPlayed) {
+                image.userState.lastPlayedTimeMilliseconds = max(image.userState.lastPlayedTimeMilliseconds, before.userState.lastPlayedTimeMilliseconds)
+            }
+            if fields.contains(.history), marked.contains(.history), let own = before.userState.lastPlayedHistoryMilliseconds {
+                image.userState.lastPlayedHistoryMilliseconds = max(image.userState.lastPlayedHistoryMilliseconds ?? own, own)
+            }
+        }
         if created || image != before {
             plan.episodes[localID] = (feedID, image)
             if created { plan.createdEpisodes.insert(localID) }
@@ -741,7 +850,10 @@ final class ServerProjector {
         }
         if fields.contains(.position) {
             let value = Int32(clamping: max(0, playback.position))
-            if !pinned { image.userState.positionMilliseconds = value }
+            if try keepsDevicePosition(episode, overlays: overlays) {
+                // The device's own resume point (a paused seek or load's save, PROTOCOL §8): no fact carries it, and the base's
+                // position record is the one it was chosen against, so a full projection keeps it as the live library does.
+            } else if !pinned { image.userState.positionMilliseconds = value }
             else if value != image.userState.positionMilliseconds { plan.deferredPins[episode, default: []].insert(.position) }
         }
         if fields.contains(.favorite) {
@@ -752,10 +864,15 @@ final class ServerProjector {
         if fields.contains(.lastPlayed) {
             var time = try record("episode", episode, "last_played")?["time"]?.integerValue ?? 0
             for overlay in overlays where overlay.kind == "activity" { time = max(time, overlay.value?.integerValue ?? 0) }
+            if journalAwareListening, !listeningFromDisplayedRow, let pending = try pendingListening(localID).lastPlayed { time = max(time, pending) }
             image.userState.lastPlayedTimeMilliseconds = time
         }
         if fields.contains(.history) {
-            image.userState.lastPlayedHistoryMilliseconds = try displayedHistory(episode: episode, overlays: overlays)
+            var history = try displayedHistory(episode: episode, overlays: overlays)
+            // This device's unexported entries are never in a cut's causal past (local cuts flush them first; a remote cut
+            // cannot depend on them): they are never suppressed.
+            if journalAwareListening, !listeningFromDisplayedRow, let pending = try pendingListening(localID).history { history = max(history ?? pending, pending) }
+            image.userState.lastPlayedHistoryMilliseconds = history
         }
         if fields.contains(.playedTime) {
             image.userState.playedDurationMilliseconds = try displayedPlayedTime(episode: episode, localID: localID, overlays: overlays)
@@ -1033,10 +1150,15 @@ final class ServerProjector {
             let localQueue = localPlayback[id]?.queue == true
             var member = localQueue ? currentSet.contains(id) : membershipRecord?["in_queue"]?.boolValue ?? currentSet.contains(id)
             // A full snapshot is the whole truth about the episodes the server knows: one it never queued is not
-            // queued, unless this device owes its queue add.
-            if !localQueue, fullBase != nil, membershipRecord == nil, member, let wire, try record("episode", wire, "identity") != nil,
-               !owed.adds.contains(id), !owed.placements.contains(id) {
-                member = false
+            // queued, unless this device owes its queue add. So is a commit that removes a membership record (a closed
+            // generation's): the entry leaves the queue in a unit as it does in a full projection.
+            if !localQueue, membershipRecord == nil, member, let wire, !owed.adds.contains(id), !owed.placements.contains(id) {
+                let key = ServerRecordKey(entity: "episode", id: wire, fieldGroup: "queue_membership")
+                if removedRecords.contains(key) || delta[key].map({ $0.value == nil }) == true {
+                    member = false
+                } else if fullBase != nil, try record("episode", wire, "identity") != nil {
+                    member = false
+                }
             }
             // A pending membership: the latest register, or a completion of this library's playback that holds (PROTOCOL §6.8).
             let completions = overlays.contains { $0.kind == "completion" } ? try positionState(episode: wire, overlays: overlays).completions : [:]

@@ -156,7 +156,7 @@ import Testing
     /// The real folder implementation against the file system: bookmark, create (never overwriting),
     /// list with modification dates, remove, and a missing folder.
     @Test func securityScopedFolderOnDisk() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M18-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("AutomaticExport-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let folder = SecurityScopedBackupFolder(bookmark: try LocalFolderDocuments.makeBookmark(directory: directory))
@@ -175,7 +175,7 @@ import Testing
     }
 
     @Test func realBackupPayloadIsTheAndroidFormat() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M18P-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("AutomaticExportPublish-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let library = try AndroidDatabaseRestore.read(AndroidDatabaseRestoreTests.fixtures.appendingPathComponent("emulator-parity-library.db"), staging: directory.appendingPathComponent("s"))
@@ -337,7 +337,7 @@ import Testing
     }
 
     @Test func aWholeDatabaseIsRecognisedAndAnEmptyOrTruncatedOneIsNot() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("K5c-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("AutomaticExportJournal-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let library = try AndroidDatabaseRestore.read(AndroidDatabaseRestoreTests.fixtures.appendingPathComponent("emulator-parity-library.db"),
@@ -372,7 +372,7 @@ import Testing
     }
 
     @MainActor @Test func preferencesPersistAndEnabledMeansAFolder() throws {
-        let file = FileManager.default.temporaryDirectory.appendingPathComponent("M18-\(UUID()).json")
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("AutomaticExport-\(UUID()).json")
         defer { try? FileManager.default.removeItem(at: file) }
         let store = try AutomaticDatabaseExportPreferenceStore(file: file)
         #expect(!store.value.isEnabled)

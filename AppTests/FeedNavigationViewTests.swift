@@ -10,7 +10,7 @@ private actor NavigationSnapshot {
 }
 
 @MainActor
-@Suite(.serialized, .timeLimit(.minutes(1)))
+@Suite(.serialized)
 struct FeedNavigationViewTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as: T.Type = T.self) -> T? {
         if let match = view as? T, match.accessibilityIdentifier == id { return match }

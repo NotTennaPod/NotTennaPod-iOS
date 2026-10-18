@@ -19,6 +19,10 @@ import NotTennaPodCore
     private var entries: [DownloadLogEntry] = []
     private var retried: Set<DownloadLogEntry.ID> = []
     private var changes: Task<Void, Never>?
+    /// The log is read at most once a second while the sheet shows, never while it is hidden, and once after the last
+    /// change (downloads and refreshes change it many times a second).
+    private(set) lazy var logRefresh = PacedRefresh { [weak self] in await self?.readLog() }
+    private var sheetHidden = false
     private var motion = DownloadLogSheetMotion()
     private var listOffset: CGFloat = -8
     private var adjustingList = false
@@ -62,19 +66,40 @@ import NotTennaPodCore
         registerForTraitChanges([UITraitPreferredContentSizeCategory.self]) { (controller: DownloadLogController, _) in
             controller.table.reloadData(); controller.view.setNeedsLayout()
         }
+        logRefresh.isActive = { [weak self] in
+            guard let self else { return false }
+            return !sheetHidden && UIApplication.shared.applicationState != .background
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(sceneReturned), name: UIApplication.didBecomeActiveNotification, object: nil)
         changes = Task { [weak self, library] in
             for await _ in await library.downloadLogChanges() {
-                guard !Task.isCancelled else { return }
-                do {
-                    let entries = try await library.downloadLog()
-                    guard let self else { return }
-                    self.entries = entries
-                    // Source adapter's view is rebound whenever the history reloads.
-                    retried = []
-                    table.reloadData(); view.setNeedsLayout()
-                } catch { self?.failed(error) }
+                guard !Task.isCancelled, let self else { return }
+                logRefresh.changed()
             }
         }
+    }
+
+    private func readLog() async {
+        do {
+            let entries = try await library.downloadLog()
+            self.entries = entries
+            // Source adapter's view is rebound whenever the history reloads.
+            retried = []
+            table.reloadData(); view.setNeedsLayout()
+        } catch { failed(error) }
+    }
+
+    @objc private func sceneReturned() { logRefresh.activate() }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        sheetHidden = false
+        logRefresh.activate()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        sheetHidden = true
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -222,7 +247,7 @@ import NotTennaPodCore
         let entry = entries[indexPath.row]
         Task { [weak self, library] in
             do {
-                let feed = try await library.feed(id: entry.feedID)
+                let feed = try await library.listedFeedHeader(id: entry.feedID)
                 let episode: LibraryEpisode?
                 if let id = entry.episodeID { episode = try await library.episode(id: id) } else { episode = nil }
                 let details = FeedLogDetails(entry: entry, feed: feed, episode: episode, text: Appearance.text)

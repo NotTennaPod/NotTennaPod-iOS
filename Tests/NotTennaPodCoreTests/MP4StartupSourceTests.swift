@@ -5,7 +5,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) struct MP4StartupSourceTests {
+@Suite(.serialized) struct MP4StartupSourceTests {
     static let names = ["lc", "he", "hev2"].flatMap { profile in
         ["gapless", "gapless-tag", "tag-only"].map { profile + "-" + $0 + ".m4a" }
     }

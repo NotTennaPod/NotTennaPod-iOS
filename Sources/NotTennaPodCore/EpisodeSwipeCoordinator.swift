@@ -14,6 +14,8 @@ import Foundation
         public let episodeID: Int64
         public let modelIdentity: UUID
         public let delta: EpisodeActionStateDelta
+        /// The library's last commit right after the mark's own write: its receipt, which fences the result.
+        public let sequence: Int64
         /// Nil is a silent source recipient, not an invisible Undo offer.
         public let message: Message?
         public var actionTitleKey: String? { message == nil ? nil : "undo" }
@@ -26,12 +28,15 @@ import Foundation
         /// Consumers patch only this exact current model/result binding.
         case committed(Commit)
         case undone(operationID: UUID, modelIdentity: UUID, result: EpisodeMarkUndoResult,
-                    delta: EpisodeActionStateDelta?)
+                    delta: EpisodeActionStateDelta?, sequence: Int64)
         case cleanupFinished(operationID: UUID, result: CleanupResult)
         /// Use the application's existing storage-error presentation policy.
         case failed(operationID: UUID?, stage: FailureStage, error: any Error)
     }
     public var onEvent: (@MainActor (Event) -> Void)?
+    /// The screens' fence: whether they show a commit of the model's episode newer than a result whose write has this
+    /// receipt. Such a result is not applied to the model (the event still follows).
+    public var superseded: (@MainActor (EpisodeActionModel, _ receipt: Int64) -> Bool)?
 
     struct Clock: Sendable {
         var now: @MainActor @Sendable () -> ContinuousClock.Instant
@@ -39,12 +44,19 @@ import Foundation
         static let continuous = Self(now: { .now }, sleep: { try await ContinuousClock().sleep(until: $0) })
     }
     struct Persistence: Sendable {
-        var apply: @Sendable (Int64, EpisodeSwipeMark) async throws -> EpisodeMarkReceipt?
-        var undo: @Sendable (EpisodeMarkReceipt) async throws -> EpisodeMarkUndoResult
+        /// Each write with its change receipt (`FeedLibraryStore.withChangeReceipt`).
+        var apply: @Sendable (Int64, EpisodeSwipeMark) async throws -> (receipt: EpisodeMarkReceipt, sequence: Int64)?
+        var undo: @Sendable (EpisodeMarkReceipt) async throws -> (result: EpisodeMarkUndoResult, sequence: Int64)
         var release: @Sendable (EpisodeMarkReceipt) async throws -> Void
         init(store: FeedLibraryStore) {
-            apply = { try await store.applySwipeMark(episodeID: $0, action: $1) }
-            undo = { try await store.undoSwipeMark($0) }
+            apply = { id, action in
+                let written = try await store.withChangeReceipt { try $0.applySwipeMark(episodeID: id, action: action) }
+                return written.value.map { ($0, written.receipt) }
+            }
+            undo = { receipt in
+                let written = try await store.withChangeReceipt { try $0.undoSwipeMark(receipt) }
+                return (written.value, written.receipt)
+            }
             release = { try await store.releaseSwipeUndo($0) }
         }
     }
@@ -97,7 +109,7 @@ import Foundation
         return await enqueue { [weak self] in
             guard let self, active else { return .invalidated }
             do {
-                guard let receipt = try await persistence.apply(model.episodeID, action) else { return .ineligible }
+                guard let (receipt, sequence) = try await persistence.apply(model.episodeID, action) else { return .ineligible }
                 guard active else {
                     try? await persistence.release(receipt)
                     return .invalidated
@@ -107,11 +119,11 @@ import Foundation
                 let operation = Operation(receipt: receipt, model: model, target: target, offersUndo: offersUndo)
                 operations[receipt.operationID] = operation
                 let delta = EpisodeActionStateDelta(playState: receipt.appliedState)
-                model.applyCommittedState(delta)
+                if superseded?(model, sequence) != true { model.applyCommittedState(delta) }
                 let message: Message = receipt.appliedState == .played ? .markedAsPlayed
                     : receipt.previousState == .new ? .removedFromInbox : .markedAsUnplayed
                 let commit = Commit(operationID: receipt.operationID, episodeID: receipt.episodeID,
-                    modelIdentity: model.identity, delta: delta, message: offersUndo ? message : nil)
+                    modelIdentity: model.identity, delta: delta, sequence: sequence, message: offersUndo ? message : nil)
                 schedule(operation, deadline: deadline)
                 onEvent?(.committed(commit))
                 if !offersUndo { await release(operation) }
@@ -140,11 +152,12 @@ import Foundation
         return enqueue { [weak self] in
             guard let self, active else { return .invalidated }
             do {
-                let result = try await persistence.undo(operation.receipt)
+                let (result, sequence) = try await persistence.undo(operation.receipt)
                 guard active else { return .invalidated }
                 let delta = result == .restored ? EpisodeActionStateDelta(playState: operation.receipt.previousState) : nil
-                if let delta { operation.model.applyCommittedState(delta) }
-                onEvent?(.undone(operationID: operationID, modelIdentity: operation.model.identity, result: result, delta: delta))
+                if let delta, superseded?(operation.model, sequence) != true { operation.model.applyCommittedState(delta) }
+                onEvent?(.undone(operationID: operationID, modelIdentity: operation.model.identity, result: result, delta: delta,
+                                 sequence: sequence))
                 removeIfFinished(operation)
                 switch result {
                 case .restored: return .restored

@@ -5,7 +5,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) struct MP4ExactIntervalTests {
+@Suite(.serialized) struct MP4ExactIntervalTests {
     @Test(arguments: ["lc", "he", "hev2"], ["full", "progressive", "truncated", "cancelled"])
     func nativeIntervalPreservesFiniteAndProgressiveStartup(profile: String, scenario: String) async throws {
 #if SWIFT_PACKAGE

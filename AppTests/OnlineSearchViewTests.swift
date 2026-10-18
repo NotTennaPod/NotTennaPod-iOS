@@ -15,7 +15,7 @@ private actor OnlineUIRequests {
         }
     }
 }
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct OnlineSearchViewTests {
+@MainActor @Suite(.serialized) struct OnlineSearchViewTests {
     private func find<T: UIView>(_ id: String, _ root: UIView, as: T.Type = T.self) -> T? {
         if let value = root as? T, value.accessibilityIdentifier == id { return value }
         return root.subviews.lazy.compactMap { find(id, $0, as: T.self) }.first

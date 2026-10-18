@@ -23,6 +23,12 @@ public struct NavigationCounters: Equatable, Sendable {
         inbox = Self.inbox(feeds)
         subscriptions = feedCounters.values.reduce(0, +)
     }
+    /// With the Inbox count and per-feed counters already known (the screens keep them as counts).
+    public init(queueLength: Int, inbox: Int, feedCounters: [Int64: Int]) {
+        queue = queueLength
+        self.inbox = inbox
+        subscriptions = feedCounters.values.reduce(0, +)
+    }
     public static func inbox(_ feeds: [LibraryFeed]) -> Int {
         feeds.reduce(0) { total, feed in
             feed.subscriptionState == .subscribed ? total + feed.episodes.count { $0.userState.playState == .new } : total

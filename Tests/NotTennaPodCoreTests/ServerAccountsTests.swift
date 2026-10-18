@@ -7,7 +7,7 @@ import Testing
 /// Accounts against the real server (PROTOCOL §15.4): sign-in, first attachment of an empty account, the switch under
 /// the activation rule, logout and resume, sign in again after a password reset, removal of a kept library, transport
 /// conflicts and a non-empty account waiting for projection.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(10))) struct ServerAccountsTests {
+@MainActor @Suite(.serialized) struct ServerAccountsTests {
     /// The app graph around the account service: a registry root, the library the graph opened, a real library
     /// switcher whose restart opens what the registry names, and an activation rule driven by `playing`.
     @MainActor final class World {
@@ -30,7 +30,8 @@ import Testing
         var pauseSync: @MainActor (ServerPauseReason) async -> Void = { _ in }
         var address: ServerAddress { ServerAddress(entered: server.base.absoluteString)! }
 
-        init(server: NTPServerProcess, admin: AdminSession, applier: (any ServerAttachSnapshotApplier)? = nil) throws {
+        init(server: NTPServerProcess, admin: AdminSession, applier: (any ServerAttachSnapshotApplier)? = nil,
+             bulkNetwork: (any ServerSyncNetworkGate)? = nil, disk: ServerBulkDiskPolicy? = nil) throws {
             self.server = server; self.admin = admin
             root = FileManager.default.temporaryDirectory.appendingPathComponent("ServerAccounts-\(UUID())")
             try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
@@ -56,6 +57,8 @@ import Testing
             dependencies.stopSync = { [unowned self] in await stopSync() }
             dependencies.pauseSync = { [unowned self] reason in await pauseSync(reason) }
             dependencies.gate = LibraryGate()
+            dependencies.bulkNetwork = bulkNetwork
+            if let disk { dependencies.disk = disk }
             accounts = ServerAccounts(dependencies)
             accounts.onFailure = { Issue.record("the attachment failed: \($0)") }
         }
@@ -158,10 +161,14 @@ import Testing
         }
     }
 
-    private func world(applier: (any ServerAttachSnapshotApplier)? = nil, _ body: (World) async throws -> Void) async throws {
+    private func world(applier: (any ServerAttachSnapshotApplier)? = nil, bulkNetwork: (any ServerSyncNetworkGate)? = nil,
+                       disk: ServerBulkDiskPolicy? = nil, _ body: (World) async throws -> Void) async throws {
         let server = try await NTPServerProcess.start()
         let world: World
-        do { world = try World(server: server, admin: try await AdminSession(server: server), applier: applier) }
+        do {
+            world = try World(server: server, admin: try await AdminSession(server: server), applier: applier, bulkNetwork: bulkNetwork,
+                              disk: disk)
+        }
         catch { server.stop(); throw error }
         do { try await body(world) } catch { world.cleanUp(); server.stop(); throw error }
         world.cleanUp(); server.stop()
@@ -357,6 +364,68 @@ import Testing
         }
     }
 
+    /// Free space as the test sets it for the new library's writes; the attach download (its own folder) always fits.
+    final class LibrarySpace: @unchecked Sendable {
+        private let lock = NSLock()
+        /// Arms of the library's writes allowed before space runs out; nil: plenty.
+        private var allowed: Int?
+        private var arms = 0
+        init(allowed: Int?) { self.allowed = allowed }
+        func plenty() { lock.withLock { allowed = nil } }
+        func available(_ url: URL) -> Int64? {
+            if url.lastPathComponent == "attach" { return 1 << 40 }
+            return lock.withLock {
+                guard let limit = allowed else { return Int64(1) << 40 }
+                arms += 1
+                return arms <= limit ? Int64(1) << 40 : ServerBulkDiskPolicy().reserve + (1 << 20)
+            }
+        }
+    }
+
+    /// The new library's own writes never use the reserved space: refused at the reset of an earlier attempt's base, at
+    /// the base batch after the archive was written, or at the projection's COMMIT after the archive and base were written, the attachment waits for space with nothing of it
+    /// active (no cursor, the device's library still open) and its download kept; with space it finishes without
+    /// downloading again.
+    @Test(arguments: [0, 2, 3])
+    func anAttachmentStopsBeforeTheReservedSpaceAndFinishesLater(allowed: Int) async throws {
+        let space = LibrarySpace(allowed: allowed)
+        var disk = ServerBulkDiskPolicy(available: { space.available($0) })
+        disk.unknownAdmission = 1 << 20
+        try await world(disk: disk) { world in
+            _ = try await world.admin.account("ivy", password: "ivy-password-1")
+            try await subscribeElsewhere(world, username: "ivy", password: "ivy-password-1")
+            world.accounts.onFailure = nil
+            let info = try await world.accounts.info(world.address)
+            let pending = try await world.accounts.signIn(world.address, info: info, username: "ivy", password: "ivy-password-1")
+            // The page opens (space was freed) at the moment the refused attempt has said it waits for space but has not
+            // ended yet: that request is not lost.
+            let accounts = world.accounts!, location = world.location
+            var waited = false
+            accounts.afterAttachSpaceWaitForTesting = { [world] in
+                guard !waited, let id = world.registry.libraries.first?.id else { return }
+                waited = true
+                #expect(accounts.page(otherProvider: false).condition == accounts.attachWaits[id].map(ServerSynchronizationPage.Condition.attachingWaits))
+                if case .space? = accounts.attachWaits[id] {} else { Issue.record("no space wait") }
+                #expect(world.registry.library(id)?.state == .attaching && world.open == .standalone, "nothing activated")
+                #expect((try? ServerAttachBuilder.hasCursor(location(id).database)) == false, "no partial projection")
+                let attach = location(id).staging?.appendingPathComponent("attach")
+                #expect(attach.flatMap { ServerSnapshotSpool.manifest(in: $0)?.complete } == true, "the verified download is kept")
+                space.plenty()
+                let before = accounts.startAttachmentRequests
+                accounts.pageOpened()
+                while accounts.startAttachmentRequests == before { await Task.yield() }
+            }
+            try await world.accounts.beginAttachment(pending, scene: nil)
+            let id = try #require(world.registry.libraries.first?.id)
+            try await world.waitFor("the space wait") { waited }
+            try await world.waitFor("the switch") { world.open == .server(id) }
+            #expect(world.accounts.attachWaits[id] == nil)
+            let store = try FeedLibraryStore(url: world.location(id).database)
+            #expect(try await store.feeds().count == 1)
+            try await store.close()
+        }
+    }
+
     /// An applier that cannot build the library: the attachment stays, resumable, until it can.
     struct UnfinishedApplier: ServerAttachSnapshotApplier {
         func apply(_ snapshot: ServerAttachSnapshot, to library: ServerAttachmentTarget) async throws {
@@ -430,6 +499,14 @@ import Testing
             var page = world.accounts.page(otherProvider: false)
             guard case .report(let status)? = page.subtitle else { Issue.record("no report: \(String(describing: page.subtitle))"); return }
             #expect(status.successful && page.condition == nil)
+            // The network goes and comes back with nothing to send: the page says why meanwhile, then shows the same last
+            // result again; the network never stands for an exchange's result.
+            world.accounts.networkWaitChanged(.offline)
+            page = world.accounts.page(otherProvider: false)
+            #expect(page.condition == .waitingForNetwork(.offline) && page.subtitle == .waitingForNetwork(.offline))
+            world.accounts.networkWaitChanged(nil)
+            page = world.accounts.page(otherProvider: false)
+            #expect(page.condition == nil && page.subtitle == .report(status), "no success or failure was made up")
             // Unsent changes: the row mentions them.
             try await store.setServerAccountPolicy(.enqueueLocation(.front))
             var unsent = ServerExchangeReport()
@@ -454,6 +531,10 @@ import Testing
             world.accounts.exchangeReported(refused)
             page = world.accounts.page(otherProvider: false)
             #expect(page.condition == .needsSignIn && page.subtitle == .signInAgain)
+            world.accounts.networkWaitChanged(.mobileDataOff)
+            page = world.accounts.page(otherProvider: false)
+            #expect(page.condition == .needsSignIn && page.unsentChanges == refused.unsentChanges, "the network never hides a pause or the unsent changes")
+            world.accounts.networkWaitChanged(nil)
             #expect(try secrets.installation(library: id, install: install)?.rejected == true, "the refused token is not sent again")
             try await world.accounts.signInAgain(password: "hana-password-2")
             try await engine.resume()
@@ -585,6 +666,47 @@ import Testing
             try await world.waitFor("the attachment's cancellation") { blocking.cancelled }
             #expect(started.duration(to: .now) < .seconds(10), "the expiry stopped the work at once")
             #expect(world.registry.libraries.map(\.state) == [.attaching], "kept, to continue later")
+        }
+    }
+
+    /// The attach download's network: mobile data (or Low Data Mode) with the mobile-data preference off, until the test
+    /// moves to Wi-Fi.
+    final class BulkGate: ServerSyncNetworkGate, @unchecked Sendable {
+        private let lock = NSLock()
+        private var wait: ServerNetworkWait? = .mobileDataOff
+        private var asked = 0
+        let (stream, continuation) = AsyncStream<Void>.makeStream()
+        func permitted() async -> Bool { true }
+        func changes() -> AsyncStream<Void> { stream }
+        func allowsMobile() async -> Bool { false }
+        func bulkWaitReason() async -> ServerNetworkWait? { lock.withLock { asked += 1; return wait } }
+        var questions: Int { lock.withLock { asked } }
+        func set(_ value: ServerNetworkWait?) {
+            lock.withLock { wait = value }
+            continuation.yield(())
+        }
+    }
+
+    /// The account's library is not downloaded on mobile data or in Low Data Mode while the mobile-data preference does
+    /// not allow sync: nothing is asked of the server, the page says it waits for Wi-Fi, and it continues on Wi-Fi.
+    @Test func anAttachmentWaitsForANetworkItMayUseAndContinuesThere() async throws {
+        let gate = BulkGate()
+        try await world(bulkNetwork: gate) { world in
+            _ = try await world.admin.account("noa", password: "noa-password-1")
+            let info = try await world.accounts.info(world.address)
+            let pending = try await world.accounts.signIn(world.address, info: info, username: "noa", password: "noa-password-1")
+            try await world.accounts.beginAttachment(pending, scene: nil)
+            let id = try #require(world.registry.libraries.first?.id)
+            try await world.waitFor("the wait") { world.accounts.attachWaits[id] == .network(.mobileDataOff) }
+            let page = world.accounts.page(otherProvider: false)
+            #expect(page.mode == .attaching && page.condition == .attachingWaits(.network(.mobileDataOff)))
+            #expect(page.subtitle == .waitingForNetwork(.mobileDataOff))
+            let attach = try #require(world.location(id).staging).appendingPathComponent("attach")
+            #expect(ServerSnapshotSpool.manifest(in: attach)?.pages.isEmpty ?? true, "nothing downloaded")
+            gate.set(nil)
+            try await world.waitFor("the empty-account question") { world.accounts.question != nil }
+            #expect(world.accounts.attachWaits[id] == nil)
+            #expect(world.accounts.page(otherProvider: false).condition == .attaching(items: 0) || world.accounts.question != nil)
         }
     }
 

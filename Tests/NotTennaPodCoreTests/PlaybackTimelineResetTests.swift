@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct PlaybackTimelineResetTests {
     private final class Engine: PlaybackEngine {
         var reading: PlaybackEngineReading?

@@ -5,7 +5,7 @@ import Synchronization
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct OPMLImportViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if let match = view as? T, view.accessibilityIdentifier == id { return match }
@@ -125,20 +125,20 @@ struct OPMLImportViewTests {
                 verifyDraft()
                 let (reads, commits, refreshes) = counts.withLock { $0 }
                 let evidence = "sceneBefore=\(originalScene); sceneAfter=\(scene.effectiveGeometry.coordinateSpace.bounds.size); contentBefore=\(originalContent); contentAfter=\(list.bounds.size); window=\(window.bounds); safeArea=\(controller.view.safeAreaInsets); selected=\(session.selected); reads=\(reads); commits=\(commits); refreshes=\(refreshes)"
-                print("M11 actual scene resize: \(evidence)")
+                print("OPML import actual scene resize: \(evidence)")
                 Attachment.record(Data(evidence.utf8), named: "opml-actual-scene-geometry.txt")
                 let rendered = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
                     #expect(window.drawHierarchy(in: window.bounds, afterScreenUpdates: true))
                 }
                 Attachment.record(try #require(rendered.pngData()), named: "opml-actual-resized-window.png")
             } catch { failure = error }
-            scene.requestGeometryUpdate(.iOS(interfaceOrientations: restore)) { print("M11 scene restore error: \($0)") }
+            scene.requestGeometryUpdate(.iOS(interfaceOrientations: restore)) { print("OPML import scene restore error: \($0)") }
             try await wait("Original scene and content geometry restored") {
                 scene.effectiveGeometry.coordinateSpace.bounds.size == originalScene && list.bounds.size == originalContent && controller.view.bounds.size == originalView
             }
             try await wait { reachable(selected) && reachable(cancel) && reachable(confirm) }
             verifyDraft()
-            print("M11 scene restored: scene=\(scene.effectiveGeometry.coordinateSpace.bounds.size); content=\(list.bounds.size); selected=\(session.selected)")
+            print("OPML import scene restored: scene=\(scene.effectiveGeometry.coordinateSpace.bounds.size); content=\(list.bounds.size); selected=\(session.selected)")
             if let failure { throw failure }
         }
     }

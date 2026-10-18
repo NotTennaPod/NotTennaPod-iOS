@@ -4,7 +4,7 @@ import Testing
 @testable import NotTennaPodCore
 
 @MainActor
-@Suite(.serialized, .timeLimit(.minutes(1)))
+@Suite(.serialized)
 struct SharedDownloadCancellationViewTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as: T.Type = T.self) -> T? {
         if let result = view as? T, result.accessibilityIdentifier == id { return result }

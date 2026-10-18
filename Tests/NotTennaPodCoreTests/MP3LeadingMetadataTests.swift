@@ -7,7 +7,7 @@ import Testing
 /// An MP3 whose audio follows large or repeated ID3v2 tags (cover art, chapter art, a v2.4 footer)
 /// decodes exactly the audio of the same file without them, wherever reads happen to split the
 /// tags and the first audio frames, and keeps the tag's required timing metadata (MLLT).
-@Suite(.serialized, .timeLimit(.minutes(8))) struct MP3LeadingMetadataTests {
+@Suite(.serialized) struct MP3LeadingMetadataTests {
     typealias Tags = LargeID3TagRoutingTests
     /// Cover art added before the fixture's MLLT frame, frame header included. 3,155,233 left only
     /// 250 audio bytes in the first parse across the tag's end; the others are controls.

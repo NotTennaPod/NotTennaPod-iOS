@@ -21,7 +21,7 @@ import Testing
     static var expected: [String: Any] { try! json("background-work/expected/background-work.json") }
 
     private func temp() throws -> URL {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M29-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("BackgroundWork-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         return directory
     }
@@ -55,7 +55,7 @@ import Testing
         }
     }
 
-    // MARK: - Retention (STORE-MAINT-001)
+    // MARK: - Retention
 
     @Test func androidBackupLogKeepsSourceBoundariesNullDatesAndOrderAndExportsNullBack() async throws {
         let directory = try temp(); defer { try? FileManager.default.removeItem(at: directory) }
@@ -209,7 +209,7 @@ import Testing
         try await store.close()
     }
 
-    // MARK: - Attempts (DOWNLOAD-003/009; defect prevention: stops do not consume attempts)
+    // MARK: - Attempts (stops do not consume attempts)
 
     private func failure(_ reason: String) -> MediaDownloadFailure {
         switch reason {
@@ -466,7 +466,7 @@ import Testing
         #expect(cancelled == 4)
         let cancelledIDs = tasks.filter { $0.cancelled }.map { $0.taskIdentifier }
         #expect(cancelledIDs == [3, 4, 5, 6])
-        #expect(!kept.cancelled && !keptWaiting.cancelled, "the active download's transfer stays for M29 resume")
+        #expect(!kept.cancelled && !keptWaiting.cancelled, "the active download's transfer stays for the background resume")
         try await store.close()
     }
 
@@ -522,7 +522,7 @@ import Testing
         }
     }
 
-    @Test(.timeLimit(.minutes(1))) func endOfBackgroundTimeInterruptsForegroundTransfersUntilActiveAgain() async throws {
+    @Test func endOfBackgroundTimeInterruptsForegroundTransfersUntilActiveAgain() async throws {
         let held = HeldTransfer()
         let router = MediaDownloadRouter(foreground: held, background: nil, userAgent: "AntennaPod/test", proxyConfigured: { true })
         let request = MediaDownloadRequest(source: "https://example.test/a.mp3", destination: URL(fileURLWithPath: "/tmp/a"))

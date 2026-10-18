@@ -36,9 +36,12 @@ public protocol ServerExchangeTransport: Sendable {
     /// Sends a protocol request (`body` canonical JSON, or no body for GET) and returns the decoded answer. Throws
     /// `ServerExchangeError` for anything else.
     func send(_ method: String, _ path: String, body: ContractJSON?) async throws -> ContractJSON
+    /// Why a whole-library download may not use the network now (nil: it may, or the transport cannot tell).
+    func bulkWaitReason() async -> ServerNetworkWait?
 }
 
 extension ServerExchangeTransport {
+    public func bulkWaitReason() async -> ServerNetworkWait? { nil }
     func push(_ body: ContractJSON) async throws -> ContractJSON { try await send("POST", "v1/push", body: body) }
     func pull(_ body: ContractJSON) async throws -> ContractJSON { try await send("POST", "v1/pull", body: body) }
     func snapshot(_ body: ContractJSON) async throws -> ContractJSON { try await send("POST", "v1/snapshot", body: body) }
@@ -63,11 +66,18 @@ public struct HTTPServerExchangeTransport: ServerExchangeTransport {
     }
 
     public func send(_ method: String, _ path: String, body: ContractJSON?) async throws -> ContractJSON {
-        if let network, await !network.permitted() { throw ServerExchangeError.networkNotPermitted }
+        // A snapshot page (a whole library, hundreds of megabytes) is bulk work: Low Data Mode counts as mobile data for
+        // it, and each page asks the system again, so a network change during the download refuses the next page.
+        let bulk = Self.isBulk(path, body)
+        if let network, bulk ? await !network.permittedForBulk() : await !network.permitted() { throw ServerExchangeError.networkNotPermitted }
         guard let token = try await token() else { throw ServerExchangeError.noToken }
         var request = URLRequest(url: base.appendingPathComponent(path), cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                  timeoutInterval: 60)
-        if let network { request.allowsExpensiveNetworkAccess = await network.allowsMobile() }
+        if let network {
+            let mobile = await network.allowsMobile()
+            request.allowsExpensiveNetworkAccess = mobile
+            if bulk { request.allowsConstrainedNetworkAccess = mobile }
+        }
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("1", forHTTPHeaderField: "NotTennaPod-Protocol")
@@ -89,6 +99,13 @@ public struct HTTPServerExchangeTransport: ServerExchangeTransport {
         // is discarded without anything being written, so a change whose answer is lost stays unconfirmed.
         try Task.checkCancellation()
         return try Self.decode(status: response.status, body: response.body)
+    }
+
+    public func bulkWaitReason() async -> ServerNetworkWait? { await network?.bulkWaitReason() }
+
+    /// A snapshot request for pages (not a recovery's one-item opening).
+    static func isBulk(_ path: String, _ body: ContractJSON?) -> Bool {
+        path == "v1/snapshot" && body?["limit"]?.integerValue != 1
     }
 
     /// A 2xx protocol JSON object, or the error its body names.

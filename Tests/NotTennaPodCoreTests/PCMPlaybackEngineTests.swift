@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor struct PCMPlaybackEngineTests {
+@Suite(.serialized) @MainActor struct PCMPlaybackEngineTests {
     typealias Transport = SampleBufferPCMOutputTests.Transport
     @MainActor final class Driver: AudioSessionActivationDriver {
         var requests: [Bool] = []

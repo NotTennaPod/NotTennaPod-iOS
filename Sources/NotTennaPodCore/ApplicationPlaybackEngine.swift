@@ -271,7 +271,7 @@ import Foundation
         case .timelineReset(let value): .timelineReset(translated(value))
         case .ended(let value): .ended(translated(value))
         case .mediaServicesReset(let value): .mediaServicesReset(translated(value))
-        case .failed: event
+        case .failed, .streamingConfirmationRequired: event
         }
     }
     private func retireSelected() {

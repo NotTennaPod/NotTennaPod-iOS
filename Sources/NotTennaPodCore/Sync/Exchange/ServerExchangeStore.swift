@@ -17,9 +17,20 @@ public enum ServerPauseReason: String, Sendable, CaseIterable {
     case transportConflict = "transport_conflict"
     /// A `dependency_missing` naming a node this library holds: the server lost it (recovery, PROTOCOL §6.4).
     case dependencyLost = "dependency_lost"
+    /// The next change to send is larger than the server accepts (PROTOCOL §6.13 `max_framed_fact_bytes`): it is never sent;
+    /// it is kept, and later changes wait behind it until an explicit retry (Synchronize now). Pulls continue.
+    case changeTooLarge = "change_too_large"
+    /// The server refused the next change's parts three times (`invalid_part`, PROTOCOL §6.4): it is kept, and later changes
+    /// wait behind it until an explicit retry (Synchronize now). Pulls continue.
+    case changeRefused = "change_refused"
 
     /// Whether pulls continue while paused.
-    public var pullsContinue: Bool { self == .versionUnsupported || self == .transportConflict }
+    public var pullsContinue: Bool {
+        self == .versionUnsupported || self == .transportConflict || self == .changeTooLarge || self == .changeRefused
+    }
+
+    /// A pause of pushing alone that an explicit retry (Synchronize now, Force full synchronization) clears.
+    public var clearedByRetry: Bool { self == .changeTooLarge || self == .changeRefused }
 }
 
 /// A request a server refused with `version_unsupported` (PROTOCOL §10: "pause the affected direction"): until an explicit
@@ -68,8 +79,16 @@ struct ServerBounds: Sendable, Equatable {
     var maxUnframedFactBytes = 256 << 10
     var maxPartBytes = 256 << 10
     var maxPartCount = 64
+    var maxFramedFactBytes = 8 << 20
     /// Entries per recovery inventory request (PROTOCOL §6.11).
     var recoveryInventory = 2_000
+
+    /// The largest fact any server of the protocol accepts (PROTOCOL §6.13).
+    static let factBoundCeiling = 8 << 20
+
+    /// The largest fact this library numbers or sends: what the server advertises, never above 8 MiB, and no more than its
+    /// parts can carry.
+    var factBound: Int { min(maxFramedFactBytes, Self.factBoundCeiling, maxPartBytes * maxPartCount) }
 
     init() {}
 
@@ -81,6 +100,7 @@ struct ServerBounds: Sendable, Equatable {
         maxUnframedFactBytes = value("max_unframed_fact_bytes", maxUnframedFactBytes)
         maxPartBytes = value("max_part_bytes", maxPartBytes)
         maxPartCount = value("max_part_count", maxPartCount)
+        maxFramedFactBytes = value("max_framed_fact_bytes", maxFramedFactBytes)
         recoveryInventory = value("recovery_inventory", recoveryInventory)
     }
 }
@@ -156,6 +176,11 @@ extension FeedLibraryStore {
         try syncTransactions(ServerTransactionKind.bookkeeping) { try database.transaction(durable: true) {
             try database.execute("UPDATE ntp_library SET durability_counter = durability_counter + 1 WHERE id = 1")
         } }
+    }
+
+    /// Whether the outbox holds an entry after `acked` (a push has something to send).
+    func serverOutboxHasEntries(after acked: Int64) throws -> Bool {
+        try database.scalar("SELECT EXISTS(SELECT 1 FROM ntp_outbox WHERE install_seq > ?)", [.integer(acked)]) == 1
     }
 
     /// Unacknowledged outbox entries after `acked`, in slot order.
@@ -268,6 +293,51 @@ extension FeedLibraryStore {
         }
     }
 
+    // MARK: - Changes the server refuses (PROTOCOL §6.4 `invalid_part`, §6.13 `max_framed_fact_bytes`)
+
+    /// Consecutive `invalid_part` answers to one framing of a change after which pushing pauses (`changeRefused`).
+    static let pushRefusalLimit = 3
+
+    /// Counts an `invalid_part` answer to the framing `transactionID` of the change `opID` and sets when pushing may try
+    /// again: 3 s after the first, doubling up to 5 minutes; at the third, pushing pauses (`changeRefused`) until an
+    /// explicit retry. A part stored never resets the count; a new framing (a renumbering, a new installation) starts again.
+    /// Returns the count and the delay in milliseconds.
+    func noteServerPushRefusal(opID: String, transactionID: String, now: Int64) throws -> (count: Int, delay: Int64) {
+        try syncTransactions(ServerTransactionKind.bookkeeping) { try database.transaction {
+            try database.execute("DELETE FROM ntp_push_refusals WHERE op_id NOT IN (SELECT op_id FROM ntp_outbox)")
+            try database.execute("INSERT INTO ntp_push_refusals(op_id, transaction_id, count) VALUES (?, ?, 1) ON CONFLICT(op_id, transaction_id) DO UPDATE SET count = count + 1",
+                                 [.text(opID), .text(transactionID)])
+            let count = Int(try database.scalar("SELECT count FROM ntp_push_refusals WHERE op_id = ? AND transaction_id = ?",
+                                                [.text(opID), .text(transactionID)]))
+            let delay = min(Int64(300_000), Int64(3_000) << Int64(min(count - 1, 10)))
+            try database.execute("UPDATE ntp_library SET push_retry_not_before = ? WHERE id = 1", [.integer(now + delay)])
+            if count >= Self.pushRefusalLimit {
+                try database.execute("UPDATE ntp_library SET pause_reason = ?, protocol_version = NULL, version_refusals = NULL WHERE id = 1",
+                                     [.text(ServerPauseReason.changeRefused.rawValue)])
+            }
+            return (count, delay)
+        } }
+    }
+
+    /// When pushing may send again after an `invalid_part` answer (milliseconds), nil when it may now.
+    func serverPushRetryNotBefore() throws -> Int64? {
+        try database.rows("SELECT push_retry_not_before FROM ntp_library WHERE id = 1").first?.first?.integer
+    }
+
+    /// An explicit retry (Synchronize now, Force full synchronization): a change the server refused, or one too large, is
+    /// tried once more now. A refusal counted up to the pause pauses again at the next one. Returns the pause it cleared.
+    @discardableResult
+    func retryRefusedServerPushes() throws -> ServerPauseReason? {
+        try syncTransactions(ServerTransactionKind.bookkeeping) { try database.transaction {
+            let pause = try serverExchangeState().pause
+            try database.execute("UPDATE ntp_push_refusals SET count = min(count, ?)", [.integer(Int64(Self.pushRefusalLimit - 1))])
+            try database.execute("UPDATE ntp_library SET push_retry_not_before = NULL WHERE id = 1 AND push_retry_not_before IS NOT NULL")
+            guard let pause, pause.clearedByRetry else { return nil }
+            try database.execute("UPDATE ntp_library SET pause_reason = NULL WHERE id = 1")
+            return pause
+        } }
+    }
+
     static func refusedRequests(_ text: String?) -> Set<ServerRefusedRequest> {
         let named = Set((text ?? "").split(separator: ",").compactMap { ServerRefusedRequest(rawValue: String($0)) })
         return named.isEmpty ? [.push] : named
@@ -313,6 +383,9 @@ extension FeedLibraryStore {
     }
 
     func takeServerDiagnostics() -> [(kind: String, detail: String)] {
+        // What observations differed in since the last exchange, by field name only: one line, however many feeds.
+        if !observationTally.isEmpty { noteServerDiagnostic("observe", observationTally.line) }
+        observationTally = ObservationDifferenceTally()
         defer { serverDiagnostics.removeAll() }
         return serverDiagnostics
     }

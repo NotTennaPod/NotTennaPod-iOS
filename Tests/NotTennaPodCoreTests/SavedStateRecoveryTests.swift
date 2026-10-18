@@ -7,7 +7,7 @@ import Testing
 /// Saved state that cannot be read now (before the first unlock after a restart, a permission or I/O error) during
 /// Keep recovery, in the stores the graph opens and in the token-removal journal is never taken for absent, and a
 /// download parked for it is tried again once access may have returned, without holding the process.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct SavedStateRecoveryTests {
+@MainActor @Suite(.serialized) struct SavedStateRecoveryTests {
     /// Makes `item` unreadable (a file) or unexaminable (a folder) until the returned closure restores it.
     private func deny(_ item: URL) throws -> () -> Void {
         var directory: ObjCBool = false

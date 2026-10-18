@@ -46,6 +46,10 @@ final class FeedAppBarView: UIView {
     private static let blurred: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>(); cache.countLimit = 8; cache.totalCostLimit = 32 * 1024 * 1024; return cache
     }()
+    /// Blurred backgrounds kept in memory (`ArtworkImageCache.trimMemory`: none in the background or after a memory warning).
+    private static var blurredKeys: Set<NSString> = []
+    static var blurredCount: Int { blurredKeys.count { blurred.object(forKey: $0) != nil } }
+    static func removeBlurredFromMemory() { blurred.removeAllObjects(); blurredKeys = [] }
     private func blurKey(width: Int, height: Int, scale: CGFloat) -> NSString? {
         guard let source = header.artworkSource,
               source.hasPrefix("https://") || source.hasPrefix("http://") || source.hasPrefix(GenerativeCoverPattern.artworkPrefix)
@@ -82,7 +86,7 @@ final class FeedAppBarView: UIView {
             let result = await withTaskCancellationHandler { await worker.value } onCancel: { worker.cancel() }
             guard !Task.isCancelled, let self, renderID == request else { return }
             let finished = result.map { UIImage(cgImage: $0) }
-            if let key, let finished { Self.blurred.setObject(finished, forKey: key, cost: width * height * 4) }
+            if let key, let finished { Self.blurred.setObject(finished, forKey: key, cost: width * height * 4); Self.blurredKeys.insert(key) }
             background.image = finished
         }
     }

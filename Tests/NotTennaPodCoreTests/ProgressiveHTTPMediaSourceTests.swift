@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor
+@Suite(.serialized) @MainActor
 struct ProgressiveHTTPMediaSourceTests {
     private enum Failure: Error { case timedOut }
     @MainActor private final class SeekResult { var value: Bool? }

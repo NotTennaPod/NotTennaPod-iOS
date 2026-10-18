@@ -48,7 +48,7 @@ extension ServerSyncEngine {
         case .transportConflict: return try await beginConflict()
         case .dependencyLost: return try await beginRecovery(.dependencyLost)
         case .lineageMismatch: return try await beginRecovery(.lineageMismatch)
-        case .versionUnsupported, .signIn, .lineageUnknown: return false
+        case .versionUnsupported, .signIn, .lineageUnknown, .changeTooLarge, .changeRefused: return false
         }
     }
 
@@ -203,7 +203,7 @@ extension ServerSyncEngine {
         guard !applied.isEmpty else { return }
         for chunk in FeedLibraryStore.chunks(applied, size: 50) {
             let result = try await store.retireServerRetained(chunk, deleting: Set(chunk), history: history, now: now())
-            record(result, into: &report)
+            await record(result, into: &report)
         }
     }
 }

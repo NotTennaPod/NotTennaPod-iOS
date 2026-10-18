@@ -45,7 +45,7 @@ import XCTest
         app.buttons["navigationMore"].tapWhenSettled(); app.buttons["Add podcast"].tapWhenSettled(); app.buttons["addRSS"].tapWhenSettled()
         let address = app.textFields["rssAddress"]
         XCTAssertTrue(address.waitForExistence(timeout: 5)); address.tapWhenSettled()
-        address.typeTextSettled("http://127.0.0.1:59431/feed.xml?format=mp3&run=m35-\(library)")
+        address.typeTextSettled("http://127.0.0.1:59431/feed.xml?format=mp3&run=widget-\(library)")
         app.buttons["Confirm"].tapWhenSettled()
         XCTAssertTrue(app.buttons["subscribeFeed"].waitForExistence(timeout: 15)); app.buttons["subscribeFeed"].tapWhenSettled()
         let action = app.buttons["episode-action-1"]
@@ -317,11 +317,11 @@ import XCTest
         until("redrawn", timeout: 10) { self.distance(try? self.pixel(at: inside), opaque) > 30 }
         attach("widget-opacity-0")
         let clear = try pixel(at: inside), wallpaper = try pixel(at: beside)
-        print("M35 opacity probe: 100 % \(opaque), 0 % \(clear), wallpaper beside \(wallpaper)")
+        print("Widget opacity probe: 100 % \(opaque), 0 % \(clear), wallpaper beside \(wallpaper)")
         let gap: Int = abs(clear.r - wallpaper.r) + abs(clear.g - wallpaper.g) + abs(clear.b - wallpaper.b)
-        // Unresolved: iOS draws its own backing under a see-through widget background (white in the original
+        // A known difference: iOS draws its own backing under a see-through widget background (white in the original
         // light-appearance capture), so the wallpaper never shows. Readability has its own assertion below.
-        XCTExpectFailure("U2: iOS shows its own widget backing, not the wallpaper, at 0 % opacity (awaiting the user's decision)") {
+        XCTExpectFailure("iOS shows its own widget backing, not the wallpaper, at 0 % opacity") {
             XCTAssertLessThanOrEqual(gap, 60, "0 %: \(clear), wallpaper beside: \(wallpaper)")
         }
         // A wallpaper-transparency failure must never excuse invisible text or controls.
@@ -341,7 +341,7 @@ import XCTest
     }
 
     /// These exercise the actual installed widget, not an app preview or a reconstructed background, and
-    /// change no Home Screen appearance setting. U2's independent literal-wallpaper expectation above remains.
+    /// change no Home Screen appearance setting. The literal-wallpaper expectation above stays separate.
     func testMediumWidgetIsReadableAtSavedOpacityValuesAndCoverOptions() throws {
         try widgetReadabilityMatrix(narrow: false)
     }

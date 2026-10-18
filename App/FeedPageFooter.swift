@@ -29,17 +29,35 @@ import UIKit
         }, for: .touchUpInside)
     }
     required init?(coder: NSCoder) { fatalError() }
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
+
+    /// The text's measurement, kept for its width, text size and text: the list asks for the footer's size on every
+    /// scroll callback.
+    private var measured: (width: CGFloat, category: UIContentSizeCategory, text: String?, size: CGSize)?
+    /// Text measurements made (tests).
+    private(set) var measurements = 0
+
+    private func textSize(width: CGFloat) -> CGSize {
+        let category = traitOverrides.contains(UITraitPreferredContentSizeCategory.self)
+            ? traitOverrides.preferredContentSizeCategory : traitCollection.preferredContentSizeCategory
+        if let measured, measured.width == width, measured.category == category, measured.text == label.text {
+            return measured.size
+        }
         label.font = Appearance.font(14, compatibleWith: Appearance.textMetricsTraits(inheriting: traitCollection, through: [self]))
-        let text = label.sizeThatFits(CGSize(width: max(1, size.width - 48), height: .greatestFiniteMagnitude))
+        let size = label.sizeThatFits(CGSize(width: max(1, width - 48), height: .greatestFiniteMagnitude))
+        measurements += 1
+        measured = (width, category, label.text, size)
+        return size
+    }
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        let text = textSize(width: size.width)
         // Android's small TextView includes font padding in its approximately
         // 20-point line box. Keep that space around the same 14-point glyphs.
         return CGSize(width: size.width, height: max(20 * label.font.pointSize / 14, text.height) + 16)
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        label.font = Appearance.font(14, compatibleWith: Appearance.textMetricsTraits(inheriting: traitCollection, through: [self]))
-        let text = label.sizeThatFits(CGSize(width: max(1, bounds.width - 48), height: .greatestFiniteMagnitude))
+        let text = textSize(width: bounds.width)
         let start = (bounds.width - text.width - 32) / 2
         image.frame = CGRect(x: start, y: (bounds.height - 16) / 2, width: 16, height: 16)
         label.frame = CGRect(x: start + 24, y: (bounds.height - text.height) / 2, width: text.width, height: text.height)

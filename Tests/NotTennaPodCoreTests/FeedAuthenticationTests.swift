@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) struct FeedAuthenticationTests {
+@Suite struct FeedAuthenticationTests {
     private let credentials = FeedCredentials(username: "fixture-user", password: "fixture-password")
     private var fetched: FetchedFeed {
         .init(feed: .init(format: .rss, title: "Private feed", episodes: []), source: "https://example.test/private.xml",

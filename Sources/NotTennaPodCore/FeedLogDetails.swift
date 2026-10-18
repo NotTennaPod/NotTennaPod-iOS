@@ -5,8 +5,12 @@ public struct FeedLogDetails: Equatable, Sendable {
     public let podcast: String?
     public let episode: String?
     public let feedID: Int64?
-    public let status, technical, fileURL, clipboard: String
+    public let status, technical, fileURL: String
+    public private(set) var clipboard: String
     public let statusKey: String
+    /// In a server library, where and when each side last refreshed the podcast ("The server: Failed (…)", "This
+    /// device: Successful (…)"); empty otherwise.
+    public private(set) var origins: [String] = []
 
     public init(log: FeedLibraryLog, feed: LibraryFeed?, text: (String) -> String) {
         // A deleted/unavailable feed uses the logged title and literal unknown URL.
@@ -64,6 +68,45 @@ public struct FeedLogDetails: Equatable, Sendable {
         clipboard = "\(text("download_log_details_human_readable_reason_title")): \n\(status) \n\n"
             + "\(text("download_log_details_technical_reason_title")): \n\(detail ?? "null") \n\n"
             + "\(text("download_log_details_file_url_title")): \n\(fileURL)"
+    }
+
+    /// The server's failed refresh of a podcast (its `refresh_status`): Android's dialog with the server's wording, its
+    /// sanitized detail (never the internal label) and the podcast's address.
+    public init(server status: ServerRefreshStatus, feed: LibraryFeed, text: (String) -> String) {
+        feedID = feed.id; episode = nil
+        podcast = feed.title
+        fileURL = feed.source
+        statusKey = status.statusKey
+        self.status = text(statusKey)
+        let detail = status.technical
+        technical = detail ?? ""
+        clipboard = "\(text("download_log_details_human_readable_reason_title")): \n\(self.status) \n\n"
+            + "\(text("download_log_details_technical_reason_title")): \n\(detail ?? "null") \n\n"
+            + "\(text("download_log_details_file_url_title")): \n\(fileURL)"
+    }
+
+    /// What the notice of a failed refresh opens (`LibraryFeed.refreshFailed`): this device's latest refresh when it
+    /// failed (its log entry has the device's own details), else the server's failure; nil when neither failed (the
+    /// Download log then). In a server library the details also say how and when each side last refreshed: the server's
+    /// published status, and this device's own last refresh (`localRefreshAttempt`; none for a podcast it never
+    /// refreshed, whatever its creation time).
+    public static func refreshFailure(latestLog log: FeedLibraryLog?, feed: LibraryFeed?, text: (String) -> String,
+                                      date: (Date) -> String) -> FeedLogDetails? {
+        var details: FeedLogDetails
+        if let log, !log.kind.isSuccessful { details = FeedLogDetails(log: log, feed: feed, text: text) }
+        else if let feed, let status = feed.serverRefresh, status.failed { details = FeedLogDetails(server: status, feed: feed, text: text) }
+        else { return nil }
+        guard let feed, let server = feed.serverRefresh else { return details }
+        func outcome(_ successful: Bool, _ time: Date?) -> String {
+            let word = text(successful ? "gpodnetsync_pref_report_successful" : "gpodnetsync_pref_report_failed")
+            return time.map { word + " (" + date($0) + ")" } ?? word
+        }
+        details.origins = [String(format: text("ntp_refresh_by_server"), outcome(!server.failed, server.lastAttempt))]
+        if let time = feed.localRefreshAttempt {
+            details.origins.append(String(format: text("ntp_refresh_by_device"), outcome(!feed.lastUpdateFailed, time)))
+        }
+        details.clipboard += " \n\n\(text("ntp_refresh_last_title")): \n" + details.origins.joined(separator: "\n")
+        return details
     }
 
     public static func statusKey(for kind: FeedLibraryLog.Kind) -> String {

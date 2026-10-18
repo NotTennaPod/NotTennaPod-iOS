@@ -14,7 +14,7 @@ import Testing
     // expected documents from the pinned source assets, so any template byte that differs fails them.
 
     private func library(_ database: URL) async throws -> [LibraryFeed] {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M17-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("HTMLExport-\(UUID())", isDirectory: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let restored = try AndroidDatabaseRestore.read(database, staging: directory.appendingPathComponent("s"))
         let store = try FeedLibraryStore(url: directory.appendingPathComponent("library.sqlite"))
@@ -70,7 +70,7 @@ import Testing
     private func compare(_ feeds: [LibraryFeed], _ name: String) throws {
         for (suffix, data) in [("feeds", HTMLExportWriter.subscriptions(feeds)), ("favorites", HTMLExportWriter.favorites(feeds))] {
             let expected = try expectedDocument(name, suffix)
-            if data != expected, let keep = ProcessInfo.processInfo.environment["M17_KEEP_DIR"] {
+            if data != expected, let keep = ProcessInfo.processInfo.environment["HTML_EXPORT_KEEP_DIR"] {
                 try? data.write(to: URL(fileURLWithPath: keep).appendingPathComponent("\(name)-\(suffix).html"))
             }
             #expect(data == expected, "\(name)-\(suffix)")

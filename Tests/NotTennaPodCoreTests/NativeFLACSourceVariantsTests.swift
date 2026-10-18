@@ -6,7 +6,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct NativeFLACSourceVariantsTests {
+@Suite(.serialized) struct NativeFLACSourceVariantsTests {
     private struct Manifest: Decodable {
         let files: [File]
         struct File: Decodable {

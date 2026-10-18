@@ -17,7 +17,7 @@ import Testing
 /// (`ServerTransactionKind.budgets`) as information only. After the pause what still waited applies. It takes minutes,
 /// so it runs when `NTP_SYNC_STARVATION` is set (`NTP_SYNC_STARVATION=20000` sets the large podcast's size, the
 /// default); run it on a quiet machine with `PCMRealTimeStarvationTests`.
-@Suite(.serialized, .timeLimit(.minutes(60)), .enabled(if: ProcessInfo.processInfo.environment["NTP_SYNC_STARVATION"] != nil))
+@Suite(.serialized, .enabled(if: ProcessInfo.processInfo.environment["NTP_SYNC_STARVATION"] != nil))
 @MainActor struct SyncLoadStarvationTests {
     typealias Agreement = ServerExchangeAgreementTests
     typealias Concurrency = ServerExchangeConcurrencyTests

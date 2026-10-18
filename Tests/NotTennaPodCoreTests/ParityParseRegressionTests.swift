@@ -262,7 +262,7 @@ struct ParityParseRegressionTests {
         for (name, doc) in [("elements", elements), ("attributes", attributes)] {
             let plain = try Self.timedTitle(doc("u", n - 1))
             let hostile = try Self.timedTitle(doc(String(repeating: "u", count: n), 0))
-            print("parity hostile input N1 \(name): \(hostile.seconds) s, a short URI \(plain.seconds) s")
+            print("parity long namespace URI \(name): \(hostile.seconds) s, a short URI \(plain.seconds) s")
             #expect(plain.title == "t" && hostile.title == "t", "\(name)")
             #expect(hostile.seconds < 4 * plain.seconds + 0.5, "\(name): \(hostile.seconds) s, a short URI \(plain.seconds) s")
         }
@@ -322,7 +322,7 @@ struct ParityParseRegressionTests {
         ] {
             var title: String?
             let run = try ParityParseMeasurementTests.measure { title = try ParityFeedParserTests.parse(doc).title }
-            print("parity hostile input N3 \(name): peak heap \(run.peakBytes) bytes for a \(doc.utf8.count)-byte feed")
+            print("parity attribute buffer \(name): peak heap \(run.peakBytes) bytes for a \(doc.utf8.count)-byte feed")
             #expect(title == "t", "\(name)")
             #expect(run.peakBytes < 32 * doc.utf8.count, "\(name): peak heap \(run.peakBytes) bytes for a \(doc.utf8.count)-byte feed")
         }

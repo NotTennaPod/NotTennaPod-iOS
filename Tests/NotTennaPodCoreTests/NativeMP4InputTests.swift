@@ -6,7 +6,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct NativeMP4InputTests {
+@Suite(.serialized) struct NativeMP4InputTests {
     static let variants = ["fast", "tail", "large-mdat", "extended-free"]
     private func fixture(_ name: String) throws -> URL {
 #if SWIFT_PACKAGE

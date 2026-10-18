@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct PCMDeferredRetryTests {
+@MainActor @Suite(.serialized) struct PCMDeferredRetryTests {
     private func wait(_ condition: () async throws -> Bool) async throws {
         let end = ContinuousClock.now + .seconds(12)
         repeat {

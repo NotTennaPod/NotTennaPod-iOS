@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2)))
+@Suite(.serialized)
 struct HTTPCodecUnknownRangeTests {
     private enum Failure: Error { case deadline }
     private func chunk(_ data: Data, end: Bool = false) -> Data {

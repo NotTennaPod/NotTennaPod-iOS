@@ -13,7 +13,7 @@ final class QueueGestureTests: XCTestCase {
         let app = XCUIApplication()
         library = UUID().uuidString
         app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-queue-gestures"]
-        if ["scroll","resize","keyboard"].contains(name) { app.launchArguments += ["-test-m10-a7-diagnostics"] }
+        if ["scroll","resize","keyboard"].contains(name) { app.launchArguments += ["-test-queue-diagnostics"] }
         if let interrupt { app.launchArguments += ["-test-queue-interrupt", interrupt] }
         if rtl { app.launchArguments += ["-test-queue-rtl"] }
         if large { app.launchArguments += ["-test-queue-large-text"] }
@@ -228,7 +228,7 @@ final class QueueGestureTests: XCTestCase {
         let app=launch("rtl",rtl:true); defer { app.terminate(); XCUIDevice.shared.orientation = .portrait }
         drag(3,to:1,x:70,app:app,rtl:true); expectOrder(Array(1...16),app); scrollRowsIntoView([3,1],app:app,rtl:true)
         drag(3,to:1,x:36,app:app,rtl:true); expectOrder([3,1,2]+Array(4...16),app)
-        if ProcessInfo.processInfo.environment["M10_QUEUE_SCENE_RESIZE_IN_MOUNTED_TESTS"] == "1" {
+        if ProcessInfo.processInfo.environment["QUEUE_SCENE_RESIZE_IN_MOUNTED_TESTS"] == "1" {
             // Duo's device-orientation request does not resize its scene. The paired
             // mounted OS-scene case supplies landscape geometry/hit/data/restoration.
             return

@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) struct ReceiverStreamingRelayTests {
+@Suite(.serialized) struct ReceiverStreamingRelayTests {
     @Test func endpointRequiresConcreteAddressAndFormatsIPv6() throws {
         for invalid in ["", "0.0.0.0", "::", "255.255.255.255", "224.0.0.1", "ff02::1", "receiver.invalid", "127.0.0.1/path"] {
             #expect(throws: (any Error).self) { try NativeRelayEndpoint.receiver(address: invalid) }

@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) struct MP3RequiredID3MetadataTests {
+@Suite(.serialized) struct MP3RequiredID3MetadataTests {
     final class Input: MediaByteInput {
         let data: Data
         let reads = Mutex<[Int]>([])

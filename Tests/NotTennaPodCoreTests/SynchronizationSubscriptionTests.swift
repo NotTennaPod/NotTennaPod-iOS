@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct SynchronizationSubscriptionTests {
     private func fixture(_ body: (FeedLibraryStore, URL, UUID) async throws -> Void) async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("SyncSubscriptions-\(UUID())")

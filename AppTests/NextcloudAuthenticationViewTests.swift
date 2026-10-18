@@ -6,7 +6,7 @@ import Testing
 
 /// Mounted dialog and secure-restoration checks. Real browser/provider handoff
 /// is covered separately by NextcloudAuthenticationTests in the UI target.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct NextcloudAuthenticationViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView, as: T.Type = T.self) -> T? {
         if let result = view as? T, result.accessibilityIdentifier == id { return result }

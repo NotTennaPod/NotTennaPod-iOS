@@ -52,7 +52,7 @@ public struct StatisticsPeriodOptions: Equatable, Sendable {
         formatter.timeZone = calendar.timeZone
         formatter.setLocalizedDateFormatFromTemplate("MMM yyyy")
         var starts: [StatisticsPeriodOption] = [], ends: [StatisticsPeriodOption] = []
-        // REF-STATISTICS-MONTH-001: an empty library captured exactly at month
+        // An empty library captured exactly at month
         // start otherwise has no From choice. Include only that real month,
         // matching the source's usable choices one millisecond later. Older
         // history and future oldest timestamps retain the strict source bound.

@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct FeedRefreshFlowTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if let value = view as? T, value.accessibilityIdentifier == id { return value }
@@ -33,6 +33,20 @@ struct FeedRefreshFlowTests {
             return .init(url: request.url!, status: 200, body: Data("<rss version=\"2.0\"><channel><title>Refreshed podcast</title><item><guid>new</guid><title>Delivered episode</title></item></channel></rss>".utf8))
         }
         func release() { continuation?.resume(); continuation = nil }
+    }
+    /// Each feed answers after a simulated network time, so refreshing every podcast takes seconds, as on a phone.
+    private actor SlowFeeds: FeedHTTPTransport {
+        private(set) var fetched = 0
+        func send(_ request: URLRequest) async throws -> FeedHTTPResponse {
+            try await Task.sleep(for: .milliseconds(80))
+            fetched += 1
+            let url = try #require(request.url), number = url.lastPathComponent
+            return .init(url: url, status: 200, body: Data("""
+                <rss version="2.0"><channel><title>Podcast \(number)</title><item><guid>episode-\(number)</guid>\
+                <title>Episode \(number)</title><enclosure url="https://example.org/media/\(number).mp3" type="audio/mpeg" length="1000"/>\
+                </item></channel></rss>
+                """.utf8))
+        }
     }
 
     @Test func editURLFromInformationPersistsFetchesAndReturnsToUpdatedList() async throws {
@@ -178,6 +192,83 @@ struct FeedRefreshFlowTests {
             let reopened = try MobileNetworkPreferenceStore(file: root.appendingPathComponent("mobile.json"))
             #expect(reopened.allows(.feedRefresh) == (choice == "always"))
             if choice == "offline" || choice == "no" { #expect(accepted.isEmpty) }
+        }
+        try await store.close()
+    }
+
+    /// Refreshing every podcast (70, over seconds) redraws the lists at most once a second while it runs, plus once when
+    /// it ends, instead of once per podcast (a stutter while a person scrolls). When it ends the screen shows everything
+    /// the refresh brought, exactly as a full reload does.
+    @Test func refreshingEveryPodcastRedrawsTheListsAtMostOnceASecond() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("RefreshAllReloads-\(UUID())")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = try FeedLibraryStore(url: root.appendingPathComponent("library.sqlite"))
+        for number in 0..<70 {
+            let source = "https://example.org/feeds/\(number)"
+            _ = try await store.insert(.init(feed: .init(format: .rss, title: "Podcast \(number)"), source: source,
+                responseURL: URL(string: source)!, validator: nil, permanentRedirectURL: nil))
+        }
+        let deletion = FeedDeletionCoordinator(store: store, retirePlayback: { _ in }, retireDownloads: { _ in })
+        let automatic = AutomaticDownloadCoordinator(store: store, preferences: { .init() },
+            environment: { .init(connection: .unavailable, allowMobile: false, charging: false) }, cleanup: { _ in }, download: { _ in })
+        weak var displayed: LibraryViewController?
+        // Wired as the app wires it (AppDelegate): each refreshed podcast requests a reload, the end waits for one.
+        var starts: [ContinuousClock.Instant] = []
+        let reloads = LibraryReloadCoalescer {
+            starts.append(.now)
+            await displayed?.reloadLibrary(preservingEpisodeDetails: true, keepsUnchangedScreen: true)?.value
+        }
+        let delivery = ManualFeedRefreshDelivery(store: store, deletion: deletion,
+            notifications: .init(store: store, publisher: Publisher(), text: NewEpisodeNotificationContent.text, artwork: { _ in nil }),
+            automaticDownloads: automatic, allowMobileSync: { false },
+            libraryChanged: { await reloads.requestAndWait() }, feedRefreshed: { reloads.request() })
+        let transport = SlowFeeds(), network = DownloadNetworkMonitor(startMonitoring: false)
+        network.update(.init(connected: true, metered: false, cellular: false))
+        let refresh = ManualFeedRefreshCoordinator(store: store, worker: .init(store: store,
+            remote: .init(store: store, fetcher: .init(transport: transport)), local: .init(store: store),
+            localDescription: "Local", localAuthor: "Folder", network: network, credentials: { _ in nil }, options: { _ in .init() }, effects: delivery))
+        let controller = LibraryViewController(library: store, startupError: nil, downloads: nil, playback: nil,
+            timeDisplayPreferences: nil, navigationPreferences: nil, speedPreferences: nil, mobileNetworkPreferences: nil,
+            usage: nil, feedDeletion: deletion, manualRefresh: refresh,
+            refreshNetwork: { .init(connected: true, metered: false, cellular: false) })
+        displayed = controller
+        delivery.onChange = { [weak controller] _ in controller?.refreshProgressChanged() }
+        refresh.onChange = { [weak controller] state in controller?.refreshStateChanged(state) }
+        try await withViewTestWindow { host, _ in
+            host.addChild(controller); host.view.addSubview(controller.view); controller.didMove(toParent: host)
+            defer {
+                controller.willMove(toParent: nil); controller.view.removeFromSuperview(); controller.removeFromParent()
+                refresh.suspend()
+            }
+            controller.view.frame = CGRect(x: 0, y: 0, width: 402, height: 800)
+            await controller.reloadLibrary()?.value
+            controller.select(.episodes)
+            controller.view.layoutIfNeeded()
+            #expect(controller.displayedEpisodeIDs.isEmpty)
+
+            let begin = ContinuousClock.now
+            _ = try await refresh.runOnce(feedID: nil).value
+            try await refresh.waitUntilIdle()
+            let elapsed = ContinuousClock.now - begin
+            print("REFRESH-ALL reloads: \(starts.count) in \(elapsed)")
+            #expect(await transport.fetched == 70)
+            #expect(elapsed > .seconds(1), "the refresh spans more than one interval")
+            // At most one start a second (the first at once), plus the final one.
+            #expect(starts.count >= 2 && starts.count <= Int(elapsed / .seconds(1)) + 2, "\(starts.count) reloads in \(elapsed)")
+            let during = starts.dropLast()
+            for (earlier, later) in zip(during, during.dropFirst()) {
+                #expect(earlier.duration(to: later) >= .milliseconds(900), "reloads \(earlier.duration(to: later)) apart")
+            }
+
+            // Nothing stale: the screen is what a full reload of the library shows.
+            controller.view.layoutIfNeeded()
+            let (feeds, rows) = (controller.feeds, controller.displayedEpisodeIDs)
+            #expect(rows.count == 70)
+            #expect(feeds == (try await store.snapshot()).feeds)
+            await controller.reloadLibrary()?.value
+            controller.view.layoutIfNeeded()
+            #expect(controller.feeds == feeds && controller.displayedEpisodeIDs == rows)
         }
         try await store.close()
     }

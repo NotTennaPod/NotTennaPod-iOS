@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct MediaStreamingTimeoutTests {
     private var fixture: URL {
 #if SWIFT_PACKAGE

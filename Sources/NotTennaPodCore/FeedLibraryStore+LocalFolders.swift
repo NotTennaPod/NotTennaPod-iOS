@@ -244,7 +244,7 @@ extension FeedLibraryStore {
                   var episode = try loadEpisode(episodeID) else { return false }
             if episode.details.media?.hasEmbeddedPicture != present {
                 episode.details.media?.hasEmbeddedPicture = present
-                try saveEpisode(episode, feedID: reference.folder.feedID)
+                try saveEpisode(episode, feedID: reference.folder.feedID, scope: .media)
             }
             try persistBookmarkRenewal(refreshedBookmark, observed: reference.folder, current: current.folder)
             try Task.checkCancellation()
@@ -290,7 +290,7 @@ extension FeedLibraryStore {
             episode.details.media?.hasEmbeddedPicture = metadata.embeddedArtwork != nil
             if let description = metadata.description { episode.details.description = description }
             episode.details.media?.metadataPending = nil
-            try saveEpisode(episode, feedID: reference.folder.feedID)
+            try saveEpisode(episode, feedID: reference.folder.feedID, scope: .metadata)
             try persistBookmarkRenewal(refreshedBookmark, observed: reference.folder, current: current.folder)
             try Task.checkCancellation()
             return true
@@ -315,7 +315,7 @@ extension FeedLibraryStore {
                   var episode = try loadEpisode(episodeID) else { return false }
             if episode.details.media?.hasEmbeddedPicture != present {
                 episode.details.media?.hasEmbeddedPicture = present
-                try saveEpisode(episode, feedID: feedID(forEpisode: episodeID))
+                try saveEpisode(episode, feedID: feedID(forEpisode: episodeID), scope: .media)
             }
             return true
         }

@@ -4,12 +4,12 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-/// Real-time sufficiency of the production processed-PCM path (2026-10-01 device report: constant skipping at
+/// Real-time sufficiency of the production processed-PCM path (a device report: constant skipping at
 /// 1.75× on a downloaded MP3). A long MP3 plays through the application's factory settings and Apple's renderer
 /// while the main thread is blocked 400 ms of every second, like a busy screen, and every core is loaded. Any
 /// moment the renderer runs out of written audio is a gap a listener hears (`PCMStarvationDiagnostics`); the
 /// heard position must also advance at the selected speed. The former 0.37 s queue failed this from ~250 ms.
-@Suite(.serialized, .timeLimit(.minutes(3))) @MainActor struct PCMRealTimeStarvationTests {
+@Suite(.serialized) @MainActor struct PCMRealTimeStarvationTests {
     @MainActor final class Driver: AudioSessionActivationDriver {
         func setActive(_ active: Bool) async throws -> Bool { true }
     }

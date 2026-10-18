@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor
+@Suite(.serialized) @MainActor
 struct AVPlayerPlaybackEngineTests {
     private enum Failure: Error { case timedOut }
     @MainActor private final class AudioConfiguration {

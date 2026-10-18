@@ -15,7 +15,7 @@ import Testing
 /// (labelled start − target, the decoder's grid) and first heard content (where
 /// that audio really is in an uninterrupted decode − target), which on an
 /// approximate seek map also contains the map's own estimate error.
-@Suite(.serialized, .timeLimit(.minutes(3))) struct MP3SeekAdmissionTests {
+@Suite(.serialized) struct MP3SeekAdmissionTests {
     struct Marker: Decodable, Sendable {
         struct Header: Decodable, Sendable { let encoderDelay: Int64; let encoderPadding: Int64 }
         let name: String

@@ -106,8 +106,15 @@ extension FeedLibraryStore {
             // alone. A standalone library counts every save, as Android does.
             let kind = try playbackSaveKind(local: session.id, episodeID: episode.id)
             if kind.listens {
-                episode.userState.lastPlayedTimeMilliseconds = timestamp
-                episode.userState.lastPlayedHistoryMilliseconds = timestamp
+                if case .listening = kind {
+                    // A server library shows the greatest listening time known (PROTOCOL §8.7): another device's, or
+                    // the server's normalized time of this one's, may be later than this save's own clock.
+                    episode.userState.lastPlayedTimeMilliseconds = max(episode.userState.lastPlayedTimeMilliseconds, timestamp)
+                    episode.userState.lastPlayedHistoryMilliseconds = max(episode.userState.lastPlayedHistoryMilliseconds ?? timestamp, timestamp)
+                } else {
+                    episode.userState.lastPlayedTimeMilliseconds = timestamp
+                    episode.userState.lastPlayedHistoryMilliseconds = timestamp
+                }
                 if session.itemPlayState == .new {
                     if sample.positionMilliseconds <= 0 { episode.userState.playState = .unplayed }
                     session.itemPlayState = .unplayed
@@ -134,7 +141,7 @@ extension FeedLibraryStore {
                     itemPlayState: session.itemPlayState, status: sample.status)
             }
             let feedID = try database.scalar("SELECT feed_id FROM episodes WHERE id = ?", [.integer(episode.id)])
-            try saveEpisode(episode, feedID: feedID)
+            try saveEpisode(episode, feedID: feedID, scope: .media)
             session.status = sample.status
             try savePlaybackSession(session)
             if synchronize { try appendPlaybackSync(episode, session: session, completed: false, now: now, feedID: feedID) }
@@ -168,6 +175,11 @@ extension FeedLibraryStore {
             let completed = reason == .ended || almostEnded
             let remove = completed || (reason == .skipped && !preferences.skipKeepsEpisode)
             let feedID = try database.scalar("SELECT feed_id FROM episodes WHERE id = ?", [.integer(episode.id)])
+            // A server library's end that covers an unexported save is listening at its own time (PROTOCOL §8.7): the row
+            // shows it as the projection of its facts will, never earlier than what it shows already.
+            let listeningEnd = try serverContext != nil && liveSyncSession(local: session.id).map {
+                $0.state == .open && $0.incarnation == playbackIncarnation && ($0.last?.index ?? 0) > $0.exportedIndex
+            } == true
             // A server library records these decisions through the pending transition (PROTOCOL §8.4).
             try journalPlaybackEnd(local: session.id, episodeID: episode.id, reason: reason, completed: completed,
                                    removeFromQueue: !completed && reason == .skipped && !preferences.skipKeepsEpisode,
@@ -200,8 +212,13 @@ extension FeedLibraryStore {
                     }
                 }
             }
-            episode.userState.lastPlayedHistoryMilliseconds = timestamp
-            try saveEpisode(episode, feedID: feedID)
+            if serverContext != nil {
+                episode.userState.lastPlayedHistoryMilliseconds = max(episode.userState.lastPlayedHistoryMilliseconds ?? timestamp, timestamp)
+                if listeningEnd { episode.userState.lastPlayedTimeMilliseconds = max(episode.userState.lastPlayedTimeMilliseconds, timestamp) }
+            } else {
+                episode.userState.lastPlayedHistoryMilliseconds = timestamp
+            }
+            try saveEpisode(episode, feedID: feedID, scope: .media)
             try database.execute("DELETE FROM playback_session WHERE id = 1")
             if reason != .switched, next == nil {
                 try database.execute("DELETE FROM playback_selection WHERE id = 1")

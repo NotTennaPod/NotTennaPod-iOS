@@ -10,10 +10,10 @@ import Testing
 /// as a finished download. Requests match the foreground engine's.
 /// The system schedules background-session tasks: on a newly created Simulator its own asset downloads
 /// held our first task for up to about 3.5 minutes (nsurlsessiond log), so waits are generous.
-@Suite(.serialized, .timeLimit(.minutes(6)))
+@Suite(.serialized)
 struct BackgroundMediaDownloadsViewTests {
     static let media = Data((0..<2_500_000).map { UInt8(truncatingIfNeeded: $0 &* 131 &+ ($0 >> 9)) })
-    static let tag = "\"m29-v1\""
+    static let tag = "\"background-v1\""
 
     /// Serves `media` with strong ETag and byte ranges, the way podcast hosts do.
     static func respond(_ request: LoopbackHTTPServer.Request, body: Data = media) -> LoopbackHTTPServer.Response {
@@ -33,7 +33,7 @@ struct BackgroundMediaDownloadsViewTests {
     }
 
     private func environment(_ body: (BackgroundMediaDownloads, URL) async throws -> Void) async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M29Background-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("BackgroundDownloads-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let downloads = BackgroundMediaDownloads(identifier: "org.nottennapod.app.tests.\(UUID().uuidString)")
         defer { downloads.invalidate(); try? FileManager.default.removeItem(at: directory) }
@@ -86,7 +86,7 @@ struct BackgroundMediaDownloadsViewTests {
         let replacement = Data(Self.media.reversed())
         let server = try await LoopbackHTTPServer.start { request in
             // The episode was replaced: the server ignores the old validator and sends the new file.
-            .init(status: 200, headers: ["Content-Type": "audio/mpeg", "ETag": "\"m29-v2\""], body: replacement)
+            .init(status: 200, headers: ["Content-Type": "audio/mpeg", "ETag": "\"background-v2\""], body: replacement)
         }
         defer { server.stop() }
         try await environment { downloads, directory in

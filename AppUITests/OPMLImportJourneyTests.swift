@@ -1,7 +1,7 @@
 import XCTest
 
 /// OPML import through the real Files picker and Files app. The test pre-action seeds folder
-/// `M11-<library>` in "On My iPhone/iPad" (TestSupport/Media/files-provider); results are checked in the UI.
+/// `OPML-<library>` in "On My iPhone/iPad" (TestSupport/Media/files-provider); results are checked in the UI.
 @MainActor final class OPMLImportJourneyTests: XCTestCase {
     private var app = XCUIApplication()
     override func setUp() { continueAfterFailure = false }
@@ -28,8 +28,8 @@ import XCTest
         tap("addOPML")
     }
     @discardableResult private func choose(_ name: String, library: String, in owner: XCUIApplication, open: Bool = true) -> XCUIElement {
-        let ownedRoot = owner.otherElements["DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: M11-" + library]
-        let folder = owner.cells["M11-" + library + ", Folder"]
+        let ownedRoot = owner.otherElements["DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: OPML-" + library]
+        let folder = owner.cells["OPML-" + library + ", Folder"]
         if !ownedRoot.exists {
             XCTAssertTrue(owner.revealInLocalFiles(folder), owner.debugDescription); folder.tap()
         }
@@ -90,13 +90,13 @@ import XCTest
         while !matches(), Date() < deadline { Thread.sleep(forTimeInterval: 0.25) }
         XCTAssertTrue(matches(), "Subscriptions: \(labels()), expected \(titles)", file: file, line: line)
     }
-    private let selection = ["M11 First", "M11 Second", "M11 Last"]
+    private let selection = ["OPML First", "OPML Second", "OPML Last"]
     func testActualPickerCancelMalformedPrefixRetryAndRelaunch() throws {
         let id = "9A490CDF-7E51-457F-9576-188511EB247C"
         start(id, mode: "fail-second-once"); defer { app.terminate() }
         picker()
         choose("selection.opml", library: id, in: app, open: false)
-        let pickerRoot = app.otherElements["DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: M11-" + id]
+        let pickerRoot = app.otherElements["DOC.browsingRoot Source: com.apple.FileProvider.LocalStorage, Title: OPML-" + id]
         let visibleCancel = app.buttons.matching(NSPredicate(format: "label == %@", "Cancel"))
             .allElementsBoundByIndex.first(where: { $0.isHittable })
         if let visibleCancel {
@@ -163,7 +163,7 @@ import XCTest
                 : files.cells.matching(NSPredicate(format: "identifier == %@ AND label == %@", "shareCell", "NotTennaPod")).firstMatch
             XCTAssertTrue(recipient.waitForExistence(timeout: 15), files.debugDescription); recipient.tap()
             XCTAssertTrue(app.buttons["opmlRow-0"].waitForExistence(timeout: 15))
-            let title = cold ? "M11 First" : "M11 Replacement"
+            let title = cold ? "OPML First" : "OPML Replacement"
             XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier == %@ AND label == %@", "opmlRow-0", title)).firstMatch.waitForExistence(timeout: 15))
             if !cold {
                 // iPad Files may deliver Share to a new scene in the warm process.
@@ -190,7 +190,7 @@ import XCTest
         app.terminate(); app.launch()
         // Existing feeds keep their custom title and state (archived stays archived, a preview stays
         // unsubscribed), so the list shows the existing subscription once plus the two new feeds.
-        expectSubscriptions(["Custom global", "M11 New one", "M11 New two"])
+        expectSubscriptions(["Custom global", "OPML New one", "OPML New two"])
         tap("QueueFragment")
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'episode-' AND label CONTAINS 'Retained global'")).firstMatch.waitForExistence(timeout: 15),
                       "The queued episode survives the import: " + app.debugDescription)

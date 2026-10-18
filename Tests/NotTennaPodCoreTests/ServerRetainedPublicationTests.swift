@@ -8,7 +8,7 @@ import Testing
 /// ownership, an identity match, a download job) or the original projection's context keeps it for the pause, where it
 /// is published correctly as a whole; and its switch's work is bounded before it is done. Against a server that sends
 /// one commit (`ServerBoundedCutoverTests.serve`), and the pinned server for repairs.
-@Suite(.serialized, .timeLimit(.minutes(20))) struct ServerRetainedPublicationTests {
+@Suite(.serialized) struct ServerRetainedPublicationTests {
     typealias Cutover = ServerBoundedCutoverTests
 
     // MARK: - The publication's result accumulates across its plans

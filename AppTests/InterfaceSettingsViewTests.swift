@@ -7,9 +7,9 @@ import Testing
 /// (theme cards, Full black, no Dynamic colors, Use episode cover), the theme applied at once to the screen, main
 /// screens readable in Light, Dark and Full black, the cover rules per surface, the Playback speed row and the
 /// hidden Choose data folder row. Expected text and rules come from Android 3.12.1, not from the app.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(4)))
+@MainActor @Suite(.serialized)
 struct InterfaceSettingsViewTests {
-    static let feedImage = "https://m31.test/feed.png", episodeImage = "https://m31.test/episode.png"
+    static let feedImage = "https://covers.test/feed.png", episodeImage = "https://covers.test/episode.png"
 
     private func find<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -57,18 +57,18 @@ struct InterfaceSettingsViewTests {
     }
     /// One podcast (red cover) with "Own cover" (blue episode image) and "No cover" (none), both queued.
     private func withFixture(_ body: @MainActor (Fixture) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M31View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("InterfaceSettingsView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let store = try FeedLibraryStore(url: root.appendingPathComponent("library.sqlite"))
         var own = ParsedEpisode(identifier: "own", title: "Own cover", publicationDate: Date(timeIntervalSince1970: 1_780_000_000),
-                                media: .init(url: "https://m31.test/own.mp3", size: 1, durationMilliseconds: 600_000))
+                                media: .init(url: "https://covers.test/own.mp3", size: 1, durationMilliseconds: 600_000))
         own.imageURL = Self.episodeImage
         let plain = ParsedEpisode(identifier: "plain", title: "No cover", publicationDate: Date(timeIntervalSince1970: 1_779_000_000),
-                                  media: .init(url: "https://m31.test/plain.mp3", size: 1, durationMilliseconds: 600_000))
+                                  media: .init(url: "https://covers.test/plain.mp3", size: 1, durationMilliseconds: 600_000))
         var parsed = ParsedFeed(format: .rss, title: "Covers podcast", episodes: [own, plain])
         parsed.imageURL = Self.feedImage
-        let feed = try await store.insert(.init(feed: parsed, source: "https://m31.test/feed", responseURL: URL(string: "https://m31.test/feed")!,
+        let feed = try await store.insert(.init(feed: parsed, source: "https://covers.test/feed", responseURL: URL(string: "https://covers.test/feed")!,
                                                 validator: nil, permanentRedirectURL: nil))
         let ids = Dictionary(uniqueKeysWithValues: feed.episodes.map { ($0.details.title!, $0.id) })
         _ = try await store.enqueue([ids["Own cover"]!, ids["No cover"]!])

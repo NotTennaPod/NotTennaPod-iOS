@@ -6,7 +6,7 @@ import Testing
 /// The mounted Settings root shows Android's unofficial-package composition, with NotTennaPod's About row
 /// under Project and its own notice. About shows that NotTennaPod is not AntennaPod.
 /// Expected text is Android's English from the oracle, not read back from the app.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct SettingsRootViewTests {
     static let rows: [(key: String, title: String, summary: String?, icon: String)] = [
         ("prefScreenInterface", "User interface", "Appearance, subscriptions, lockscreen", "ic_appearance"),

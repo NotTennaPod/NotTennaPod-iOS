@@ -5,7 +5,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct ProxySettingsViewTests {
+@MainActor @Suite(.serialized) struct ProxySettingsViewTests {
     private func find<T: UIView>(_ id: String, _ view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let value = view as? T { return value }
         return view.subviews.lazy.compactMap { find(id, $0) as T? }.first

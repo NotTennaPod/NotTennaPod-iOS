@@ -158,10 +158,10 @@ struct ParityQuadraticTests {
         #expect(feed.author == "I, C, D")
     }
 
-    // MARK: The server's entity-candidate and namespaced-attribute follow-ups (07f1be3, 526f06c, 6ec5517)
+    // MARK: The server's entity-candidate and namespaced-attribute cases
 
     /// A run of '&' before one ';' gives each '&' a candidate entity name as long as the rest of the run; every
-    /// candidate up to the longest declared name was copied and hashed (found by fuzzing the phone's parity parse). The server's
+    /// candidate up to the longest declared name was copied and hashed. The server's
     /// TestQuadraticEntityCandidates: 11 entities and a 1 MiB run, and uses at every declared length.
     @Test func entityCandidatesAreLinear() throws {
         let n = 1 << 20
@@ -232,7 +232,7 @@ struct ParityQuadraticTests {
     }
 
     /// Attributes' expanded names (namespace, local) must be unique; the namespace was the URI itself, hashed for every
-    /// attribute (found by fuzzing the phone's parity parse). Each URI is numbered once, when declared (the server's
+    /// attribute. Each URI is numbered once, when declared (the server's
     /// TestQuadraticNamespacedAttributes).
     @Test func namespacedAttributesAreLinear() throws {
         let doc = "<rss version=\"2.0\" xmlns:p=\"" + String(repeating: "u", count: 2 << 20) + "\"><channel><title>t</title><x"

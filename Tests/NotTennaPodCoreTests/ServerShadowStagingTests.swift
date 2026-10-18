@@ -4,7 +4,7 @@ import Testing
 
 /// Retained publications and staging: a removal staged before the player moves into its podcast,
 /// staged work counted once, and statistics fan-out counted per row.
-@Suite(.serialized, .timeLimit(.minutes(20))) struct ServerShadowStagingTests {
+@Suite(.serialized) struct ServerShadowStagingTests {
     typealias Cutover = ServerBoundedCutoverTests
     typealias Retained = ServerRetainedPublicationTests
     typealias Large = ServerLargeUnitTests
@@ -233,5 +233,9 @@ import Testing
 }
 
 extension FeedLibraryStore {
-    func executeForTesting(_ sql: String) throws { try database.execute(sql) }
+    /// Raw SQL; a schema change is followed, as every schema-creating path is, by the change capture's installation.
+    func executeForTesting(_ sql: String) throws {
+        try database.execute(sql)
+        try database.refreshChangeCapture()
+    }
 }

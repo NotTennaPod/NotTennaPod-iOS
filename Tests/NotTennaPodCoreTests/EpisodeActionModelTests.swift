@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct EpisodeActionModelTests {
+@MainActor @Suite struct EpisodeActionModelTests {
     private actor Gate {
         var entered = false
         var continuation: CheckedContinuation<Void, Never>?

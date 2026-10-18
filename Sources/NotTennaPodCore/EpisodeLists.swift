@@ -86,7 +86,7 @@ public enum EpisodeListQueries {
         }
     }
 
-    /// Already-filtered Episodes rows in the Episodes sort. Equal keys follow the source plan: by feed id,
+    /// Already-filtered Episodes rows in the Episodes sort. Equal keys follow AntennaPod's query plan: by feed id,
     /// then episode id, unless the filter uses `played`, `queued` or `is_favorite` (then by episode id).
     public static func episodes(_ rows: [Row], filter: FeedEpisodeFilter, sort: EpisodeListSort) -> [Row] {
         let byEpisode = !Set(filter.values).isDisjoint(with: ["played", "queued", "is_favorite"])

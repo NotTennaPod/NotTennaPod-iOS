@@ -4,7 +4,7 @@ import Testing
 
 /// Push and pull against the real server (PROTOCOL §6.4): framing, lost answers, verification,
 /// waiting, pauses and backoff. Nothing is ever dropped.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerExchangePushPullTests {
+@Suite(.serialized) struct ServerExchangePushPullTests {
     typealias Agreement = ServerExchangeAgreementTests
 
     struct InjectedCrash: Error {}

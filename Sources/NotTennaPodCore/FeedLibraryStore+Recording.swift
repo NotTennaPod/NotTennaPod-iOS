@@ -47,6 +47,20 @@ extension FeedLibraryStore {
     func write<T>(_ intent: ServerIntent, durable: Bool = true, now: Date? = nil, _ body: () throws -> T) throws -> T {
         guard let context = serverContext else { return try database.transaction(durable: durable, body) }
         let capture = ChangeCapture(clientTime: ServerActionClock.time(of: now ?? Date()))
+        do { return try recordedWrite(intent, capture: capture, context: context, durable: durable, body) }
+        catch let error as ServerRecordingError {
+            // A cut refused because its flush found listening too large for the server (PROTOCOL §6.13) changed nothing; that
+            // listening stays refused and listed under Needs attention, in a transaction of its own.
+            if case .cutBlockedByRefusedListening = error, capture.refusedExport {
+                let time = try milliseconds(capture.clientTime)
+                _ = try? write(.local, now: now) { try journalFlushOpenSessions(now: time) }
+            }
+            throw error
+        }
+    }
+
+    private func recordedWrite<T>(_ intent: ServerIntent, capture: ChangeCapture, context: ServerLibraryContext, durable: Bool,
+                                  _ body: () throws -> T) throws -> T {
         let result = try database.transaction(durable: durable) { () throws -> T in
             // Earlier owed adds are recorded before this action takes its capture and changes anything, so each
             // recorder sees only its own action's changes; one bounded step, owed adds first.
@@ -65,10 +79,13 @@ extension FeedLibraryStore {
             let value = try body()
             // Flush before cuts (PROTOCOL §8.2).
             if intent == .historyRemove || intent == .historyClear || intent == .statisticsReset { try journalFlushOpenSessions(now: time) }
+            // An Undo's restore compensates what came before it, listening included: the episode's listening saved before
+            // it is exported first, so the restore follows it on this author's chain (PROTOCOL §6.9, §8.2).
+            if intent == .undoMark { try journalFlushOpenSessions(now: time, episodes: Set(capture.episodeOrder)) }
             activeCapture = nil
             // Listening no exported fact carries yet is marked with the save itself.
             if intent == .playbackSave || intent == .playbackEnd { try markLocalPlayback(capture, intent: intent) }
-            let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection)
+            let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection, factBound: factBoundOverride)
             do {
                 try database.savepoint { try record(intent, capture: capture, writer: writer) }
                 recorderWrites = writer.writes
@@ -111,11 +128,11 @@ extension FeedLibraryStore {
 
     /// `saveEpisode`: reports the episode before and after. Outside the seam a server library refuses a write
     /// that changes a synced field.
-    func captureEpisodeWrite(_ episode: LibraryEpisode, feedID: Int64) throws {
+    func captureEpisodeWrite(_ episode: LibraryEpisode, feedID: Int64, before: LibraryEpisode? = nil) throws {
         guard serverContext != nil else { return }
         if let capture = activeCapture {
-            try capture.noteEpisode(episode.id, feedID: feedID, before: try loadEpisode(episode.id), after: episode)
-        } else if let stored = try loadEpisode(episode.id), SyncedEpisode(stored) != SyncedEpisode(episode) {
+            try capture.noteEpisode(episode.id, feedID: feedID, before: try before ?? loadEpisode(episode.id), after: episode)
+        } else if let stored = try before ?? loadEpisode(episode.id), SyncedEpisode(stored) != SyncedEpisode(episode) {
             throw ServerRecordingError.writeOutsideSeam
         }
     }
@@ -239,4 +256,7 @@ extension FeedLibraryStore {
 
     /// The recorder's writes in the last server-library transaction, for tests.
     func lastRecorderWrites() -> Int { recorderWrites }
+
+    /// Test-only: facts over `bytes` are too large to number, as if the server advertised that bound; nil restores it.
+    func setServerFactBoundForTesting(_ bytes: Int?) { factBoundOverride = bytes }
 }

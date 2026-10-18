@@ -2,20 +2,22 @@ import Foundation
 
 /// Episode state: favorites, sort order, Inbox, played and swipe marks with undo.
 extension FeedLibraryStore {
-    public func updateEpisode(id: Int64, change: @Sendable (inout LibraryEpisode) throws -> Void) throws {
+    /// A direct edit of the stored episode, read in the same transaction. `scope`: what of it the edit may change (any
+    /// field by default: tests and tools edit details this way; the store's own actions name a narrower scope).
+    public func updateEpisode(id: Int64, scope: EpisodeWriteScope = .metadata, change: @Sendable (inout LibraryEpisode) throws -> Void) throws {
         try Task.checkCancellation()
         try write(.registers) {
             guard var episode = try loadEpisode(id) else { throw FeedLibraryError.missingEpisode(id) }
             try change(&episode)
             guard episode.id == id else { throw FeedLibraryError.invalidMutation }
             let feedID = try database.scalar("SELECT feed_id FROM episodes WHERE id = ?", [.integer(id)])
-            try saveEpisode(episode, feedID: feedID)
+            try saveEpisode(episode, feedID: feedID, scope: scope)
         }
     }
 
     /// Explicit Add/Remove favorite commands are idempotent, never stale toggles.
     public func setFavorite(episodeID: Int64, favorite: Bool) throws {
-        try updateEpisode(id: episodeID) { $0.userState.isFavorite = favorite }
+        try updateEpisode(id: episodeID, scope: .userState) { $0.userState.isFavorite = favorite }
     }
 
     public func setFeedEpisodeSortOrder(feedID: Int64, order: FeedEpisodeSortOrder) throws {
@@ -53,6 +55,18 @@ extension FeedLibraryStore {
         try Task.checkCancellation()
         return try write(.dismissAll) {
             var changed: [Int64] = []
+            if keyedReads {
+                // Only the NEW episodes are read, by the derived keys, in the same order.
+                for (id, feedID) in try keyedVisibleEpisodes("k.state = -1") {
+                    guard var episode = try loadEpisode(id) else { throw FeedLibraryError.corruptRecord }
+                    guard episode.userState.playState == .new else { continue }
+                    episode.userState.playState = .unplayed
+                    try saveEpisode(episode, feedID: feedID)
+                    changed.append(id)
+                }
+                try Task.checkCancellation()
+                return changed
+            }
             for row in try database.rows("SELECT id FROM feeds f\(hiddenFeedsCondition("f.id").map { " WHERE " + $0 } ?? "") ORDER BY id") {
                 guard let id = row[0].integer, let feed = try loadFeed(id) else { throw FeedLibraryError.corruptRecord }
                 for var episode in feed.episodes where episode.userState.playState == .new {
@@ -73,12 +87,24 @@ extension FeedLibraryStore {
         try Task.checkCancellation()
         return try write(.historyClear) {
             var changed: [Int64] = []
-            for row in try database.rows("SELECT id FROM feeds f\(hiddenFeedsCondition("f.id").map { " WHERE " + $0 } ?? "") ORDER BY id") {
-                guard let id = row[0].integer, let feed = try loadFeed(id) else { throw FeedLibraryError.corruptRecord }
-                for var episode in feed.episodes where episode.userState.lastPlayedHistoryMilliseconds != nil {
+            if keyedReads {
+                // Only the episodes with a history entry (zero and negative included) are read, by the derived keys,
+                // in the same order.
+                for (id, feedID) in try keyedVisibleEpisodes("k.history_ms IS NOT NULL") {
+                    guard var episode = try loadEpisode(id) else { throw FeedLibraryError.corruptRecord }
+                    guard episode.userState.lastPlayedHistoryMilliseconds != nil else { continue }
                     episode.userState.lastPlayedHistoryMilliseconds = nil
-                    try saveEpisode(episode, feedID: feed.id)
-                    changed.append(episode.id)
+                    try saveEpisode(episode, feedID: feedID)
+                    changed.append(id)
+                }
+            } else {
+                for row in try database.rows("SELECT id FROM feeds f\(hiddenFeedsCondition("f.id").map { " WHERE " + $0 } ?? "") ORDER BY id") {
+                    guard let id = row[0].integer, let feed = try loadFeed(id) else { throw FeedLibraryError.corruptRecord }
+                    for var episode in feed.episodes where episode.userState.lastPlayedHistoryMilliseconds != nil {
+                        episode.userState.lastPlayedHistoryMilliseconds = nil
+                        try saveEpisode(episode, feedID: feed.id)
+                        changed.append(episode.id)
+                    }
                 }
             }
             // A standalone library's statistics units are rows to Android's `clearPlaybackHistory` too (schema 20). In
@@ -89,8 +115,25 @@ extension FeedLibraryStore {
         }
     }
 
+    /// The episodes matching `condition` (over the derived keys `k`) of the feeds library-wide reads show, staged ones
+    /// left out, in the order a feed-by-feed read visits them: feed ID, then each feed's stored order (`pubdate DESC, id`).
+    /// Reads only the matching keys (each condition is a partial index); needs the derived data complete.
+    func keyedVisibleEpisodes(_ condition: String) throws -> [(id: Int64, feedID: Int64)] {
+        let shown = hiddenFeedsCondition("k.feed_id").map { " AND " + $0 } ?? ""
+        return try database.rows("SELECT k.id, k.feed_id FROM episode_list_keys k JOIN episodes e ON e.id = k.id WHERE \(condition) AND k.hidden = 0\(shown) ORDER BY k.feed_id, e.pubdate DESC, k.id").map { row in
+            guard let id = row[0].integer, let feed = row[1].integer else { throw FeedLibraryError.corruptRecord }
+            return (id, feed)
+        }
+    }
+
     /// Capture the accepted prior state and guard in the same commit as a swipe
     /// mark. Neither direction resets position or emits a manual sync action.
+    /// `body` run on the store, with the library's last commit right after it: the receipt of the write `body` made (a
+    /// change set is emitted before its write returns, and nothing else runs on the store in between).
+    public func withChangeReceipt<T: Sendable>(_ body: @Sendable (isolated FeedLibraryStore) throws -> T) rethrows -> (value: T, receipt: Int64) {
+        (try body(self), changes.emitted)
+    }
+
     public func applySwipeMark(episodeID: Int64, action: EpisodeSwipeMark) throws -> EpisodeMarkReceipt? {
         try Task.checkCancellation()
         return try write(.swipeMark) {

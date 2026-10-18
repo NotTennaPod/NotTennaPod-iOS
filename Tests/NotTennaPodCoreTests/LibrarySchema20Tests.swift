@@ -68,7 +68,7 @@ enum RawLibrary {
         let reopened = try FeedLibraryStore(url: url)
         #expect(try await reopened.libraryIdentity().identity == identity.identity)
         try await reopened.close()
-        #expect(try RawLibrary.rows(url, "PRAGMA user_version").first?.first == "20")
+        #expect(try RawLibrary.rows(url, "PRAGMA user_version").first?.first == "22")
     }
 
     @Test func aSchema19StandaloneLibraryMigratesOnceAndKeepsItsRows() async throws {
@@ -264,7 +264,7 @@ enum RawLibrary {
         try LibrarySQLite(url: url).close()
         for suffix in ["-wal", "-shm"] { try? FileManager.default.removeItem(atPath: url.path + suffix) }
         let identity = try #require(try LibraryDatabaseInspection.identity(of: url))
-        #expect(try LibraryDatabaseInspection.schemaVersion(of: url) == 20)
+        #expect(try LibraryDatabaseInspection.schemaVersion(of: url) == 22)
         let reader = try FeedLibraryStore(readingOnly: url)
         #expect(try await reader.feeds().isEmpty)
         #expect(try await reader.exportContents().identity == identity.identity)

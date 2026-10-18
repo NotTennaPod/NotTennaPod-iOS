@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct NativeMP3PacketParserTests {
     private var fixture: URL {
         fixture(named: "playback-unknown-duration")

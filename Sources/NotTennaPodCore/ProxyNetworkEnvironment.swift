@@ -61,4 +61,13 @@ public final class ProxyNetworkEnvironment: FeedHTTPTransport, Sendable {
     public func send(_ request: URLRequest, bodyLimit: Int) async throws -> FeedHTTPResponse {
         try await requestScope().send(request, bodyLimit: bodyLimit)
     }
+
+    public func send(_ request: URLRequest, bodyLimit: Int, completeAfter: @escaping @Sendable (Int) -> Int?) async throws -> FeedHTTPResponse {
+        try await requestScope().send(request, bodyLimit: bodyLimit, completeAfter: completeAfter)
+    }
+
+    /// The caller's budget itself reaches the shared client's session delegate.
+    public func send(_ request: URLRequest, budget: FeedTransferBudget, completeAfter: (@Sendable (Int) -> Int?)?) async throws -> FeedHTTPResponse {
+        try await requestScope().send(request, budget: budget, completeAfter: completeAfter)
+    }
 }

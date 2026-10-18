@@ -20,13 +20,20 @@ extension ServerSyncEngine {
         do { try await store.requestServerFullSynchronization() } catch { log("error", "recording the request: \(ServerLogValue.failure(error))") }
     }
 
+    /// What a Force full synchronization would download now (the confirmation's estimate): nil when unknown.
+    public func fullSynchronizationEstimate() async -> Int64? {
+        guard let estimate = await snapshotEstimate() else { return nil }
+        let spooled = ServerSnapshotSpool.manifest(in: fullSpool)?.bytes ?? 0
+        return max(0, estimate - spooled)
+    }
+
     /// Whether a Force full synchronization is owed.
     public func fullSynchronizationRequested() async -> Bool { (try? await store.serverFullSynchronizationRequested()) ?? false }
 
     public func forceFullSynchronization() async -> ServerExchangeReport {
         // One exchange at a time: a running one finishes first.
         if let running { _ = await running.value }
-        let task = Task(priority: .utility) { await self.performFull() }
+        let task = Task(priority: .utility) { await LibraryChangeOrigin.$current.withValue(.sync) { await self.performFull() } }
         running = task
         let report = await withTaskCancellationHandler { await task.value } onCancel: { task.cancel() }
         running = nil
@@ -38,18 +45,42 @@ extension ServerSyncEngine {
     public func cancelExchange() { running?.cancel() }
 
     private func performFull() async -> ServerExchangeReport {
+        pushRefusedThisExchange = false
         // A snapshot the server refused waits for an explicit retry or an update; the request stays owed, and the
         // exchange goes on as usual meanwhile.
         if let state = try? await store.serverExchangeState(), !state.permits(.snapshot) { return await performExchange() }
+        // A download this network may not carry (mobile data or Low Data Mode while the mobile-data preference does not
+        // allow sync) waits: the ordinary exchange runs meanwhile, so other changes keep arriving. A complete download
+        // needs no network.
+        if let wait = await transport.bulkWaitReason(), ServerSnapshotSpool.manifest(in: fullSpool)?.complete != true {
+            try? await store.requestServerFullSynchronization()
+            var report = await performExchange()
+            report.fullSynchronizationWaitsForNetwork = wait
+            return report
+        }
+        // The same while it waits for free space: ordinary sync goes on, and nothing is staged again until space grew.
+        var waiting = ServerExchangeReport()
+        if !bulkSpaceReturned(&waiting) {
+            try? await store.requestServerFullSynchronization()
+            return await ordinaryWhileWaitingForSpace(nil)
+        }
         var report = ServerExchangeReport()
         do {
             log("full", "started")
-            if try await store.releaseServerPins() { report.libraryChanged = true; publish(.libraryChanged) }
+            // Owed until a repair is published, across relaunches: its download is kept, and holds later commits, only
+            // while it is owed.
+            if try await !store.serverFullSynchronizationRequested() { try await store.requestServerFullSynchronization() }
+            _ = try await store.releaseServerPins()
+            await publishChanges(&report)
             try await applyPending(&report)
             try await push(&report)
             // While audio plays, a library too large to stage then waits before anything is downloaded.
             var playingLarge = false
-            if await isPlaying() { playingLarge = try await store.serverRecordCount() > fullStagingWhilePlaying }
+            if await isPlaying() {
+                // A kept download's size counts when it is larger than this library (what staging would write).
+                let incoming = ServerSnapshotSpool.manifest(in: fullSpool)?.records ?? 0
+                playingLarge = max(try await store.serverRecordCount(), incoming) > fullStagingWhilePlaying
+            }
             if report.waiting || playingLarge {
                 if playingLarge { report.waitingForPause = true }
                 log("full", report.waitingForBackground ? "waits until NotTennaPod is in the background" : "waits for playback to pause")
@@ -57,16 +88,25 @@ extension ServerSyncEngine {
                 try await reproject(&report)
                 if !report.waiting, report.retryAfter == nil {
                     try await applyPending(&report)
+                    // Published: what waited behind its head is applied, and pulls catch up with what followed.
+                    if report.reprojected {
+                        try await pull(&report)
+                        try await applyPending(&report)
+                    }
                     try await push(&report)
                 }
             }
             if report.retryAfter == nil, !report.waitingForDependencies { failures = 0 }
+            // Published: nothing is held any more.
+            if report.reprojected { report.fullSynchronizationHolds = false }
         } catch let error as ServerExchangeError {
             await handle(error, &report)
         } catch let refused as ServerRequestRefused {
             await refuse(refused.request, &report)
         } catch is ServerRequestGated {
             // What the server refused waits for an explicit retry or an update.
+        } catch let space as ServerInsufficientSpace {
+            noteInsufficientSpace(space, &report)
         } catch is CancellationError {
             report.cancelled = true
         } catch ServerSnapshotError.verificationFailed {
@@ -77,7 +117,24 @@ extension ServerSyncEngine {
             report.error = String(describing: error)
             backoff(&report)
         }
+        // Stopped short of the reserved space: the ordinary exchange still brings other devices' changes (behind the
+        // repair's head once it is known).
+        if report.insufficientSpace { return await ordinaryWhileWaitingForSpace(report) }
         return await finish(report)
+    }
+
+    /// An ordinary exchange while a repair waits for free space, reported as unfinished (`insufficientSpace`), with what
+    /// the repair's attempt did before it stopped.
+    private func ordinaryWhileWaitingForSpace(_ before: ServerExchangeReport?) async -> ServerExchangeReport {
+        var report = await performExchange()
+        report.insufficientSpace = true
+        if let before {
+            report.libraryChanged = report.libraryChanged || before.libraryChanged
+            report.appliedUnits += before.appliedUnits
+            report.acknowledged += before.acknowledged
+            report.fullSynchronizationHolds = report.fullSynchronizationHolds || before.fullSynchronizationHolds
+        }
+        return report
     }
 
     private func reproject(_ report: inout ServerExchangeReport) async throws {
@@ -88,7 +145,7 @@ extension ServerSyncEngine {
         // it was built on, dropped otherwise.
         if let kept = keptFull {
             if try await keptFullIsLive(kept) {
-                try await publishFull(kept, &report)
+                if try await publishFull(kept, &report) { ServerSnapshotSpool.remove(fullSpool) }
                 return
             }
             try await dropKeptFull()
@@ -96,18 +153,38 @@ extension ServerSyncEngine {
         // A shadow kept for the next commit was built on the base this repair replaces.
         try await dropKeptShadow()
         try await discardStaging()
-        let folder = staging.appendingPathComponent("full", isDirectory: true)
-        defer { try? FileManager.default.removeItem(at: folder) }
-        let transport = transport
-        let snapshot = try await ServerSnapshotDownload(folder: folder, fetch: { page in
+        // The repair's download is kept until it is published: an interruption continues it from its last page, and a
+        // complete one is published without the network (verified again first).
+        let folder = fullSpool
+        _ = try await fullSyncFence()
+        let identity = ServerSnapshotIdentity(mode: "upgrade", installID: state.installID, logID: cursor.logID, epoch: cursor.epoch)
+        let existing = ServerSnapshotSpool.manifest(in: folder).flatMap { $0.identity == identity ? $0 : nil }
+        if existing?.complete != true, !snapshotsAllowed {
+            log("full", "the download waits for a processing background task or the app")
+            return
+        }
+        guard bulkSpaceReturned(&report) else { return }
+        let transport = transport, disk = disk, limit = snapshotPageLimit
+        let estimate = await snapshotEstimate()
+        var spool = ServerSnapshotSpool(folder: folder, identity: identity, fetch: { page in
             var body: ContractObject = ["mode": "upgrade", "cursor": .string(cursor.encoded), "install_id": .string(state.installID),
                                         "acked_install_seq": .integer(state.acked)]
-            if let page { body["page"] = .string(page) }
+            if let page { body["page"] = .string(page) } else if let limit { body["limit"] = .integer(Int64(limit)) }
             return try await ServerRequestRefused.mapping(.snapshot) { try await transport.snapshot(.object(body)) }
-        }, isViewExpired: { ($0 as? ServerExchangeError)?.code == "view_expired" }).run()
+        }, restarts: { error, resumed in
+            let code = (error as? ServerExchangeError)?.code
+            return code == "view_expired" || (resumed && code == "invalid_request")
+        })
+        spool.clock = clock
+        disk.guarding(&spool, estimate: estimate)
+        let hook = stepCrashPoint
+        spool.beforeRequest = { try hook?("full.page") }
+        let snapshot = try await spool.run()
+        ServerSnapshotEstimate.record(snapshot, in: staging)
         try crash("full.spooled")
         let head = try SyncCursor(encoded: snapshot.head)
         guard head.logID == cursor.logID, head.epoch == cursor.epoch else {
+            ServerSnapshotSpool.remove(folder)
             throw ServerExchangeError.server(status: 409, code: "lineage_mismatch", retryAfter: nil)
         }
         // The live library at exactly the snapshot's head: later commits wait in the archive.
@@ -117,11 +194,58 @@ extension ServerSyncEngine {
             if report.waiting { log("full", "waits for the commits before the snapshot"); return }
         }
         guard let live = try await store.serverExchangeState().cursor, live == head else {
+            if let live = try await store.serverExchangeState().cursor, live.logID == head.logID, live.epoch == head.epoch, live.seq > head.seq {
+                // Past the snapshot already (an older app applied beyond it): it can never be published; again from the start.
+                ServerSnapshotSpool.remove(folder)
+            }
             log("full", "the library is not at the snapshot's head yet; again later")
             backoff(&report)
             return
         }
-        _ = try await publishReprojection(snapshot, head: head, replacing: nil, &report)
+        if try await publishReprojection(snapshot, head: head, replacing: nil, &report) { ServerSnapshotSpool.remove(folder) }
+    }
+
+    /// The requested repair's spool (PROTOCOL §6.14): `staging/full/`.
+    var fullSpool: URL { staging.appendingPathComponent("full", isDirectory: true) }
+
+    /// The head a requested repair's download holds later commits behind, nil when nothing is held. Once the download's
+    /// first page named its head H, commits after H wait until the repair is published at H: pushes go on; the next
+    /// pull archives what follows H, and later pulls wait for the publication (a pull applies what is archived first),
+    /// which then applies and pulls everything in order. A spool that can no longer be published (another lineage or installation, a
+    /// live cursor past H, the request gone with its publication) is deleted. The hold is bounded: a partial download
+    /// with no page for 24 hours is abandoned (the request stays and starts again later), and a complete one holds for
+    /// 72 hours at most (it is kept, and published if the cursor is still at H).
+    func fullSyncFence() async throws -> Int64? {
+        let folder = fullSpool
+        guard let manifest = ServerSnapshotSpool.manifest(in: folder) else { return nil }
+        guard let target = manifest.targetHead.flatMap({ try? SyncCursor(encoded: $0) }) else { return nil }
+        let state = try await store.serverExchangeState()
+        guard let live = state.cursor, manifest.identity.installID == state.installID, live.logID == target.logID, live.epoch == target.epoch,
+              live.seq <= target.seq, try await store.serverFullSynchronizationRequested() else {
+            ServerSnapshotSpool.remove(folder)
+            log("full", "a kept download no longer applies; it is deleted")
+            return nil
+        }
+        let age = now() - manifest.lastActivity
+        if !manifest.complete, age > Self.partialSpoolHold {
+            ServerSnapshotSpool.remove(folder)
+            log("full", "the download made no progress for a day; it starts again later")
+            return nil
+        }
+        if manifest.complete, age > Self.completeSpoolHold { return nil }
+        return target.seq
+    }
+
+    static let partialSpoolHold: Int64 = 24 * 3_600_000
+    static let completeSpoolHold: Int64 = 72 * 3_600_000
+
+    /// The next snapshot download's estimated size: the last one's, scaled by the items this library holds now (its
+    /// archived entries and decisions and its base records). Nil when nothing was downloaded into it yet.
+    func snapshotEstimate() async -> Int64? {
+        guard let last = ServerSnapshotEstimate.read(staging) else { return nil }
+        let records = (try? await store.serverRecordCount()) ?? 0
+        let archived = (try? archive.entryAndDecisionCount()) ?? 0
+        return last.scaled(to: records + archived)
     }
 
     /// Makes a verified snapshot the live base and projects every live row from it, published in one transaction
@@ -154,11 +278,12 @@ extension ServerSyncEngine {
             else if let record = item["record"], record["entity"]?.stringValue == "podcast", record["field_group"]?.stringValue == "credentials",
                     let secret = record["value"]?["secret_id"]?.stringValue { secrets.insert(secret) }
             if entries.count + decisions.count >= 2_000 {
-                try archive.archive(entries: entries, decisions: decisions, now: now)
+                try archive.archive(entries: entries, decisions: decisions, now: now, budget: disk.budget(at: staging))
                 entries.removeAll(keepingCapacity: true); decisions.removeAll(keepingCapacity: true)
             }
         }
-        try archive.archive(entries: entries, decisions: decisions, now: now)
+        try archive.archive(entries: entries, decisions: decisions, now: now, budget: disk.budget(at: staging))
+        try crash("full.archived")
         try await fetchSecrets(secrets)
         let file = staging.appendingPathComponent("full-\(head.seq).sqlite")
         try FileManager.default.createDirectory(at: staging, withIntermediateDirectories: true)
@@ -166,7 +291,7 @@ extension ServerSyncEngine {
         removeFullStagingFiles()
         var keep = false
         defer { if !keep { Self.removeStagingFile(file) } }
-        let staged = try ServerFullReprojection.stageBase(snapshot, into: file)
+        let staged = try ServerFullReprojection.stageBase(snapshot, into: file, budget: disk.budget(at: staging))
         // The registrations the snapshot resolves: their podcasts are their own feeds (as a unit's resolution gives
         // them), and their drafts' materialization is the publication's work too.
         var resolvedFeeds: [String: Int64] = [:]
@@ -191,7 +316,8 @@ extension ServerSyncEngine {
             do {
                 build = try ServerFullReprojection.build(database: databaseURL, file: file, history: history, now: now,
                                                          feedIDs: reserved.feeds, episodeIDs: reserved.episodes, touches: touches,
-                                                         target: head, admissionsSeen: replacing == nil, resolvedFeeds: resolvedFeeds)
+                                                         target: head, admissionsSeen: replacing == nil, resolvedFeeds: resolvedFeeds,
+                                                         budget: disk.budget(at: staging))
             } catch ServerApplyError.needsLocalIDs {
                 extra = max(1_024, extra * 4)
                 continue
@@ -241,12 +367,12 @@ extension ServerSyncEngine {
             do {
                 let result = try await store.publishFullReprojection(build, head: kept.head, now: kept.now, crash: stepCrashPoint, ticket: ticket,
                                                                      workLimit: ticket == nil && busy ? publishWorkLimit : nil, history: history,
-                                                                     resolutions: kept.resolutions)
+                                                                     resolutions: kept.resolutions, budget: disk.budget(at: staging))
                 try await dropKeptFull()
                 report.publishedUnits += 1
                 report.reprojected = true
                 report.rebasedEntities += result.rebased
-                record(result, into: &report)
+                await record(result, into: &report)
                 try crash("full.published")
                 if result.background { log("full", "\(result.work) row writes published whole while audio plays in the background") }
                 log("full", result.wholeAtPause

@@ -74,7 +74,7 @@ import XCTest
         // Sort by Duration (shortest first) and keep it sorted.
         tap("queueMore")
         XCTAssertTrue(app.buttons["queueLock"].exists, "Lock is offered while the queue is not kept sorted")
-        attachScreen("m23-queue-menu")
+        attachScreen("queue-sort-queue-menu")
         tap("queueSort")
         let keep = app.buttons["queueKeepSorted"]
         XCTAssertTrue(keep.waitForExistence(timeout: 5))
@@ -83,13 +83,13 @@ import XCTest
         XCTAssertEqual(app.buttons["queueSort-duration"].label, "Duration\u{a0}▲")
         XCTAssertTrue(keep.isEnabled); keep.tap()
         XCTAssertEqual(keep.value as? String, "On")
-        attachScreen("m23-sort-sheet-keep-sorted")
+        attachScreen("queue-sort-sort-sheet-keep-sorted")
         closeSortSheet()
         expectQueue(ints("queue"), "Sorted by duration")
         tap("queueMore")
         XCTAssertTrue(app.buttons["queueSort"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["queueLock"].exists, "Lock is hidden while Keep sorted is on")
-        attachScreen("m23-queue-menu-keep-sorted")
+        attachScreen("queue-sort-queue-menu-keep-sorted")
         app.otherElements["queueMenu"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)).tap()
 
         // An added episode is sorted in; its tie keeps Enqueue location's (Back) place.
@@ -100,7 +100,7 @@ import XCTest
         // Clear queue: Cancel keeps everything, Confirm removes every episode.
         tap("queueMore"); tap("queueClear")
         XCTAssertTrue(app.staticTexts["Please confirm that you want to remove ALL episodes from the queue."].waitForExistence(timeout: 5))
-        attachScreen("m23-clear-queue-confirmation")
+        attachScreen("queue-sort-clear-queue-confirmation")
         tap("queueClearCancel")
         expectQueue(ints("result"), "Cancel keeps the queue")
         tap("queueMore"); tap("queueClear"); tap("queueClearConfirm")
@@ -116,7 +116,7 @@ import XCTest
         let location = app.buttons["prefEnqueueLocation"]
         XCTAssertTrue(location.waitForExistence(timeout: 5))
         for _ in 0..<4 where !location.isHittable { app.swipeUp() }
-        attachScreen("m23-playback-settings-queue-rows")
+        attachScreen("queue-sort-playback-settings-queue-rows")
         location.tap(); tap("prefEnqueueLocation-FRONT")
         XCTAssertTrue(app.buttons["prefEnqueueLocation-FRONT"].waitForNonExistence(timeout: 5))
         tap("toolbarBack"); tap("toolbarBack")

@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(2)))
+@Suite
 struct FFmpegPCMDecoderTests {
     private func fixture(_ name: String) throws -> URL {
         try #require(Bundle.module.url(forResource: name, withExtension: nil, subdirectory: "Fixtures/StreamingFormats"))

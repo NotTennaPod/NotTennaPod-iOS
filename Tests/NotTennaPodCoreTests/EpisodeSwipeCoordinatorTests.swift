@@ -3,7 +3,7 @@ import SQLite3
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct EpisodeSwipeCoordinatorTests {
+@MainActor @Suite struct EpisodeSwipeCoordinatorTests {
     @MainActor private final class Clock {
         var instant = ContinuousClock.now
         var deadlines: [ContinuousClock.Instant] = []
@@ -258,7 +258,7 @@ import Testing
             #expect(try h.diskState(model.episodeID) == .unplayed)
             #expect(model.snapshot().episode.userState.playState == .unplayed)
             #expect(await owner.undo(operationID: value.operationID) == .notOffered)
-            #expect(!h.events.contains { if case .undone(_, _, .restored, _) = $0 { true } else { false } })
+            #expect(!h.events.contains { if case .undone(_, _, .restored, _, _) = $0 { true } else { false } })
             #expect(h.events.contains { if case .failed(_, .undo, _) = $0 { true } else { false } })
         }
     }

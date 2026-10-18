@@ -23,7 +23,7 @@ final class NotificationsJourneyTests: XCTestCase {
                 if request.path.hasPrefix("/feed.xml") {
                     let feed = """
                     <rss version="2.0"><channel><title>Failing podcast</title><link>https://example.test</link>
-                    <item><guid>m30-failing</guid><title>Failing episode</title><pubDate>Mon, 28 Sep 2026 08:00:00 GMT</pubDate>
+                    <item><guid>failing-episode</guid><title>Failing episode</title><pubDate>Mon, 28 Sep 2026 08:00:00 GMT</pubDate>
                     <enclosure url="http://127.0.0.1:\(port.withLock { $0 })/episode.mp3" type="audio/mpeg" length="1000000"/></item>
                     </channel></rss>
                     """
@@ -136,7 +136,7 @@ final class NotificationsJourneyTests: XCTestCase {
         try simulateTap(library: library)
         app.activate()
         XCTAssertEqual(logTitles(app, expecting: 1), ["Failing episode"])
-        attachScreen("M30 warm tap: Download log over the podcast page")
+        attachScreen("Notifications: warm tap: Download log over the podcast page")
         closeLog(app)
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label == %@", "Failing episode")).firstMatch.exists,
                       "the podcast page under the log is kept")
@@ -146,7 +146,7 @@ final class NotificationsJourneyTests: XCTestCase {
         try simulateTap(library: library)
         launch(app, library: library)
         XCTAssertEqual(logTitles(app, expecting: 1), ["Failing episode"])
-        attachScreen("M30 cold tap: Download log over the reopened page")
+        attachScreen("Notifications: cold tap: Download log over the reopened page")
         XCTAssertEqual(app.otherElements.matching(identifier: "downloadLogSheet").count, 1)
         closeLog(app)
 
@@ -158,7 +158,7 @@ final class NotificationsJourneyTests: XCTestCase {
         let downloadSwitch = app.buttons["prefShowDownloadReport"]
         XCTAssertTrue(downloadSwitch.waitForExistence(timeout: 5))
         XCTAssertEqual(downloadSwitch.value as? String, "On")
-        attachScreen("M30 Settings → Notifications")
+        attachScreen("Notifications: Settings → Notifications")
         let syncSwitch = app.buttons["pref_gpodnet_notifications"]
         XCTAssertFalse(syncSwitch.isEnabled, "Synchronization failed is disabled without an account")
         downloadSwitch.tapWhenSettled()
@@ -191,7 +191,7 @@ final class NotificationsJourneyTests: XCTestCase {
         action.tap()
         let message = app.staticTexts["Download of \"Failing episode\" failed."]
         XCTAssertTrue(message.waitForExistence(timeout: 20))
-        attachScreen("M30 foreground failure message")
+        attachScreen("Notifications: foreground failure message")
         // The message stays for Android's long duration; Details is tapped while it is shown.
         app.buttons["downloadErrorDetails"].tap()
         XCTAssertEqual(logTitles(app, expecting: 3), ["Failing episode", "Failing episode", "Failing episode"])

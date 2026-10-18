@@ -89,7 +89,7 @@ struct AllEpisodesFilterViewTests {
                 case .portraitUpsideDown: restore = .portraitUpsideDown
                 case .landscapeLeft: restore = .landscapeLeft
                 case .landscapeRight: restore = .landscapeRight
-                default: throw NSError(domain: "M9ResizeSetup", code: 1)
+                default: throw NSError(domain: "AllEpisodesResizeSetup", code: 1)
                 }
                 @MainActor func assertComposition() async throws {
                     let search: UIButton = try #require(find("allEpisodesSearch", in: controller.view))
@@ -124,7 +124,7 @@ struct AllEpisodesFilterViewTests {
                     try await wait { requestError != nil || (scene.effectiveGeometry.coordinateSpace.bounds.size != originalScene && scroll.bounds.size != originalContent) }
                     try #require(requestError == nil || windowingRefusesRotation(requestError), "\(requestError ?? "")")
                     window.layoutIfNeeded(); controller.view.layoutIfNeeded()
-                    print("M9 scene resize: rtl=\(rtl); sceneBefore=\(originalScene); sceneAfter=\(scene.effectiveGeometry.coordinateSpace.bounds.size); contentBefore=\(originalContent); contentAfter=\(scroll.bounds.size); safeArea=\(controller.view.safeAreaInsets)")
+                    print("All Episodes scene resize: rtl=\(rtl); sceneBefore=\(originalScene); sceneAfter=\(scene.effectiveGeometry.coordinateSpace.bounds.size); contentBefore=\(originalContent); contentAfter=\(scroll.bounds.size); safeArea=\(controller.view.safeAreaInsets)")
                     try await assertComposition()
                     let filter: UIButton = try #require(find("allEpisodesFilter", in: controller.view)); filter.sendActions(for: .touchUpInside)
                     try await wait { controller.presentedViewController?.isBeingPresented == false }
@@ -134,9 +134,9 @@ struct AllEpisodesFilterViewTests {
                     try await wait { controller.presentedViewController == nil }
                     try await assertComposition()
                 } catch { failure = error }
-                scene.requestGeometryUpdate(.iOS(interfaceOrientations: restore)) { print("M9 scene restore error: \($0)") }
+                scene.requestGeometryUpdate(.iOS(interfaceOrientations: restore)) { print("All Episodes scene restore error: \($0)") }
                 try await wait { scene.effectiveGeometry.coordinateSpace.bounds.size == originalScene && scroll.bounds.size == originalContent }
-                print("M9 scene restored: rtl=\(rtl); scene=\(scene.effectiveGeometry.coordinateSpace.bounds.size); content=\(scroll.bounds.size)")
+                print("All Episodes scene restored: rtl=\(rtl); scene=\(scene.effectiveGeometry.coordinateSpace.bounds.size); content=\(scroll.bounds.size)")
                 try await assertComposition()
                 if let failure { throw failure }
             }

@@ -2,6 +2,10 @@
 
 The [README](../README.md#testing) lists the test suites and how to run them. This page covers the framework probes, acceptance runs, the hub that runs the release candidate for the integration tests, and where the test data comes from.
 
+## Prerequisites
+
+The host suites that run the pinned server, every UI journey run (the NotTennaPod scheme's pre-action starts the hub), `HubProxySmokeTests`, the probes (their fixture servers include the hub), the hub's own tests and the acceptance runs need the sibling NotTennaPod-Server and NotTennaPod-Web checkouts, Go and Node; the hub's own tests and the acceptance runs also need the Playwright browsers; the acceptance runs alone also need `ffmpeg`, `ffprobe` and `openssl` (for the server's media acceptance and the web player suite); and the UI journeys need the Simulator's Files app opened once. [README: Test prerequisites](../README.md#test-prerequisites) lists them, which suite needs what, and the build caches. The other host suites and the view tests need only the README's setup.
+
 ## Probe tests
 
 Run only with the `NotTennaPodProbeTests` scheme. These experiments are excluded from the app, view-test and UI-journey schemes and are not among the suites that must pass. They test assumptions about Apple frameworks that an implementation choice depends on; a failed probe informs that choice and never justifies changing platform settings or dropping a requirement. The probe scheme has no fixture pre-action: start what a probe needs with `Tools/test-fixtures.sh start` first.
@@ -12,7 +16,30 @@ Run only with the `NotTennaPodProbeTests` scheme. These experiments are excluded
 
 ## Acceptance runs
 
-`Tools/acceptance.sh A` builds the release candidate and runs phase A's rows in order (`--list` prints them). Its UI journeys run on the Simulator named by `NTP_ACCEPTANCE_IPHONE`, by default `iPhone 18 Pro`; set it to the name of any iOS 27 iPhone Simulator you have, for example `NTP_ACCEPTANCE_IPHONE="iPhone 18 Pro Max" Tools/acceptance.sh A`. The script never creates or renames a Simulator. `NTP_SERVER_CHECKOUT`, `NTP_WEB_CHECKOUT` (by default the sibling `NotTennaPod-Server` and `NotTennaPod-Web` checkouts) and `NTP_GO` (by default the server checkout's `.work/toolchains/go/bin/go`) select the checkouts and the Go toolchain, as for `Tools/ntp-server.sh`.
+`Tools/acceptance.sh A` builds the release candidate and runs acceptance A's rows in order (`--list` prints them). Its UI journeys run on the Simulator named by `NTP_ACCEPTANCE_IPHONE`, by default `iPhone 18 Pro`; set it to the name of any iOS 27 iPhone Simulator you have, for example `NTP_ACCEPTANCE_IPHONE="iPhone 18 Pro Max" Tools/acceptance.sh A`. The script never creates or renames a Simulator. `NTP_SERVER_CHECKOUT`, `NTP_WEB_CHECKOUT` (by default the sibling `NotTennaPod-Server` and `NotTennaPod-Web` checkouts) and `NTP_GO` (by default the server checkout's `.work/toolchains/go/bin/go`) select the checkouts and the Go toolchain, as for `Tools/ntp-server.sh`.
+
+## Audio changes
+
+A change to the audio output, transports, refill, queue depth, producers or speed processing needs two kinds of evidence ([AGENTS.md](../AGENTS.md)): `PCMRealTimeStarvationTests` must pass (acceptance A's quiet `ios-pcm-safety` row, or `Tools/test-host.sh --filter PCMRealTimeStarvationTests` on a quiet Mac), and a person must listen on a real iPhone at 1.75× and 3×, seeking, with the screen in use and locked. The test plays the long MP3 (`LongMP3/`) through the processed path into a muted transport at 1×, 1.75× and 3×, with the main thread blocked 400 ms of every second and every core loaded, and asserts that the renderer never runs out of audio and that the position advances at the selected speed. It is evidence about the pipeline's timing on the Mac, not about what is heard on a phone.
+
+## Opt-in runs and overrides
+
+These variables switch on runs that are off by default, or point a test at other inputs or outputs. Host suites read them from the environment. A UI journey or view test reads them from the test runner's environment: set them with a `TEST_RUNNER_` prefix on the `xcodebuild test` command (`TEST_RUNNER_HOME_SECTIONS_EXPECTED=<file> xcodebuild test …`), which `xcodebuild` passes to the runner without the prefix.
+
+| Variable | Read by | Unset | Set |
+| --- | --- | --- | --- |
+| `NTP_SCALE=1` | The scale cases of `DerivedScaleTests`, `DerivedSequenceTests`, `KeyedReadsTests`, `LibraryMemoryBudgetTests`, `LibraryScreenBudgetTests`, `LibraryScreenModelEquivalenceTests`, `LibraryScreenOtherScreensTests`, `ProjectedTextChangeTests`, `ServerChangeSetBudgetTests` and `ServerChangeSetScaleTests` | Ordinary sizes | Power-user libraries of 10,000 to 100,000 episodes; run on a release build (`-c release`) |
+| `NTP_CHANGE_ORACLE=1` | The sync suites' stores (`ChangeSetOracle.swift`) | No oracle | Every transaction of the sync scenarios is checked against the change-set oracle |
+| `NTP_SYNC_STARVATION[=<episodes>]` | `SyncLoadStarvationTests` | Not run | Runs it (minutes long, on a quiet Mac); the value is the large podcast's episode count, 20,000 by default |
+| `NTP_EXCHANGE_MEASURE[=<episodes>]` | `ServerExchangeMeasurementTests`, `ServerRecoveryMeasurementTests` | Not run | Measures large commits, the store's holds and playback-save latency (minutes long); the value is the large podcast's episode count, by default 20,000 for the exchange and 10,000 for recovery |
+| `DATABASE_RESTORE_ORACLE_INPUT`, `DATABASE_RESTORE_ORACLE_OUTPUT` | `AndroidDatabaseRestoreTests.oracleHarnessExportsEveryInput` | Not run | Imports every `.db` in the input folder and writes, into the output folder, its re-export under the same name and `<name>.result.txt` (imported or rejected), for the `TestSupport/BackupChecker` round-trip checks |
+| `DATABASE_BACKUP_KEEP=<file>` | `AndroidDatabaseBackupTests` | Nothing kept | Copies the written backup to that file, for an import on Android 3.12.1 |
+| `HTML_EXPORT_KEEP_DIR=<folder>` | `HTMLExportWriterTests` | Nothing kept | Writes each export that differs from its expected document into that existing folder (`<library>-feeds.html`, `<library>-favorites.html`) |
+| `SUBSCRIPTION_TAGS_EXPORT_DIR=<folder>` | `SubscriptionTagsTests` | Nothing kept | Keeps each bulk edit's `BEFORE.db` and `AFTER.db` in a subfolder per case |
+| `HOME_SECTIONS_EXPECTED=<file>`, `HOME_SECTIONS_DATABASE=<file>` | `HomeSectionsJourneyTests` | `TestSupport/Data/home-sections/expected/journey-rich.json` and `databases/rich.db` | Runs the journey on another Android database and its oracle output |
+| `SUBSCRIPTIONS_EXPECTED=<file>`, `SUBSCRIPTIONS_DATABASE=<file>` | `SubscriptionsJourneyTests` | The expectations recorded in the test and `TestSupport/Data/subscriptions-screen/databases/mixed.db` | Runs the journey on another Android database and its oracle output |
+| `QUEUE_SCENE_RESIZE_IN_MOUNTED_TESTS=1` | `QueueGestureTests.test09RTLLeadingHalfAndRotation` | Rotates the device | Stops before the device rotation, for the Duo, whose orientation request does not resize its scene; the view test `QueueInteractionViewTests.queueRTLRetainsOrderAndReachabilityAcrossDeliveredSceneResize` then supplies the real scene resize, so run it with the journey |
+| `KEEP_LOCAL_EXPORTS=1` | Journeys that save into the Files storage | Their exports are removed when they end | Keeps them for an independent check (below) |
 
 ## The hub: lifecycle and evidence
 
@@ -38,7 +65,29 @@ A test registration remains active when its fixtures exit or crash. Its run must
 
 Tests find all their inputs in the repository. Every input is synthetic, generated by the project, copied unchanged from AntennaPod (GPL-3.0, like this project) or produced by AntennaPod's own code; the sections below say which.
 
-The generators run `ffmpeg`, `ffprobe`, `java` and `javac` from `PATH`; `FFMPEG` and `FFPROBE` name other builds. Recorded commands in manifests and provenance files name the executables only; the recorded versions say which builds made the files.
+The generators run `ffmpeg`, `ffprobe`, `java` and `javac` from `PATH`; for the scripts that read them, `FFMPEG` and `FFPROBE` name other builds. The MP3 seek-marker and format-change generators take ffmpeg as an argument instead (`generate.py <ffmpeg> <empty output directory>`). Recorded commands in manifests and provenance files name the executables only; the recorded versions say which builds made the files.
+
+### Map
+
+Three kinds of evidence are kept apart: **runtime Android output** (made by AntennaPod or Media3 running on Android), **source-based oracles** (independent programs written from the pinned Android source, sharing no code with the app) and **synthetic inputs** (made by the project). Most of the programs that made these files are not in the repository and cannot be rerun from here. What a file records about its origin varies: some expected files name their oracle, some only the reference commit, some nothing; the consuming test's description says what its expectations come from.
+
+| Folder | What it is | Kind | Used by |
+| --- | --- | --- | --- |
+| `TestSupport/Data/database-restore/` | Android backups ([below](#android-backups-testsupportdatadatabase-restore)) | Runtime Android output and synthetic | Restore, backup, export and recovery tests |
+| `TestSupport/Data/android-first-journey/Antennapod.db` | A database pulled from AntennaPod 3.12.1, the schema the backup writer must produce | Runtime Android output | `AndroidDatabaseBackupTests` |
+| `TestSupport/BackupChecker/` | `normalize.py` (the state Android 3.12.1 presents for a database, by its cursor semantics), `compare_roundtrip.py` (Android → iOS import → re-export), `check_edit_roundtrip.py` (edited on iOS, as Android would hold it), `android_statistics.py` and `navigation_counters.py` (Android's own SQL) | Source-based oracle, committed and runnable | `AndroidBackupRoundTripOracleTests`, `LibraryExportTests`, the restore oracle harness ([overrides](#opt-in-runs-and-overrides)) |
+| `TestSupport/Data/episode-list-menus/`, `episode-pager/`, `home-sections/`, `queue-sort-clear/`, `statistics-tabs/`, `subscription-tags-bulk/`, `subscriptions-screen/`, `swipe-settings/` | Android-schema databases of synthetic libraries (and their inputs as JSON), with the expected lists, pages, sections, queues, statistics, tags, subscriptions and swipe settings | Synthetic inputs; expected files from source-based oracles, not committed. The episode-list, pager, Home, tags and subscriptions files name their oracle and reference commit; the queue and statistics files only the reference commit, the swipe-settings file its source pin | `EpisodeListsTests`, `EpisodePagerTests`, `HomeSectionsTests`, `QueueSortTests`, `StatisticsTabsTests`, `SubscriptionTagsTests`, `SubscriptionDisplayTests`, `SwipeSettingsTests`, their view tests and journeys |
+| `TestSupport/Data/html-export/` | Android-schema databases and the expected HTML: `expected-escaped/` is the oracle's escaped output of Android 3.12.1's documents. `HTMLExportWriterTests` itself applies the NotTennaPod branding and two NULL adjustments (a NULL feed address written as `href=""`, a NULL-state feed kept in favorites) to the `missing` and `states` documents before comparing | Synthetic inputs; source-based oracle (not committed; described in the test) | `HTMLExportWriterTests` |
+| `TestSupport/Data/background-work/` | Download-log retention, attempt-budget and transfer-assembly cases (with their reference commit) and the expected results | Source-based oracle (not committed; described in the test) | `BackgroundWorkTests` |
+| `TestSupport/Data/interface-settings/`, `notifications-settings/`, `project-about/`, `settings-search/` | Expected settings screens, rows and search results. The notifications file records its reference commit, the settings-root and settings-search files their source files' hashes; the interface-settings file holds results only. The tests' descriptions add that settings search was cross-checked against lib.preferencesearch 2.7.3 and the 3.12.1 APK, and the settings root against an emulator capture | Source-based oracles (not committed) | `InterfaceSettingsTests`, `NotificationsTests`, `SettingsRootCompositionTests`, `SettingsSearchTests` and their view tests and journeys |
+| `TestSupport/Data/add-podcast-discovery/` | Discovery inputs, pages and expectations ([below](#add-podcast-discovery-testsupportdataadd-podcast-discovery)) | Synthetic inputs; source-based oracle | `AddPodcastDiscoveryTests`, `AddPodcastJourneyTests` |
+| `Tests/NotTennaPodCoreTests/Fixtures/LongMP3/` | 1,800 s of synthetic changing harmonics, 44.1 kHz mono MP3 (the FFmpeg command is in its manifest) | Synthetic | `PCMRealTimeStarvationTests`, `SyncLoadStarvationTests`, `NativeMP3LongSourceTests` |
+| `Fixtures/MP4Gapless/`, `MP4EditedStartup/`, `AACEdits/`, `AACEmptyEdits/` | MP4 files rewritten from the `AACGapless/` encodes with gapless metadata and edit lists (forward, gaps, repeats, reverses, empty edits, clipped starts), and `android-report.json`: what Media3 1.10.0 played from each on an Android 16 emulator | Synthetic inputs (the rewriting script is not committed; manifests record sources and hashes); runtime Android output | `MP4GaplessMetadataTests`, `MP4ExactIntervalTests`, `MP4StartupSourceTests`, `MP4EditedStartupTests`, `AACEditSequenceTests`, `AACEmptyEditTests`, `AACLocalSourceSelectionTests` |
+| `Fixtures/NativeMP4Timeline/`, `NativeFormatReference/` | MP4 timeline variants (edits, timescales, empty and priority tracks) and MP4 extents, with Android 16 emulator reports of their durations and seekability | Synthetic inputs, committed (the programs that made them are not); runtime Android output | `NativeMP4SourceTimelineTests`, `NativeAudioSourceTimelineTests`, `NativeAudioPacketProducerTests`, `NativeMP4InputTests` |
+| `Fixtures/BufferedCodecReference/` | Android's decodes of the Ogg and WebM tones (16-bit PCM) and their buffer timeline | Runtime Android output | `FFmpegBufferedSeekReferenceTests` |
+| `Fixtures/external-entry-oracle.json` | 95 address, subscription-link and shared-text cases with Android's outcome; for shared text also the iOS outcome (it opens the first link) | Source-based oracle (an independent Python probe of the pinned source, not committed) | `ExternalEntryTests` |
+
+The sections below describe the other host fixtures and the UI journeys' fixtures.
 
 ### Feed parser vectors
 
@@ -74,7 +123,7 @@ The matrix enumerates queue lengths 0 through 5, each entry without media / with
 
 `AACGapless/` holds three synthetic AAC-LC, HE-AAC and HE-AACv2 `.m4a` files from Apple's AAC encoder and Android's report on them (`android-report.json`). `manifest.json` also records the raw ADTS encodes made with them; those bytes are kept once, as `AACProfiles/lc-stereo.aac`, `he-stereo.aac` and `hev2-stereo.aac`.
 
-`StreamingFormats/` contains eight synthetic tone encodings generated by a Python script with FFmpeg 8.1.2. Its manifest records commands, codec/container metadata and hashes; the generator refuses to overwrite existing fixtures. They exercise native format detection/playback, not an Android runtime oracle. The WebM and trimming cases have known failures.
+`StreamingFormats/` contains eight synthetic tone encodings (WAV, M4A with and without a tail, ADTS, FLAC, Ogg Vorbis, Ogg Opus and WebM Opus) made with FFmpeg 8.1.2; its manifest records every command, the codec/container metadata and the hashes (the generating script is not committed). Apple's own parser and AVPlayer open all but the WebM (`StreamingFormatMatrixTests`); the app identifies WebM as Matroska first and plays it through the bundled decoder, which the ordinary playback tests cover (`BufferedPCMPlaybackEngineTests`, `PCMRemoteRoutingTests`). Native format detection and playback fixtures, not an Android runtime oracle.
 
 `StreamingHLS/` is an AAC packet-preserving HLS remux of `StreamingFormats/tone.m4a`, generated with FFmpeg 8.1.2. Its manifest records the source hash, exact remux options and every playlist/segment hash. It tests native playlist playback and source routing for conventional and misleading URL extensions, including seek/rate/play intent kept across routing; it is not an Android runtime oracle.
 
@@ -148,7 +197,7 @@ The matrix enumerates queue lengths 0 through 5, each entry without media / with
 
 ### Android backups (`TestSupport/Data/database-restore/`)
 
-Synthetic test libraries; their feeds point at local fixture servers or `example.invalid`. NotTennaPod Server keeps unchanged copies of the backups in `internal/importer/androiddb/testdata/`.
+Synthetic test libraries; their feeds point at local fixture servers or `example.invalid`. NotTennaPod Server keeps unchanged copies of the first four groups below in `internal/importer/androiddb/testdata/`; `gap-data/` is this app's counter-test data.
 
 - `android-3.12.1/`: libraries made by AntennaPod 3.12.1 on the Android emulator.
 - `older-versions/`: backups generated from the table definitions of older AntennaPod releases (`PodDBAdapter` at the release named in each file name, 0.8 to 3.8.0), and `v3110000-edges.db`, edge values in the 3.12.1 schema.
@@ -159,6 +208,10 @@ Synthetic test libraries; their feeds point at local fixture servers or `example
 ### Synchronization fixture servers
 
 `TestSupport/Servers/serve-synchronization-fixture.py` (a gpodder.net-compatible account) and `serve-nextcloud-fixture.py` (Nextcloud Login Flow v2 and the gpoddersync provider) serve synthetic accounts on loopback, with the fixed password `fixture-password`; nothing in them comes from a real account.
+
+### View test fixtures
+
+The show-notes view tests (`ShownotesSubresourceTests`) load the notes and their subresources from an HTTPS server on 127.0.0.1 (`AppTests/ShownotesFixtureServer.swift`), as a publisher's are. Its certificates are not in the repository: the `NotTennaPodViewTests` scheme's test pre-action runs `Tools/shownotes-tls-fixture.sh`, which makes two fresh self-signed certificates for 127.0.0.1 into the ignored `.work/test-fixtures/shownotes-tls/` (it can also be run by hand). Nothing is added to a trust store: a Debug-only hook in the notes trusts exactly the `trusted` certificate's SHA-256 fingerprint, and `other` is the control a test expects to be rejected.
 
 ### UI journey fixtures
 
@@ -236,7 +289,7 @@ The default stage for a new UUID namespace is `/feed.xml?session=<UUID>` with on
 
 RSS uses `audio/wav`, enclosure length 1,920,044 and `itunes:duration` 120. RSS does not encode AntennaPod's NEW state; the app's refresh classification of the two newly delivered items supplies it.
 
-#### Add-podcast discovery (`TestSupport/Media/discovery/`)
+#### Add-podcast discovery (`TestSupport/Data/add-podcast-discovery/`)
 
 Served by `TestSupport/Servers/serve-discovery-fixture.py` on `127.0.0.1:18820`, which `Tools/test-fixtures.sh` starts for every UI run (scheme pre-action).
 
@@ -254,11 +307,11 @@ In DEBUG, a UI-test launch (`-test-library-id`) always sends the Apple top list 
 
 #### Files provider (`TestSupport/Media/files-provider/`)
 
-Documents the UI journeys pick through the real system Files picker. `Tools/test-fixtures.sh start <udid>` (the NotTennaPod scheme's test pre-action) copies them into the Simulator's "On My iPhone/iPad" storage (`group.com.apple.FileProvider.LocalStorage`) before every UI run, and removes earlier test exports there. Within a run the storage stays as seeded: every journey that saves into it (OPML, database and HTML export, automatic backup) removes what it saved when it ends, pass or fail (`keepLocalFilesSeeded` in `AppUITests/NavigationQueries.swift`). To keep a journey's exports for independent checking, run that journey alone with `TEST_RUNNER_KEEP_LOCAL_EXPORTS=1`.
+Documents the UI journeys pick through the real system Files picker. `Tools/test-fixtures.sh start <udid>` (the NotTennaPod scheme's test pre-action) copies them into the Simulator's "On My iPhone/iPad" storage (`group.com.apple.FileProvider.LocalStorage`) before every UI run, and removes earlier test exports and every other folder there. **That storage is the test Simulator's whole "On My iPhone/iPad": every folder at its root is deleted at each UI run, so keep nothing of your own there.** Within a run the storage stays as seeded: every journey that saves into it (OPML, database and HTML export, automatic backup) removes what it saved when it ends, pass or fail (`keepLocalFilesSeeded` in `AppUITests/NavigationQueries.swift`). To keep a journey's exports for independent checking, run that journey alone with `TEST_RUNNER_KEEP_LOCAL_EXPORTS=1`.
 
-- `M11/*.opml`: OPML import journeys, one copy per test library in folder `M11-<library-id>`. `malformed.opml` is a truncated document; `refresh.opml` re-imports the retained feeds that the `refresh-lifecycle` fixture seeds.
-- `M16/*.db`: the database-import error cases (a newer schema version and a non-database file). The valid backup is `TestSupport/Data/database-restore/android-3.12.1/emulator-parity-library.db`.
-- `M18`: an empty folder is created for the automatic-export journey.
+- `OPML/*.opml`: OPML import journeys, one copy per test library in folder `OPML-<library-id>`. `malformed.opml` is a truncated document; `refresh.opml` re-imports the retained feeds that the `refresh-lifecycle` fixture seeds.
+- `DatabaseImport/*.db`: the database-import error cases (a newer schema version and a non-database file). The valid backup is `TestSupport/Data/database-restore/android-3.12.1/emulator-parity-library.db`.
+- `DatabaseExport`: an empty folder is created for the automatic-export journey.
 
 #### Playback video (`AppUITests/Fixtures/PlaybackVideo/`)
 

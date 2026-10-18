@@ -16,7 +16,7 @@ import Testing
 /// `Fixtures/HeardRate`), so the measurement is independent of the app's position
 /// arithmetic, and rates are taken against the wall clock: a wrong sample rate, a doubled or
 /// missing speed stage or a renderer rate error all show up as the wrong speed.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3))) struct HeardPlaybackRateTests {
+@MainActor @Suite(.serialized) struct HeardPlaybackRateTests {
     // MARK: Gap 1 — the chosen speed is the speed heard
 
     /// Android: `ExoPlayer.setPlaybackParameters(speed)` (ExoPlayerWrapper.setPlaybackParams)

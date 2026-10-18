@@ -167,7 +167,7 @@ extension FeedLibraryStore {
         try database.transaction(write: false) {
             _ = try requireSynchronization(epoch)
             // Source getFeedList includes every state; preserve that selection.
-            return try loadFeeds().contains {
+            return try loadFeedHeaders().contains {
                 $0.keepUpdated && ($0.lastRefreshAttempt == nil || $0.lastRefreshAttempt == Date(timeIntervalSince1970: 0))
             }
         }

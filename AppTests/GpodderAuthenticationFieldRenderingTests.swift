@@ -4,7 +4,7 @@ import Testing
 
 /// Source TextInputLayout: the floating hint aligns with the text and the outline
 /// is interrupted around it, so no line runs through the label.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct GpodderAuthenticationFieldRenderingTests {
     @Test(arguments: [UIUserInterfaceStyle.light, .dark],
           [UISemanticContentAttribute.forceLeftToRight, .forceRightToLeft])

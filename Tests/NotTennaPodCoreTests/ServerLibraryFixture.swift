@@ -1,5 +1,6 @@
 import Foundation
 import SQLite3
+import Testing
 @testable import NotTennaPodCore
 
 /// A server library on disk for recorder tests (PROTOCOL §15.2): a fresh library with an
@@ -24,9 +25,13 @@ struct ServerLibraryFixture {
                                          accountID: accountID, namespace: namespace, username: "alice", installID: installID, deviceMarker: nil)
         _ = FeedAuthentication(store: store, vault: vault)
         if server { try await store.initializeServerLibrary(identity) }
+        await ChangeOracleRegistry.install(store)
     }
 
-    func close() async { try? await store.close(); try? FileManager.default.removeItem(at: directory) }
+    func close() async {
+        ChangeOracleRegistry.verify(store, "library fixture")
+        try? await store.close(); try? FileManager.default.removeItem(at: directory)
+    }
 
     // MARK: Feeds
 

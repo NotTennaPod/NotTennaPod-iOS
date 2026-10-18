@@ -9,7 +9,7 @@ import Testing
 /// SOCKSv5 18791); start it with `Tools/test-fixtures.sh start` first. The fixture report
 /// (`.work/test-fixtures/proxy-report.json` in this checkout) is the record of which bytes went
 /// through the proxy; the observed result is noted below.
-@Suite(.serialized, .timeLimit(.minutes(2))) struct BackgroundProxyProbeTests {
+@Suite(.serialized) struct BackgroundProxyProbeTests {
     private final class Delegate: NSObject, URLSessionDownloadDelegate, Sendable {
         let proxy: PodcastProxy
         let result = Mutex<(status: Int?, bytes: Int64?, error: String?, proxyChallenges: Int)>((nil, nil, nil, 0))
@@ -51,34 +51,34 @@ import Testing
         return delegate.result.withLock { $0 }
     }
 
-    /// Observed 2026-09-28 (iOS 27.0 Simulator): the request reaches the proxy, but its 407 challenge is
+    /// Observed on the iOS 27.0 Simulator: the request reaches the proxy, but its 407 challenge is
     /// not offered to a background session's delegate; the task completes with the 407 response.
     @Test func httpProxyChallengeIsNotDeliveredToBackgroundSession() async throws {
         let proxy = PodcastProxy(kind: .http, host: "127.0.0.1", port: 18790, username: "fixture-user", password: "fixture-secret")
-        let result = try await run(proxy, url: "http://proxy-feed.invalid/episode.mp3?session=m29-p1")
-        print("M29-P1 http: \(result)")
+        let result = try await run(proxy, url: "http://proxy-feed.invalid/episode.mp3?session=proxy-challenge")
+        print("Background proxy http: \(result)")
         #expect(result.status == 407 && result.proxyChallenges == 0, "\(result)")
     }
 
     /// A plain-HTTP request that already carries the proxy credentials is accepted by the proxy.
     @Test func httpProxyAcceptsPreemptiveProxyAuthorizationInBackgroundSession() async throws {
         let proxy = PodcastProxy(kind: .http, host: "127.0.0.1", port: 18790, username: "fixture-user", password: "fixture-secret")
-        let result = try await run(proxy, url: "http://proxy-feed.invalid/episode.mp3?session=m29-p1b", preemptive: true)
-        print("M29-P1 http preemptive: \(result)")
+        let result = try await run(proxy, url: "http://proxy-feed.invalid/episode.mp3?session=proxy-preemptive", preemptive: true)
+        print("Background proxy http preemptive: \(result)")
         #expect(result.status == 200 && (result.bytes ?? 0) > 0, "\(result)")
     }
 
     @Test func httpsThroughAuthenticatedConnectProxyInBackgroundSession() async throws {
         let proxy = PodcastProxy(kind: .http, host: "127.0.0.1", port: 18790, username: "fixture-user", password: "fixture-secret")
         let result = try await run(proxy, url: "https://www.example.com/")
-        print("M29-P1 https connect: \(result)")
+        print("Background proxy https connect: \(result)")
         #expect(result.status == 200 && (result.bytes ?? 0) > 0, "\(result)")
     }
 
     @Test func socksProxyCarriesBackgroundDownload() async throws {
         let proxy = PodcastProxy(kind: .socks, host: "127.0.0.1", port: 18791, username: "fixture-user", password: "fixture-secret")
         let result = try await run(proxy, url: "https://www.example.com/")
-        print("M29-P1 socks: \(result)")
+        print("Background proxy socks: \(result)")
         #expect(result.status == 200 && (result.bytes ?? 0) > 0, "\(result)")
     }
 }

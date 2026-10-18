@@ -14,7 +14,7 @@ struct InterfaceSettingsTests {
     private static func cases(_ key: String) -> [[String: Any]] { oracle[key] as! [[String: Any]] }
 
     private func withDirectory(_ body: (URL) async throws -> Void) async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M31Interface-\(UUID())")
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("InterfaceSettings-\(UUID())")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         try await body(directory)

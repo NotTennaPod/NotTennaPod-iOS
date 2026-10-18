@@ -16,6 +16,9 @@ extension FeedLibraryStore {
         for job in try downloadJobs(activeOnly: true) where !excludingJobs.contains(job.id) {
             if paths.contains(job.destination.standardizedFileURL.path) { return true }
         }
+        // Only the episodes whose stored file has this file's name are read; a staged episode no list shows
+        // owns nothing yet.
+        if keyedReads { return try fileOwners(of: [file]).contains { !$0.hidden } }
         for feed in try loadFeeds() {
             for episode in feed.episodes {
                 if let local = episode.userState.localFileURL, paths.contains(URL(fileURLWithPath: local).standardizedFileURL.path) { return true }

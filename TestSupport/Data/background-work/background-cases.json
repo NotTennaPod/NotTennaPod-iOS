@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "contract": "the background-work design contract (M29 A1)",
+ "contract": "background work as docs/ARCHITECTURE.md describes it (Downloads and refresh)",
  "reference": "f8c641887e4677237b01b6e942ff8fe20fc8beec",
  "now_ms": 1790510400000,
  "download_log": {

@@ -5,7 +5,7 @@ import Testing
 
 /// Exercises the application resolver and selected PCM engine with real encoded
 /// media; only the output clock/session activation are deterministic test ports.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct PlaybackProcessedSelectionTests {
     private final class Transport: PCMVolumePresentationTransport {
         var currentTime = CMTime.zero

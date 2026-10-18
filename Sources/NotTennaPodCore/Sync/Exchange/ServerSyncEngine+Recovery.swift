@@ -57,7 +57,10 @@ extension ServerSyncEngine {
     /// Steps 4–7 of the recovery the live library records. Returns whether the exchange may go on (its outbox may be
     /// pushed): false while the recovery has not caught up yet (it waits, the report says for what).
     func recover(_ report: inout ServerExchangeReport, _ keychain: ServerInstallationKeychain) async throws -> Bool {
-        guard var recovery = try await store.serverRecovery(), !recovery.finished else { return true }
+        guard var recovery = try await store.serverRecovery(), !recovery.finished else {
+            ServerSnapshotSpool.remove(recoverySpool)
+            return true
+        }
         report.recovery = recovery.waiting ? .waiting : .running
         // A quarantine an interruption left part-way finishes first, before anything is sent: the rest of its closure
         // (with what the person recorded meanwhile), its frontier and writer repairs, then its overlays.
@@ -65,6 +68,8 @@ extension ServerSyncEngine {
         recovery = try await store.serverRecovery() ?? recovery
         try await withdrawUnrestored(&report)
         if recovery.caughtUp {
+            // The base switch was published (or not needed): its download has no use left.
+            ServerSnapshotSpool.remove(recoverySpool)
             // While entries wait, what the outbox gained since (a draft materialized) and names them is parked before the
             // push, so the slots after it keep moving.
             if recovery.waiting, let epoch = recovery.epoch { try await park(try waitingNodes(recovery, epoch: epoch)) }
@@ -74,6 +79,12 @@ extension ServerSyncEngine {
         // A request the recovery needs that the server refused (`version_unsupported`) waits for an explicit retry or an
         // update: nothing of the recovery is prepared or sent again meanwhile.
         if Self.recoveryBlocked(state, caughtUp: false) { return false }
+        // A full recovery whose base switch waits for playback to pause (its download not started yet, or kept) does
+        // nothing again while audio plays: no new opening of the server's view, no staging. The pause runs it.
+        if try await recoveryWaitsForPause(recovery, state: state) {
+            report.waitingForPause = true
+            return false
+        }
         // Step 4: the recovery snapshot's first answer opens (or resumes) the recovery: the prefix shortcut, or a full
         // snapshot, whose epoch keys the inventory. A full one is downloaded only after the uploads (step 7).
         let opened = try await openRecovery(&recovery, state: state, spoolingTo: nil)
@@ -108,14 +119,44 @@ extension ServerSyncEngine {
                 try await dropKeptFull()
                 try await dropKeptShadow()
                 try await discardStaging()
-                let folder = staging.appendingPathComponent("recovery", isDirectory: true)
-                defer { try? FileManager.default.removeItem(at: folder) }
-                if case .full(let downloaded) = try await openRecovery(&recovery, state: state, spoolingTo: folder), let snapshot = downloaded {
+                // The download is kept until its switch is published (an interruption continues it, playback starting
+                // keeps it for the pause); a large one does not start while audio plays, nor in a background refresh.
+                let identity = recoveryIdentity(recovery, state: state, epoch: epoch)
+                let existing = ServerSnapshotSpool.manifest(in: recoverySpool).flatMap { $0.identity == identity ? $0 : nil }
+                if existing?.complete != true, !snapshotsAllowed {
+                    log("recovery", "the server's library is downloaded in a processing background task or in the app")
+                    return false
+                }
+                // Neither downloaded nor staged (a kept download is not verified and staged again) while a large library
+                // plays: the live library's size, or the kept download's when it is larger (what staging would write).
+                if await isPlaying(), max(try await store.serverRecordCount(), existing?.records ?? 0) > fullStagingWhilePlaying {
+                    report.waitingForPause = true
+                    log("recovery", "the server's library is downloaded and switched to when playback pauses")
+                    return false
+                }
+                guard bulkSpaceReturned(&report) else { return false }
+                // Room for it before the server is asked for the whole library.
+                if existing?.complete != true {
+                    try disk.admit(estimate: await snapshotEstimate(), spooled: existing?.bytes ?? 0, at: recoverySpool)
+                }
+                let downloaded: ServerAttachSnapshot?
+                if let existing, !existing.pages.isEmpty {
+                    // Continued from its last page (no new first request: page tokens carry the view), or reused whole.
+                    downloaded = try await recoverySnapshot(identity, request: recoveryRequest(recovery, state: state, full: true), first: nil).run()
+                } else if case .full(let snapshot) = try await openRecovery(&recovery, state: state, spoolingTo: recoverySpool) {
+                    downloaded = snapshot
+                } else { downloaded = nil }
+                if let snapshot = downloaded {
+                    ServerSnapshotEstimate.record(snapshot, in: staging)
                     let head = try SyncCursor(encoded: snapshot.head)
-                    guard head.epoch == epoch else { return false }
+                    guard head.epoch == epoch else {
+                        ServerSnapshotSpool.remove(recoverySpool)
+                        return false
+                    }
                     guard try await publishReprojection(snapshot, head: head, replacing: live, recoveryID: recovery.recoveryID, &report) else {
                         return false
                     }
+                    ServerSnapshotSpool.remove(recoverySpool)
                     log("recovery", "the library's base is the restored server's at \(head.seq), with what this library restored")
                 }
             }
@@ -134,6 +175,8 @@ extension ServerSyncEngine {
         _ = try await settle(outcome, &recovery, epoch: epoch, &report)
         recovery.caughtUp = true
         try await store.updateServerRecovery { $0 = recovery }
+        // The fence lifted: every episode's adoption may be decided again, told now.
+        if !deferDelivery { await publishChanges(&report) }
         log("recovery", "caught up: \(outcome.recovered) changes restored" + (outcome.problems > 0 ? ", \(outcome.problems) could not be restored" : "")
             + (outcome.unresolved > 0 ? ", \(outcome.unresolved) wait for another device to restore what they depend on" : ""))
         caughtUpNow = true
@@ -214,10 +257,17 @@ extension ServerSyncEngine {
     func releaseHolds(_ waiting: Set<String>, _ report: inout ServerExchangeReport) async throws {
         var released = 0
         while let result = try await store.releaseServerHolds(stillWaiting: waiting, history: history, now: now()) {
-            record(result, into: &report)
+            await record(result, into: &report)
             released += 1
         }
         if released > 0 { log("recovery", "what changes that no longer wait showed is the server's again") }
+    }
+
+    /// Tests: one hold-release step as the recovery runs it, its report returned.
+    func releaseHoldsForTesting() async throws -> ServerExchangeReport {
+        var report = ServerExchangeReport()
+        try await releaseHolds([], &report)
+        return report
     }
 
     /// Holds a finished recovery left because newer local work kept them end once that work resolved, and
@@ -229,7 +279,7 @@ extension ServerSyncEngine {
             try Task.checkCancellation()
             try await pace()
             if let result = try await ServerDeferredMerges.step(store, database: databaseURL, candidate: candidate, history: history, now: now()) {
-                record(result, into: &report)
+                await record(result, into: &report)
             }
         }
         if let recovery = try await store.serverRecovery(), !recovery.finished { return }
@@ -268,10 +318,7 @@ extension ServerSyncEngine {
     /// bound to another installation (one copied with the library) starts under a new ID.
     private func openRecovery(_ recovery: inout ServerRecoveryRecord, state: ServerExchangeState, spoolingTo folder: URL?) async throws -> Opened {
         for attempt in 0..<2 {
-            var body: ContractObject = ["mode": "recovery", "recovery_id": .string(recovery.recoveryID), "install_id": .string(state.installID),
-                                        "acked_install_seq": .integer(state.acked)]
-            if let cursor = state.cursor { body["cursor"] = .string(cursor.encoded) }
-            if folder == nil { body["limit"] = 1 }
+            let body = recoveryRequest(recovery, state: state, full: folder != nil)
             let first: ContractJSON
             do { first = try await gated(.recovery) { try await transport.snapshot(.object(body)) } }
             catch let error as ServerExchangeError where error.status == 403 && attempt == 0 {
@@ -293,28 +340,69 @@ extension ServerSyncEngine {
                 }
                 return .prefix
             }
-            guard let folder else {
-                guard let head = first["head"]?.stringValue.flatMap({ try? SyncCursor(encoded: $0) }) else {
-                    throw ServerSnapshotError.invalidSnapshot("a recovery snapshot without its head")
-                }
+            guard let head = first["head"]?.stringValue.flatMap({ try? SyncCursor(encoded: $0) }) else {
+                throw ServerSnapshotError.invalidSnapshot("a recovery snapshot without its head")
+            }
+            guard folder != nil else {
                 try await note(&recovery, epoch: head.epoch, prefix: false)
                 return .full(nil)
             }
             // A full snapshot: its first page is the one just answered.
-            let firstPage = SendableBox(first)
-            let transport = transport, request = body
-            let snapshot = try await ServerSnapshotDownload(folder: folder, fetch: { page in
-                if page == nil, let answer = firstPage.take() { return answer }
-                var body = request
-                if let page { body["page"] = .string(page) }
-                return try await ServerRequestRefused.mapping(.recovery) { try await transport.snapshot(.object(body)) }
-            }, isViewExpired: { ($0 as? ServerExchangeError)?.code == "view_expired" }).run()
-            let head = try SyncCursor(encoded: snapshot.head)
-            try await note(&recovery, epoch: head.epoch, prefix: false)
+            let snapshot = try await recoverySnapshot(recoveryIdentity(recovery, state: state, epoch: head.epoch), request: body,
+                                                      first: SendableBox(first)).run()
+            try await note(&recovery, epoch: try SyncCursor(encoded: snapshot.head).epoch, prefix: false)
             log("recovery", "the server's library is restored from a snapshot at \(head.seq)")
             return .full(snapshot)
         }
         throw ServerExchangeError.server(status: 403, code: "forbidden", retryAfter: nil)
+    }
+
+    /// Whether the recovery is a full one whose base switch is still ahead (its epoch is recorded, the live cursor is
+    /// still the old epoch's, nothing built is kept) while a large library plays.
+    private func recoveryWaitsForPause(_ recovery: ServerRecoveryRecord, state: ServerExchangeState) async throws -> Bool {
+        guard let epoch = recovery.epoch, recovery.prefix == false, let live = state.cursor, live.epoch != epoch, keptFull == nil else { return false }
+        guard await isPlaying() else { return false }
+        // The incoming library may be larger than this one (a phone behind the server): a kept download's size counts.
+        let incoming = ServerSnapshotSpool.manifest(in: recoverySpool)
+            .flatMap { $0.identity == recoveryIdentity(recovery, state: state, epoch: epoch) ? $0.records : nil } ?? 0
+        return max(try await store.serverRecordCount(), incoming) > fullStagingWhilePlaying
+    }
+
+    /// The recovery's full snapshot download (`staging/recovery/`): kept until its base switch is published.
+    var recoverySpool: URL { staging.appendingPathComponent("recovery", isDirectory: true) }
+
+    func recoveryIdentity(_ recovery: ServerRecoveryRecord, state: ServerExchangeState, epoch: Int64) -> ServerSnapshotIdentity {
+        ServerSnapshotIdentity(mode: "recovery", installID: state.installID, recoveryID: recovery.recoveryID, logID: state.cursor?.logID, epoch: epoch)
+    }
+
+    /// `POST /v1/snapshot {mode: recovery, recovery_id, install_id: T', cursor, acked_install_seq}`; one item only when
+    /// the full snapshot is not wanted yet.
+    private func recoveryRequest(_ recovery: ServerRecoveryRecord, state: ServerExchangeState, full: Bool) -> ContractObject {
+        var body: ContractObject = ["mode": "recovery", "recovery_id": .string(recovery.recoveryID), "install_id": .string(state.installID),
+                                    "acked_install_seq": .integer(state.acked)]
+        if let cursor = state.cursor { body["cursor"] = .string(cursor.encoded) }
+        if !full { body["limit"] = 1 } else if let limit = snapshotPageLimit { body["limit"] = .integer(Int64(limit)) }
+        return body
+    }
+
+    /// The recovery's spool: `first` answers the first page when it was just asked (step 4's request); later pages by
+    /// their tokens.
+    private func recoverySnapshot(_ identity: ServerSnapshotIdentity, request: ContractObject, first: SendableBox<ContractJSON>?) async -> ServerSnapshotSpool {
+        let estimate = await snapshotEstimate()
+        let transport = transport, folder = recoverySpool, hook = stepCrashPoint
+        var spool = ServerSnapshotSpool(folder: folder, identity: identity, fetch: { page in
+            if page == nil, let answer = first?.take() { return answer }
+            var body = request
+            if let page { body["page"] = .string(page) }
+            return try await ServerRequestRefused.mapping(.recovery) { try await transport.snapshot(.object(body)) }
+        }, restarts: { error, resumed in
+            let code = (error as? ServerExchangeError)?.code
+            return code == "view_expired" || (resumed && code == "invalid_request")
+        })
+        spool.clock = clock
+        spool.beforeRequest = { try hook?("recovery.page") }
+        disk.guarding(&spool, estimate: estimate)
+        return spool
     }
 
     /// The answer's epoch: a new one (the first answer, or the server restored again since) starts the inventory under
@@ -366,17 +454,37 @@ extension ServerSyncEngine {
     }
 
     /// `POST /v1/sync/recovery/inventory` for every entry without an answer in this epoch, a page at a time: `have`,
-    /// `need` or `conflict`, recorded durably per page.
+    /// `need` or `conflict`, recorded durably per page. A page is the longest run of the remaining entries whose exact
+    /// request body fits `inventoryBudget` bytes (and `bounds.recovery_inventory` entries), so it fits every server's
+    /// body limit; a `payload_too_large` answer halves the budget and builds a smaller page from the same entries at once.
     private func inventory(_ entries: [RecoveryEntry], recovery: ServerRecoveryRecord, epoch: Int64, bounds: ServerBounds) async throws {
         let progress = try archive.recoveryProgress(recovery: recovery.recoveryID, epoch: epoch)
         let open = entries.filter { progress[$0.key] == nil && $0.retained?.unrestored != true }
-        let page = max(1, bounds.recoveryInventory)
-        for start in stride(from: 0, to: open.count, by: page) {
+        guard !open.isEmpty else { return }
+        let sizes = try open.map { try $0.item.inventory.canonicalBytes().count }
+        let envelope = try ContractJSON.object(["recovery_id": .string(recovery.recoveryID), "entries": []]).canonicalBytes().count
+        let limit = max(1, bounds.recoveryInventory)
+        var start = 0
+        while start < open.count {
             try Task.checkCancellation()
-            let batch = Array(open[start..<min(open.count, start + page)])
-            let answer = try await gated(.recovery) {
-                try await transport.send("POST", "v1/sync/recovery/inventory", body: [
-                    "recovery_id": .string(recovery.recoveryID), "entries": .array(batch.map(\.item.inventory))])
+            var bytes = envelope, count = 0
+            while start + count < open.count, count < limit {
+                let added = sizes[start + count] + (count > 0 ? 1 : 0)
+                if count > 0, bytes + added > inventoryBudget { break }
+                bytes += added; count += 1
+            }
+            let batch = Array(open[start..<(start + count)])
+            let answer: ContractJSON
+            do {
+                answer = try await gated(.recovery) {
+                    try await transport.send("POST", "v1/sync/recovery/inventory", body: [
+                        "recovery_id": .string(recovery.recoveryID), "entries": .array(batch.map(\.item.inventory))])
+                }
+            } catch let error as ServerExchangeError where error.status == 413 && count > 1 && inventoryBudget > Self.inventoryFloor {
+                // Too large for this server: a smaller page of the same entries, now (nothing was recorded for them).
+                inventoryBudget = max(Self.inventoryFloor, min(inventoryBudget, bytes) / 2)
+                log("recovery", "the inventory is sent in smaller pages")
+                continue
             }
             var statuses: [String: String] = [:]
             for result in answer["results"]?.arrayValue ?? [] {
@@ -388,10 +496,14 @@ extension ServerSyncEngine {
                 (entry.item.kind, entry.item.id, ServerArchive.RecoveryProgress(status: statuses[entry.key] ?? "need"))
             }
             try archive.setRecoveryProgress(recovery: recovery.recoveryID, epoch: epoch, values.map { (kind: $0.0, id: $0.1, progress: $0.2) })
+            try crash("recovery.inventory.page")
             let conflicts = values.filter { $0.2.status == "conflict" }.count
             if conflicts > 0 { log("recovery", "\(conflicts) entries differ from the server's: kept here, never uploaded") }
+            start += count
         }
     }
+
+    static let inventoryFloor = 4 << 10
 
     // MARK: - Step 6: upload
 
@@ -609,7 +721,7 @@ extension ServerSyncEngine {
         }
         for chunk in FeedLibraryStore.chunks(retire, size: 50) {
             let result = try await store.retireServerRetained(chunk, deleting: delete.intersection(chunk), history: history, now: now())
-            record(result, into: &report)
+            await record(result, into: &report)
         }
     }
 
@@ -666,7 +778,7 @@ extension ServerSyncEngine {
         let ops = try await store.unrestoredWithOverlays()
         for chunk in FeedLibraryStore.chunks(ops, size: 50) {
             let result = try await store.retireServerRetained(chunk, deleting: [], history: history, now: now())
-            record(result, into: &report)
+            await record(result, into: &report)
         }
     }
 

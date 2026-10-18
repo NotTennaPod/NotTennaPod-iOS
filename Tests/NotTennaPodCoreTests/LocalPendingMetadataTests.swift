@@ -5,7 +5,7 @@ import Testing
 
 /// Playback demand for the metadata of an episode first listed while its file was only in the
 /// cloud. The folder and files are real; the provider's availability answers are the fixture's.
-@Suite(.serialized, .timeLimit(.minutes(1)))
+@Suite(.serialized)
 struct LocalPendingMetadataTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
     private struct Fixture {

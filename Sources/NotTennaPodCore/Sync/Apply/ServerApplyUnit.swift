@@ -113,6 +113,9 @@ struct ServerUnitResult: Sendable {
     var work = 0
     /// Rows the unit's transaction wrote (SQLite's change count): what its lock hold scales with.
     var rowsWritten = 0
+    /// VM steps its statements ran while it held the lock (its transaction, commit included): the work its hold
+    /// scales with, whatever the machine's speed or load.
+    var lockSteps: Int64 = 0
     var retired: [Retired] = []
     /// Feeds whose deletion effects the feed-deletion coordinator now drains.
     var deletedFeeds: [Int64] = []
@@ -220,6 +223,10 @@ enum ServerExchangeTables {
         "CREATE TABLE IF NOT EXISTS ntp_feed_merges (source_feed INTEGER PRIMARY KEY, survivor_feed INTEGER NOT NULL)",
     ]
 
+    /// Consecutive `invalid_part` answers to a framed fact's parts (PROTOCOL §6.4), by its framing transaction: a new framing
+    /// starts again, a part stored does not; an explicit retry tries once more.
+    static let pushRefusals = "CREATE TABLE IF NOT EXISTS ntp_push_refusals (op_id TEXT NOT NULL, transaction_id TEXT NOT NULL, count INTEGER NOT NULL, PRIMARY KEY(op_id, transaction_id))"
+
     /// Indexes a unit's statements use inside the live lock (their cost is what the commit changes, not the library's
     /// size). Created with a new library's tables (empty, at once); a library from before them gets them at its first
     /// exchange while nothing plays (`ensureServerIndexes`), never while it opens: on a large library the build takes
@@ -233,16 +240,77 @@ enum ServerExchangeTables {
         "CREATE INDEX IF NOT EXISTS ntp_episodes_by_podcast ON ntp_episodes(podcast_id)",
     ]
 
+    /// A write to a server table that a feed's refresh merge or its observation reads per episode retires the
+    /// feed's refresh memo, in the transaction that writes it: the parses observed, the canonical episode metadata shown
+    /// (its presence), the episode mappings, the local identities, the observations listed and the staged episodes hidden.
+    static let refreshMemoTriggers: [(name: String, sql: String)] = {
+        func retire(_ feed: String) -> String { "DELETE FROM feed_refresh_memo WHERE feed_id = \(feed);" }
+        func ofEpisode(_ local: String) -> String { "(SELECT feed_id FROM episodes WHERE id = \(local))" }
+        // `local-feed:<feed>` and `local-episode:<episode>`.
+        func observed(_ row: String) -> String {
+            retire("CASE \(row).entity WHEN 'podcast' THEN CAST(substr(\(row).id, 12) AS INTEGER) ELSE \(ofEpisode("CAST(substr(\(row).id, 15) AS INTEGER)")) END")
+        }
+        func mapped(_ wire: String) -> String {
+            retire("(SELECT e.feed_id FROM ntp_episodes n JOIN episodes e ON e.id = n.local_id WHERE n.episode_id = \(wire))")
+        }
+        func changed(_ columns: [String]) -> String {
+            "(" + columns.map { "OLD.\($0)" }.joined(separator: ", ") + ") IS NOT (" + columns.map { "NEW.\($0)" }.joined(separator: ", ") + ")"
+        }
+        func trigger(_ name: String, _ event: String, when: String? = nil, _ body: String) -> (String, String) {
+            ("refresh_memo_\(name)", "CREATE TRIGGER IF NOT EXISTS refresh_memo_\(name) AFTER \(event)\(when.map { " WHEN \($0)" } ?? "") BEGIN \(body) END")
+        }
+        let metadata = { (row: String) in "\(row).entity = 'episode' AND \(row).field_group = 'metadata'" }
+        let mappingColumns = ["episode_id", "local_id", "podcast_id", "kind", "value", "occurrence"]
+        let identityColumns = ["local_id", "feed_id", "kind", "value", "guid", "enclosure", "publication_time"]
+        return [
+            trigger("observed_insert", "INSERT ON ntp_observed", observed("NEW")),
+            trigger("observed_update", "UPDATE ON ntp_observed", when: changed(["entity", "id", "parse_hash", "observation_op", "catalog_node"]),
+                    observed("OLD") + " " + observed("NEW")),
+            trigger("observed_delete", "DELETE ON ntp_observed", observed("OLD")),
+            trigger("records_insert", "INSERT ON ntp_records", when: metadata("NEW"), mapped("NEW.id")),
+            trigger("records_delete", "DELETE ON ntp_records", when: metadata("OLD"), mapped("OLD.id")),
+            trigger("records_update", "UPDATE OF entity, id, field_group ON ntp_records", when: changed(["entity", "id", "field_group"]),
+                    mapped("OLD.id") + " " + mapped("NEW.id")),
+            trigger("episodes_insert", "INSERT ON ntp_episodes", retire(ofEpisode("NEW.local_id"))),
+            trigger("episodes_delete", "DELETE ON ntp_episodes", retire(ofEpisode("OLD.local_id"))),
+            trigger("episodes_update", "UPDATE ON ntp_episodes", when: changed(mappingColumns),
+                    retire(ofEpisode("OLD.local_id")) + " " + retire(ofEpisode("NEW.local_id"))),
+            trigger("local_items_insert", "INSERT ON ntp_local_items", retire("NEW.feed_id")),
+            trigger("local_items_delete", "DELETE ON ntp_local_items", retire("OLD.feed_id")),
+            trigger("local_items_update", "UPDATE ON ntp_local_items", when: changed(identityColumns), retire("OLD.feed_id") + " " + retire("NEW.feed_id")),
+            trigger("observation_work_insert", "INSERT ON ntp_observation_work", retire("NEW.feed_id")),
+            trigger("observation_work_update", "UPDATE ON ntp_observation_work", retire("OLD.feed_id") + " " + retire("NEW.feed_id")),
+            trigger("hidden_episodes_insert", "INSERT ON ntp_hidden_episodes", retire("NEW.feed_id")),
+            trigger("hidden_episodes_delete", "DELETE ON ntp_hidden_episodes", retire("OLD.feed_id")),
+            trigger("hidden_episodes_update", "UPDATE ON ntp_hidden_episodes", retire("OLD.feed_id") + " " + retire("NEW.feed_id")),
+        ].map { (name: $0.0, sql: $0.1) }
+    }()
+
     static func create(_ database: LibrarySQLite) throws {
         // The earlier `ntp_observation_work` (keyed by `local_id`, without the parse; never shipped, only in development
         // libraries) is recreated: its observations are made again by the next refresh.
         let columns = try database.rows("PRAGMA table_info(ntp_observation_work)").compactMap { $0[1].text }
         if !columns.isEmpty, !columns.contains("fields") { try database.execute("DROP TABLE ntp_observation_work") }
         for statement in statements { try database.execute(statement) }
+        for trigger in refreshMemoTriggers { try database.execute(trigger.sql) }
+        // Tables the change capture watches may have appeared (the hidden staging and removal tables).
+        try database.refreshChangeCapture()
         // Added to `ntp_library` without a schema version (nothing of sync has shipped): the requests a server
         // refused with `version_unsupported`, comma-separated (`ServerRefusedRequest`).
-        if try !database.rows("PRAGMA table_info(ntp_library)").contains(where: { $0[1].text == "version_refusals" }) {
+        let library = try database.rows("PRAGMA table_info(ntp_library)").compactMap { $0[1].text }
+        if !library.contains("version_refusals") {
             try database.execute("ALTER TABLE ntp_library ADD COLUMN version_refusals TEXT")
+        }
+        // Added together, so the one check every unit makes covers them all: when pushing may try a refused change again
+        // (milliseconds) after `invalid_part` (PROTOCOL §6.4), with the refusals' counts; and a draft's state: one larger
+        // than the server accepts once materialized is never numbered (`refused_too_large`), and the drafts after it on
+        // its chain wait (`waiting`), kept with their overlays.
+        if !library.contains("push_retry_not_before") {
+            try database.execute("ALTER TABLE ntp_library ADD COLUMN push_retry_not_before INTEGER")
+            try database.execute(pushRefusals)
+            if try !database.rows("PRAGMA table_info(ntp_drafts)").contains(where: { $0[1].text == "state" }) {
+                try database.execute("ALTER TABLE ntp_drafts ADD COLUMN state TEXT NOT NULL DEFAULT 'waiting'")
+            }
         }
     }
 }
@@ -259,6 +327,31 @@ extension FeedLibraryStore {
         guard !missing.isEmpty else { return false }
         try database.transaction { for statement in ServerExchangeTables.indexes { try database.execute(statement) } }
         return true
+    }
+
+    /// The index that finds podcasts' `refresh_status` records; it exists once they have been projected.
+    static let refreshStatusIndex = "ntp_records_refresh_status"
+
+    /// A library that pulled `refresh_status` records before projections showed them (PROTOCOL §9.4) shows them now: each
+    /// one is projected once onto its podcast's feed, in one transaction, with the index that finds them, which marks it
+    /// done (bounded by the podcasts, once per library; later records are projected by their units). Whether a feed changed.
+    func projectStoredRefreshStatuses() throws -> Bool {
+        guard serverContext != nil,
+              try database.scalar("SELECT count(*) FROM sqlite_master WHERE type = 'index' AND name = ?", [.text(Self.refreshStatusIndex)]) == 0
+        else { return false }
+        return try write(.remote) {
+            try database.execute("CREATE INDEX IF NOT EXISTS \(Self.refreshStatusIndex) ON ntp_records(id) WHERE entity = 'podcast' AND field_group = 'refresh_status'")
+            var changed = false
+            for row in try database.rows("SELECT p.feed_id, r.value FROM ntp_records r JOIN ntp_podcasts p ON p.podcast_id = r.id WHERE r.entity = 'podcast' AND r.field_group = 'refresh_status' AND p.feed_id IS NOT NULL") {
+                guard let feedID = row[0].integer, var feed = try loadFeedHeader(feedID), !feed.source.isLocalFeedSource else { continue }
+                let status = ServerRefreshStatus(record: try row[1].data.map { try ContractJSON.decode($0) })
+                guard feed.serverRefresh != status else { continue }
+                feed.serverRefresh = status
+                try saveHeader(feed)
+                changed = true
+            }
+            return changed
+        }
     }
 
     /// Marks the episodes a playback save or end changed. Runs inside that write's transaction,
@@ -292,16 +385,18 @@ extension FeedLibraryStore {
         guard let context = serverContext else { throw ServerRecordingError.notAServerLibrary }
         try ensureServerExchangeTables()
         let clock = ContinuousClock(), started = clock.now
-        let changes = try database.scalar("SELECT total_changes()")
+        let changes = database.totalChanges, steps = database.statementSteps
         // Its keyed statements run hundreds of times inside the lock: each prepared once.
         var result = try database.reusingStatements { try syncTransactions(ServerTransactionKind.directUnit) { try write(.remote, durable: true) {
             var result = ServerUnitResult(seq: input.commit.seq)
             guard try checkUnitOrder(input, &result) else { return result }
+            try performanceFaultsForTesting()
             try applyUnitInTransaction(input, context: context, history: history, maxWork: maxWork, result: &result)
             return result
         } } }
         result.lockMilliseconds = Self.milliseconds(started.duration(to: clock.now))
-        result.rowsWritten = Int(try database.scalar("SELECT total_changes()") - changes)
+        result.lockSteps = database.statementSteps - steps
+        result.rowsWritten = Int(database.totalChanges - changes)
         return result
     }
 
@@ -343,10 +438,25 @@ extension FeedLibraryStore {
         throw ServerApplyError.outOfOrder(live: live?.seq, commit: input.commit.seq)
     }
 
+    /// Test-only performance mutations inside a unit (each must fail its budget): a whole-library read on a second
+    /// connection, and every podcast decoded in memory.
+    private func performanceFaultsForTesting() throws {
+        if adoptionFaults.contains(.unitScansOnSecondConnection), let url = database.fileURL {
+            let reader = try LibrarySQLite(readingOnly: url)
+            defer { try? reader.close() }
+            _ = try reader.rows("SELECT SUM(length(record)) FROM episodes")
+        }
+        if adoptionFaults.contains(.unitLoadsFeeds) { _ = try loadFeeds() }
+    }
+
     func unitProjector(context: ServerLibraryContext, now: Int64) throws -> ServerProjector {
-        ServerProjector(db: database, namespace: context.namespace, accountID: context.accountID, now: now) { [database] kind in
+        let projector = ServerProjector(db: database, namespace: context.namespace, accountID: context.accountID, now: now) { [database] kind in
             try database.allocateID(kind)
         }
+        projector.journalAwareListening = !adoptionFaults.contains(.recordsOnlyListening)
+        projector.listeningFromDisplayedRow = adoptionFaults.contains(.displayedRowListening)
+        projector.countsStatisticsUnits = adoptionFaults.contains(.countStatisticsUnits)
+        return projector
     }
 
     /// Writes the commit's records into `ntp_records` (the base) and returns what they make the unit re-project. Every
@@ -358,6 +468,7 @@ extension FeedLibraryStore {
         var written = 0
         for record in commit.records {
             scope.add(record: record.entity, id: record.id, group: record.fieldGroup)
+            if record.value == nil { projector.removedRecords.insert(record.key) }
             if record.entity == "episode", record.fieldGroup == "played_time" {
                 try projector.notePlayedTimeChange(episode: record.id, previous: try projector.record("episode", record.id, "played_time")?["played_ms"]?.integerValue ?? 0)
             }
@@ -697,6 +808,16 @@ extension FeedLibraryStore {
                 row[0].integer.map { ($0, row[1].data, row[2].text) }
             } : []
         var queue = plan.removedFeeds.isEmpty ? [] : try loadQueue()
+        // A closed generation's episodes: the overlays this library's pending facts put on them are that generation's and
+        // go with its rows, so a podcast subscribed again never shows them or records over them; the facts stay as they
+        // were recorded (PROTOCOL §6.8). Found from the pending overlays (what changed), never from the podcast's episodes.
+        for podcast in plan.closedPodcasts.sorted(by: { $0.utf8.lexicographicallyPrecedes($1.utf8) }) {
+            try database.execute("DELETE FROM ntp_overlays WHERE entity = 'episode' AND id IN (SELECT o.id FROM ntp_overlays AS o CROSS JOIN ntp_episodes AS n ON n.episode_id = o.id WHERE o.entity = 'episode' AND n.podcast_id = ?)",
+                                 [.text(podcast)])
+            // A chain of its pending registration's drafts stopped at one too large for the server ends with the removal
+            // (PROTOCOL §6.13): what follows it is sent under the closed generation, as the facts above are.
+            try endRefusedDraftChains(podcast: podcast)
+        }
         for feedID in plan.removedFeeds {
             guard let feed = try loadFeed(feedID) else { continue }
             // Projected removals stop only their own downloads: another row's of the same address (a merge's survivor)
@@ -705,7 +826,7 @@ extension FeedLibraryStore {
             result.deletedFeeds.append(feedID)
         }
         for removal in plan.pinnedRemovals {
-            try applyPinnedRemoval(removal, now: now)
+            try applyPinnedRemoval(removal, merged: plan.mergeRemovals.contains(removal.feedID), closed: plan.closedGenerations[removal.feedID], now: now)
             result.removedEpisodes = true
         }
         for (feedID, ids) in plan.removedEpisodes.sorted(by: { $0.key < $1.key }) {
@@ -714,8 +835,12 @@ extension FeedLibraryStore {
         }
         for removal in plan.hiddenRemovals {
             // A large removal leaves every list at once, in this unit; its rows go in bounded transactions after it.
-            // The player's episode is cleared as in a pinned removal (PROTOCOL §6.8) and goes when the player leaves it.
-            if let playing = removal.playing { try clearRemovedPlayingEpisode(playing, feedID: removal.feedID) }
+            // The player's episode is cleared and cut loose as in a pinned removal (PROTOCOL §6.8) and goes when the player
+            // leaves it (the hidden feed is its detached feed meanwhile).
+            if let playing = removal.playing {
+                try clearRemovedPlayingEpisode(playing, feedID: removal.feedID)
+                if !plan.mergeRemovals.contains(removal.feedID) { try detachHeldEpisode(playing, feedID: removal.feedID, hidden: true, closed: plan.closedGenerations[removal.feedID], now: now) }
+            }
             try database.execute("INSERT INTO ntp_hidden_feeds(feed_id, podcast_id, state, seq) VALUES (?, ?, 'removing', ?) ON CONFLICT(feed_id) DO UPDATE SET podcast_id = excluded.podcast_id, state = 'removing', seq = excluded.seq",
                                  [.integer(removal.feedID), .text(removal.podcast), .integer(result.seq)])
             result.hiddenRemovals = true
@@ -747,7 +872,7 @@ extension FeedLibraryStore {
             let removed = Set(queueBefore.map(\.id)).subtracting(final).count
             if queueBefore.count >= 2, removed * 4 > queueBefore.count * 3 {
                 let safeguard: ContractJSON = ["time": .integer(now), "id": .string(UUID().uuidString), "episodes": .array(try queueBefore.map { member in
-                    let title = try member.record.flatMap { try JSONDecoder().decode(LibraryEpisode.self, from: $0).details.title }
+                    let title = try member.record.flatMap { try JSONDecoder.libraryRecord(LibraryEpisode.self, from: $0).details.title }
                     return ["local_id": .integer(member.id), "title": title.map(ContractJSON.string) ?? .null,
                             "key": member.key.map(ContractJSON.string) ?? .null]
                 })]
@@ -780,8 +905,10 @@ extension FeedLibraryStore {
     }
 
     /// PROTOCOL §6.8: every other episode of the podcast goes as in a normal removal; the playing episode's shared state is
-    /// cleared; the podcast is a pinned removal every library-wide read skips until the selection leaves it.
-    private func applyPinnedRemoval(_ removal: (feedID: Int64, podcast: String, episodeID: Int64), now: Int64) throws {
+    /// cleared and it is cut loose from the account with what the player shows of its feed (`detachHeldEpisode`). A podcast
+    /// merged into a live one closes no generation (PROTOCOL §9.7): its feed is a pinned removal the player's episode keeps
+    /// syncing from until the player leaves it.
+    private func applyPinnedRemoval(_ removal: (feedID: Int64, podcast: String, episodeID: Int64), merged: Bool, closed: String?, now: Int64) throws {
         guard let feed = try loadFeed(removal.feedID) else { return }
         let date = Date(timeIntervalSince1970: Double(now) / 1_000)
         let others = feed.episodes.filter { $0.id != removal.episodeID }
@@ -795,8 +922,64 @@ extension FeedLibraryStore {
             try appendEffect(.init(feedID: feed.id, date: date, kind: .removeEpisodes(others), removedEpisodeCleanup: cleanup))
         }
         try clearRemovedPlayingEpisode(removal.episodeID, feedID: feed.id)
-        try database.execute("INSERT INTO ntp_podcasts(podcast_id, feed_id, pinned_removal) VALUES (?, ?, 1) ON CONFLICT(podcast_id) DO UPDATE SET feed_id = excluded.feed_id, live_generation = NULL, pinned_removal = 1",
-                             [.text(removal.podcast), .integer(removal.feedID)])
+        if merged {
+            try database.execute("INSERT INTO ntp_podcasts(podcast_id, feed_id, pinned_removal) VALUES (?, ?, 1) ON CONFLICT(podcast_id) DO UPDATE SET feed_id = excluded.feed_id, live_generation = NULL, pinned_removal = 1",
+                                 [.text(removal.podcast), .integer(removal.feedID)])
+        } else {
+            try detachHeldEpisode(removal.episodeID, feedID: feed.id, hidden: false, closed: closed, now: now)
+        }
+    }
+
+    /// The player's episode of a removed podcast, cut loose from the account (PROTOCOL §6.8): the podcast and the
+    /// episode's wire identity are left as a removal without the hold leaves them (they name no row here), so a podcast
+    /// subscribed again gets rows of its own; the episode's journal, owed work and local sync marks go, with the
+    /// overlays its pending facts put on it (those facts stay as they were recorded, and never reach another row). Its
+    /// feed is a detached feed (`pinned_feed_removals`, or the hidden feed of a large removal, `hidden`): no list shows
+    /// it, nothing of it is recorded, projected or matched again, and it goes when the player leaves the episode.
+    /// `closed`: the generation the removal closed (the podcast's live one before it), for a journal never bound to one.
+    func detachHeldEpisode(_ id: Int64, feedID: Int64, hidden: Bool, closed: String? = nil, now: Int64) throws {
+        // Listening saved before the removal that no fact carries yet is exported first, under the generation it was
+        // played in; only listening after the removal is not synced.
+        try exportJournalBeforeDetach(id, closed: closed, now: now)
+        let wires = try database.rows("SELECT episode_id FROM ntp_episodes WHERE local_id = ?", [.integer(id)]).compactMap { $0[0].text }
+        try database.execute("UPDATE ntp_podcasts SET feed_id = NULL, pinned_removal = 0 WHERE feed_id = ?", [.integer(feedID)])
+        try database.execute("UPDATE ntp_episodes SET local_id = NULL WHERE local_id = ?", [.integer(id)])
+        let named = ContractJSON.array((wires + [Self.ledgerKey(localEpisode: id)]).map(ContractJSON.string)).canonicalText
+        try database.execute("DELETE FROM ntp_overlays WHERE entity = 'episode' AND id IN (SELECT value FROM json_each(?))", [.text(named)])
+        try database.execute("DELETE FROM ntp_owed WHERE subject = ?", [.text(Self.owedSubject(id))])
+        try database.execute("DELETE FROM ntp_sessions WHERE episode_id = ?", [.integer(id)])
+        for table in ["ntp_queue_keys", "ntp_local_playback", "ntp_hidden_episodes"] {
+            try database.execute("DELETE FROM \(table) WHERE episode_id = ?", [.integer(id)])
+        }
+        for table in ["ntp_deferred_absence", "ntp_local_items"] {
+            try database.execute("DELETE FROM \(table) WHERE local_id = ?", [.integer(id)])
+        }
+        var transitions = try transitionState()
+        let before = transitions
+        if transitions.current?.episodeID == id { transitions.current = nil }
+        transitions.due.removeAll { $0.transition.episodeID == id }
+        if transitions != before { try storeTransitionState(transitions, journal) }
+        // Refused work of the episode (PROTOCOL §6.13) went with its journal and owed work, the removal applying here as
+        // everywhere: its Needs attention items go with it, and the log says so.
+        try database.execute("DELETE FROM ntp_attention WHERE kind IN ('listening_refused', 'queue_add_refused') AND json_extract(CAST(record AS TEXT), '$.episode') = ?",
+                             [.integer(id)])
+        if try database.scalar("SELECT changes()") > 0 {
+            noteServerDiagnostic("too_large", "what the server refused of an episode whose podcast was removed went with the removal")
+        }
+        if !hidden { try database.execute("INSERT OR IGNORE INTO pinned_feed_removals(feed_id) VALUES (?)", [.integer(feedID)]) }
+    }
+
+    /// Whether a feed is detached (PROTOCOL §6.8): the feed of an episode the player keeps after its podcast's removal,
+    /// or a removed podcast whose rows are going. Nothing of it is recorded.
+    func isDetachedFeed(_ feedID: Int64) throws -> Bool {
+        guard serverContext != nil else { return false }
+        return try database.scalar("SELECT (SELECT count(*) FROM pinned_feed_removals WHERE feed_id = ?) + (SELECT count(*) FROM ntp_hidden_feeds h WHERE h.feed_id = ? AND h.state = 'removing' AND NOT \(Self.mergedPodcastSQL("h.podcast_id")))",
+                                   [.integer(feedID), .integer(feedID)]) > 0
+    }
+
+    /// Whether podcast `column` merged into another (its subscription record's state).
+    static func mergedPodcastSQL(_ column: String) -> String {
+        "EXISTS (SELECT 1 FROM ntp_records r WHERE r.entity = 'podcast' AND r.id = \(column) AND r.field_group = 'subscription' AND json_extract(CAST(r.value AS TEXT), '$.state') = 'merged')"
     }
 
     /// The player's episode of a podcast the server removed (PROTOCOL §6.8): its shared state is cleared and it leaves the
@@ -839,6 +1022,26 @@ extension FeedLibraryStore {
 
     // MARK: - The player's pin (PROTOCOL §6.8)
 
+    /// Leaving this library (a sign-out, an account or library switch) ends the player's hold of an episode cut loose from
+    /// the account (PROTOCOL §6.8): its saved selection and session go, then its rows and files as at any release.
+    /// Nothing is recorded or completed; every other episode and podcast stays as it is. Returns whether rows changed.
+    @discardableResult
+    public func releaseDetachedEpisodes(now: Date = Date()) throws -> Bool {
+        guard serverContext != nil else { return false }
+        let detached = "SELECT id FROM episodes WHERE feed_id IN (SELECT feed_id FROM pinned_feed_removals UNION SELECT h.feed_id FROM ntp_hidden_feeds h WHERE h.state = 'removing' AND NOT \(Self.mergedPodcastSQL("h.podcast_id")))"
+        let cleared = try syncTransactions(ServerTransactionKind.bookkeeping) { () throws -> Bool in
+            try ensureServerExchangeTables()
+            return try database.transaction {
+                try database.execute("DELETE FROM playback_session WHERE episode_id IN (\(detached))")
+                var changes = try database.scalar("SELECT changes()")
+                try database.execute("DELETE FROM playback_selection WHERE episode_id IN (\(detached))")
+                changes += try database.scalar("SELECT changes()")
+                return changes > 0
+            }
+        }
+        return try releaseServerPins(now: now) || cleared
+    }
+
     /// Applies what waited for the player: remote positions and durations of episodes it no longer holds, and pinned
     /// removals whose podcast it left. Returns whether rows changed.
     @discardableResult
@@ -853,11 +1056,18 @@ extension FeedLibraryStore {
         let pinned = Set([selection, session].compactMap { $0 })
         let deferred = try database.rows("SELECT d.episode_id, d.fields, n.local_id FROM ntp_deferred_pins d LEFT JOIN ntp_episodes n ON n.episode_id = d.episode_id")
             .filter { row in row[2].integer.map { !pinned.contains($0) } ?? true }
-        let removals = try database.rows("SELECT podcast_id, feed_id FROM ntp_podcasts WHERE pinned_removal = 1").filter { row in
-            guard let feed = row[1].integer else { return true }
-            let episodes = try database.rows("SELECT id FROM episodes WHERE feed_id = ?", [.integer(feed)]).compactMap { $0[0].integer }
-            return !episodes.contains(where: pinned.contains)
+        func held(_ feed: Int64) throws -> Int64? {
+            try database.rows("SELECT id FROM episodes WHERE feed_id = ?", [.integer(feed)]).compactMap { $0[0].integer }.first(where: pinned.contains)
         }
+        // A pinned removal linked to its podcast: deleted once the player left it; while held, a merged podcast's keeps its
+        // link (PROTOCOL §9.7), and one an earlier version kept for a removal is detached as a removal is now.
+        let removals = try database.rows("SELECT p.podcast_id, p.feed_id, \(Self.mergedPodcastSQL("p.podcast_id")) FROM ntp_podcasts p WHERE p.pinned_removal = 1").filter { row in
+            guard row[2].integer == 1, let feed = row[1].integer else { return true }
+            return try held(feed) == nil
+        }
+        // Detached feeds the player left (a large removal's hidden feed goes in its own bounded transactions).
+        let detached = try database.rows("SELECT feed_id FROM pinned_feed_removals WHERE feed_id NOT IN (SELECT feed_id FROM ntp_hidden_feeds) ORDER BY feed_id")
+            .compactMap { $0[0].integer }.filter { try held($0) == nil }
         // Deferred absences whose hold retired (or whose episode the server holds again).
         let absences = try database.rows("SELECT local_id, episode_id, feed_id FROM ntp_deferred_absence").filter { row in
             guard let local = row[0].integer, let episode = row[1].text else { return true }
@@ -870,7 +1080,7 @@ extension FeedLibraryStore {
             return try database.scalar("SELECT count(*) FROM ntp_overlays WHERE entity = 'episode' AND id IN (?, ?)",
                                        [.text(episode), .text("local-episode:\(local)")]) == 0
         }
-        guard !deferred.isEmpty || !removals.isEmpty || !absences.isEmpty else { return false }
+        guard !deferred.isEmpty || !removals.isEmpty || !detached.isEmpty || !absences.isEmpty else { return false }
         return try write(.remote) {
             let projector = try unitProjector(context: context, now: try milliseconds(now))
             // Projected as every unit is, so what the released fields change of the queue (a completion whose claim no
@@ -888,9 +1098,18 @@ extension FeedLibraryStore {
             for row in removals {
                 guard let podcast = row[0].text else { continue }
                 if let feedID = row[1].integer, let feed = try loadFeed(feedID) {
-                    try deleteFeedInTransaction(feed, queue: &queue, now: now, sharedAddressJobs: false)
+                    if let episode = try held(feedID) {
+                        try detachHeldEpisode(episode, feedID: feedID, hidden: false, now: try milliseconds(now))
+                    } else {
+                        try deleteFeedInTransaction(feed, queue: &queue, now: now, sharedAddressJobs: false)
+                    }
                 }
                 try database.execute("UPDATE ntp_podcasts SET pinned_removal = 0 WHERE podcast_id = ?", [.text(podcast)])
+            }
+            // A detached feed goes with its episode and files once the player left it; nothing is recorded (PROTOCOL §6.8).
+            for feedID in detached {
+                guard let feed = try loadFeed(feedID) else { continue }
+                try deleteFeedInTransaction(feed, queue: &queue, now: now, sharedAddressJobs: false)
             }
             for row in absences {
                 guard let local = row[0].integer, let episode = row[1].text, let feedID = row[2].integer else { continue }

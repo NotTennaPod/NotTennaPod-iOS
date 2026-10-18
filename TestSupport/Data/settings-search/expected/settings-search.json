@@ -1554,8 +1554,8 @@
   }
  ],
  "ios_hidden": {
-  "prefTintedColors": "user decision 2026-09-26: Dynamic colors is not implemented; the row is hidden",
-  "prefChooseDataDir": "user decision 2026-09-28 (M31, D9a): Choose data folder is hidden",
+  "prefTintedColors": "Dynamic colors is not implemented on iOS; the row is hidden",
+  "prefChooseDataDir": "Choose data folder is hidden on iOS",
   "prefPersistNotify": "UserInterfacePreferencesFragment.java:100-102 hides it on API 30+ (the reference is API 36); iOS never shows it; Android's result for it opens the screen with nothing to highlight"
  },
  "ios_conditional": {
@@ -1771,7 +1771,7 @@
  "named_queries": [
   {
    "query": "black",
-   "why": "M33 acceptance: Full black is the first result (User interface > Theming)",
+   "why": "Full black is the first result (User interface > Theming)",
    "android": [
     {
      "key": "prefThemeBlack",
@@ -2021,7 +2021,7 @@
   },
   {
    "query": "speed",
-   "why": "M33 acceptance: the global Playback speed (Playback > Playback control) and the podcast one (Podcast settings > Playback) lead, with their breadcrumbs",
+   "why": "the global Playback speed (Playback > Playback control) and the podcast one (Podcast settings > Playback) lead, with their breadcrumbs",
    "android": [
     {
      "key": "prefPlaybackSpeedLauncher",
@@ -4247,7 +4247,7 @@
   },
   {
    "query": "dynamic",
-   "why": "Android's first result (Dynamic colors) is hidden on iOS (user decision)",
+   "why": "Android's first result (Dynamic colors) is hidden on iOS",
    "android": [
     {
      "key": "prefTintedColors",
@@ -4497,7 +4497,7 @@
   },
   {
    "query": "data folder",
-   "why": "a space is an ordinary character; Choose data folder is hidden on iOS (user decision D9a)",
+   "why": "a space is an ordinary character; Choose data folder is hidden on iOS",
    "android": [
     {
      "key": "prefChooseDataDir",

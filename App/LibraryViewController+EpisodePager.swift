@@ -41,7 +41,7 @@ extension LibraryViewController {
     /// that here: a missing neighbour stays a blank page (Android's neighbour pop is not copied).
     func closeMissingEpisodePager() {
         guard libraryLoaded, path.count > 1, case .episode(let feedID, let episodeID) = path.last,
-              !feeds.contains(where: { $0.id == feedID && $0.episodes.contains { $0.id == episodeID } }) else { return }
+              libraryEpisode(episodeID)?.feed.id != feedID else { return }
         popup?.removeFromSuperview(); popup = nil
         popToParent()
     }
@@ -85,7 +85,7 @@ extension LibraryViewController {
         }
         state.view.accessibilityAnnouncement = { [weak self, weak state] page in
             guard let self, let item = state?.model.items[safe: page] else { return nil }
-            return feeds.first { $0.id == item.feedID }?.episodes.first { $0.id == item.episodeID }?.details.title
+            return libraryEpisode(item.episodeID).flatMap { $0.feed.id == item.feedID ? $0.episode.details.title : nil }
         }
     }
 
@@ -106,9 +106,9 @@ extension LibraryViewController {
         }
         for index in window where state.pages[index] == nil {
             let item = state.model.items[index]
-            guard let feed = feeds.first(where: { $0.id == item.feedID }),
-                  let episode = feed.episodes.first(where: { $0.id == item.episodeID }) else { continue }
-            let page = makeEpisodePage(feed, episode)
+            guard let (feed, episode) = libraryEpisode(item.episodeID), feed.id == item.feedID else { continue }
+            // The page shows the stored show notes and chapters (the screens' library holds list projections).
+            let page = makeEpisodePage(feed, detailedEpisode(episode))
             if let reading = state.releasedReading.removeValue(forKey: index), reading.episodeID == episode.id {
                 // Both regions reopen where they were read: the notes at their rendered readiness, the header
                 // after the page's first layout, within what fits then (`layoutEpisodeDetails`).

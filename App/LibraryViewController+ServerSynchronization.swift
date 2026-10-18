@@ -23,9 +23,16 @@ extension LibraryViewController {
         case .synchronize:
             guard let sync = (UIApplication.shared.delegate as? AppDelegate)?.serverSync else { return }
             Task { await sync.synchronizeNow() }
+        // It downloads the whole library again: the person is told so, with its estimated size, and confirms first.
         case .full:
-            guard let sync = (UIApplication.shared.delegate as? AppDelegate)?.serverSync else { return }
-            Task { await sync.forceFullSynchronization() }
+            guard let sync = (UIApplication.shared.delegate as? AppDelegate)?.serverSync, presentedViewController == nil else { return }
+            Task { [weak self] in
+                let estimate = await sync.fullSynchronizationEstimate()
+                guard let self, self.presentedViewController == nil else { return }
+                messages.present(ServerSynchronizationDialogs.fullSynchronization(estimate: estimate) {
+                    Task { await sync.forceFullSynchronization() }
+                })
+            }
         // A switch or Keep waiting for playback goes ahead: playback stops, a resumption after an interruption
         // included; applied at once, the page reopens here after the restart.
         case .stopPlayback:
@@ -358,6 +365,17 @@ extension LibraryViewController {
             positive: .init(title: Appearance.text("cancel_label"), identifier: "previousLibraryExportCancel"), customBody: body)
         body.onSelect = { [weak dialog] index in dialog?.dismiss(animated: true) { select(kinds[index]) } }
         return dialog
+    }
+
+    /// "Force full synchronization": "This downloads your whole library from the server again (estimated %@). Continue?"
+    /// (without the size when none is known), Cancel and OK.
+    static func fullSynchronization(estimate: Int64?, confirm: @escaping () -> Void) -> SourceMessageController {
+        let message = estimate.flatMap { $0 > 0 ? $0 : nil }.map {
+            String(format: Appearance.text("ntp_server_full_confirm_estimate"), EpisodeRowPresentation.fileSize($0))
+        } ?? Appearance.text("ntp_server_full_confirm")
+        return SourceMessageController(title: Appearance.text("synchronization_full_sync_title"), message: message,
+            positive: .init(title: Appearance.text("ok"), identifier: "fullSynchronizationConfirm", perform: confirm, performAfterDismiss: true),
+            negative: .init(title: Appearance.text("cancel_label"), identifier: "fullSynchronizationCancel"))
     }
 
     /// "Remove this library from this device? Its library data and downloads will be deleted."

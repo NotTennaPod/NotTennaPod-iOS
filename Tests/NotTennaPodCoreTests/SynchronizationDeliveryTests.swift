@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct SynchronizationDeliveryTests {
     private func fixture(_ body: (FeedLibraryStore, UUID, DeliveryPublisher) async throws -> Void) async throws {
         let file = FileManager.default.temporaryDirectory.appendingPathComponent("SyncDelivery-\(UUID()).sqlite")

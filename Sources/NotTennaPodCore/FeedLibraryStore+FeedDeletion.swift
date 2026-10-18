@@ -79,7 +79,7 @@ extension FeedLibraryStore {
                 }
                 // File teardown can finish after the user subscribes again.
                 // Do not let that older removal cancel the newer queued add.
-                let resubscribed = try loadFeeds().contains {
+                let resubscribed = try loadFeedHeaders().contains {
                     $0.subscriptionState != .notSubscribed && $0.source.utf16.elementsEqual(deletion.source.utf16)
                 }
                 try appendEffect(.init(feedID: deletion.feedID, date: effect.date, kind: .feedRemoved(source: deletion.source)),
@@ -184,7 +184,17 @@ extension FeedLibraryStore {
             let jobPaths = Set(try downloadJobs(activeOnly: false).filter { !cleanup.downloadJobIDs.contains($0.id) }
                 .map { $0.destination.standardizedFileURL.path })
             var episodePaths: Set<String> = []
-            if serverContext != nil {
+            if keyedReads {
+                // Only the episodes whose stored file has one of these files' names are read.
+                var localFeeds: [Int64: Bool] = [:]
+                for owner in try fileOwners(of: cleanup.files) where !cleanup.episodeIDs.contains(owner.id) {
+                    if !owner.downloaded {
+                        if localFeeds[owner.feedID] == nil { localFeeds[owner.feedID] = try loadFeedHeader(owner.feedID)?.source.isLocalFeedSource == true }
+                        guard localFeeds[owner.feedID] == true else { continue }
+                    }
+                    episodePaths.insert(owner.path)
+                }
+            } else if serverContext != nil {
                 // A server library reads only the episodes that name a file, by index: a removal's
                 // bounded transactions never decode the whole library.
                 episodePaths = try serverFileOwnerPaths(excluding: cleanup.episodeIDs)
@@ -207,6 +217,32 @@ extension FeedLibraryStore {
                 if !replacedJob && !replacement { try removeFile(file) }
             }
         }
+    }
+
+    /// The episodes whose stored file may be one of `files` or its transcript, each with that file's standardized path:
+    /// the derived file-name index (`episode_list_keys.local_file_name`, the text after the stored path's last "/") narrows
+    /// them by name, and the standardized paths are compared exactly by the caller. A stored path whose last component is
+    /// not its file's name once standardized (it ends in "/", "/." or "/..") is always a candidate. Needs the derived data
+    /// complete (`derived.isReady`).
+    func fileOwners(of files: [URL]) throws -> [(id: Int64, feedID: Int64, hidden: Bool, downloaded: Bool, path: String)] {
+        var names: Set<String> = ["", ".", ".."]
+        var wanted: Set<String> = []
+        for file in files {
+            let path = file.standardizedFileURL.path
+            for owned in [path, path + ".transcript"] {
+                wanted.insert(owned)
+                names.insert(EpisodeListKeys.lastComponent(owned))
+            }
+        }
+        let list = ContractJSON.array(names.sorted().map(ContractJSON.string)).canonicalText
+        var owners: [(id: Int64, feedID: Int64, hidden: Bool, downloaded: Bool, path: String)] = []
+        for row in try database.rows("SELECT k.id, k.feed_id, k.hidden, k.downloaded, json_extract(CAST(e.record AS TEXT), '$.userState.localFileURL') FROM episode_list_keys k JOIN episodes e ON e.id = k.id WHERE k.local_file_name IN (SELECT value FROM json_each(?)) ORDER BY k.id", [.text(list)]) {
+            guard let id = row[0].integer, let feed = row[1].integer, let stored = row[4].text else { continue }
+            let path = URL(fileURLWithPath: stored).standardizedFileURL.path
+            guard wanted.contains(path) else { continue }
+            owners.append((id, feed, row[2].integer == 1, row[3].integer == 1, path))
+        }
+        return owners
     }
 
     /// The files episodes other than `excluded` own, as the standalone check counts them (downloaded, or of a local

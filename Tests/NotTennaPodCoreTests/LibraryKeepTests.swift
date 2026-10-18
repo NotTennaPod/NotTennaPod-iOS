@@ -80,6 +80,9 @@ import Testing
         _ = try await store.enqueue([episodes[1], episodes[2]])
         try await store.setServerAccountPolicy(.enqueueLocation(.front))
         try await store.setServerAccountPolicy(.sorting(keepSorted: true, order: .dateNewOld))
+        // The server's refresh of this podcast fails (its refresh_status, as a projection shows it).
+        try await store.setServerRefreshForTesting(ServerRefreshStatus(lastAttempt: LibraryKeepTests.now, label: "forbidden", code: 403),
+                                                   feedID: feed.id)
         try await store.close()
         // A live background transfer's sidecar record, written under S's folder.
         let transfers = location.media.appendingPathComponent("background-transfers", isDirectory: true)
@@ -196,7 +199,7 @@ import Testing
         lines.append("server \(await store.isServerLibrary)")
         let snapshot = try await store.snapshot()
         for feed in snapshot.feeds {
-            lines.append("feed \(feed.id) \(feed.title ?? "")")
+            lines.append("feed \(feed.id) \(feed.title ?? "") failed \(feed.refreshFailed) server-status \(feed.serverRefresh != nil)")
             for episode in feed.episodes {
                 let state = episode.userState
                 // A previous library is read only: its stored paths are resolved by readers that need them, never written.
@@ -259,10 +262,13 @@ import Testing
         #expect(try RawLibrary.rows(root, "SELECT count(*) FROM ntp_observation_work").first?.first == "0", "and observations still to record")
         #expect(try RawLibrary.rows(root, "SELECT count(*) FROM ntp_feed_merges").first?.first == "0", "and merges' settings still to carry")
         try await store.close()
-        // Nothing a person sees changed at conversion (the downloaded file's path names its new folder).
+        // Nothing a person sees changed at conversion (the downloaded file's path names its new folder), but the server's
+        // refresh status: a library that no longer syncs with a server shows none.
         let after = try await libraryState(root, readOnly: false) { $0.replacingOccurrences(of: device.root.standardizedFileURL.path, with: "ROOT") }
+        #expect(before.contains("Server failed true server-status true"))
         #expect(after.replacingOccurrences(of: "role converted", with: "role -").replacingOccurrences(of: "server false", with: "server true")
-                == before.replacingOccurrences(of: "ROOT/Server Libraries/\(Self.source)/media", with: "ROOT/media"))
+                == before.replacingOccurrences(of: "ROOT/Server Libraries/\(Self.source)/media", with: "ROOT/media")
+                    .replacingOccurrences(of: "Server failed true server-status true", with: "Server failed false server-status false"))
         // The previous library: the old library with its files, policies and speeds.
         let archive = PreviousLibraryLocation(root: device.root, id: previous.id)
         let old = try FeedLibraryStore(readingOnly: archive.database)
@@ -310,6 +316,8 @@ import Testing
         let manifest = try baseline.keep().request(source: Self.source)
         #expect(baseline.keep().run(manifest) == .finished)
         let expected = try await state(baseline)
+        #expect(expected["root.library"]?.contains("server-status true") == false, "a kept library shows no server refresh status")
+        #expect(expected["root.library"]?.contains("Server failed false") == true)
 
         let device = try copy(template)
         defer { remove(device) }
@@ -376,6 +384,56 @@ import Testing
     }
 
     // MARK: - Opening before publication
+
+    /// After Keep the library no longer syncs with a server: a podcast whose server refresh failed shows no error, no
+    /// notice and no server row in its details, after reopening and after a successful refresh. This device's own
+    /// failure, its log and its times stay as they were until this device's own refresh succeeds.
+    @Test func keepDropsTheServersRefreshStatusAndKeepsThisDevicesOwn() async throws {
+        let device = try await device()
+        defer { remove(device) }
+        let server = try FeedLibraryStore(url: device.source.database)
+        _ = FeedAuthentication(store: server, vault: MemoryCredentialVault())
+        let failing = try #require(try await server.feeds().first { $0.metadata.title == "Server" })
+        #expect(failing.refreshFailed && failing.serverRefresh != nil && !failing.lastUpdateFailed)
+        let other = try await server.insert(ServerLibraryFixture.fetched("https://other.example/feed.xml", title: "Other", count: 1))
+        try await server.setServerRefreshForTesting(ServerRefreshStatus(lastAttempt: Self.now, label: "parser_exception"), feedID: other.id)
+        try await server.recordFailure(.unauthorized, feedID: failing.id, date: Self.now.addingTimeInterval(60))
+        let before = try #require(try await server.feed(id: failing.id))
+        let log = try #require(try await server.logs(feedID: failing.id).first)
+        try await server.close()
+        let keep = device.keep()
+        #expect(keep.run(try keep.request(source: Self.source)) == .finished)
+        let store = try FeedLibraryStore(url: device.root.appendingPathComponent("library.sqlite"))
+        #expect(await !store.isServerLibrary)
+        let words = ["ntp_refresh_by_server": "The server: %1$@", "ntp_refresh_by_device": "This device: %1$@"]
+        func text(_ key: String) -> String { words[key] ?? key }
+        // Only the server's failure: nothing shows.
+        let kept = try #require(try await store.feed(id: other.id))
+        #expect(kept.serverRefresh == nil && !kept.refreshFailed)
+        let otherLog = try await store.logs(feedID: other.id).first
+        #expect(FeedLogDetails.refreshFailure(latestLog: otherLog, feed: kept, text: text, date: { _ in "date" }) == nil)
+        // This device's own failure stays, with its times and log, and its details have no server row.
+        var own = try #require(try await store.feed(id: failing.id))
+        #expect(own.serverRefresh == nil && own.refreshFailed && own.lastUpdateFailed)
+        #expect(own.lastRefreshAttempt == before.lastRefreshAttempt && own.localRefreshAttempt == before.localRefreshAttempt)
+        #expect(try await store.logs(feedID: failing.id).first == log)
+        let details = try #require(FeedLogDetails.refreshFailure(latestLog: log, feed: own, text: text, date: { _ in "date" }))
+        #expect(details.statusKey == "download_error_unauthorized" && details.origins.isEmpty && !details.clipboard.contains("The server"))
+        // This device's refresh succeeds: no icon, no notice.
+        struct Transport: FeedHTTPTransport {
+            func send(_ request: URLRequest) async throws -> FeedHTTPResponse {
+                FeedHTTPResponse(url: request.url!, status: 200, body: ServerDiscoveryTests.rss(""))
+            }
+        }
+        let service = FeedRefreshService(store: store, fetcher: FeedFetcher(transport: Transport()), clock: { Self.now.addingTimeInterval(120) })
+        guard case .updated = try await service.refresh(feedID: failing.id) else { Issue.record("not refreshed"); return }
+        own = try #require(try await store.feed(id: failing.id))
+        #expect(!own.refreshFailed && own.serverRefresh == nil)
+        let latest = try await store.logs(feedID: failing.id).first
+        #expect(latest?.kind.isSuccessful == true)
+        #expect(FeedLogDetails.refreshFailure(latestLog: latest, feed: own, text: text, date: { _ in "date" }) == nil)
+        try await store.close()
+    }
 
     /// The settings write fails after the commit: the converted library opens from where it is, plays its downloads and
     /// records changes (play, mark, queue, speeds, policies); the retry publishes those later values, not the capture,

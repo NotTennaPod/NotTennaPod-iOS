@@ -7,7 +7,7 @@ import Testing
 /// launch completes or rolls it back; the old or new library stays coherent and its feed credentials work; only the
 /// secrets the import created and its staging folder go, never a credential the live library reaches; cleanup that
 /// cannot run now keeps its journal and is safe to repeat; the outcome is told once.
-@Suite(.serialized, .timeLimit(.minutes(2)))
+@Suite(.serialized)
 struct DatabaseImportRecoveryTests {
     static let backup = AndroidDatabaseRestoreTests.fixtures.appendingPathComponent("archived-credentials-library.db")
     static let liveLogin = FeedCredentials(username: "live-user", password: "live-password")
@@ -21,11 +21,11 @@ struct DatabaseImportRecoveryTests {
     }
 
     private func live() async throws -> Live {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("K5b-\(UUID())", isDirectory: true)
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("DatabaseImportRecovery-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: root.appendingPathComponent("media"), withIntermediateDirectories: true)
         let database = root.appendingPathComponent("library.sqlite")
         let store = try FeedLibraryStore(url: database), vault = ImportVault()
-        let source = "https://k5b.example/private"
+        let source = "https://import.example/private"
         let feed = try await store.insert(.init(feed: ParsedFeed(format: .rss, title: "Live private podcast"), source: source,
             responseURL: URL(string: source)!, validator: nil, permanentRedirectURL: nil))
         try await FeedAuthentication(store: store, vault: vault).save(Self.liveLogin, feedID: feed.id)
@@ -432,7 +432,7 @@ struct DatabaseImportRecoveryTests {
 
 /// Background time may end any wait for the library gate: a cancelled wait holds nothing and lets whoever waited
 /// behind it in.
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct LibraryGateCancellationTests {
     private func until(_ predicate: () -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(10)

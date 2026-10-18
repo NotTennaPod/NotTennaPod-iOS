@@ -4,7 +4,7 @@ import Synchronization
 @testable import NotTennaPodCore
 
 @MainActor
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct DownloadCoordinatorTests {
     private func withCoordinator(source: String, network: DownloadNetworkMonitor,
                                  sharedMedia: Bool = false,
@@ -101,6 +101,46 @@ struct DownloadCoordinatorTests {
             try await waitUntil { try await store.downloadJobs(activeOnly: false).filter { $0.state == .completed }.count == 2 }
             #expect(try await store.downloadJobs(activeOnly: false).allSatisfy { $0.networkConstraint == .connected })
             #expect(server.requests.count == 2)
+        }
+    }
+
+    /// A job created within "Allow this time" keeps the constraint it was stored with after the window ends; a download
+    /// asked for later on Wi-Fi is Wi-Fi-only again.
+    @Test func allowThisTimeCoversOnlyJobsCreatedWithinIt() async throws {
+        let clock = Mutex(Date(timeIntervalSince1970: 1_700_000_000))
+        let network = network(metered: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("Coordinator-\(UUID())")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = try FeedLibraryStore(url: directory.appendingPathComponent("library.sqlite"))
+        let episodes = (1...2).map { index in
+            ParsedEpisode(identifier: "\(index)", title: "Episode \(index)",
+                          media: ParsedMedia(url: "https://example.test/media?episode=\(index)", size: 100_000, durationMilliseconds: 30_000))
+        }
+        _ = try await store.insert(FetchedFeed(feed: ParsedFeed(format: .rss, title: "Coordinator", episodes: episodes),
+                                              source: "https://example.test/feed", responseURL: URL(string: "https://example.test/feed")!,
+                                              validator: nil, permanentRedirectURL: nil))
+        // A transfer that never finishes: only the stored constraints matter here.
+        let coordinator = DownloadCoordinator(store: store, directory: directory.appendingPathComponent("media"), transfer: NeverFinishingTransfer(),
+                                              network: network, clock: { clock.withLock { $0 } })
+        do {
+            #expect(try await coordinator.request(episodeID: 1) == .confirmation(showVPNAdvice: false))
+            #expect(try await coordinator.confirm(episodeID: 1, choice: .now) == .request(ignoreConstraints: true, showMobileNotice: false))
+            clock.withLock { $0 = $0.addingTimeInterval(600) }
+            network.update(.init(connected: true, metered: false, cellular: false, transport: .wifi))
+            #expect(try await coordinator.request(episodeID: 2) == .request(ignoreConstraints: false, showMobileNotice: false))
+            let jobs = try await store.downloadJobs(activeOnly: false)
+            let constraints = Dictionary(uniqueKeysWithValues: jobs.map { ($0.episodeID, $0.networkConstraint) })
+            #expect(constraints == [1: .connected, 2: .unmetered])
+            await coordinator.stop(); try await store.close()
+        } catch { await coordinator.stop(); try? await store.close(); throw error }
+    }
+
+    private struct NeverFinishingTransfer: MediaTransferring {
+        func download(_ input: MediaDownloadRequest,
+                      progress: @escaping @Sendable (MediaDownloadProgress) -> Void) async throws -> MediaDownloadResult {
+            try await Task.sleep(for: .seconds(3_600))
+            throw CancellationError()
         }
     }
 

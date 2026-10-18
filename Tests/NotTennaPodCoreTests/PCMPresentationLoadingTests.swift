@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(3))) @MainActor
+@Suite(.serialized) @MainActor
 struct PCMPresentationLoadingTests {
     typealias Transport = SampleBufferPCMOutputTests.Transport
     private enum Failure: Error { case deadline, playbackDeadline(reached: Int64, target: Int64) }

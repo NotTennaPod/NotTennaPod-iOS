@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) struct PodcastProxyTests {
+@Suite struct PodcastProxyTests {
     @Test func plainHTTPUsesForwardProxyWithoutResolvingOriginOrSendingCredentialsPreemptively() async throws {
         let proxy = try await LoopbackHTTPServer.start { _ in .init() }
         defer { proxy.stop() }

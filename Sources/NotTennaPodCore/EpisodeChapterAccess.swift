@@ -4,7 +4,11 @@ import Foundation
 /// file URL in feed metadata. Views own request cancellation; this owner retains
 /// the transport/cache and keeps file grants alive through each complete read.
 public struct EpisodeChapterAccess: Sendable {
-    enum Request: Sendable { case chapters, image(EmbeddedChapterImage) }
+    enum Request: Sendable {
+        case chapters, image(EmbeddedChapterImage, budget: Int)
+        /// A streamed episode's chapter list, admitted for its network (`AuxiliaryNetworkAdmission`).
+        case streamedChapters(AuxiliaryNetworkAdmission.Allowance)
+    }
     enum Result: Sendable { case chapters([ParsedChapter]?), image(Data) }
     typealias FileRead = @Sendable (URL, @Sendable () throws -> Void, Request) throws -> Result
     typealias RemoteRead = @Sendable (URL, PodcastProxy, FeedCredentials?, String, Request) async throws -> Result
@@ -35,14 +39,23 @@ public struct EpisodeChapterAccess: Sendable {
         self.fileRead = fileRead; self.remoteRead = remoteRead
     }
 
+    /// What a deferred part of a chapter load waits for (`EpisodeChapterPresentation`'s wake).
+    public var admission: AuxiliaryNetworkAdmission { loader.admission }
+
     public func load(episode: LibraryEpisode, loaded: [ParsedChapter]? = nil,
                      forceRefresh: Bool = false) async throws -> [ParsedChapter] {
+        try await loadDeferring(episode: episode, loaded: loaded, forceRefresh: forceRefresh).chapters
+    }
+
+    /// The chapters available now, with the conditions of the parts that must wait for the network.
+    public func loadDeferring(episode: LibraryEpisode, loaded: [ParsedChapter]? = nil,
+                              forceRefresh: Bool = false) async throws -> EpisodeChapterLoad {
         try await requireCurrent(episode)
         let loader = loader, identity = EpisodeChapterIdentity(episode)
         // A downloaded file removed behind the library's back is read again (and so falls back as before).
         let fileGone = episode.userState.isDownloaded && episode.userState.localFileURL.map {
             !FileManager.default.fileExists(atPath: $0) } == true
-        let result = try await loader.load(stored: episode.details.chapters, loaded: loaded,
+        let result = try await loader.loadDeferring(stored: episode.details.chapters, loaded: loaded,
             externalURL: episode.details.chapterURL, forceRefresh: forceRefresh) {
                 try await loader.mediaChapters(identity, forceRefresh: forceRefresh || fileGone) {
                     guard case .chapters(let chapters) = try await readMedia(episode, request: .chapters) else { return nil }
@@ -53,8 +66,10 @@ public struct EpisodeChapterAccess: Sendable {
         return result
     }
 
-    public func artwork(_ reference: EmbeddedChapterImage, episode: LibraryEpisode) async throws -> Data? {
-        guard case .image(let bytes) = try await readMedia(episode, request: .image(reference)) else { return nil }
+    /// `budget` bounds the bytes a streamed episode's picture may transfer (`RemoteChapterMediaReader.artwork`).
+    public func artwork(_ reference: EmbeddedChapterImage, episode: LibraryEpisode,
+                        budget: Int = MobileImageAccess.byteLimit) async throws -> Data? {
+        guard case .image(let bytes) = try await readMedia(episode, request: .image(reference, budget: budget)) else { return nil }
         return bytes
     }
 
@@ -96,16 +111,43 @@ public struct EpisodeChapterAccess: Sendable {
             let configuration = proxy()
             let login = try await credentials(store.feedID(forEpisode: episode.id))
             try await requireCurrent(episode)
-            result = try await remoteRead(url, configuration, login, userAgent, request)
+            if case .chapters = request {
+                result = try await streamedChapters(episode, url: url, proxy: configuration, credentials: login)
+            } else {
+                result = try await remoteRead(url, configuration, login, userAgent, request)
+            }
         }
         try await requireCurrent(episode)
         return result
     }
 
+    /// A streamed episode's chapter list follows Streaming, or Once consent for this episode, or an unrestricted network
+    /// for as long as it stays so; downloaded and folder files never ask. A denial, an interruption or a list over the
+    /// restricted budget waits (`AuxiliaryNetworkDenied`, never a result); over the unrestricted budget there are no
+    /// embedded chapters within limits.
+    private func streamedChapters(_ episode: LibraryEpisode, url: URL, proxy: PodcastProxy,
+                                  credentials: FeedCredentials?) async throws -> Result {
+        let admission = loader.admission, permitted = AuxiliaryNetworkAdmission.Wake.permitted(.streamedMedia, episodeID: episode.id)
+        guard let allowance = try await admission.allowance(.streamedMedia, episodeID: episode.id) else {
+            throw AuxiliaryNetworkDenied(wake: permitted)
+        }
+        let remoteRead = remoteRead, userAgent = userAgent
+        do {
+            return try await admission.perform(allowance) {
+                try await remoteRead(url, proxy, credentials, userAgent, .streamedChapters(allowance))
+            }
+        } catch is DownloadNetworkInterruption {
+            throw AuxiliaryNetworkDenied(wake: permitted)
+        } catch let exceeded as ChapterMediaBudgetExceeded {
+            if exceeded.restricted { throw AuxiliaryNetworkDenied(wake: .unrestricted) }
+            return .chapters(nil)
+        }
+    }
+
     static func readFile(_ url: URL, check: @Sendable () throws -> Void, request: Request) throws -> Result {
         switch request {
-        case .chapters: return .chapters(try EmbeddedChapterReader.read(url: url, checkCancellation: check))
-        case .image(let reference): return .image(try reference.read(url: url, checkCancellation: check))
+        case .chapters, .streamedChapters: return .chapters(try EmbeddedChapterReader.read(url: url, checkCancellation: check))
+        case .image(let reference, _): return .image(try reference.read(url: url, checkCancellation: check))
         }
     }
     static func readRemote(_ url: URL, proxy: PodcastProxy, credentials: FeedCredentials?, userAgent: String,
@@ -113,7 +155,8 @@ public struct EpisodeChapterAccess: Sendable {
         let reader = RemoteChapterMediaReader(proxy: proxy, credentials: credentials, userAgent: userAgent)
         switch request {
         case .chapters: return .chapters(try await reader.read(url: url))
-        case .image(let reference): return .image(try await reader.artwork(reference, url: url))
+        case .streamedChapters(let allowance): return .chapters(try await reader.read(url: url, allowance: allowance))
+        case .image(let reference, let budget): return .image(try await reader.artwork(reference, url: url, budget: budget))
         }
     }
 }

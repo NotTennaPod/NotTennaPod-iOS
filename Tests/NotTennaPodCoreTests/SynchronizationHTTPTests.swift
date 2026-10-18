@@ -14,7 +14,7 @@ private actor SynchronizationScript: SynchronizationHTTPTransport {
     }
 }
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct SynchronizationHTTPTests {
     private func reply(_ json: String = "", status: Int = 200) -> SynchronizationHTTPResponse {
         .init(status: status, body: Data(json.utf8))

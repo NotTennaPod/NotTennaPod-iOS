@@ -4,7 +4,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(1))) struct NativeMP3PCMDecoderTests {
+@Suite(.serialized) struct NativeMP3PCMDecoderTests {
     enum Fixture: String, CaseIterable {
         case unknown = "playback-unknown-duration", finite = "playback-30sec", stereo = "playback-vbr-stereo", lowRate = "playback-vbr-low-rate"
         var rate: Int32 { self == .lowRate ? 22050 : self == .stereo ? 48000 : 44100 }

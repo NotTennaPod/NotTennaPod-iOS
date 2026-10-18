@@ -1,4 +1,5 @@
 # The NotTennaPod server commit the host agreement tests run against (PROTOCOL §15.1), and the server of
 # the release candidate (PROTOCOL §16, with the web commit in web-version.txt). Tools/ntp-server.sh builds it from an
-# archived copy of the sibling checkout into .work/ntp-server/<commit>/; the checkout itself is never changed.
-1bf970cc1fb2b5973356bd82eaafda47c6e97a54
+# archived copy of the sibling checkout, never changing the checkout: alone into .work/ntp-server/<commit>/ for the
+# host tests, and with the web client (--with-web) into .work/ntp-server/<commit>+web-<web commit>/ for the candidate.
+3381ce2be80221c24c3b2197bca3eb6b52510856

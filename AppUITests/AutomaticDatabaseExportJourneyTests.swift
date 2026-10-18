@@ -1,8 +1,8 @@
 import XCTest
 
-/// Actual journey (one ordered test; the test pre-action seeds the empty "M18" folder, step 4 has the app remove
+/// Actual journey (one ordered test; the test pre-action seeds the empty "DatabaseExport" folder, step 4 has the app remove
 /// it, and the test leaves it present and empty again when it ends): Backup & restore → Automatic database export
-/// switch → real folder picker (Cancel keeps Off; choosing "M18" turns it On and backs up now) → a due run (backup
+/// switch → real folder picker (Cancel keeps Off; choosing "DatabaseExport" turns it On and backs up now) → a due run (backup
 /// clock shifted by a DEBUG launch argument; no system setting changes) backs up again → a not-due launch writes
 /// nothing → a removed folder reports the source error → switching Off stops backups. The backups are read from the
 /// folder (not through the Swift writer); retention and schema equality are checked by the host tests.
@@ -12,22 +12,22 @@ import XCTest
     private var app = XCUIApplication()
     override func setUp() {
         continueAfterFailure = false
-        keepLocalFilesSeeded(removing: [], emptyFolder: "M18")
+        keepLocalFilesSeeded(removing: [], emptyFolder: "DatabaseExport")
     }
     /// The backups in the chosen folder, as a person sees them in Files; each is a valid Android backup of the library.
     private func checkBackups(count: Int, file: StaticString = #filePath, line: UInt = #line) throws {
-        let backups = LocalFilesStorage.items(prefix: LocalFilesStorage.databaseExport.prefix, suffix: LocalFilesStorage.databaseExport.suffix, in: "M18")
-        XCTAssertEqual(backups.count, count, "Backups in M18: \(backups.map(\.lastPathComponent))", file: file, line: line)
+        let backups = LocalFilesStorage.items(prefix: LocalFilesStorage.databaseExport.prefix, suffix: LocalFilesStorage.databaseExport.suffix, in: "DatabaseExport")
+        XCTAssertEqual(backups.count, count, "Backups in DatabaseExport: \(backups.map(\.lastPathComponent))", file: file, line: line)
         for backup in backups {
             XCTAssertEqual(try LocalFilesStorage.backupSummary(backup), .statisticsFixture, backup.lastPathComponent, file: file, line: line)
         }
     }
 
     private func launch(offsetDays: Int? = nil) {
-        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-m13-statistics-journey"]
+        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-statistics-journey"]
             + (offsetDays.map { ["-test-auto-backup-now-offset-days", String($0)] } ?? [])
         app.launch()
-        XCTAssertTrue(app.windows["m13StatisticsFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
+        XCTAssertTrue(app.windows["statisticsFixtureReady"].waitForExistence(timeout: 30), app.debugDescription)
     }
     private func tap(_ id: String) {
         let button = app.buttons[id]; XCTAssertTrue(button.waitForExistence(timeout: 15), id)
@@ -78,7 +78,7 @@ import XCTest
         XCTAssertTrue(toggle.waitForExistence(timeout: 10)); XCTAssertEqual(toggle.value as? String, "Off", "Cancel keeps it off")
 
         toggle.tap()
-        let folder = app.cells.matching(NSPredicate(format: "label BEGINSWITH %@", "M18")).firstMatch
+        let folder = app.cells.matching(NSPredicate(format: "label BEGINSWITH %@", "DatabaseExport")).firstMatch
         app.revealInLocalFiles(folder)
         XCTAssertTrue(folder.exists, app.debugDescription); folder.tap()
         let open = app.buttons["Open"].firstMatch
@@ -110,7 +110,7 @@ import XCTest
 
     private func removedFolderReportsSourceError() {
         // The notice is transient (snackbar length): observe it first, then the run's recorded outcome.
-        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-m13-statistics-journey",
+        app.launchArguments = ["-test-library-id", library, "-test-muted-playback", "-test-statistics-journey",
                                "-test-auto-backup-now-offset-days", "8", "-test-auto-backup-remove-folder"]
         app.launch()
         let notice = app.staticTexts["applicationNotice"]

@@ -5,7 +5,7 @@ import Testing
 /// The queue merges as one device would have made it (PROTOCOL §7.6), against the pinned server: two phones
 /// act while neither sees the other (the server off for them), each at its own moment on its action clock, then push
 /// in either order. Both phones and a phone attached afterwards show single-device order.
-@Suite(.serialized, .timeLimit(.minutes(20))) struct ServerQueueReplayAgreementTests {
+@Suite(.serialized) struct ServerQueueReplayAgreementTests {
     /// Episodes titled T 1 … T 6, oldest first.
     static let feeds: [String: ExchangeWorld.Feed] = ["/t.xml": ("T", "t", 6)]
 

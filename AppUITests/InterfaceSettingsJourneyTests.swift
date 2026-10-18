@@ -11,7 +11,7 @@ import XCTest
 final class InterfaceSettingsJourneyTests: XCTestCase {
     private var app: XCUIApplication!
 
-    /// Feed "M31 covers" (red cover) with three episodes that each have a blue episode image; the audio comes from
+    /// Feed "Cover colours" (red cover) with three episodes that each have a blue episode image; the audio comes from
     /// the listening fixture (18765, started by the scheme pre-action).
     private final class CoverServer: Sendable {
         let server: LoopbackHTTPServer
@@ -26,16 +26,16 @@ final class InterfaceSettingsJourneyTests: XCTestCase {
                 case "/feed.xml":
                     let base = "http://127.0.0.1:\(port.withLock { $0 })"
                     let items = (1...3).map { index in """
-                        <item><guid>m31-\(index)</guid><title>Cover episode \(index)</title>
+                        <item><guid>cover-episode-\(index)</guid><title>Cover episode \(index)</title>
                         <pubDate>Mon, 2\(index) Sep 2026 08:00:00 GMT</pubDate>
                         <itunes:image href="\(base)/episode.png"/>
-                        <enclosure url="http://127.0.0.1:18765/30sec.mp3?m31=\(index)" type="audio/mpeg" length="120017"/>
+                        <enclosure url="http://127.0.0.1:18765/30sec.mp3?cover=\(index)" type="audio/mpeg" length="120017"/>
                         <itunes:duration>00:30</itunes:duration></item>
                         """ }.joined()
                     let feed = """
                         <?xml version="1.0" encoding="UTF-8"?>
                         <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"><channel>
-                        <title>M31 covers</title><link>https://example.test/m31</link><itunes:image href="\(base)/feed.png"/>
+                        <title>Cover colours</title><link>https://example.test/covers</link><itunes:image href="\(base)/feed.png"/>
                         \(items)</channel></rss>
                         """
                     return .init(status: 200, headers: ["Content-Type": "application/rss+xml"], body: Data(feed.utf8))

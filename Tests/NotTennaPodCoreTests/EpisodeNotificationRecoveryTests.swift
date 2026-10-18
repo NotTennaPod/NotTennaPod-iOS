@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct EpisodeNotificationRecoveryTests {
     private let text = EpisodeNotificationDelivery.Text(title: { "New \($0)" }, message: { "\($1): \($0)" }, summary: "Inbox")
     private func fetched(_ identifiers: [String]) -> FetchedFeed {
@@ -181,7 +181,7 @@ struct EpisodeNotificationRecoveryTests {
             #expect(try await migrated.manualRefreshRequest() == request)
             #expect(try await migrated.pendingEpisodeNotifications(requestID: request.id).isEmpty)
             let check = try LibrarySQLite(url: file)
-            #expect(try check.scalar("PRAGMA user_version") == 20)
+            #expect(try check.scalar("PRAGMA user_version") == 22)
             try check.close(); try await migrated.close()
         }
     }

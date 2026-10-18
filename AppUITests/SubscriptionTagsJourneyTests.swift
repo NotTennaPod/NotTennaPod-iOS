@@ -86,7 +86,7 @@ import XCTest
         XCTAssertTrue(app.buttons["subscriptionTag-#untagged"].exists)
         app.buttons["subscriptionTag-Tech"].tap()
         XCTAssertEqual(displayed(), [4, 5, 3, 6])
-        attachScreen("m24-chip-tech")
+        attachScreen("subscription-tags-chip-tech")
         app.buttons["subscriptionTag-#root"].tap()
 
         // Tag two feeds: long press starts multi-select; the Tags dialog shows only common tags (none here).
@@ -115,7 +115,7 @@ import XCTest
         if app.buttons["openDrawer"].waitForExistence(timeout: 5) { app.buttons["openDrawer"].tap() }
         let folder = app.buttons["drawer-folder-Morning"]
         wait(folder)
-        attachScreen("m24-drawer-folders")
+        attachScreen("subscription-tags-drawer-folders")
         folder.press(forDuration: 1.2)
         wait(app.buttons["renameTag"]); XCTAssertTrue(app.buttons["deleteTag"].exists)
         app.buttons["renameTag"].tap()
@@ -135,7 +135,7 @@ import XCTest
         app.buttons["subscriptionFeed-3"].press(forDuration: 1.2)
         app.buttons["subscriptionFeed-4"].tap(); app.buttons["subscriptionFeed-5"].tap()
         selectionTitle("3/10 selected")
-        attachScreen("m24-selection-three")
+        attachScreen("subscription-tags-selection-three")
         bulk("playbackSpeed")
         wait(app.buttons["feedSpeedIncrease"])
         for _ in 0..<7 { app.buttons["feedSpeedIncrease"].tap() }

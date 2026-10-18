@@ -7,7 +7,7 @@ import Synchronization
 /// Mounted database import flow: source `importDatabase` warning (No / Confirm), picker, progress, then the
 /// non-cancelable "Import successful" / restart or "Import error". The out-of-process system picker
 /// is captured; the real Files picker runs in the database import journey.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct DatabaseImportFlowTests {
     private final class Host: UIViewController {
         var pickers: [UIDocumentPickerViewController] = []

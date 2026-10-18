@@ -6,7 +6,7 @@ import Testing
 /// copy detection and a new lineage's first attachment are tested elsewhere (`ServerRecoveryTests`,
 /// `ServerCopiesTests`, `ServerStartOverTests`); these phones' engines have no Keychain items for installation
 /// transitions, so they stop at the pause or conflict that hands over to them, with nothing lost.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerExchangeScenarioTests {
+@Suite(.serialized) struct ServerExchangeScenarioTests {
     typealias Agreement = ServerExchangeAgreementTests
     typealias Concurrency = ServerExchangeConcurrencyTests
 

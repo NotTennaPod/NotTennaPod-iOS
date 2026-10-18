@@ -38,6 +38,9 @@ public struct FeedRefreshResult: Equatable, Sendable {
     public var completedEpisodeSync: [CompletedEpisodeSync]
     /// A server library's refresh: each kept item's local episode → its index in the record-level parse.
     var serverItems: [Int64: Int] = [:]
+    /// The refresh was identical to the feed's last applied one: only its header was written, and
+    /// `feed` holds the header alone (no episodes).
+    public var itemsUnchanged = false
 }
 
 extension FeedRefreshResult.Duplicate {

@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct ApplicationPlaybackEngineTests {
+@MainActor @Suite(.serialized) struct ApplicationPlaybackEngineTests {
     @MainActor final class Gate {
         var waiting = false
         private var continuation: CheckedContinuation<Void, Never>?

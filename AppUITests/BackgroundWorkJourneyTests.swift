@@ -7,7 +7,7 @@ import XCTest
 /// Download log keeping 7 days of entries on a 3-day maintenance cadence.
 final class BackgroundWorkJourneyTests: XCTestCase {
     static let media = Data((0..<3_000_000).map { UInt8(truncatingIfNeeded: $0 &* 7 &+ ($0 >> 11)) })
-    static let tag = "\"m29-journey-v1\""
+    static let tag = "\"background-journey-v1\""
 
     @MainActor private func launch(_ app: XCUIApplication, library: String, _ extra: [String] = []) {
         app.launchArguments = ["-test-library-id", library, "-test-muted-playback"] + extra
@@ -32,7 +32,7 @@ final class BackgroundWorkJourneyTests: XCTestCase {
     @MainActor func testDownloadLogKeepsSevenDaysOnThreeDayMaintenanceCadence() {
         continueAfterFailure = false
         let app = XCUIApplication(), library = UUID().uuidString
-        launch(app, library: library, ["-test-m29-download-log"])
+        launch(app, library: library, ["-test-download-log-history"])
         openLog(app)
         // First launch: never run, so due. 7 d + 1 min and 8 d are gone; 6 d 23 h and 1 h stay.
         XCTAssertEqual(logTitles(app, expecting: 2), ["Recent episode", "Kept podcast"])
@@ -60,7 +60,7 @@ final class BackgroundWorkJourneyTests: XCTestCase {
                 if request.path.hasPrefix("/feed.xml") {
                     let feed = """
                     <rss version="2.0"><channel><title>Background podcast</title><link>https://example.test</link>
-                    <item><guid>m29-background</guid><title>Background episode</title><pubDate>Mon, 28 Sep 2026 08:00:00 GMT</pubDate>
+                    <item><guid>background-episode</guid><title>Background episode</title><pubDate>Mon, 28 Sep 2026 08:00:00 GMT</pubDate>
                     <enclosure url="http://127.0.0.1:\(port.withLock { $0 })/episode.mp3" type="audio/mpeg" length="\(BackgroundWorkJourneyTests.media.count)"/></item>
                     </channel></rss>
                     """
@@ -156,7 +156,7 @@ final class BackgroundWorkJourneyTests: XCTestCase {
         XCTAssertEqual(SHA256.hash(data: saved), SHA256.hash(data: Self.media))
         // Records how the Simulator's terminate behaves for background transfers.
         let ranges = episodes.server.requests.filter { $0.path == "/episode.mp3" }.map { $0.headers["range"] ?? "none" }
-        print("M29-P5 finishedWithoutApp=\(finishedWithoutApp) relaunchedBySystem=\(relaunchedBySystem) episodeRequests=\(ranges)")
+        print("Background transfer: finishedWithoutApp=\(finishedWithoutApp) relaunchedBySystem=\(relaunchedBySystem) episodeRequests=\(ranges)")
         // One successful entry in the Download log.
         openLog(app)
         XCTAssertEqual(logTitles(app, expecting: 1), ["Background episode"])
@@ -176,7 +176,7 @@ final class BackgroundWorkJourneyTests: XCTestCase {
             case "/earlier.xml":
                 let items = (1...9).map { index in
                     """
-                    <item><guid>m29-earlier-\(index)</guid><title>Earlier episode \(index)</title>
+                    <item><guid>earlier-episode-\(index)</guid><title>Earlier episode \(index)</title>
                     <pubDate>Mon, \(10 + index) Sep 2026 08:00:00 GMT</pubDate>
                     <enclosure url="\(base)/old-\(index).mp3" type="audio/mpeg" length="3000000"/></item>
                     """
@@ -186,7 +186,7 @@ final class BackgroundWorkJourneyTests: XCTestCase {
             case "/new.xml":
                 let feed = """
                 <rss version="2.0"><channel><title>Restored podcast</title><link>https://example.test</link>
-                <item><guid>m29-new</guid><title>New episode</title><pubDate>Mon, 28 Sep 2026 08:00:00 GMT</pubDate>
+                <item><guid>new-episode</guid><title>New episode</title><pubDate>Mon, 28 Sep 2026 08:00:00 GMT</pubDate>
                 <enclosure url="\(base)/new.mp3" type="audio/mpeg" length="\(BackgroundWorkJourneyTests.media.count)"/></item>
                 </channel></rss>
                 """
@@ -244,7 +244,7 @@ final class BackgroundWorkJourneyTests: XCTestCase {
     /// iOS: leaving the app starts the pending pass at once within the granted background time.
     @MainActor func testMarkPlayedReachesServerAfterAppGoesToBackground() async throws {
         continueAfterFailure = false
-        let app = XCUIApplication(), username = "m29_" + UUID().uuidString.lowercased()
+        let app = XCUIApplication(), username = "background_" + UUID().uuidString.lowercased()
         addUIInterruptionMonitor(withDescription: "System password save prompt") { alert in
             let later = alert.buttons["Not Now"]
             guard later.exists else { return false }

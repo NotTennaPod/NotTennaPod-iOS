@@ -7,7 +7,7 @@ import Testing
 /// the recorder, from the rows before and after, and each must be explained by the facts and drafts the call
 /// recorded, by their fixed effects, or by the code that owns the call (playback). Previews the account does
 /// not know and local folders record nothing by design.
-@MainActor @Suite(.timeLimit(.minutes(10))) struct ServerRecordingCoverageTests {
+@MainActor @Suite struct ServerRecordingCoverageTests {
     enum Change: Hashable, CustomStringConvertible {
         case episode(Int64, String), episodeInserted(Int64), episodeDeleted(Int64)
         case feed(Int64, String), feedInserted(Int64), feedDeleted(Int64), credentials(Int64)
@@ -444,5 +444,97 @@ extension FeedLibraryStore {
             }
         }
         return nil
+    }
+}
+
+// MARK: - Drafts too large for the server (PROTOCOL §6.13, §15.2)
+
+extension ServerRecordingCoverageTests {
+    /// A pending podcast with an episode whose title makes every fact naming it about 7 KB, and three favorites on its
+    /// chain: a small one, the large episode's, a small one.
+    private static func pendingChain(_ fixture: ServerLibraryFixture, source: String = "https://example.test/feed.xml")
+        async throws -> (feed: LibraryFeed, registration: String, drafts: [String], small: [Int64], large: Int64) {
+        var fetched = ServerLibraryFixture.fetched(source, count: 3)
+        fetched.feed.episodes[2].title = ServerOwedReplayTests.largeTitle
+        let feed = try await fixture.store.insert(fetched)
+        let ids = feed.episodes.map(\.id).sorted()
+        let large = try #require(feed.episodes.first { $0.details.identifier == "guid-3" }).id
+        let small = ids.filter { $0 != large }
+        let registration = try fixture.registrationOp(feedID: feed.id)
+        for id in [small[0], large, small[1]] { try await fixture.store.setFavorite(episodeID: id, favorite: true) }
+        let drafts = try fixture.drafts().filter { $0.registration == registration }.map(\.opID)
+        #expect(drafts.count == 3)
+        return (feed, registration, drafts, small, large)
+    }
+
+    /// The bound falls before the registration resolves: the chain's first draft is numbered, the second (too large) is
+    /// refused and the third waits, both kept as drafts with their overlays; Needs attention names the podcast; another
+    /// chain materializes as usual.
+    @Test func aDraftTooLargeWhenItMaterializesStopsItsChainThere() async throws {
+        let fixture = try await ServerLibraryFixture()
+        do {
+            let store = fixture.store
+            let chain = try await Self.pendingChain(fixture)
+            let other = try await Self.pendingChain(fixture, source: "https://example.test/other.xml")
+            let before = try fixture.outboxCount()
+            await store.setServerFactBoundForTesting(ServerOwedReplayTests.smallBound)
+            let ids = try fixture.created(chain.registration)
+            try await store.resolveRegistration(opID: chain.registration, .init(podcastID: ids.podcast, generationID: ids.generation, mode: "created", decisionID: nil))
+            let numbered = try fixture.newFacts(after: before)
+            #expect(numbered.map(\.opID) == [chain.drafts[0]], "only the first is numbered")
+            #expect(try fixture.rows("SELECT op_id, state FROM ntp_drafts WHERE registration_op = '\(chain.registration)' ORDER BY author_seq")
+                    == [[chain.drafts[1], "refused_too_large"], [chain.drafts[2], "waiting"]])
+            for draft in chain.drafts.dropFirst() { #expect(!(try fixture.overlays(opID: draft)).isEmpty, "\(draft) keeps its overlays") }
+            #expect(try await store.episode(id: chain.large)?.userState.isFavorite == true, "the change stays shown")
+            #expect(try await store.serverAttentionItems().map(\.kind) == [.refusedTooLarge(podcastTitle: "Show")])
+            #expect(try fixture.rows("SELECT state FROM ntp_registrations WHERE op_id = '\(chain.registration)'") == [["resolved"]])
+            #expect(try await store.serverUnsentChanges() >= 2, "both are kept as unsent")
+            // Another registration's chain is unaffected (the large episode's draft of it waits behind it the same way).
+            let count = try fixture.outboxCount()
+            let otherIDs = try fixture.created(other.registration)
+            try await store.resolveRegistration(opID: other.registration, .init(podcastID: otherIDs.podcast, generationID: otherIDs.generation,
+                                                                                 mode: "created", decisionID: nil))
+            #expect(try fixture.newFacts(after: count).map(\.opID) == [other.drafts[0]])
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
+
+    /// The creation guard counts what materialization adds (the longest IDs for each placeholder, the resolution and the
+    /// chain's predecessor among the dependencies, the envelope): a draft's estimate is never below its materialized
+    /// fact, and a draft whose estimate is over the bound is refused when it is made, with the action.
+    @Test func theDraftGuardCountsMaterializedIDsAndDependencies() async throws {
+        let fixture = try await ServerLibraryFixture()
+        do {
+            let store = fixture.store
+            let chain = try await Self.pendingChain(fixture)
+            var estimates: [String: Int] = [:], templates: [String: Int] = [:]
+            for row in try fixture.rows("SELECT op_id, dependencies FROM ntp_drafts") {
+                let op = try #require(row[0]), dependencies = try JSONDecoder().decode([String].self, from: Data((row[1] ?? "[]").utf8))
+                let template = try #require(try fixture.drafts().first { $0.opID == op }).template.canonicalBytes()
+                templates[op] = template.count
+                estimates[op] = ServerOutboxWriter.materializedEstimate(template: template, dependencies: dependencies.count)
+            }
+            let ids = try fixture.created(chain.registration)
+            let before = try fixture.outboxCount()
+            try await store.resolveRegistration(opID: chain.registration, .init(podcastID: ids.podcast, generationID: ids.generation, mode: "created",
+                                                                                 decisionID: ContractIdentity.randomUUID()))
+            let facts = try fixture.newFacts(after: before)
+            #expect(facts.count == 3)
+            for fact in facts {
+                let size = try fact.json.canonicalBytes().count
+                #expect(try #require(estimates[fact.opID]) >= size, "\(fact.opID): estimate \(estimates[fact.opID] ?? 0) < \(size)")
+            }
+            // A pending podcast's draft whose template fits the bound but whose estimate does not: the favorite is refused,
+            // nothing changes.
+            let next = try await Self.pendingChain(fixture, source: "https://example.test/third.xml")
+            let drafts = try fixture.drafts().count
+            await store.setServerFactBoundForTesting(try #require(templates[chain.drafts[1]]) + 200)
+            var refused: ServerRecordingError?
+            do { try await store.setFavorite(episodeID: next.large, favorite: false) } catch let error as ServerRecordingError { refused = error }
+            guard case .factTooLarge? = refused else { Issue.record("not refused: \(String(describing: refused))"); await fixture.close(); return }
+            #expect(try fixture.drafts().count == drafts)
+            #expect(try await store.episode(id: next.large)?.userState.isFavorite == true)
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
     }
 }

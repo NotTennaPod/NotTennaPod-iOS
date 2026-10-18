@@ -63,9 +63,9 @@ import NotTennaPodCore
         let reader = library.map(LocalFolderArtworkReader.init(store:))
         artwork = EpisodeArtworkView(source: feed.metadata.imageURL, fallback: nil, title: nil,
                                      folderArtwork: { identity in try await reader?.read(feedID: feed.id, identity: identity) })
-        fallback = Appearance.label(feed.title, size: 14)
+        fallback = Appearance.label(feed.humanReadableIdentifier, size: 14)
         pill = Appearance.label(counterText(counter), size: 14)
-        title = Appearance.label(feed.title, size: Self.titleFontSize(columns: columns))
+        title = Appearance.label(feed.humanReadableIdentifier, size: Self.titleFontSize(columns: columns))
         super.init(frame: .zero)
         card.backgroundColor = Appearance.navigation; card.layer.cornerRadius = 12
         card.layer.shadowColor = UIColor.black.cgColor; card.layer.shadowOpacity = 0.2
@@ -81,7 +81,8 @@ import NotTennaPodCore
         pill.backgroundColor = UIColor(red: 0x40 / 255, green: 0x40 / 255, blue: 0x40 / 255, alpha: 0xD2 / 255)
         pill.textColor = .white; pill.textAlignment = .center; pill.numberOfLines = 1; pill.clipsToBounds = true
         pill.isHidden = counter <= 0; pill.accessibilityIdentifier = "subscriptionCounter-\(feed.id)"
-        failure.isHidden = !feed.lastUpdateFailed; failure.tintColor = Appearance.foreground
+        failure.isHidden = !feed.refreshFailed; failure.tintColor = Appearance.foreground
+        failure.accessibilityIdentifier = "subscriptionFailure-\(feed.id)"
         title.numberOfLines = 2; title.lineBreakMode = .byTruncatingTail; title.textAlignment = .natural
         title.isHidden = !showTitle
         [artwork, fallback, pill, failure].forEach(coverCard.addSubview)
@@ -93,7 +94,7 @@ import NotTennaPodCore
         addSubview(circle)
         for view in [card, coverCard, artwork, fallback, pill, failure, title, circle] as [UIView] { view.isUserInteractionEnabled = false }
         isAccessibilityElement = true; accessibilityTraits = .button; accessibilityIdentifier = "subscriptionFeed-\(feed.id)"
-        accessibilityLabel = [feed.title, feed.lastUpdateFailed ? Appearance.text("refresh_failed_msg") : nil].compactMap { $0 }.joined(separator: ", ")
+        accessibilityLabel = [feed.humanReadableIdentifier, feed.refreshFailed ? Appearance.text("refresh_failed_msg") : nil].compactMap { $0 }.joined(separator: ", ")
         accessibilityValue = counterText(counter)
     }
     required init?(coder: NSCoder) { fatalError() }
@@ -146,7 +147,7 @@ import NotTennaPodCore
         let reader = library.map(LocalFolderArtworkReader.init(store:))
         artwork = EpisodeArtworkView(source: feed.metadata.imageURL, fallback: nil, title: nil,
                                      folderArtwork: { identity in try await reader?.read(feedID: feed.id, identity: identity) })
-        title = Appearance.label(feed.title, size: 14)
+        title = Appearance.label(feed.humanReadableIdentifier, size: 14)
         counter = Appearance.label(counterText(value), size: 14)
         super.init(frame: .zero)
         cover.backgroundColor = UIColor(red: 0x77 / 255, green: 0x77 / 255, blue: 0x77 / 255, alpha: 0x22 / 255)
@@ -155,10 +156,11 @@ import NotTennaPodCore
         title.numberOfLines = 2; title.lineBreakMode = .byTruncatingTail; title.textAlignment = .natural
         counter.textColor = Appearance.secondary; counter.isHidden = value <= 0
         counter.accessibilityIdentifier = "subscriptionCounter-\(feed.id)"
-        failure.isHidden = !feed.lastUpdateFailed; failure.tintColor = Appearance.foreground
+        failure.isHidden = !feed.refreshFailed; failure.tintColor = Appearance.foreground
+        failure.accessibilityIdentifier = "subscriptionFailure-\(feed.id)"
         for view in [cover, title, counter, failure] as [UIView] { view.isUserInteractionEnabled = false; addSubview(view) }
         isAccessibilityElement = true; accessibilityTraits = .button; accessibilityIdentifier = "subscriptionFeed-\(feed.id)"
-        accessibilityLabel = [feed.title, feed.lastUpdateFailed ? Appearance.text("refresh_failed_msg") : nil].compactMap { $0 }.joined(separator: ", ")
+        accessibilityLabel = [feed.humanReadableIdentifier, feed.refreshFailed ? Appearance.text("refresh_failed_msg") : nil].compactMap { $0 }.joined(separator: ", ")
         accessibilityValue = counterText(value)
     }
     required init?(coder: NSCoder) { fatalError() }

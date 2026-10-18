@@ -147,7 +147,7 @@ public enum SwipeAction: String, Codable, CaseIterable, Sendable {
             return .init(recipient: recipient, removesRow: removes)
         case .removeInbox:
             guard state.playState == .new else { return .init(recipient: .none, removesRow: removes) }
-            // REF-INBOX-UNDO-001: use the accepted prior NEW state for this wording and later Undo.
+            // Uses the accepted prior NEW state for this wording and later Undo.
             return .init(recipient: .markWithUndo(.removeInbox), removesRow: removes,
                          undo: removes ? .playState(messageKey: "removed_from_inbox_message") : nil)
         case .delete:

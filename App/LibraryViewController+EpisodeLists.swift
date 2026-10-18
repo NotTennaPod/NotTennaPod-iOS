@@ -3,20 +3,11 @@ import NotTennaPodCore
 
 // Inbox, Episodes, Favorites and History lists.
 extension LibraryViewController {
-    private func allEpisodesRows() -> [(LibraryFeed, LibraryEpisode)] {
-        let queued = Set(queuedEpisodes.map(\.id)), filter = allEpisodesFilter
-        let rows = feeds.flatMap { feed in
-            feed.episodes.filter { filter.includes($0, subscription: feed.subscriptionState, queued: queued.contains($0.id)) }.map { (feed: feed, episode: $0) }
-        }
-        return EpisodeListQueries.episodes(rows, filter: filter.effective, sort: episodeLists.episodes).map { ($0.feed, $0.episode) }
-    }
     // MARK: Episode lists
 
     func renderInbox(heading: UILabel) {
-        let rows = EpisodeListQueries.inbox(feeds, sort: episodeLists.inbox).map { ($0.feed, $0.episode) }
-        feedSelectionIDs = rows.map { $0.1.id }
-        if rows.isEmpty { listEmpty(icon: "ic_inbox", title: "no_inbox_head_label", message: "no_inbox_label", identifier: "inbox") }
-        else { episodes(rows, paged: true) }
+        if openIndexedList(.inbox(episodeLists.inbox)) == 0 { listEmpty(icon: "ic_inbox", title: "no_inbox_head_label", message: "no_inbox_label", identifier: "inbox") }
+        else { indexedEpisodes(paged: true) }
         let layout = toolbarLayout(hasOverflow: true, hasSecondaryAction: true)
         heading.frame = layout.title
         let search = Appearance.icon("ic_search", label: Appearance.text("search_label")) { [weak self] in self?.openSearch() }
@@ -32,10 +23,8 @@ extension LibraryViewController {
     }
 
     func renderFavorites(heading: UILabel) {
-        let rows = EpisodeListQueries.favorites(feeds, sort: episodeLists.episodes).map { ($0.feed, $0.episode) }
-        feedSelectionIDs = rows.map { $0.1.id }
-        if rows.isEmpty { listEmpty(icon: "ic_star", title: "no_fav_episodes_head_label", message: "no_fav_episodes_label", identifier: "favorites") }
-        else { episodes(rows, paged: true) }
+        if openIndexedList(.favorites(episodeLists.episodes)) == 0 { listEmpty(icon: "ic_star", title: "no_fav_episodes_head_label", message: "no_fav_episodes_label", identifier: "favorites") }
+        else { indexedEpisodes(paged: true) }
         let layout = toolbarLayout(hasOverflow: true, hasSecondaryAction: true)
         heading.frame = layout.title
         let search = Appearance.icon("ic_search", label: Appearance.text("search_label")) { [weak self] in self?.openSearch() }
@@ -49,14 +38,13 @@ extension LibraryViewController {
     }
 
     func renderHistory(heading: UILabel) {
-        let rows = EpisodeListQueries.history(feeds).map { ($0.feed, $0.episode) }
-        feedSelectionIDs = rows.map { $0.1.id }
-        if rows.isEmpty { listEmpty(icon: "ic_history", title: "no_history_head_label", message: "no_history_label", identifier: "history") }
-        else { episodes(rows, paged: true) }
+        let count = openIndexedList(.history)
+        if count == 0 { listEmpty(icon: "ic_history", title: "no_history_head_label", message: "no_history_label", identifier: "history") }
+        else { indexedEpisodes(paged: true) }
         // Clear history is shown only while the history has episodes (`PlaybackHistoryFragment:91–95`).
-        let layout = toolbarLayout(hasOverflow: false, hasPrimaryAction: !rows.isEmpty)
+        let layout = toolbarLayout(hasOverflow: false, hasPrimaryAction: count > 0)
         heading.frame = layout.title
-        guard !rows.isEmpty else { return }
+        guard count > 0 else { return }
         let clear = Appearance.icon("ic_delete", label: Appearance.text("clear_history_label")) { [weak self] in self?.confirmClearHistory() }
         clear.accessibilityIdentifier = "historyClear"; clear.frame = layout.primaryAction
         toolbar.addSubview(clear)
@@ -135,11 +123,9 @@ extension LibraryViewController {
     }
 
     func renderAllEpisodes(heading: UILabel) {
-        let rows = allEpisodesRows()
-        // The source adapter's total count and selection denominator use the same query.
-        feedSelectionIDs = rows.map { $0.1.id }
-        if rows.isEmpty { allEpisodesEmpty() }
-        else { episodes(rows, paged: true) }
+        // The source adapter's total count and selection denominator use the same membership.
+        if openIndexedList(.episodes(allEpisodesFilter, episodeLists.episodes)) == 0 { allEpisodesEmpty() }
+        else { indexedEpisodes(paged: true) }
         let layout = toolbarLayout(hasOverflow: true, hasPrimaryAction: true, hasSecondaryAction: true)
         heading.frame = layout.title
         let search = Appearance.icon("ic_search", label: Appearance.text("search_label")) { [weak self] in self?.openSearch() }

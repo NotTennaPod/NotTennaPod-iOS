@@ -1558,6 +1558,6 @@
    "ERROR_NOT_FOUND",
    "410"
   ],
-  "http_401": "authentication dialog, not an error dialog (FEED-AUTHENTICATION-001)"
+  "http_401": "authentication dialog, not an error dialog"
  }
 }

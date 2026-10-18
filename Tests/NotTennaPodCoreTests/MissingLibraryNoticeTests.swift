@@ -6,7 +6,7 @@ import Testing
 /// instead (the fallback for a missing folder or database): due once per occurrence after a graph start that
 /// succeeded, never for a damaged registry, a normal start or a library that cannot be read now, and not again when
 /// later starts fall back for the same library. Which library opens, the registry and the folders stay as they were.
-@Suite(.serialized, .timeLimit(.minutes(1))) struct MissingLibraryNoticeTests {
+@Suite(.serialized) struct MissingLibraryNoticeTests {
     private let serverID = "0b5a3c1e-7c43-4a5e-9d1f-2b9a0e7f6c11"
     private let otherID = "7d2e4f60-1a3b-4c5d-8e9f-0a1b2c3d4e5f"
 

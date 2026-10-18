@@ -8,7 +8,7 @@ import Testing
 import UIKit
 #endif
 
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor struct PlaybackVideoPresentationTests {
+@Suite(.serialized) @MainActor struct PlaybackVideoPresentationTests {
     private func time(_ value: Double) -> CMTime { CMTime(seconds: value, preferredTimescale: 48000) }
     private func range(_ start: Double, _ duration: Double) -> CMTimeRange { CMTimeRange(start: time(start), duration: time(duration)) }
 

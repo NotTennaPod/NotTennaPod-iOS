@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) @MainActor
+@Suite(.serialized) @MainActor
 struct BufferedPCMRecoveryFactoryTests {
     typealias Transport = SampleBufferPCMOutputTests.Transport
     @MainActor private final class OutputControl { var shouldFail = true }

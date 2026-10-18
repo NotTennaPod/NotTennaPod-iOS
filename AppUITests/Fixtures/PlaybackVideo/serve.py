@@ -25,7 +25,7 @@ def checkpoint(identity):
     identity=str(uuid.UUID(identity)).upper()
     # Runs on several Simulators share this server: find the app data container holding this UUID library.
     # Read the Simulators' data directories directly: `simctl get_app_container` on a busy Simulator took
-    # over 10 s while other test runs were active (2026-09-28), failing the checkpoint for a different device.
+    # over 10 s while other test runs were active, failing the checkpoint for a different device.
     directory=libraries.get(identity)
     if directory is None or not directory.is_dir():
         directory=find_library(identity)

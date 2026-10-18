@@ -123,6 +123,7 @@ public actor FeedLibraryStore {
     var synchronizationExecution: UUID?
     var synchronizationListeners: [UUID: AsyncStream<Void>.Continuation] = [:]
     var automaticDownloadListeners: [UUID: AsyncStream<Void>.Continuation] = [:]
+    var queueEffectListeners: [UUID: AsyncStream<Void>.Continuation] = [:]
     var downloadLogListeners: [UUID: AsyncStream<Void>.Continuation] = [:]
     /// Enqueue location and Keep sorted, read inside every `addToQueue` transaction like
     /// `UserPreferences` in `DBWriter.addQueueItem`. Set synchronously so no enqueue can precede it.
@@ -130,17 +131,37 @@ public actor FeedLibraryStore {
     /// The feed-credential Keychain store (adopted by `FeedAuthentication`), which a server library uses to keep a
     /// subscription URL's userinfo as the feed's credentials secret. Unused in a standalone library.
     let credentialVault = Mutex<(any SynchronizationCredentialStore)?>(nil)
-    /// Decoded feeds (header and episodes), reused while the feed's change generation (`feed_changes`,
-    /// maintained by SQLite triggers on every write to `feeds` and `episodes`) is unchanged. Every library
-    /// change reloads the library; re-reading and decoding every episode each time made a 100-podcast library
-    /// run hot. A changed feed is re-read; within it, an episode whose record bytes are unchanged (content
-    /// hash and length) keeps its decoded value. Discarded after any rollback (`cachedRollbacks`).
-    private var loadedFeeds: [Int64: LoadedFeed] = [:]
-    private var cachedRollbacks = 0
-    /// Feeds whose episode records were re-read (cache miss), for tests of avoided whole-feed reads.
-    private(set) var feedEpisodeReloads = 0
+    /// Feeds whose episode records were read (`loadFeed`), for tests of avoided whole-feed reads. Nothing decoded is kept
+    /// between reads: a feed's episodes are read from the database each time a caller needs them.
+    private(set) var feedEpisodeReads = 0
+    /// Whole-library screen reads (`snapshot()` and `screenSnapshot()`), for the screens' budgets.
+    public internal(set) var snapshotReads = 0
     /// Durable write commits made by this store, for tests of batched work.
     var writeCommits: Int { database.writeCommits }
+    /// A refresh reads each of its feed's server tables once and hands what it read on (the merge's observed hashes to the
+    /// recorder, the decoded feed to the capture). Tests turn it off for the differential reference.
+    var refreshSharesReads = true
+    /// Library records (feeds, episodes, effects, logs) decoded from JSON, for tests of work budgets.
+    private(set) var recordsDecoded = 0
+    /// Of `recordsDecoded`, the episode records (the budget: an unchanged refresh decodes none).
+    private(set) var episodeRecordsDecoded = 0
+    /// Refreshes that were identical to their feed's last applied one and wrote only its header, for tests.
+    var unchangedRefreshes = 0
+    /// Whether the routine readers that have a keyed path (automatic download, file owners, the bulk Inbox and
+    /// history clears, sync action matching, notification counts) take it once the derived keys are complete. Tests turn it
+    /// off for the canonical reference.
+    var keyedReadsEnabled = true
+    var keyedReads: Bool { derived.isReady && keyedReadsEnabled }
+    /// Whether refreshes read and keep the refresh memo (`FeedRefreshMemo`). Tests turn it off for the differential
+    /// reference.
+    var refreshMemoEnabled = true
+    /// Whether this library's server tables have the triggers that retire a feed's refresh memo (`ServerExchangeTables`).
+    var refreshMemoGuarded: Bool?
+    /// What the store's connection has done so far (tests compare two readings).
+    var work: StoreWork {
+        .init(recordsDecoded: recordsDecoded, statements: database.statementsRun, steps: database.statementSteps,
+              pages: database.pagesTouched, commits: database.writeCommits)
+    }
     /// The connection's current `PRAGMA synchronous` (2 = FULL), for tests.
     func synchronousMode() throws -> Int64 { try database.scalar("PRAGMA synchronous") }
     /// The server library's identity (`ntp_library`), nil in a standalone library (PROTOCOL §15.4).
@@ -149,6 +170,10 @@ public actor FeedLibraryStore {
     var activeCapture: ChangeCapture?
     /// Test failure injection: the recorder fails right after its Nth write (PROTOCOL §15.2).
     var recorderFailureInjection: Int?
+    /// Test-only: the fact bound in place of the one the server advertised (PROTOCOL §6.13).
+    var factBoundOverride: Int?
+    /// Test-only faults in the adoption decision (mutation checks).
+    var adoptionFaults: Set<AdoptionFault> = []
     /// The recorder's writes in the last server-library transaction, for tests.
     var recorderWrites = 0
     /// The owed-fact replay's transactions: how many have finished, readable without the store, and,
@@ -160,11 +185,16 @@ public actor FeedLibraryStore {
     /// history removal's cuts.
     var queueRemovalKeys: [UUID: StoredQueueKey] = [:]
     var historyRemovalCuts: [UUID: [RecordedFact]] = [:]
+    /// The removal's local cuts of listening kept on this device, each session's earlier cut, for the Undo.
+    var historyRemovalLocalCuts: [UUID: [(session: String, previous: Int64?)]] = [:]
     /// Wake hints for the server sync scheduler: a local action recorded facts (PROTOCOL §6.4, push 2 s later).
     var serverOutboxListeners: [UUID: AsyncStream<Void>.Continuation] = [:]
     /// Sync log lines from the store (PROTOCOL §15.5): writes the recorder refused (an unmapped change, PROTOCOL §15.2) and owed facts
     /// recorded late, each noted once its transaction committed, logged by the next exchange outside the write lock.
     var serverDiagnostics: [(kind: String, detail: String)] = []
+    /// Why observations since the last exchange differed from their canonical records, by field name (the first-refresh
+    /// diagnosis).
+    var observationTally = ObservationDifferenceTally()
     /// Owed queue additions the last successful `replayOwedStep` recorded.
     var owedStepAdds = 0
     /// This opening of the library (PROTOCOL §8): a playback session journaled by an earlier one is
@@ -185,13 +215,38 @@ public actor FeedLibraryStore {
     /// library opened before a Keep at logout has published it, PROTOCOL §15.4).
     public init(url: URL, ownedRoot: URL? = nil, synchronizationClock: @escaping @Sendable () -> Date = { Date() }) throws {
         database = try LibrarySQLite(url: url, ownedRoot: ownedRoot)
+        try database.enableChangeCapture()
+        databaseURL = url
+        derived = DerivedReadiness(ready: try LibrarySchema21.isComplete(database))
         self.synchronizationClock = synchronizationClock
         serverContext = try Self.loadServerContext(database)
         if serverContext != nil { try ServerExchangeTables.create(database) }
         isServerLibraryAtOpen = serverContext != nil
         readOnly = false
         identityAtOpen = try database.libraryIdentity()
+        (changes, syncChanges) = try Self.connectChanges(database, library: identityAtOpen?.identity)
     }
+
+    /// Every committed visible change of this library, whatever its origin (`LibraryChangeHub`).
+    public nonisolated let changes: LibraryChangeHub
+    /// Sync-origin commits the sync engine has not taken yet.
+    nonisolated let syncChanges: LibrarySyncChanges
+
+    /// The hub fed by the connection's commits: every set to the hub, sync-origin commits also to the engine's list.
+    private static func connectChanges(_ database: LibrarySQLite, library: String?) throws -> (LibraryChangeHub, LibrarySyncChanges) {
+        let identity = LibraryChangeHub.Identity(library: library, incarnation: UUID())
+        database.changeIdentity = identity
+        let hub = LibraryChangeHub(identity: identity, baseline: try database.changeSequence())
+        let sync = LibrarySyncChanges()
+        database.onCommit = { [hub, sync] commit in
+            if let set = commit.set { hub.emit(set) }
+            if commit.origin == .sync { sync.add(commit) }
+        }
+        return (hub, sync)
+    }
+
+    /// The sync-origin changes committed since the last call (the sync engine publishes them after each step).
+    func takeSyncChanges() -> (set: LibraryChangeSet?, knowledge: LibraryPositionKnowledge?) { syncChanges.take() }
 
     /// The library's identity and Cast tag as the store opened (schema 20), for the graph's synchronous setup. A
     /// first attachment changes a new library's identity afterwards; `libraryIdentity()` reads the current row.
@@ -205,12 +260,16 @@ public actor FeedLibraryStore {
     /// migrates nor writes, and any write fails. Only for reading a whole library once (an export's source).
     init(readingOnly url: URL) throws {
         database = try LibrarySQLite(readingOnly: url)
+        databaseURL = url
+        let current = try database.scalar("PRAGMA user_version") >= 21 ? try LibrarySchema21.isComplete(database) : false
+        derived = DerivedReadiness(ready: current)
         synchronizationClock = { Date() }
         serverContext = try database.scalar("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = 'ntp_library'") == 1
             ? try Self.loadServerContext(database) : nil
         isServerLibraryAtOpen = serverContext != nil
         readOnly = true
         identityAtOpen = try database.libraryIdentity()
+        (changes, syncChanges) = try Self.connectChanges(database, library: identityAtOpen?.identity)
         if serverContext != nil {
             // The exchange's tables a library-wide read names; a server library that never ran an exchange has none,
             // which reads as nothing hidden. Empty TEMP tables of this connection only; the library's data never changes.
@@ -227,39 +286,84 @@ public actor FeedLibraryStore {
 
     /// A read-only store (`init(readingOnly:)`).
     let readOnly: Bool
+    /// The library database's file, for the readers' connections.
+    let databaseURL: URL
+    /// Whether the derived keys and counts (schema 21) are complete, readable without the store.
+    nonisolated let derived: DerivedReadiness
+    /// The graph's screen readers, opened at their first use (`readers()`).
+    var openReaders: LibraryReaders?
+    var readersClosed = false
 
-    public func close() throws { try database.close() }
+    /// Interrupts the readers (closed by `closeReaders` before this), ends readiness waits and closes the library; the
+    /// change stream finishes after it.
+    public func close() throws {
+        openReaders?.shutdown()
+        readersClosed = true
+        derived.close()
+        try database.close()
+        changes.finish()
+    }
 
     public func feeds() throws -> [LibraryFeed] {
         try database.transaction(write: false) { try loadFeeds(skippingPinnedRemovals: true) }
     }
 
-    public func snapshot() throws -> FeedLibrarySnapshot {
-        try database.transaction(write: false) {
-            let feeds = try loadFeeds(skippingPinnedRemovals: true)
-            var targets: [Int64: EpisodeMediaDeletionTarget] = [:]
-            for feed in feeds {
-                let link = feed.source.isLocalFeedSource ? try localFolder(feedID: feed.id) : nil
-                for episode in feed.episodes {
-                    targets[episode.id] = mediaDeletionTarget(episode: episode, feed: feed, localFolder: link)
-                }
-            }
-            return try FeedLibrarySnapshot(feeds: feeds, queue: loadVisibleQueue(), deletionTargets: targets,
-                                           statisticsUnits: loadStatisticsUnits(of: feeds))
+    /// The feeds of `feeds()`, in its order, as headers only (no episodes): what choosing the feeds a refresh covers reads.
+    public func feedHeaders() throws -> [LibraryFeed] {
+        try database.transaction(write: false) { try loadFeedHeaders(skippingPinnedRemovals: true) }
+    }
+
+    /// The feeds of `loadFeeds`, in its order, as headers only (no episode is read).
+    func loadFeedHeaders(skippingPinnedRemovals: Bool = false) throws -> [LibraryFeed] {
+        let shown = skippingPinnedRemovals ? hiddenFeedsCondition("id").map { " WHERE " + $0 } ?? "" : ""
+        return try database.rows("SELECT id, record FROM feeds\(shown) ORDER BY title COLLATE NOCASE ASC, id").map { row in
+            let feed: LibraryFeed = try decode(row[1])
+            guard feed.id == row[0].integer, feed.episodes.isEmpty, feed.metadata.episodes.isEmpty else { throw FeedLibraryError.corruptRecord }
+            return feed
         }
+    }
+
+    public func snapshot() throws -> FeedLibrarySnapshot {
+        snapshotReads += 1
+        return try database.transaction(write: false) { try loadSnapshot() }
+    }
+
+    /// `snapshot()` inside the caller's read transaction. `projection`: every episode as lists show it
+    /// (`LibraryEpisode.listProjection`: no show notes, no chapters), the queue's included.
+    func loadSnapshot(projection: Bool = false) throws -> FeedLibrarySnapshot {
+        let feeds = try loadFeeds(skippingPinnedRemovals: true, projection: projection)
+        var targets: [Int64: EpisodeMediaDeletionTarget] = [:]
+        var shown: [Int64: LibraryEpisode] = [:]
+        for feed in feeds {
+            let link = feed.source.isLocalFeedSource ? try localFolder(feedID: feed.id) : nil
+            for episode in feed.episodes {
+                targets[episode.id] = Self.mediaDeletionTarget(episode: episode, feed: feed, localFolder: link)
+                if projection { shown[episode.id] = episode }
+            }
+        }
+        // The visible queue is of shown episodes: a projection takes them from the feeds just read.
+        let queue = try projection ? try visibleQueueIDs().compactMap { shown[$0] } : loadVisibleQueue()
+        return try FeedLibrarySnapshot(feeds: feeds, queue: queue, deletionTargets: targets,
+                                       statisticsUnits: loadStatisticsUnits(of: feeds))
     }
 
     /// Statistics' read (schema 20): the feeds every library-wide read shows, with their episodes' statistics units.
     public func statisticsLibrary() throws -> LibraryStatisticsInput {
         try database.transaction(write: false) {
-            let feeds = try loadFeeds(skippingPinnedRemovals: true)
+            // Statistics read no show notes or chapters (nothing decoded that is not shown).
+            let feeds = try loadFeeds(skippingPinnedRemovals: true, projection: true)
             return LibraryStatisticsInput(feeds: feeds, units: try loadStatisticsUnits(of: feeds))
         }
     }
 
+    /// The Downloads statistics' read: `feeds()` with each episode as lists show it (no show notes, no chapters).
+    public func statisticsFeeds() throws -> [LibraryFeed] {
+        try database.transaction(write: false) { try loadFeeds(skippingPinnedRemovals: true, projection: true) }
+    }
+
     /// The statistics units of the given feeds' episodes.
     func loadStatisticsUnits(of feeds: [LibraryFeed]) throws -> [Int64: [LibraryStatisticsUnit]] {
-        guard try database.scalar("SELECT count(*) FROM statistics_units") > 0 else { return [:] }
+        guard try database.scalar("SELECT EXISTS (SELECT 1 FROM statistics_units)") == 1 else { return [:] }
         let shown = Set(feeds.flatMap { $0.episodes.map(\.id) })
         return try database.statisticsUnits().filter { shown.contains($0.key) }
     }
@@ -279,24 +383,20 @@ public actor FeedLibraryStore {
                                    timeZone: TimeZone = .current) throws -> FeedStatisticsSnapshot? {
         try database.transaction(write: false) {
             // A hidden podcast (being removed, or staged) has no statistics to show.
-            guard try !isHiddenFeed(feedID), let feed = try loadFeed(feedID) else { return nil }
+            // Statistics read no show notes or chapters.
+            guard try !isHiddenFeed(feedID), let feed = try loadFeed(feedID, projection: true) else { return nil }
             return try FeedStatisticsSnapshot(feed: feed, units: loadStatisticsUnits(of: [feed]), now: now, timeZone: timeZone)
         }
     }
 
     /// Every feed, title order. `skippingPinnedRemovals`: library-wide reads leave out a podcast the server removed
     /// while the player still holds one of its episodes (PROTOCOL §6.8); only the player reads it then.
-    func loadFeeds(skippingPinnedRemovals: Bool = false) throws -> [LibraryFeed] {
+    func loadFeeds(skippingPinnedRemovals: Bool = false, projection: Bool = false) throws -> [LibraryFeed] {
         let pinned = skippingPinnedRemovals ? hiddenFeedsCondition("f.id").map { " WHERE " + $0 } ?? "" : ""
-        let rows = try database.rows("SELECT f.id, coalesce(c.generation, 0), coalesce(c.episode_generation, 0) FROM feeds f LEFT JOIN feed_changes c ON c.feed_id = f.id\(pinned) ORDER BY f.title COLLATE NOCASE ASC, f.id")
+        let rows = try database.rows("SELECT f.id FROM feeds f\(pinned) ORDER BY f.title COLLATE NOCASE ASC, f.id")
         let feeds = try rows.map { row in
-            guard row.count == 3, let id = row[0].integer, let generation = row[1].integer, let episodes = row[2].integer,
-                  let feed = try loadFeed(id, generation: .init(feed: generation, episodes: episodes)) else { throw FeedLibraryError.corruptRecord }
+            guard let id = row[0].integer, let feed = try loadFeed(id, projection: projection) else { throw FeedLibraryError.corruptRecord }
             return feed
-        }
-        if pinned.isEmpty, loadedFeeds.count > feeds.count {
-            let present = Set(feeds.map(\.id))
-            loadedFeeds = loadedFeeds.filter { present.contains($0.key) }
         }
         return feeds
     }
@@ -314,6 +414,17 @@ public actor FeedLibraryStore {
     /// is not there.
     public func feed(id: Int64) throws -> LibraryFeed? {
         try database.transaction(write: false) { try isHiddenFeed(id) ? nil : loadFeed(id) }
+    }
+
+    /// `feed(id:)` without its episodes: for callers that need only the podcast's own fields.
+    public func listedFeedHeader(id: Int64) throws -> LibraryFeed? {
+        try database.transaction(write: false) { try isHiddenFeed(id) ? nil : loadFeedHeader(id) }
+    }
+
+    /// `playbackFeed(id:)` without its episodes: the player's own displays (artwork, controls, Cast, chapters) need only the
+    /// podcast's own fields.
+    public func playbackFeedHeader(id: Int64) throws -> LibraryFeed? {
+        try database.transaction(write: false) { try loadFeedHeader(id) }
     }
 
     /// The podcast of the player's episode, also while the server's removal of it waits for the player to leave the
@@ -355,6 +466,11 @@ public actor FeedLibraryStore {
     /// Test inspection API: not called by the app.
     func feedHeader(id: Int64) throws -> LibraryFeed? {
         try loadFeedHeader(id)
+    }
+
+    /// The header (no episodes) of a feed a refresh fetches: nil for a feed no library-wide read shows, as `feed(id:)`.
+    func refreshHeader(id: Int64) throws -> LibraryFeed? {
+        try database.transaction(write: false) { try isHiddenFeed(id) ? nil : loadFeedHeader(id) }
     }
 
     public func episode(id: Int64) throws -> LibraryEpisode? {
@@ -503,7 +619,20 @@ public actor FeedLibraryStore {
         try Task.checkCancellation()
         return try write(.refresh, now: options.now) {
             try requireManualRefresh(manualRequestID)
-            let result = try merge(fetched, feedID: feedID, options: options, logRecovery: true)
+            let result: FeedRefreshResult
+            // A refresh identical to the feed's last applied one writes only its header; any other runs the merge.
+            switch try refreshMemo(fetched, feedID: feedID, options: options) {
+            case .unchanged(let header):
+                result = try applyUnchangedRefresh(fetched, header: header, options: options)
+            case .merge(let candidate):
+                // A merge that may prove the feed unchanged arms its memo first: what the merge writes to the server tables
+                // its episodes depend on retires it.
+                let before = try candidate == nil ? nil : armRefreshMemo(feedID: feedID)
+                // The armed feed is the stored one, read in this transaction: the merge starts from it rather than reading
+                // the feed again.
+                result = try merge(fetched, feedID: feedID, options: options, logRecovery: true, current: before?.before)
+                if let candidate { try settleRefreshMemo(candidate, before: before, result: result, fetched: fetched) }
+            }
             try stageCommittedEpisodeNotification(result.feed, manualRequestID: manualRequestID)
             try Task.checkCancellation()
             return result
@@ -536,31 +665,36 @@ public actor FeedLibraryStore {
         try database.execute("DELETE FROM pending_effects WHERE id = ?", [.integer(id)])
     }
 
+    /// `current`: the stored feed when the caller has just read it in this transaction.
     func merge(_ fetched: FetchedFeed, feedID: Int64, options: FeedRefreshOptions,
-                       logRecovery: Bool) throws -> FeedRefreshResult {
-        guard let current = try loadFeed(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
+                       logRecovery: Bool, current stored: LibraryFeed? = nil) throws -> FeedRefreshResult {
+        guard let current = try stored ?? loadFeed(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
         var settings = options
         settings.validator = fetched.validator
         // A server library identifies and files by the record-level parse (PROTOCOL §9.7); local folders never sync (PROTOCOL §7.6).
         let catalog = serverContext != nil && !current.source.isLocalFeedSource ? fetched.catalog ?? ServerCatalogRecords.interim(fetched.feed) : nil
         var result = try mergeSnapshot(fetched.feed, into: current, options: settings, catalog: catalog)
-        if logRecovery {
-            let lastLog = try database.rows("SELECT record FROM refresh_log WHERE feed_id = ? ORDER BY completed_at DESC, id LIMIT 1", [.integer(feedID)]).first
-            if let lastLog, !(try decode(lastLog[0]) as FeedLibraryLog).kind.isSuccessful {
-                try appendLog(.init(feedID: feedID, date: options.now, title: fetched.feed.title, kind: .success))
-            }
-            if let updated = fetched.proposedSourceUpdate, !updated.utf16.elementsEqual(fetched.source.utf16) {
-                for row in try database.rows("SELECT record FROM feeds") {
-                    var header: LibraryFeed = try decode(row[0])
-                    if header.source.utf16.elementsEqual(fetched.source.utf16) {
-                        header.source = updated
-                        try saveHeader(header)
-                        if header.id == feedID { result.feed.source = updated }
-                    }
+        if logRecovery { try recordRefreshRecovery(fetched, feedID: feedID, options: options, feed: &result.feed) }
+        return result
+    }
+
+    /// After a refresh's merge: a success log entry when the feed's last one failed, and a permanent redirect followed by
+    /// every feed of the old address.
+    func recordRefreshRecovery(_ fetched: FetchedFeed, feedID: Int64, options: FeedRefreshOptions, feed: inout LibraryFeed) throws {
+        let lastLog = try database.rows("SELECT record FROM refresh_log WHERE feed_id = ? ORDER BY completed_at DESC, id LIMIT 1", [.integer(feedID)]).first
+        if let lastLog, !(try decode(lastLog[0]) as FeedLibraryLog).kind.isSuccessful {
+            try appendLog(.init(feedID: feedID, date: options.now, title: fetched.feed.title, kind: .success))
+        }
+        if let updated = fetched.proposedSourceUpdate, !updated.utf16.elementsEqual(fetched.source.utf16) {
+            for row in try database.rows("SELECT record FROM feeds") {
+                var header: LibraryFeed = try decode(row[0])
+                if header.source.utf16.elementsEqual(fetched.source.utf16) {
+                    header.source = updated
+                    try saveHeader(header)
+                    if header.id == feedID { feed.source = updated }
                 }
             }
         }
-        return result
     }
 
     func mergeSnapshot(_ incoming: ParsedFeed, into current: LibraryFeed,
@@ -570,7 +704,8 @@ public actor FeedLibraryStore {
         let result = try server?.0 ?? FeedRefreshMerger.merge(incoming, into: current, options: options) { try database.allocateID("episode") }
         let cleanup = result.removedEpisodes.isEmpty ? nil : try captureEpisodeRemoval(
             result.removedEpisodes, feed: current, now: options.now)
-        try save(result.feed, previous: current)
+        // `current` was read in this transaction and nothing wrote its episodes since: the capture takes their before from it.
+        try save(result.feed, previous: current, previousIsStored: refreshSharesReads)
         for item in server?.1 ?? [] { try saveServerLocalItem(item, feedID: feedID) }
         for episode in result.removedEpisodes {
             try captureEpisodeDeletion(episode, feedID: feedID)
@@ -615,50 +750,31 @@ public actor FeedLibraryStore {
         return feed
     }
 
-    func loadFeed(_ id: Int64) throws -> LibraryFeed? {
-        let row = try database.rows("SELECT generation, episode_generation FROM feed_changes WHERE feed_id = ?", [.integer(id)]).first
-        return try loadFeed(id, generation: .init(feed: row?[0].integer ?? 0, episodes: row?[1].integer ?? 0))
-    }
-
-    /// `generation` is read before the records, in the same transaction where it matters: records read later
-    /// are never older than it, so a cached feed is never older than its recorded generation.
-    private func loadFeed(_ id: Int64, generation: LoadedFeed.Generation) throws -> LibraryFeed? {
-        if cachedRollbacks != database.rollbacks {
-            loadedFeeds.removeAll()
-            cachedRollbacks = database.rollbacks
-        }
-        let previous = loadedFeeds[id]
-        if let previous, previous.generation == generation { return previous.feed }
-        guard let row = try database.rows("SELECT record FROM feeds WHERE id = ?", [.integer(id)]).first else {
-            loadedFeeds[id] = nil
-            return nil
-        }
+    /// `projection`: each episode as lists show it (`LibraryEpisode.listProjection`), its show notes and chapters left out
+    /// by SQLite, never decoded. A projection is only ever read: no writer takes one (`EpisodeWriteScope`).
+    func loadFeed(_ id: Int64, projection: Bool = false) throws -> LibraryFeed? {
+        guard let row = try database.rows("SELECT record FROM feeds WHERE id = ?", [.integer(id)]).first else { return nil }
         var feed: LibraryFeed = try decode(row[0])
         guard feed.id == id, feed.episodes.isEmpty, feed.metadata.episodes.isEmpty else { throw FeedLibraryError.corruptRecord }
-        // Only the header changed (no episode row was inserted, updated or deleted since): keep the episodes.
-        if let previous, previous.generation.episodes == generation.episodes {
-            feed.episodes = previous.feed.episodes
-            loadedFeeds[id] = LoadedFeed(generation: generation, feed: feed, episodeDigests: previous.episodeDigests)
-            return feed
-        }
-        var reusable: [Int64: LibraryEpisode] = [:]
-        if let previous { for episode in previous.feed.episodes { reusable[episode.id] = episode } }
-        var digests: [Int64: RecordDigest] = [:]
-        feedEpisodeReloads += 1
+        feedEpisodeReads += 1
         // A server library leaves out new episodes staged for a unit that has not revealed them.
         let hidden = serverContext != nil ? " AND id NOT IN (SELECT episode_id FROM ntp_hidden_episodes)" : ""
-        feed.episodes = try database.rows("SELECT id, record FROM episodes WHERE feed_id = ?\(hidden) ORDER BY pubdate DESC, id", [.integer(id)])
+        let record = projection ? LibraryEpisode.listProjectionSQL("record") : "record"
+        feed.episodes = try database.rows("SELECT id, \(record) FROM episodes WHERE feed_id = ?\(hidden) ORDER BY pubdate DESC, id", [.integer(id)])
             .map { row in
-                guard let id = row[0].integer, let data = row[1].data else { throw FeedLibraryError.corruptRecord }
-                let digest = RecordDigest(data)
-                digests[id] = digest
-                if let episode = reusable[id], previous?.episodeDigests[id] == digest { return episode }
-                let episode = try JSONDecoder().decode(LibraryEpisode.self, from: data)
-                guard id == episode.id else { throw FeedLibraryError.corruptRecord }
+                let episode: LibraryEpisode = try projection ? decodeProjection(row[1]) : decode(row[1])
+                guard row[0].integer == episode.id else { throw FeedLibraryError.corruptRecord }
                 return episode
             }
-        loadedFeeds[id] = LoadedFeed(generation: generation, feed: feed, episodeDigests: digests)
         return feed
+    }
+
+    /// An episode projection (`LibraryEpisode.listProjectionSQL`): JSON text.
+    func decodeProjection(_ value: LibrarySQLValue) throws -> LibraryEpisode {
+        guard case .text = value, let data = value.recordData else { throw FeedLibraryError.corruptRecord }
+        recordsDecoded += 1
+        episodeRecordsDecoded += 1
+        return try JSONDecoder.libraryRecord(LibraryEpisode.self, from: data)
     }
 
     func loadEpisode(_ id: Int64) throws -> LibraryEpisode? {
@@ -670,7 +786,9 @@ public actor FeedLibraryStore {
 
     /// With `previous` (the stored feed, decoded), only episodes that differ from it are saved: a refresh
     /// usually changes none, and encoding and comparing every record of the library was most of its cost.
-    func save(_ feed: LibraryFeed, previous: LibraryFeed? = nil) throws {
+    /// `previousIsStored`: `previous` holds exactly the stored rows (read in this transaction, nothing written to its
+    /// episodes since), so a server library's capture takes an episode's before from it instead of reading it again.
+    func save(_ feed: LibraryFeed, previous: LibraryFeed? = nil, previousIsStored: Bool = false) throws {
         try saveHeader(feed)
         var stored: [Int64: LibraryEpisode] = [:]
         if let previous {
@@ -678,7 +796,7 @@ public actor FeedLibraryStore {
             for episode in previous.episodes { stored[episode.id] = episode }
         }
         for episode in feed.episodes where stored[episode.id] != episode {
-            try saveEpisode(episode, feedID: feed.id)
+            try saveEpisode(episode, feedID: feed.id, before: previousIsStored ? stored[episode.id] : nil, scope: .metadata)
         }
     }
 
@@ -693,9 +811,54 @@ public actor FeedLibraryStore {
                               .blob(try Self.encodeRecord(header))])
     }
 
-    func saveEpisode(_ episode: LibraryEpisode, feedID: Int64, explicitStateIntent: Bool = false) throws {
+    /// What an episode write may change of the stored episode: a write that only meant to change user state
+    /// can never rewrite the details (show notes, chapters) from a partial copy of the episode.
+    public enum EpisodeWriteScope: Sendable {
+        /// User state only: the stored details and stored-chapters flag stay exactly (the default).
+        case userState
+        /// Also what the media file itself tells: its size, duration, embedded picture and pending metadata.
+        case media
+        /// Any field: a refresh merge, a local folder's metadata, a new episode.
+        case metadata
+
+        /// The SQL condition over the stored record `o` and the new one `n` (record JSON text) that the scope allows.
+        func allows(_ o: String, _ n: String) -> String? {
+            let chapters = "json_extract(\(o), '$.hasStoredChapters') IS json_extract(\(n), '$.hasStoredChapters')"
+            switch self {
+            case .userState: return "json_extract(\(o), '$.details') IS json_extract(\(n), '$.details') AND \(chapters)"
+            case .media:
+                func fixed(_ r: String) -> String {
+                    "json_remove(json_extract(\(r), '$.details'), '$.media.size', '$.media.durationMilliseconds', '$.media.hasEmbeddedPicture', '$.media.metadataPending')"
+                }
+                return "\(fixed(o)) IS \(fixed(n)) AND \(chapters)"
+            case .metadata: return nil
+            }
+        }
+
+        /// The same rule over decoded values (records whose stored text is spelled differently from today's encoding).
+        func allows(stored: LibraryEpisode, new: LibraryEpisode) -> Bool {
+            guard stored.hasStoredChapters == new.hasStoredChapters else { return false }
+            switch self {
+            case .userState: return stored.details == new.details
+            case .media:
+                func fixed(_ details: ParsedEpisode) -> ParsedEpisode {
+                    var details = details
+                    details.media?.size = 0; details.media?.durationMilliseconds = 0
+                    details.media?.hasEmbeddedPicture = nil; details.media?.metadataPending = nil
+                    return details
+                }
+                return fixed(stored.details) == fixed(new.details)
+            case .metadata: return true
+            }
+        }
+    }
+
+    /// `before`: the stored episode, when the caller holds it (else it is read when needed). `scope`: what of the stored
+    /// episode the write may change; a write outside it throws `invalidMutation` and changes nothing.
+    func saveEpisode(_ episode: LibraryEpisode, feedID: Int64, explicitStateIntent: Bool = false, before: LibraryEpisode? = nil,
+                     scope: EpisodeWriteScope = .userState) throws {
         guard episode.id > 0, let date = episode.details.publicationDate else { throw FeedLibraryError.invalidMutation }
-        try captureEpisodeWrite(episode, feedID: feedID)
+        try captureEpisodeWrite(episode, feedID: feedID, before: before)
         if try database.scalar("SELECT count(*) FROM episode_swipe_undo WHERE episode_id = ?", [.integer(episode.id)]) > 0 {
             let previous = try loadEpisode(episode.id)
             var replaced = previous == nil || !exactlyEqual(previous?.details.media?.url, episode.details.media?.url)
@@ -715,13 +878,25 @@ public actor FeedLibraryStore {
         }
         // Byte-identical records are not rewritten (see `saveHeader`); `encodeRecord` is deterministic, so an
         // unchanged episode encodes to its stored bytes.
-        try database.execute("INSERT INTO episodes(id, feed_id, pubdate, record) VALUES (?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET pubdate = excluded.pubdate, record = excluded.record WHERE episodes.feed_id = excluded.feed_id AND (episodes.pubdate IS NOT excluded.pubdate OR episodes.record IS NOT excluded.record)",
-                             [.integer(episode.id), .integer(feedID), .integer(try milliseconds(date)),
-                              .blob(try Self.encodeRecord(episode))])
+        let record = try Self.encodeRecord(episode), pubdate = try milliseconds(date)
+        func upsert(guarded: Bool) throws {
+            let allowed = guarded ? scope.allows("CAST(episodes.record AS TEXT)", "CAST(excluded.record AS TEXT)").map { " AND (\($0))" } ?? "" : ""
+            try database.execute("INSERT INTO episodes(id, feed_id, pubdate, record) VALUES (?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET pubdate = excluded.pubdate, record = excluded.record WHERE episodes.feed_id = excluded.feed_id AND (episodes.pubdate IS NOT excluded.pubdate OR episodes.record IS NOT excluded.record)\(allowed)",
+                                 [.integer(episode.id), .integer(feedID), .integer(pubdate), .blob(record)])
+        }
+        try upsert(guarded: true)
         if try database.scalar("SELECT changes()") != 1 {
-            // Unchanged is fine; a row owned by another feed is not.
-            guard try database.scalar("SELECT count(*) FROM episodes WHERE id = ? AND feed_id = ?",
-                                      [.integer(episode.id), .integer(feedID)]) == 1 else { throw FeedLibraryError.invalidMutation }
+            // Unchanged is fine; a row owned by another feed is not, and neither is a change outside the scope.
+            guard let row = try database.rows("SELECT feed_id, pubdate IS ? AND record IS ?, record FROM episodes WHERE id = ?",
+                                              [.integer(pubdate), .blob(record), .integer(episode.id)]).first,
+                  row[0].integer == feedID else { throw FeedLibraryError.invalidMutation }
+            if row[1].integer != 1 {
+                // The guard compares the stored JSON as written; a record written with another spelling of equal values is
+                // judged on its decoded values.
+                let stored: LibraryEpisode = try decode(row[2])
+                guard scope.allows(stored: stored, new: episode) else { throw FeedLibraryError.invalidMutation }
+                try upsert(guarded: false)
+            }
         }
     }
 
@@ -738,23 +913,9 @@ public actor FeedLibraryStore {
             try database.execute("INSERT INTO pending_effects(kind, record) VALUES (?, ?)",
                                  [.text(effect.kind.name), .blob(try JSONEncoder().encode(effect))])
         }
+        // Its consumer runs after this transaction (the store serializes it behind the commit).
+        if case .queueEpisodes = effect.kind { for listener in queueEffectListeners.values { listener.yield(()) } }
         if queueSync { try queueSynchronizationEffect(effect) }
-    }
-
-    private struct LoadedFeed {
-        /// `feed_changes` generations: `generation` (header or any episode), `episode_generation` (episode rows only).
-        struct Generation: Equatable { let feed: Int64, episodes: Int64 }
-        let generation: Generation; let feed: LibraryFeed; let episodeDigests: [Int64: RecordDigest]
-    }
-    /// Full-content hash and length of a stored record, so a changed feed keeps the decoded episodes whose bytes did not change.
-    private struct RecordDigest: Equatable {
-        let hash: Int, count: Int
-        init(_ data: Data) {
-            var hasher = Hasher()
-            data.withUnsafeBytes { hasher.combine(bytes: $0) }
-            hash = hasher.finalize()
-            count = data.count
-        }
     }
 
     /// Feed header and episode records: sorted keys make equal values encode to equal bytes (plain
@@ -765,12 +926,22 @@ public actor FeedLibraryStore {
         return try encoder.encode(value)
     }
 
-    /// An episode's stored record bytes, as `saveEpisode` writes them (for a conversion rewriting records directly).
-    static func encodedEpisodeRecord(_ episode: LibraryEpisode) throws -> Data { try encodeRecord(episode) }
+    /// An episode's stored record bytes, as `saveEpisode` writes them, for a conversion rewriting records directly:
+    /// `stored` is the record it replaces, read in the same transaction, whose details it must keep exactly.
+    static func encodedEpisodeRecord(_ episode: LibraryEpisode, replacing stored: LibraryEpisode) throws -> Data {
+        guard EpisodeWriteScope.userState.allows(stored: stored, new: episode) else { throw FeedLibraryError.invalidMutation }
+        return try encodeRecord(episode)
+    }
+    /// A new episode's record bytes (no stored record to keep), as `saveEpisode` writes them: tests writing rows directly.
+    static func newEpisodeRecord(_ episode: LibraryEpisode) throws -> Data { try encodeRecord(episode) }
+    /// A feed header's stored record bytes, as `saveHeader` writes them.
+    static func encodedFeedRecord(_ feed: LibraryFeed) throws -> Data { try encodeRecord(feed) }
 
     func decode<T: Decodable>(_ value: LibrarySQLValue) throws -> T {
         guard let data = value.data else { throw FeedLibraryError.corruptRecord }
-        return try JSONDecoder().decode(T.self, from: data)
+        recordsDecoded += 1
+        if T.self == LibraryEpisode.self { episodeRecordsDecoded += 1 }
+        return try JSONDecoder.libraryRecord(T.self, from: data)
     }
 
     func milliseconds(_ date: Date) throws -> Int64 {
@@ -779,5 +950,17 @@ public actor FeedLibraryStore {
             throw FeedLibraryError.invalidMutation
         }
         return Int64(value)
+    }
+}
+
+/// Work a store's connection did (`FeedLibraryStore.work`); the difference of two readings is what happened between them.
+struct StoreWork: Equatable, Sendable, CustomStringConvertible {
+    var recordsDecoded: Int, statements: Int, steps: Int64, pages: Int64, commits: Int
+    static func - (a: StoreWork, b: StoreWork) -> StoreWork {
+        .init(recordsDecoded: a.recordsDecoded - b.recordsDecoded, statements: a.statements - b.statements,
+              steps: a.steps - b.steps, pages: a.pages - b.pages, commits: a.commits - b.commits)
+    }
+    var description: String {
+        "\(recordsDecoded) records decoded, \(statements) statements, \(steps) VM steps, \(pages) pages, \(commits) commits"
     }
 }

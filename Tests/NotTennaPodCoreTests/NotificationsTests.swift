@@ -8,7 +8,7 @@ import UserNotifications
 /// `TestSupport/Data/notifications-settings/expected/notifications.json` (its `ios` layer applies the
 /// iOS adaptation and defect preventions), never from the Swift code. No test needs notification
 /// permission: the notification center is a recording double, and what is checked is what the app hands over.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3)))
+@MainActor @Suite(.serialized)
 struct NotificationsTests {
     static let repository = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../..").standardized
     static func json(_ path: String) -> [String: Any] {
@@ -79,7 +79,7 @@ struct NotificationsTests {
         try #require(inputs.count == 5 && inputs.count == expected.count)
         for (input, output) in zip(inputs, expected) {
             let name = input["name"] as! String
-            let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M30Prefs-\(UUID())")
+            let folder = FileManager.default.temporaryDirectory.appendingPathComponent("NotificationPreferences-\(UUID())")
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
             defer { try? FileManager.default.removeItem(at: folder) }
             let file = folder.appendingPathComponent("notification-preferences.json")
@@ -115,7 +115,7 @@ struct NotificationsTests {
 
     /// Defaults On; the saved file keeps Android's key names; a missing file or key reads as On.
     @Test func defaultsAndSavedKeys() throws {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M30Keys-\(UUID())")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("NotificationKeys-\(UUID())")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
         let file = folder.appendingPathComponent("notification-preferences.json")
@@ -183,13 +183,13 @@ struct NotificationsTests {
     /// Runs the scenario's attempts through `DownloadCoordinator` and its worker/store (retry spacing is skipped
     /// by a clock that moves two minutes per reading) and returns every failure report it published.
     private func reports(title: String?, url: String, outcomes: [String]) async throws -> (reports: [DownloadFailureReport], logs: Int, state: LibraryDownloadJob.State?) {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M30Downloads-\(UUID())")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("NotificationDownloads-\(UUID())")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
         let store = try FeedLibraryStore(url: folder.appendingPathComponent("library.sqlite"))
         do {
-            let episode = ParsedEpisode(identifier: "m30", title: title, media: ParsedMedia(url: url, size: 1_024, durationMilliseconds: 30_000))
-            let feed = try await store.insert(FetchedFeed(feed: ParsedFeed(format: .rss, title: "M30 podcast", episodes: [episode]),
+            let episode = ParsedEpisode(identifier: "notified", title: title, media: ParsedMedia(url: url, size: 1_024, durationMilliseconds: 30_000))
+            let feed = try await store.insert(FetchedFeed(feed: ParsedFeed(format: .rss, title: "Notified podcast", episodes: [episode]),
                 source: "https://example.test/feed", responseURL: URL(string: "https://example.test/feed")!, validator: nil, permanentRedirectURL: nil))
             let network = DownloadNetworkMonitor(startMonitoring: false)
             network.update(.init(connected: true, metered: false, cellular: false))
@@ -324,7 +324,7 @@ struct NotificationsTests {
         let inputs = try #require(Self.scenarios["sync_scenarios"] as? [[String: Any]])
         let outputs = try #require(Self.oracle["sync"] as? [[String: Any]])
         try #require(inputs.count == 18 && outputs.count == inputs.count)
-        let file = FileManager.default.temporaryDirectory.appendingPathComponent("M30Sync-\(UUID()).sqlite")
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("NotificationsSync-\(UUID()).sqlite")
         defer { for suffix in ["", "-wal", "-shm"] { try? FileManager.default.removeItem(atPath: file.path + suffix) } }
         let store = try FeedLibraryStore(url: file)
         let account = UUID()

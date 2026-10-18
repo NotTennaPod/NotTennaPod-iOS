@@ -79,7 +79,9 @@ extension ServerProjector {
 
     /// A podcast merged into `survivor` (PROTOCOL §9.7): without a feed of the survivor here, this feed becomes the survivor's;
     /// otherwise its episodes merge as above, the survivor's feed takes this feed's device-only settings when it has
-    /// none of its own, and this feed goes once nothing plays from it (a pinned removal, PROTOCOL §6.8).
+    /// none of its own, and this feed goes once nothing plays from it (a pinned removal, PROTOCOL §6.8). Every episode
+    /// merges inside this unit, its row moved or deleted, however many there are; only the emptied feed's removal can
+    /// come after it.
     func projectMergedPodcast(_ podcast: String, into survivor: String, feedID: Int64) throws {
         // The source's live generation joins the survivor's live class (PROTOCOL §9.7): its releases are the survivor
         // generation's; a closed source generation stays closed.
@@ -122,7 +124,7 @@ extension ServerProjector {
             guard let target = try localEpisode(survivorEpisode), target != local else { continue }
             try handOver(local, row: row, to: target, episode: survivorEpisode)
         }
-        try remove(feedID: feedID, podcast: podcast)
+        try remove(feedID: feedID, podcast: podcast, merged: true)
     }
 
     private func hasActiveJob(_ local: Int64) throws -> Bool {
@@ -260,9 +262,11 @@ struct ServerMergeRows: Sendable {
     var token: [Int64] = []
 }
 
-/// Deferred podcast merges completed in bounded steps (PROTOCOL §6.8): the candidates (merged podcasts whose
-/// feed is still here, not being removed) and whether each still waits are read on a connection of their own; each
-/// completion is one store unit. Candidates are durable state, so a relaunch continues where the steps stopped.
+/// Deferred podcast merges completed one podcast a step, at most `perExchange` an exchange (PROTOCOL §6.8): the
+/// candidates (merged podcasts whose feed is still here, not being removed) and whether each still waits are read on a
+/// connection of their own; each completion is one store unit, which merges every episode of its podcast and deletes or
+/// moves all of its rows (its work grows with the podcast; it is not split into bounded transactions). Candidates are
+/// durable state, so a relaunch continues where the steps stopped.
 enum ServerDeferredMerges {
     struct Candidate: Sendable, Equatable { var podcast: String; var feedID: Int64 }
 

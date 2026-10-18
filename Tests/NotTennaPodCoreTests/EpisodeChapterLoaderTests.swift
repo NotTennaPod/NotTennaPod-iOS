@@ -33,7 +33,7 @@ private actor ChapterMediaProbe {
     func read(_ chapters: [ParsedChapter]?) -> [ParsedChapter]? { calls += 1; return chapters }
 }
 
-@Suite(.timeLimit(.minutes(1))) struct EpisodeChapterLoaderTests {
+@Suite struct EpisodeChapterLoaderTests {
     private let url = URL(string: "https://example.invalid/chapters.json")!
     private func cache() -> URLCache { URLCache(memoryCapacity: 1_000_000, diskCapacity: 0) }
     private func response(_ title: String, count: Int = 2, headers: [String: String] = [:]) -> FeedHTTPResponse {

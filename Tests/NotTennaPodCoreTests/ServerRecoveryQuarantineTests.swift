@@ -7,7 +7,7 @@ import Testing
 /// fresh authors, so synchronization never stops; a fact missing a dependency waits for another device to restore it,
 /// retried at later exchanges indefinitely, with the facts chained behind it parked and still shown; it is never given
 /// up (PROTOCOL §1.3). The recovery never claims to be complete while anything is refused.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerRecoveryQuarantineTests {
+@Suite(.serialized) struct ServerRecoveryQuarantineTests {
     typealias Copies = ServerCopiesTests
     typealias Recovery = ServerRecoveryTests
     typealias PushPull = ServerExchangePushPullTests

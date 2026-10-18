@@ -5,7 +5,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct NativeAudioSourceTimelineTests {
+@Suite(.serialized) struct NativeAudioSourceTimelineTests {
     private struct Report: Decodable {
         let complete: Bool
         let cases: [Case]

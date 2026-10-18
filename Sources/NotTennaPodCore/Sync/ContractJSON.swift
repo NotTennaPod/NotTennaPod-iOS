@@ -163,6 +163,7 @@ extension ContractJSON {
     /// escapes, no unescaped control characters, no trailing data, at most 64 levels of nesting.
     public static func decode(_ data: some Sequence<UInt8>) throws -> ContractJSON {
         let bytes = Array(data)
+        SQLWorkMeter.shared.noteDecoded(bytes: bytes.count)
         guard ContractUTF8.isValid(bytes) else { throw ContractError(.invalidJSON, "invalid UTF-8") }
         return try bytes.withUnsafeBufferPointer { buffer in
             var parser = StrictJSONParser(bytes: buffer)

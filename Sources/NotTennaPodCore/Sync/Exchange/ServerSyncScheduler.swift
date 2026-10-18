@@ -4,12 +4,17 @@ import Foundation
 /// their own to check timing without a server.
 public protocol ServerExchangeDriving: AnyObject, Sendable {
     func exchange() async -> ServerExchangeReport
+    /// An exchange that may start or continue a snapshot download only when `snapshots` (not in a background app
+    /// refresh task, whose few seconds would cut a large download off).
+    func exchange(snapshots: Bool) async -> ServerExchangeReport
     func forceFullSynchronization() async -> ServerExchangeReport
     /// The stored state without an exchange (`ServerExchangeReport.stateOnly`).
     func storedState() async -> ServerExchangeReport
     /// Force full synchronization's request, persisted until a repair is published.
     func requestFullSynchronization() async
     func fullSynchronizationRequested() async -> Bool
+    /// What a Force full synchronization would download, estimated from the last download (nil: unknown).
+    func fullSynchronizationEstimate() async -> Int64?
     func resume() async throws
     /// Pauses the exchange for `reason` until `resume()` (PROTOCOL §6.11 `lineage_unknown` found by signing in again).
     func pause(_ reason: ServerPauseReason) async
@@ -22,14 +27,25 @@ public protocol ServerExchangeDriving: AnyObject, Sendable {
     func close() async
     /// Asks the server to refresh a podcast, or every one (`POST /v1/refresh`); never waited for.
     func requestServerRefresh(feedID: Int64?) async
+    /// An explicit retry of changes the server refused or found too large (PROTOCOL §6.13).
+    func retryRefusedChanges() async
 }
 
 extension ServerSyncEngine: ServerExchangeDriving {}
 
 extension ServerExchangeDriving {
+    public func exchange(snapshots: Bool) async -> ServerExchangeReport { await exchange() }
+    public func fullSynchronizationEstimate() async -> Int64? { nil }
     public func pause(_ reason: ServerPauseReason) async {}
     public func planNewInstallation() async -> ServerSignInInstallation? { nil }
     public func requestServerRefresh(feedID: Int64?) async {}
+    public func retryRefusedChanges() async {}
+}
+
+/// Why no exchange can run now (PROTOCOL §15.5): no network, or only mobile data that sync may not use.
+public enum ServerNetworkWait: Sendable, Equatable {
+    case offline
+    case mobileDataOff
 }
 
 /// Whether the network may be used for sync now (the "Synchronization" mobile-data preference), and when it
@@ -39,14 +55,24 @@ public protocol ServerSyncNetworkGate: Sendable {
     func changes() -> AsyncStream<Void>
     /// Whether sync may use an expensive (mobile) network at all; requests ask the system to refuse one otherwise.
     func allowsMobile() async -> Bool
+    /// Why sync may not use the network now; nil when it may.
+    func waitReason() async -> ServerNetworkWait?
+    /// Why a whole-library download (attach, Force full synchronization, a recovery's snapshot) may not use the network
+    /// now; nil when it may. Besides mobile data, Low Data Mode counts as a network sync's mobile-data preference
+    /// governs.
+    func bulkWaitReason() async -> ServerNetworkWait?
 }
 
 extension ServerSyncNetworkGate {
     public func allowsMobile() async -> Bool { true }
+    public func waitReason() async -> ServerNetworkWait? { await permitted() ? nil : .offline }
+    public func bulkWaitReason() async -> ServerNetworkWait? { await waitReason() }
+    public func permittedForBulk() async -> Bool { await bulkWaitReason() == nil }
 }
 
 /// The device's network through `DownloadNetworkMonitor`, with the mobile-data rule of gpodder.net sync: a metered
-/// network only when the "Synchronization" mobile-data preference allows it.
+/// network only when the "Synchronization" mobile-data preference allows it. Low Data Mode does not stop ordinary
+/// sync (positions and changes keep flowing); it is Android's metered network only for what Mobile updates govern.
 public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     let monitor: DownloadNetworkMonitor
     let allowMobile: @Sendable () async -> Bool
@@ -55,19 +81,57 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         self.monitor = monitor; self.allowMobile = allowMobile
     }
 
-    public func permitted() async -> Bool {
+    public func permitted() async -> Bool { await waitReason() == nil }
+
+    public func waitReason() async -> ServerNetworkWait? {
         // Not known yet (the monitor's first report): try; the requests themselves refuse an expensive network.
-        guard let network = monitor.current else { return true }
-        return DownloadNetworkConstraint(ignoreConstraints: false, allowMobile: await allowMobile()).permits(network)
+        guard let network = monitor.current else { return nil }
+        return Self.waitReason(network, allowMobile: await allowMobile())
+    }
+
+    static func waitReason(_ network: DownloadNetworkState, allowMobile: Bool) -> ServerNetworkWait? {
+        guard network.connected else { return .offline }
+        return allowMobile || !network.metered ? nil : .mobileDataOff
+    }
+
+    public func bulkWaitReason() async -> ServerNetworkWait? {
+        guard let network = monitor.current else { return nil }
+        return Self.bulkWaitReason(network, allowMobile: await allowMobile())
+    }
+
+    /// A whole-library download: on mobile data or in Low Data Mode only when the mobile-data preference allows sync.
+    static func bulkWaitReason(_ network: DownloadNetworkState, allowMobile: Bool) -> ServerNetworkWait? {
+        guard network.connected else { return .offline }
+        return allowMobile || (!network.metered && !network.constrained) ? nil : .mobileDataOff
     }
 
     public func allowsMobile() async -> Bool { await allowMobile() }
 
+    /// Only real changes: path updates repeating the same network and the same answer are not passed on (each would
+    /// retry an unreachable server).
     public func changes() -> AsyncStream<Void> {
         let changes = monitor.changes()
+        let allowMobile = allowMobile
         return AsyncStream { continuation in
-            let task = Task { for await _ in changes { continuation.yield(()) }; continuation.finish() }
+            let task = Task {
+                var filter = ChangeFilter()
+                for await network in changes {
+                    let wait = Self.waitReason(network, allowMobile: await allowMobile())
+                    if filter.isChange(network, wait) { continuation.yield(()) }
+                }
+                continuation.finish()
+            }
             continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    /// The last network and answer passed on.
+    struct ChangeFilter {
+        private var last: (network: DownloadNetworkState, wait: ServerNetworkWait?)?
+        mutating func isChange(_ network: DownloadNetworkState, _ wait: ServerNetworkWait?) -> Bool {
+            if let last, last.network == network, last.wait == wait { return false }
+            last = (network, wait)
+            return true
         }
     }
 }
@@ -92,8 +156,11 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     public struct Timing: Sendable {
         public var debounce: Duration = .seconds(2)
         public var polling: Duration = .seconds(60)
-        /// The first reconnection of a dropped event stream; it doubles up to `polling`.
+        /// The first reconnection of a dropped event stream; it doubles up to `polling` while connections stay short.
         public var reconnect: Duration = .seconds(5)
+        /// A connection up this long (past its first head; the server's heartbeat is every 25 s) was stable: the
+        /// reconnection backoff starts again from `reconnect`.
+        public var stableAfter: Duration = .seconds(30)
         public var reloadInterval: Duration = .seconds(1)
         public init() {}
     }
@@ -107,8 +174,12 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     public struct Callbacks {
         /// After every exchange (the page's status, the sync log's reach, background-task scheduling).
         public var reported: @MainActor (ServerExchangeReport) -> Void = { _ in }
-        /// Rows the screens show changed; at most once per `Timing.reloadInterval`.
-        public var libraryChanged: @MainActor () -> Void = {}
+        /// Rows the screens show changed: the union of the exact change sets since the last call, never empty; at most
+        /// once per `Timing.reloadInterval`.
+        public var libraryChanged: @MainActor (LibraryChangeSet) -> Void = { _ in }
+        /// What a paused player's adoption depends on changed: told at once, and after every exchange that applied a
+        /// unit (a backstop). The app checks adoption.
+        public var positionKnowledge: @MainActor (LibraryPositionKnowledge) -> Void = { _ in }
         /// Feeds or episodes were deleted: their files go through the feed-deletion coordinator.
         public var feedsDeleted: @MainActor () -> Void = {}
         public var accountPoliciesChanged: @MainActor () -> Void = {}
@@ -118,6 +189,13 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         public var releasesArrived: @MainActor () -> Void = {}
         /// Podcasts merged (PROTOCOL §9.7): their per-feed speed and skip silence go to the survivors.
         public var feedsMerged: @MainActor () -> Void = {}
+        /// Why no exchange can run now, or nil once one may (PROTOCOL §15.5): told when it changes, from the network's
+        /// changes as well as from an exchange that could not start. Apart from `reported`, so it never stands for an
+        /// exchange's result (a pause, a successful synchronization, the unsent changes).
+        public var networkWaitChanged: @MainActor (ServerNetworkWait?) -> Void = { _ in }
+        /// Work started (an exchange, or a push waiting for the debounce): in the background it asks for granted time
+        /// (`BackgroundWorkGrant.workStarted`), so a push started there, a pause on the lock screen's, is not cut off.
+        public var workStarted: @MainActor () -> Void = {}
         public init() {}
     }
 
@@ -145,6 +223,8 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     public private(set) var hintsConnected = false
     /// The pause that stops every trigger until `resume()`.
     public private(set) var pause: ServerPauseReason?
+    /// Why no exchange can run now (`Callbacks.networkWaitChanged`).
+    public private(set) var networkWait: ServerNetworkWait?
 
     private var started = false
     /// Granted background time ended with no scene active and no audio keeping the app running: triggers are
@@ -166,6 +246,8 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     /// audio plays too if within the background budget.
     private var waitingForBackground = false
     private var waitingForNetwork = false
+    /// The background task running now, if any: a refresh task never starts or continues a snapshot download.
+    private var backgroundWork: BackgroundWork?
     /// The last known answer of the network gate: hints connect only on a permitted network.
     private var networkAllowed = false
     private var knownHead: ServerHead?
@@ -177,6 +259,19 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     private var retry: Task<Void, Never>?
     private var poller: Task<Void, Never>?
     private var hintTask: Task<Void, Never>?
+    /// Which hint task owns the hints: every start and stop moves it on, so a stopped or replaced task (one still waiting
+    /// for the gate's answer, say) never changes its successor's state, never connects, and never leaves a stream that
+    /// `stopHints` cannot end. Exactly one live hint stream per scheduler.
+    private var hintGeneration = 0
+    /// The connection attempt in progress (its first head's time once connected): whoever ends it counts it in the backoff,
+    /// the owning task when the stream ends by itself, `stopHints` when the scheduler ends it.
+    private struct HintAttempt { var connectedAt: ContinuousClock.Instant? }
+    private var hintAttempt: HintAttempt?
+    /// The event stream's reconnection backoff, kept across network changes while this scheduler runs: the next
+    /// delay after a short connection (nil: `reconnect`), and no reconnection before `reconnectNotBefore`. A stable
+    /// connection, a new foreground period and a resumption start it again; another library has its own scheduler.
+    private var reconnectDelay: Duration?
+    private var reconnectNotBefore: ContinuousClock.Instant?
     private var watchers: [Task<Void, Never>] = []
     private var reloadTimer: Task<Void, Never>?
     private var lastReload: ContinuousClock.Instant?
@@ -186,10 +281,14 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     /// `eligibility`: the engine's, moved on at every foreground and playback transition.
     public init(engine: any ServerExchangeDriving, hints: (any ServerChangeHintSource)?, outbox: (@Sendable () async -> AsyncStream<Void>)?,
                 network: any ServerSyncNetworkGate, timing: Timing = .init(), callbacks: Callbacks = .init(),
-                eligibility: ServerPublicationEligibility? = nil) {
+                eligibility: ServerPublicationEligibility? = nil, snapshotsNeedForeground: Bool = false) {
         self.engine = engine; self.hints = hints; self.outbox = outbox; self.network = network
         self.timing = timing; self.callbacks = callbacks; self.eligibility = eligibility
+        self.snapshotsNeedForeground = snapshotsNeedForeground
     }
+
+    /// Snapshot downloads only in the foreground or a processing task (the app); tests drive the scheduler without scenes.
+    private let snapshotsNeedForeground: Bool
 
     private let eligibility: ServerPublicationEligibility?
 
@@ -211,7 +310,8 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
             for await event in await engine.events() {
                 guard let self else { return }
                 switch event {
-                case .libraryChanged: self.libraryChangedSoon()
+                case .libraryChanged(let set): self.libraryChangedSoon(set)
+                case .positionKnowledge(let knowledge): self.callbacks.positionKnowledge(knowledge)
                 case .feedsDeleted: self.callbacks.feedsDeleted()
                 case .accountPoliciesChanged: self.callbacks.accountPoliciesChanged()
                 case .releases: self.callbacks.releasesArrived()
@@ -272,6 +372,7 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         if value {
             expedited = false
             unpark()
+            resetReconnection()
             startHints()
             callbacks.releasesArrived()
             trigger(.activation)
@@ -322,7 +423,7 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
                 self?.trigger(.retry)
             }
         }
-        if !pending.isEmpty, loop == nil, !pending.allSatisfy(backingOff) { loop = Task { [weak self] in await self?.run() } }
+        if !pending.isEmpty, loop == nil, !pending.allSatisfy(backingOff) { startLoop() }
     }
 
     /// The player's state (PROTOCOL §6.8): units are paced and large publications wait while it plays; a pause or stop runs
@@ -355,6 +456,7 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
             self?.debounce = nil
             self?.trigger(.localChange)
         }
+        callbacks.workStarted()
     }
 
     /// "Synchronize now" (PROTOCOL §6.14): pushes, then pulls, now. A server that needed updating is tried again.
@@ -369,6 +471,8 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     public func synchronizeNow() async -> ServerExchangeReport? {
         await engine.note("requested", "synchronize now")
         if lastReport?.pause == .versionUnsupported { await resumeEngine() }
+        // What the server refused or found too large is tried once more (PROTOCOL §6.13).
+        await engine.retryRefusedChanges()
         return await runRequested()
     }
 
@@ -378,13 +482,18 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     @discardableResult
     public func forceFullSynchronization() async -> ServerExchangeReport? {
         await engine.note("requested", "force full synchronization")
-        // An explicit retry of what a server that needed updating refused.
+        // An explicit retry of what a server that needed updating refused, or found too large.
         if lastReport?.pause == .versionUnsupported { await resumeEngine() }
+        await engine.retryRefusedChanges()
         await engine.requestFullSynchronization()
         fullRequested = true
         fullWaiting = false
         return await runRequested()
     }
+
+    /// The size the Force full synchronization confirmation names: the last download's, scaled to the library now; nil
+    /// when nothing was downloaded into this library yet. A download already kept counts as done.
+    public func fullSynchronizationEstimate() async -> Int64? { await engine.fullSynchronizationEstimate() }
 
     /// The person's sign-in found the account without this library's history (PROTOCOL §6.11 `lineage_unknown`): sync pauses
     /// until the person signs in again or starts over.
@@ -402,6 +511,7 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
     /// The person signed in again, or the server or app was updated: sync continues.
     public func resume() async {
         await resumeEngine()
+        resetReconnection()
         startHints()
         trigger(.requested)
     }
@@ -417,12 +527,14 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
             pending.insert(.background)
             return false
         }
+        backgroundWork = work
+        defer { backgroundWork = nil }
         // A processing task continues while the heavy work advances; playing audio (it may run then) or a failure
         // leaves it for later.
         for _ in 0..<(work == .processing ? 8 : 1) {
             let before = exchangesRun
             pending.insert(.background)
-            if loop == nil { loop = Task { [weak self] in await self?.run() } }
+            if loop == nil { startLoop() }
             await loop?.value
             if Task.isCancelled || exchangesRun == before { return false }
             guard work == .processing, needsProcessingTime, !playing,
@@ -445,6 +557,8 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
 
     /// A push waits for the debounce (tests).
     var debouncing: Bool { debounce != nil }
+    /// No reconnection of the change hints before this instant (tests).
+    var hintReconnectionNotBefore: ContinuousClock.Instant? { reconnectNotBefore }
     /// Triggers waiting for the next exchange (tests).
     var pendingTriggers: Set<Trigger> { pending }
 
@@ -468,9 +582,13 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         if reason == .poll || reason == .hint, !foreground { return }
         pending.insert(reason)
         guard loop == nil, !parked, !backingOff(reason) else { return }
-        loop = Task { [weak self] in
-            await self?.run()
-        }
+        startLoop()
+    }
+
+    /// Runs what is pending; in the background the work asks for granted time.
+    private func startLoop() {
+        loop = Task { [weak self] in await self?.run() }
+        callbacks.workStarted()
     }
 
     /// Runs an exchange that starts after this call (after a running one) and returns its report; nil when none
@@ -481,7 +599,7 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         let before = exchangesRun
         // A pause stops automatic triggers, not what the person asks for: the report says why nothing happened.
         pending.insert(.requested)
-        if loop == nil { loop = Task { [weak self] in await self?.run() } }
+        if loop == nil { startLoop() }
         await loop?.value
         return exchangesRun > before ? lastReport : nil
     }
@@ -491,16 +609,22 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         while !pending.isEmpty, !Task.isCancelled, !parked {
             // Triggers that arrived during a failed exchange wait for its retry deadline (the retry timer runs them).
             if pending.allSatisfy(backingOff) { return }
+            // A recovery waiting for playback to pause (its snapshot download or switch) is not asked again at every
+            // hint, poll or local change while audio plays: those wait for the pause (a recovery holds pushes and pulls
+            // anyway).
+            if recoveryWaitsForPause, pending.isDisjoint(with: Self.runsWaitingRecovery) { return }
             let reasons = pending
             pending.removeAll()
-            guard await network.permitted() else {
-                // Mobile data not allowed, or no network: the network's return runs it.
+            if let wait = await network.waitReason() {
+                // Mobile data not allowed, or no network: the network's return runs it, and the page says why meanwhile.
                 waitingForNetwork = true
                 networkAllowed = false
                 stopHints()
+                setNetworkWait(wait)
                 return
             }
             waitingForNetwork = false
+            setNetworkWait(nil)
             retry?.cancel(); retry = nil
             isExchanging = true
             exchangesRun += 1
@@ -509,8 +633,12 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
             // A waiting repair is not staged again on every trigger: only when it may run now.
             let mayRun: Set<Trigger> = waitingForBackground ? [.requested, .background, .backgrounded, .launch]
                 : [.requested, .playbackPaused, .background, .backgrounded, .launch]
-            let full = fullRequested && !fullRefused && (!fullWaiting || !reasons.isDisjoint(with: mayRun))
-            let report = full ? await engine.forceFullSynchronization() : await engine.exchange()
+            // A background app refresh task has seconds: it never starts (or continues) a snapshot download, whatever
+            // triggers are pending; nor does background time that is not a processing task, when the app says so.
+            let snapshots = snapshotsAllowed
+            let full = fullRequested && !fullRefused && (!fullWaiting || !reasons.isDisjoint(with: mayRun)) && snapshots
+            let report = full ? await engine.forceFullSynchronization()
+                : snapshots ? await engine.exchange() : await engine.exchange(snapshots: false)
             isExchanging = false
             handle(report, full: full)
         }
@@ -520,11 +648,23 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         lastReport = report
         // Owed notifications are retried after every exchange, whether or not it brought releases.
         if !report.cancelled { callbacks.releasesArrived() }
+        // A backstop for adoption: after an exchange that applied something, the player's episode is checked.
+        if report.appliedUnits > 0 { callbacks.positionKnowledge(LibraryPositionKnowledge(all: true)) }
         if let head = report.head { knownHead = head }
-        // A request refused because sync may not use this network: the network's return runs it again.
-        if report.networkNotPermitted { waitingForNetwork = true }
+        // A request refused because sync may not use this network: the network's return runs it again, and the page
+        // says why meanwhile.
+        if report.networkNotPermitted {
+            waitingForNetwork = true
+            let network = network
+            Task { [weak self] in
+                guard let wait = await network.waitReason(), let self, self.started else { return }
+                self.setNetworkWait(wait)
+            }
+        }
         // A Force full synchronization that was published is done (the engine cleared its request with it); one
         // that waits or failed stays requested and runs when it may.
+        // A repair waiting for a network its download may use runs when the network changes.
+        if report.fullSynchronizationWaitsForNetwork != nil { waitingForNetwork = true }
         if full {
             if report.reprojected { fullRequested = false; fullWaiting = false }
             else if report.waitingForPause || report.waitingForBackground { fullWaiting = true }
@@ -579,6 +719,21 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         callbacks.reported(report)
     }
 
+    /// Whether an exchange now may start or continue a snapshot download: never within a background app refresh task;
+    /// with `snapshotsNeedForeground`, only in the foreground or a processing task (so the launch of an app started in
+    /// the background for a refresh task downloads nothing either).
+    var snapshotsAllowed: Bool {
+        guard backgroundWork != .refresh else { return false }
+        return !snapshotsNeedForeground || foreground || backgroundWork == .processing
+    }
+
+    /// Triggers that run an exchange while a recovery waits for playback to pause.
+    static let runsWaitingRecovery: Set<Trigger> = [.requested, .playbackPaused, .background, .backgrounded, .launch]
+
+    private var recoveryWaitsForPause: Bool {
+        playing && lastReport?.recovery == .running && lastReport?.waitingForPause == true
+    }
+
     /// Whether `reason` waits for the retry deadline: every automatic trigger does; what the person asks for, a
     /// background task, the deadline itself and the network's return after it was unreachable do not.
     private func backingOff(_ reason: Trigger) -> Bool {
@@ -603,9 +758,13 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
 
     /// A prohibited network stops the hints and the running exchange at once (it is cancelled, never a success);
     /// a permitted one starts them again and runs what waited for it.
+    /// What the page shows meanwhile follows the network too, also when nothing waits to be sent (PROTOCOL §15.5).
     private func networkChanged() async {
         guard started else { return }
-        if await network.permitted() {
+        let wait = await network.waitReason()
+        guard started else { return }
+        setNetworkWait(wait)
+        if wait == nil {
             networkAllowed = true
             startHints()
             if waitingForNetwork || lastReport?.unreachable == true { trigger(.network) }
@@ -620,47 +779,100 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
         }
     }
 
+    private func setNetworkWait(_ wait: ServerNetworkWait?) {
+        // A stopped scheduler (its library closed) tells nothing any more.
+        guard started, wait != networkWait else { return }
+        networkWait = wait
+        callbacks.networkWaitChanged(wait)
+    }
+
     // MARK: - Change hints
 
     private func startHints() {
         guard started, foreground, pause == nil, networkAllowed, !parked, hintTask == nil else { return }
         guard let hints else { startPolling(); return }
-        let reconnect = timing.reconnect, polling = timing.polling
+        hintGeneration &+= 1
+        let generation = hintGeneration
         hintTask = Task { [weak self] in
-            var delay = reconnect
-            while !Task.isCancelled {
-                // Every (re)connection asks the gate first: no hint stream over a prohibited network.
-                guard let network = self?.network, await network.permitted(), !Task.isCancelled else {
+            while self?.ownsHints(generation) == true {
+                // A reconnection waits for the backoff, also when the network went and came back meanwhile; polling
+                // covers the wait.
+                if let deadline = self?.reconnectNotBefore, let now = self?.clock.now, now < deadline {
+                    self?.startPolling()
+                    do { try await Task.sleep(until: deadline, clock: .continuous) } catch { return }
+                    guard self?.ownsHints(generation) == true else { return }
+                }
+                // Every (re)connection asks the gate first: no hint stream over a prohibited network. An answer that
+                // arrives after this task was stopped or replaced changes nothing.
+                guard let network = self?.network else { return }
+                let permitted = await network.permitted()
+                guard self?.ownsHints(generation) == true else { return }
+                guard permitted else {
                     self?.hintTask = nil; self?.hintsConnected = false
                     return
                 }
+                self?.hintAttempt = HintAttempt()
                 do {
                     for try await head in hints.hints() {
-                        guard let self else { return }
+                        guard let self, self.ownsHints(generation) else { break }
+                        if self.hintAttempt?.connectedAt == nil { self.hintAttempt?.connectedAt = self.clock.now }
                         self.hintsConnected = true
                         self.stopPolling()
-                        delay = reconnect
                         if head != self.knownHead { self.trigger(.hint) }
                     }
                 } catch ServerChangeHintError.unsupported {
                     // An older server: polling for as long as the scene is active.
-                    self?.hintsConnected = false
-                    self?.startPolling()
+                    guard let self, self.ownsHints(generation) else { return }
+                    self.hintAttempt = nil
+                    self.hintsConnected = false
+                    self.startPolling()
                     return
                 } catch ServerChangeHintError.rejected {
                     // The token stopped being valid: the exchange finds the pause; polling continues meanwhile.
-                    self?.trigger(.hint)
+                    if let self, self.ownsHints(generation) { self.trigger(.hint) }
                 } catch {}
-                guard let self, !Task.isCancelled else { return }
+                // Ended by itself (dropped, refused): the backoff counts it. Ended by `stopHints`: counted there.
+                guard let self, self.ownsHints(generation) else { return }
+                self.hintStreamEnded()
                 self.hintsConnected = false
                 self.startPolling()
-                do { try await Task.sleep(for: delay) } catch { return }
-                delay = min(delay * 2, polling)
             }
         }
     }
 
+    /// Whether the running hint task, started as `generation`, still owns the hints.
+    private func ownsHints(_ generation: Int) -> Bool { hintGeneration == generation && !Task.isCancelled }
+
+    /// A connection that stayed up `stableAfter` past its first head starts the backoff again (the next reconnection
+    /// after `reconnect`); any shorter one, a failed connection included, waits the delay and doubles it, up to
+    /// `polling` (5, 10, 20, 40, 60 s). Heartbeats are not heads: only the stream's own time up counts.
+    private func hintStreamEnded() {
+        guard let attempt = hintAttempt else { return }
+        hintAttempt = nil
+        let connectedAt = attempt.connectedAt
+        let now = clock.now
+        let delay: Duration
+        if let connectedAt, connectedAt.duration(to: now) >= timing.stableAfter {
+            delay = timing.reconnect
+            reconnectDelay = nil
+        } else {
+            delay = reconnectDelay.map { min($0 * 2, timing.polling) } ?? timing.reconnect
+            reconnectDelay = delay
+        }
+        reconnectNotBefore = now + delay
+    }
+
+    /// A new foreground period or a resumption: the hints connect at once, with the backoff from its start.
+    private func resetReconnection() {
+        reconnectDelay = nil
+        reconnectNotBefore = nil
+    }
+
     private func stopHints() {
+        // The attempt in progress ends now and counts at once, so what follows (a new foreground period resetting the
+        // backoff, a replacement) sees it; the stopped task changes nothing afterwards.
+        hintStreamEnded()
+        hintGeneration &+= 1
         hintTask?.cancel(); hintTask = nil
         hintsConnected = false
         stopPolling()
@@ -682,7 +894,12 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
 
     // MARK: - Screens (PROTOCOL §6.8: at most one reload a second during catch-up)
 
-    private func libraryChangedSoon() {
+    /// The change sets waiting for the next delivery, as one union.
+    private var pendingChanges: LibraryChangeSet?
+
+    private func libraryChangedSoon(_ set: LibraryChangeSet) {
+        guard !set.isEmpty else { return }
+        pendingChanges = pendingChanges.map { $0.union(set) } ?? set
         guard reloadTimer == nil else { return }
         let now = clock.now
         if let last = lastReload, last.duration(to: now) < timing.reloadInterval {
@@ -691,12 +908,17 @@ public struct DownloadNetworkSyncGate: ServerSyncNetworkGate {
                 do { try await Task.sleep(for: wait) } catch { return }
                 guard let self, !Task.isCancelled else { return }
                 self.reloadTimer = nil
-                self.lastReload = self.clock.now
-                self.callbacks.libraryChanged()
+                self.deliverChanges()
             }
             return
         }
-        lastReload = now
-        callbacks.libraryChanged()
+        deliverChanges()
+    }
+
+    private func deliverChanges() {
+        guard let changes = pendingChanges else { return }
+        pendingChanges = nil
+        lastReload = clock.now
+        callbacks.libraryChanged(changes)
     }
 }

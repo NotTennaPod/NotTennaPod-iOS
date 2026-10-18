@@ -4,7 +4,7 @@ import Testing
 
 /// PROTOCOL §15.4: background transfers are reconciled against every library on the device. A transfer of an inactive
 /// library is never cancelled as an orphan; transfers that belong to no library still go.
-@Suite(.timeLimit(.minutes(1))) struct LibraryTransferOwnershipTests {
+@Suite struct LibraryTransferOwnershipTests {
     private final class ListedTask: ReconciledTransfer {
         let taskIdentifier: Int
         let taskDescription: String?

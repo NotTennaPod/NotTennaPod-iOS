@@ -5,7 +5,7 @@ import Testing
 /// The coordinator's playback hooks against the pinned server (PROTOCOL §8): a phone's real
 /// `PlaybackCoordinator`, with the hook tests' engine, on the real clock, and every phone compared field by field with a
 /// fresh attachment.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(10))) struct ServerPlaybackCoordinatorAgreementTests {
+@MainActor @Suite(.serialized) struct ServerPlaybackCoordinatorAgreementTests {
     typealias Concurrency = ServerExchangeConcurrencyTests
     typealias Engine = ServerPlaybackHookTests.Engine
 

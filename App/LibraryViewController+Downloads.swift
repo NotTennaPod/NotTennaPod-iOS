@@ -7,29 +7,13 @@ extension LibraryViewController {
         if case .destination(.downloads) = path.last { return downloadPreferences?.value.buttonActionPlay != true }
         return false
     }
+    /// DownloadsList lists downloaded episodes and those of active jobs: read from the kept downloaded set and the
+    /// active jobs' addresses, proportional to the downloads, never to the library.
     func downloadsRows() -> [(LibraryFeed, LibraryEpisode)] {
-        // DownloadsList lists downloaded episodes and those of active jobs; only those are gathered, so a large
-        // library is not copied on every download update.
-        let jobs = downloads?.jobs ?? []
-        let active = jobs.filter { $0.state.isActive }.map(\.source)
-        // A string set finds candidates without copying every address; equal code units always hash equal, and
-        // the code-unit comparison keeps the exact source match.
-        let sources = Set(active)
-        func activeSource(_ url: String?) -> Bool {
-            guard !active.isEmpty, let url, sources.contains(url) else { return false }
-            return active.contains { $0.utf16.elementsEqual(url.utf16) }
-        }
-        let candidates = feeds.flatMap { feed in
-            feed.episodes.filter { episode in
-                episode.userState.isDownloaded || activeSource(episode.details.media?.url)
-            }
-        }
-        return DownloadsList.episodes(candidates, jobs: jobs, order: downloadPreferences?.value.listSortOrder)
-            .compactMap { episode in libraryEpisode(episode.id).map { ($0.feed, episode) } }
+        mirror.downloads(jobs: downloads?.jobs ?? [], order: downloadPreferences?.value.listSortOrder).compactMap { libraryEpisode($0) }
     }
     func renderDownloads(heading: UILabel) {
-        let rows = downloadsRows()
-        feedSelectionIDs = rows.map { $0.1.id }
+        let rows = openCollectionList(.downloads)
         if rows.isEmpty { downloadsEmpty() } else { episodes(rows) }
         let layout = toolbarLayout(hasOverflow: true, hasPrimaryAction: true, hasSecondaryAction: true)
         heading.frame = layout.title
@@ -66,23 +50,26 @@ extension LibraryViewController {
     private func showDownloadsSort() {
         guard let downloadPreferences else { return }
         let editor = FeedSortEditor(selection: DownloadsList.order(downloadPreferences.value.listSortOrder), local: false,
-            includesGlobal: false, fields: DownloadsList.sortFields, save: { order in
+            includesGlobal: false, fields: DownloadsList.sortFields, save: { [weak self] order in
                 var value = downloadPreferences.value; value.listSortOrder = order
                 try downloadPreferences.update(value)
+                // A preference, not a library change: the open list is sorted again here, as the Inbox sort sheet does.
+                self?.render()
             })
         presentFeedSort(editor)
     }
     private func confirmDeletePlayedDownloads() {
-        guard let library else { return }
+        guard library != nil else { return }
         present(SourceMessageController(title: Appearance.text("delete_downloads_played"), message: Appearance.text("delete_downloads_played_confirmation"),
             positive: .init(title: Appearance.text("confirm_label"), identifier: "downloadsDeletePlayedConfirm", perform: { [weak self] in
                 Task {
-                    do {
-                        let snapshot = try await library.snapshot()
-                        let ids = DownloadsList.playedDownloadIDs(snapshot.feeds.flatMap(\.episodes))
-                        guard !ids.isEmpty else { return }
-                        self?.performEpisodeListAction(.delete, ids: ids, selection: true)
-                    } catch { self?.showError(error) }
+                    // The downloaded episodes the screens keep, current to every commit (proportional to the downloads,
+                    // not the library).
+                    guard let self else { return }
+                    await self.settleLibraryChanges()
+                    let ids = DownloadsList.playedDownloadIDs(self.mirror.downloadedIDs.sorted().compactMap { self.mirror.episode($0)?.episode })
+                    guard !ids.isEmpty else { return }
+                    self.performEpisodeListAction(.delete, ids: ids, selection: true)
                 }
             }, performAfterDismiss: true),
             negative: .init(title: Appearance.text("cancel_label"), identifier: "downloadsDeletePlayedCancel")), animated: true)
@@ -96,14 +83,14 @@ extension LibraryViewController {
                 guard try await library.episode(id: episodeID) != nil, let downloads else { return }
                 let decision = try await downloads.request(episodeID: episodeID)
                 handleDownloadDecision(decision, episodeID: episodeID)
-            } else if let feed = try await library.feed(id: entry.feedID), let manualRefresh {
+            } else if let feed = try await library.listedFeedHeader(id: entry.feedID), let manualRefresh {
                 let accepted = manualRefresh.runOnce(feedID: feed.id, isLocalFeed: feed.source.isLocalFeedSource)
                 _ = try await accepted.value
             }
         }, openFeed: { [weak self] id in
             Task { [weak self] in
                 do {
-                    guard let self, let feed = try await library.feed(id: id) else { return }
+                    guard let self, let feed = try await library.listedFeedHeader(id: id) else { return }
                     if feed.subscriptionState == .subscribed { await openNotification(.feed(id)) }
                     else { showPreview(id, recoveredBySearch: false) }
                 } catch { self?.showError(error) }
@@ -136,8 +123,8 @@ extension LibraryViewController {
         Task { [weak self] in
             do {
                 let feedID = try await library.feedID(forEpisode: episodeID)
-                guard let feed = try await library.feed(id: feedID),
-                      let episode = feed.episodes.first(where: { $0.id == episodeID }), episode.details.media != nil else { return }
+                guard let feed = try await library.listedFeedHeader(id: feedID), try await library.feedID(forEpisode: episodeID) == feedID,
+                      let episode = try await library.episode(id: episodeID), episode.details.media != nil else { return }
                 let currentlyPlaying = self?.playback?.episode?.id == episodeID && self?.playback?.wantsPlayback == true
                 if currentlyPlaying {
                     try await self?.playback?.toggle(episodeID: episodeID)

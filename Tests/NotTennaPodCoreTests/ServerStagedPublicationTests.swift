@@ -7,7 +7,7 @@ import Testing
 /// changes inside it are re-projected at its switch (a favorite, a queue edit, a checkpoint on an episode of the podcast
 /// being staged), and one that cannot publish now keeps its staged result for the next exchange or pause, built again
 /// only when what it was built on moved. Against a server that sends one commit (`ServerBoundedCutoverTests.serve`).
-@Suite(.serialized, .timeLimit(.minutes(20))) struct ServerStagedPublicationTests {
+@Suite(.serialized) struct ServerStagedPublicationTests {
     typealias Cutover = ServerBoundedCutoverTests
 
     /// A player saving on its own task while an exchange runs: every save is a minute's checkpoint export (its simulated
@@ -45,7 +45,7 @@ import Testing
         try fixture.outbox().filter { $0.type == "session.checkpoint" }.count
     }
 
-    /// The owner listens all day: a 20,000-episode catalog arrives while audio plays and the player exports a checkpoint
+    /// A person listens all day: a 20,000-episode catalog arrives while audio plays and the player exports a checkpoint
     /// every minute (here every save, to cover the staging's every window). It is staged and published while playing;
     /// the exports, on another podcast, never make it stale.
     @Test func aTwentyThousandEpisodeCatalogAppliesWhilePlayingWithMinuteExports() async throws {

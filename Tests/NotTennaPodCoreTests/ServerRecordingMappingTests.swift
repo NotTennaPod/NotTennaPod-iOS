@@ -563,12 +563,12 @@ struct ServerRecordingMappingTests {
 }
 
 extension FeedLibraryStore {
-    /// Projects a value onto an episode as pulled records do (`.remote`).
+    /// Projects a value onto an episode as pulled records do (`.remote`): any field, metadata as well as user state.
     func projectForTesting(_ id: Int64, _ change: @Sendable (inout LibraryEpisode) -> Void) throws {
         try write(.remote) {
             guard var episode = try loadEpisode(id) else { return }
             change(&episode)
-            try saveEpisode(episode, feedID: feedID(forEpisode: id))
+            try saveEpisode(episode, feedID: feedID(forEpisode: id), scope: .metadata)
         }
     }
 
@@ -589,4 +589,40 @@ final class MemoryCredentialVault: SynchronizationCredentialStore, @unchecked Se
     }
     func remove(id: UUID) throws { _ = lock.withLock { values.removeValue(forKey: id) } }
     func contains(_ id: UUID) -> Bool { lock.withLock { values[id] != nil } }
+}
+
+// MARK: - Facts the server never accepts (PROTOCOL §6.13)
+
+extension ServerRecordingMappingTests {
+    /// A sort whose `queue.reorder` would be larger than the server accepts is refused, random or not, never split: the
+    /// queue stays as it was and nothing is recorded. Under the bound the same sort is one fact.
+    @Test(arguments: [QueueSortOrder.episodeTitleAZ, .random])
+    func aSortTooLargeForTheServerIsRefusedAndChangesNothing(order: QueueSortOrder) async throws {
+        let fixture = try await ServerLibraryFixture()
+        do {
+            let store = fixture.store
+            let ids = try await fixture.subscribeRegistered(ServerLibraryFixture.fetched(count: 60)).feed.episodes.map(\.id).sorted()
+            _ = try await store.enqueue(ids.reversed())
+            let queue = try await store.queue().map(\.id)
+            let keys = try fixture.queueKeys().map(\.key)
+            let before = try fixture.outboxCount()
+            await store.setServerFactBoundForTesting(8 << 10)
+            var refused: ServerRecordingError?
+            do { _ = try await store.reorderQueue(order) } catch let error as ServerRecordingError { refused = error }
+            guard case .factTooLarge(let type, let bytes)? = refused else {
+                Issue.record("the sort was not refused: \(String(describing: refused))")
+                await fixture.close(); return
+            }
+            #expect(type == "queue.reorder" && bytes > 8 << 10)
+            #expect(try await store.queue().map(\.id) == queue, "the queue is unchanged")
+            #expect(try fixture.queueKeys().map(\.key) == keys)
+            #expect(try fixture.outboxCount() == before, "nothing recorded")
+            await store.setServerFactBoundForTesting(nil)
+            _ = try await store.reorderQueue(order)
+            let facts = try fixture.newFacts(after: before)
+            #expect(facts.map(\.type) == ["queue.reorder"], "one fact under the bound")
+            #expect(facts.first?.payload["observed"]?.arrayValue?.count == 60)
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
 }

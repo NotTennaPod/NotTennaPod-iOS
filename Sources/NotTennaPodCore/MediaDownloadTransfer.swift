@@ -131,7 +131,9 @@ public final class MediaDownloadTransfer: Sendable {
         if representation == nil || representation?.total.map({ offset > $0 }) == true { offset = 0; representation = nil }
         var expectedTotal = offset > 0 ? representation?.total : nil
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30)
+        // UNMETERED: neither an expensive nor a Low Data network, as the background session's requests.
         request.allowsExpensiveNetworkAccess = input.networkConstraint == .connected
+        request.allowsConstrainedNetworkAccess = input.networkConstraint == .connected
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         request.setValue("identity", forHTTPHeaderField: "Accept-Encoding")
         request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")

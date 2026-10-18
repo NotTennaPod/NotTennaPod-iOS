@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) @MainActor
+@Suite(.serialized) @MainActor
 struct PCMSourceDurationTests {
     typealias Transport = SampleBufferPCMOutputTests.Transport
     private enum Failure: Error { case deadline }

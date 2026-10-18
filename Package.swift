@@ -11,7 +11,9 @@ let package = Package(
         .target(name: "NativePCMTransport", cxxSettings: [
             .unsafeFlags(["-fobjc-arc", "-Wfunction-effects", "-Werror=function-effects"])
         ]),
-        .target(name: "NotTennaPodCore", dependencies: ["SwiftSoup", "NativePCMTransport", "CFFmpegCodec"]),
+        // The write-budget SQLite VFS of bulk synchronization work (a reserve of free space it never uses).
+        .target(name: "SQLiteBudget", linkerSettings: [.linkedLibrary("sqlite3")]),
+        .target(name: "NotTennaPodCore", dependencies: ["SwiftSoup", "NativePCMTransport", "CFFmpegCodec", "SQLiteBudget"]),
         .testTarget(
             name: "NotTennaPodCoreTests",
             dependencies: ["NotTennaPodCore"],

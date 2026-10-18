@@ -112,4 +112,74 @@ struct ShownotesFormatterTests {
                     == ShownotesFormatter.webKitDocument(html, defaultFontCSS: font + rest))
         }
     }
+
+    /// Hints that fetch or connect ahead of use, and a refresh that replaces the notes, never reach WebKit: whole
+    /// elements, matched as HTML matches them (case-insensitive, whitespace-separated `rel` tokens).
+    @Test func resourceHintsAndRefreshAreRemovedBeforeWebKit() throws {
+        let raw = """
+            <head><link rel="PreFetch" href="https://example.test/a"><link rel=" stylesheet\tpreload " href="https://example.test/b">
+            <link rel="dns-prefetch" href="//example.test"><link rel="preconnect" href="https://example.test">
+            <link rel="prerender" href="https://example.test/c"><link rel="ModulePreload" href="https://example.test/d.js">
+            <meta HTTP-EQUIV=" Refresh " content="0; url=https://example.test/e"><link rel="stylesheet" href="https://example.test/kept.css">
+            <meta http-equiv="content-type" content="text/html"></head><body><p>Notes</p><link rel=prefetch href=/f></body>
+            """
+        let html = try ShownotesFormatter.format(raw, durationMilliseconds: .max, noShownotesLabel: "None", style: style)
+        let prepared = try ShownotesFormatter.preparedWebKitDocument(html, defaultFontCSS: "")
+        let document = try SwiftSoup.parse(prepared.html)
+        #expect(try document.select("link").map { try $0.attr("href") } == ["https://example.test/kept.css"])
+        #expect(try document.select("meta[http-equiv]").map { try $0.attr("http-equiv") } == ["content-type"])
+        for hidden in ["example.test/a", "example.test/b", "//example.test\"", "example.test/c", "d.js", "example.test/e", "/f"] {
+            #expect(!prepared.html.contains(hidden), "\(hidden)")
+        }
+        #expect(try document.select("p").text() == "Notes")
+        #expect(prepared.classes == .small)
+    }
+
+    /// The classes a document may load are found conservatively: anything that could load one counts.
+    @Test func subresourceClassesAreConservative() throws {
+        func classes(_ raw: String) throws -> ShownotesFormatter.SubresourceClasses {
+            let html = try ShownotesFormatter.format(raw, durationMilliseconds: .max, noShownotesLabel: "None", style: style)
+            return try ShownotesFormatter.preparedWebKitDocument(html, defaultFontCSS: "body { transform: translate(1px) }").classes
+        }
+        let small: [String] = [
+            "<img src='https://example.test/a.png'>", "<img srcset='https://example.test/a.png 1x'>",
+            "<head><link rel='stylesheet' href='https://example.test/a.css'></head><p>x</p>",
+            "<svg><image href='https://example.test/a.png'/></svg>", "<svg><use href='https://example.test/a.svg#x'/></svg>",
+            "<div style='background-image: URL( \"https://example.test/a.png\" )'>x</div>",
+            "<div style='background: u\\72l(https://example.test/a.png)'>x</div>",
+            "<style>@IMPORT 'https://example.test/a.css';</style>", "<style>p { background: image-set('a.png' 1x) }</style>",
+            "<style>@font-face { font-family: F; src: url(https://example.test/f.woff) }</style>",
+            "<video poster='https://example.test/p.png'></video>", "<table background='https://example.test/b.png'><tr><td>x</td></tr></table>",
+            "<input type='image' src='https://example.test/i.png'>"
+        ]
+        for raw in small { #expect(try classes(raw).contains(.small), "\(raw)") }
+        #expect(try classes("<p>Plain <b style='color: red; font-weight: bold'>notes</b> <a href='https://example.test' ping='https://example.test/p'>link</a> 1:00</p>") == [])
+        #expect(try classes("<video src='https://example.test/v.mp4'></video>") == .heavy)
+        #expect(try classes("<audio><source src='https://example.test/a.mp3'></audio>") == .all, "a source may be a picture's")
+        for frame in ["<iframe src='https://example.test/f'></iframe>", "<object data='https://example.test/o'></object>",
+                      "<embed src='https://example.test/e'>", "<iframe srcdoc='<p>x</p>'></iframe>"] {
+            #expect(try classes(frame) == .all, "an embedded document may load either class: \(frame)")
+        }
+        #expect(try classes("<video><track default src='https://example.test/t.vtt'></video>") == .heavy)
+    }
+
+    @Test func contentSecurityPolicyFallbackLeadsTheHeadAndFollowsTheClasses() throws {
+        let raw = "<head><meta http-equiv='content-security-policy' content='img-src *'></head><p>x</p>"
+        let html = try ShownotesFormatter.format(raw, durationMilliseconds: .max, noShownotesLabel: "None", style: style)
+        let policy = ShownotesFormatter.contentSecurityPolicy(allowing: .heavy)
+        let document = try SwiftSoup.parse(try ShownotesFormatter.preparedWebKitDocument(html, defaultFontCSS: "",
+            contentSecurityPolicy: policy).html)
+        #expect(try document.head()?.child(0).attr("content") == policy)
+        #expect(policy.contains("img-src data: blob:") && policy.contains("font-src data:") && policy.contains("media-src * data: blob:")
+                && policy.contains("script-src 'none'"))
+        // A remote frame or an object could load pictures the document's policy cannot see: both classes, or none.
+        for mixed in [ShownotesFormatter.SubresourceClasses.heavy, .small] {
+            let policy = ShownotesFormatter.contentSecurityPolicy(allowing: mixed)
+            #expect(policy.contains("frame-src 'none'") && policy.contains("child-src 'none'") && policy.contains("object-src 'none'"), "\(mixed)")
+        }
+        #expect(ShownotesFormatter.contentSecurityPolicy(allowing: .all).contains("frame-src * data:"))
+        let none = ShownotesFormatter.contentSecurityPolicy(allowing: [])
+        #expect(none.contains("frame-src 'none'") && none.contains("object-src 'none'") && none.contains("style-src 'unsafe-inline' data:"))
+        #expect(ShownotesFormatter.contentSecurityPolicy(allowing: .all).contains("img-src * data: blob:"))
+    }
 }

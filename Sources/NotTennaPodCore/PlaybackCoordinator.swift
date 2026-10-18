@@ -88,6 +88,13 @@ public final class PlaybackCoordinator {
     private let streamingAccess: (@MainActor (LibraryEpisode) async throws -> PlaybackStreamingAccess)?
     private var streamingPolicy = StreamingAdmissionPolicy()
     public var pendingStreamingEpisodeID: Int64? { streamingPolicy.pendingMediaID }
+    /// The episode whose current load proceeded on "Once" consent ("Allow this time"): its Cast relay and streamed
+    /// chapter list may use a restricted network (`AuxiliaryNetworkAdmission`). Consent ends with that load: the next
+    /// load, and every retirement or unload of it (stop, completion, skip, failure, a media-services reset), clear it.
+    public private(set) var onceAdmittedEpisodeID: Int64?
+    /// Where a confirmation the route asked for (`PlaybackEngineEvent.streamingConfirmationRequired`) resumes: the
+    /// position that route was loading, such as the local position at a Cast transfer or a receiver's position.
+    private var confirmationPosition: (episodeID: Int64, milliseconds: Int64)?
     private var externalPreparation = false
     private var generation: UUID?
     private var commandID: UUID?
@@ -98,6 +105,41 @@ public final class PlaybackCoordinator {
     private var tail: Task<Void, any Error>?
     private var sequence: UInt64 = 0
     private var listeners: [UUID: AsyncStream<Event>.Continuation] = [:]
+    /// Admitted commands and engine events, in admission order, until each has finished (`admit`).
+    private var admitted: [Admission] = []
+    /// The admission whose operation runs now.
+    private var running: Admission?
+    /// An engine stage runs now: a stage admitted meanwhile waits until it has finished.
+    private var stagingEngine = false
+    /// Tests turn this off for the serial reference: every engine stage then waits for its turn.
+    var hoistsEngineStages = true
+#if DEBUG
+    /// Tests: called before each store write the coordinator makes, with the values it passes; awaiting holds the
+    /// write, throwing fails it.
+    var storeGate: (@MainActor (PlaybackStoreCall) async throws -> Void)?
+#endif
+
+    /// One admitted command or engine event. `residual`: all it still does is a store write whose inputs it captured,
+    /// then applying that write's result and publishing.
+    private final class Admission {
+        var residual = false
+        /// The engine stage of a pause, a seek or a position or state event, not run yet.
+        var stage: (@MainActor () -> Stage)?
+        /// What that stage left to write, when it ran before its turn.
+        var persistence: (@MainActor () async throws -> Void)?
+    }
+
+    /// An engine stage's outcome: its store write (nil: none), or `opaque` when this time it needs more than the
+    /// engine (a skip past the end, a sleep timer expiring), so the whole command waits for its turn.
+    private enum Stage {
+        case persist((@MainActor () async throws -> Void)?)
+        case opaque
+    }
+
+    /// What a save writes, captured when it is decided: nothing that runs before it is written changes it.
+    private struct SaveCapture {
+        let sessionID: UUID, generation: UUID?, sample: PlaybackSample, now: Date, synchronize: Bool
+    }
 
     /// The app passes neither clock. `clock` is the wall time saved with positions and history; `monotonicClock`
     /// paces the five-second checkpoints and the clock sleep timer. Injecting only `clock` makes it drive both
@@ -134,14 +176,29 @@ public final class PlaybackCoordinator {
         engine.onEvent = { [weak self] event in
             guard let self else { return }
             let receivedAt = self.clock(), monotonic = self.monotonicClock()
+            // A route's refusal belongs to the route load that raised it: one replaced before the refusal is handled
+            // (a session ending or handed back) must not stop its replacement.
+            let route = (self.engine as? RoutedPlaybackEngine)?.routeID
             // Playback the engine starts by itself (an interruption ending with shouldResume) is fenced like a Play,
             // in this step: its handling waits in the queue, and until it ran it counts as starting playback.
             let resumes = !self.isRetired && !self.wantsPlayback && event.engineReading?.sample.status == .playing
             if resumes { self.resumptions.advance(); self.playRequests += 1; self.onPlaybackRequested?() }
-            _ = self.enqueue {
-                defer { if resumes { self.playRequests -= 1 } }
-                do { try await self.handle(event, receivedAt: receivedAt, monotonic: monotonic) }
+            let handle: @MainActor () async throws -> Void = {
+                do { try await self.handle(event, receivedAt: receivedAt, monotonic: monotonic, route: route) }
                 catch { self.storageFailure() }
+            }
+            switch event {
+            case .position, .stateChanged:
+                // A position or state report moves no store write ahead of another: its save waits for its turn, but
+                // what it shows does not wait for an earlier save, nor holds back a later pause or seek.
+                _ = self.admitStaged(event: true, stage: {
+                    self.eventStage(event, receivedAt: receivedAt, monotonic: monotonic)
+                }, fallback: handle, finished: { if resumes { self.playRequests -= 1 } })
+            default:
+                _ = self.enqueue {
+                    defer { if resumes { self.playRequests -= 1 } }
+                    try await handle()
+                }
             }
         }
     }
@@ -266,17 +323,24 @@ public final class PlaybackCoordinator {
     /// and a later user command can settle or cancel this request.
     func seekFromPictureInPicture(to milliseconds: Int64, identity: VideoCommandIdentity,
         isCurrent: @escaping @MainActor () -> Bool) async throws {
+        // Its engine stage may run at admission: a request already cancelled never reaches the engine.
+        try Task.checkCancellation()
         let events = events()
-        var seekCommand: UUID?
-        let queued = enqueue {
-            try Task.checkCancellation()
-            guard isCurrent(), self.videoCommandIdentity == identity,
-                  let state = self.systemSnapshot, state.canSeek else { throw CancellationError() }
+        var seekCommand: UUID?, refused = false
+        let cancelled = PictureSeekCancellation()
+        // Like every seek, the engine moves as soon as everything admitted before it has only captured store writes
+        // left; its recording keeps its place, and a later Pause does not wait for it.
+        let queued = admitStaged(stage: {
+            guard !cancelled.isSet, isCurrent(), self.videoCommandIdentity == identity,
+                  let state = self.systemSnapshot, state.canSeek else { refused = true; return .persist(nil) }
             self.interactionRevision &+= 1
-            await self.seekCurrent(to: min(max(0, milliseconds), state.durationMilliseconds ?? 0))
+            let record = self.seekStage(to: min(max(0, milliseconds), state.durationMilliseconds ?? 0))
             seekCommand = self.commandID
-        }
-        try await withTaskCancellationHandler(operation: { try await queued.value }, onCancel: { queued.cancel() })
+            return .persist(record)
+        }, fallback: {})
+        try await withTaskCancellationHandler(operation: { try await queued.value },
+                                              onCancel: { cancelled.set(); queued.cancel() })
+        if refused || cancelled.isSet { throw CancellationError() }
         for await _ in events {
             try Task.checkCancellation()
             guard isCurrent(), self.systemSnapshot?.identity == identity.selection,
@@ -299,7 +363,34 @@ public final class PlaybackCoordinator {
         isCurrent: @escaping @MainActor () -> Bool = { true }) async throws -> Bool {
         var accepted = false
         let starts: Bool = switch command { case .play, .toggle: true; default: false }
-        try await (starts ? requestPlayback : enqueue)({
+        // Pause, seek and skip (the Lock Screen's, headphones') move the engine without waiting for earlier saves.
+        let stage: @MainActor () -> Stage = {
+            guard isCurrent(), let state = self.systemSnapshot, state.identity == identity else { return .persist(nil) }
+            let staged: Stage
+            switch command {
+            case .pause:
+                staged = .persist(self.wantsPlayback || self.awaitsInterruptionResumption ? self.pauseStage() : nil)
+            case .toggle:
+                guard state.canPlay else { return .persist(nil) }
+                guard self.wantsPlayback else { return .opaque }
+                staged = .persist(self.pauseStage())
+            case .seek(let milliseconds):
+                guard state.canSeek else { return .persist(nil) }
+                staged = .persist(self.seekStage(to: min(max(0, milliseconds), state.durationMilliseconds ?? 0)))
+            case .restart:
+                guard state.canSkip else { return .persist(nil) }
+                staged = .persist(self.seekStage(to: 0))
+            case .skip(let seconds, let direction):
+                guard state.canSkip else { return .persist(nil) }
+                staged = self.skipIntervalStage(seconds: seconds, direction: direction)
+            case .play, .next, .stop, .rate: return .opaque
+            }
+            guard case .persist = staged else { return .opaque }
+            self.interactionRevision &+= 1
+            accepted = true
+            return staged
+        }
+        try await admitStaged(startsPlayback: starts, stage: stage, fallback: {
             guard isCurrent(), let state = self.systemSnapshot, state.identity == identity else { return }
             switch command {
             case .play, .toggle: guard state.canPlay else { return }
@@ -311,12 +402,12 @@ public final class PlaybackCoordinator {
             }
             self.interactionRevision &+= 1
             switch command {
-            case .play: try await self.playCurrent()
+            case .play: try await self.playCurrent(residual: true)
             // During an interruption the player shows paused, but its resumption is pending: Pause gives it up.
             case .pause: if self.wantsPlayback || self.awaitsInterruptionResumption { try await self.pauseCurrent() }
             case .toggle:
                 if self.wantsPlayback { try await self.pauseCurrent() }
-                else { try await self.playCurrent() }
+                else { try await self.playCurrent(residual: true) }
             case .stop: try await self.stopCurrent()
             case .next: try await self.finish(.skipped)
             case .restart: await self.seekCurrent(to: 0)
@@ -334,7 +425,7 @@ public final class PlaybackCoordinator {
         interactionRevision &+= 1
         try await (play ? requestPlayback : enqueue) {
             if self.episode?.id == episodeID, self.generation != nil {
-                if play { try await self.resume() } else { try await self.pauseCurrent() }
+                if play { try await self.resume(residual: true) } else { try await self.pauseCurrent() }
                 return
             }
             try await self.load(episodeID, play: play, fromQueue: false)
@@ -358,7 +449,7 @@ public final class PlaybackCoordinator {
             do { try await self.load(episodeID, play: false, fromQueue: false, adoption: adoption) }
             catch {
                 if retired {
-                    self.generation = nil; self.commandID = nil; self.engine.unload()
+                    self.generation = nil; self.commandID = nil; self.engine.unload(); self.onceAdmittedEpisodeID = nil
                     self.wantsPlayback = false; self.sample?.status = .paused
                     self.phase = self.episode == nil ? .idle : .stopped
                     self.publish(.stateChanged)
@@ -366,6 +457,39 @@ public final class PlaybackCoordinator {
                 throw error
             }
         }.value
+    }
+
+    /// A Cast receiver's item that this library loaded needs a new relay that the network does not admit (a restoration
+    /// with no live lease): loads `episodeID` at the receiver's position on the route `activateRoute` installs, once the
+    /// current item has settled and unloaded, so the route's refusal asks Once/Always there. It is not a person's
+    /// command: it runs only while `isCurrent` holds and no person's command came after it was asked, checked again
+    /// just before the route is installed, so a newer selection always wins and the receiver is left alone.
+    public func selectOnRoute(episodeID: Int64, positionMilliseconds: Int64,
+                              activateRoute: @escaping @MainActor () throws -> Void,
+                              isCurrent: @escaping @MainActor () -> Bool) async throws {
+        let interaction = interactionRevision
+        let current: @MainActor () -> Bool = { [weak self] in isCurrent() && self?.interactionRevision == interaction }
+        try await enqueue {
+            guard current() else { throw CancellationError() }
+            var retired = false
+            let route = RouteActivation(activate: activateRoute, isCurrent: current, didRetire: { retired = true })
+            do { try await self.load(episodeID, play: false, fromQueue: false, startPosition: positionMilliseconds, route: route) }
+            catch {
+                if retired {
+                    self.generation = nil; self.commandID = nil; self.engine.unload(); self.onceAdmittedEpisodeID = nil
+                    self.wantsPlayback = false; self.sample?.status = .paused
+                    self.phase = self.episode == nil ? .idle : .stopped
+                    self.publish(.stateChanged)
+                }
+                throw error
+            }
+        }.value
+    }
+
+    private struct RouteActivation {
+        var activate: @MainActor () throws -> Void
+        var isCurrent: @MainActor () -> Bool
+        var didRetire: @MainActor () -> Void
     }
 
     private struct ExternalAdoption {
@@ -379,22 +503,31 @@ public final class PlaybackCoordinator {
     /// actions use select/toggle to reselect an episode over a confirmation item.
     public func play() async throws {
         interactionRevision &+= 1
-        try await requestPlayback { try await self.playCurrent() }.value
+        try await requestPlayback { try await self.playCurrent(residual: true) }.value
     }
 
-    private func playCurrent() async throws {
+    /// `residual`: the command does nothing after this (see `resume`).
+    private func playCurrent(residual: Bool = false) async throws {
         if pendingStreamingEpisodeID != nil {
+            let resumeAt = confirmationPosition
             let decision = streamingPolicy.play(isConfirmationItem: true, currentMedia: nil,
                 state: .ready, streamingAllowed: false, isCasting: false)
-            if case .reload(let id) = decision { try await load(id, play: true, fromQueue: false) }
+            if case .reload(let id) = decision {
+                try await load(id, play: true, fromQueue: false,
+                               startPosition: resumeAt?.episodeID == id ? resumeAt?.milliseconds : nil)
+            }
             return
         }
         guard let episode else { return }
         if generation == nil { try await load(episode.id, play: true, fromQueue: false) }
-        else { try await resume() }
+        else { try await resume(residual: residual) }
     }
 
-    public func pause() async throws { interactionRevision &+= 1; try await enqueue { try await self.pauseCurrent() }.value }
+    /// The engine pauses at once, even while an earlier save waits for the store; the pause's own save keeps its place.
+    public func pause() async throws {
+        interactionRevision &+= 1
+        try await admitStaged(stage: { .persist(self.pauseStage()) }, fallback: { try await self.pauseCurrent() }).value
+    }
 
     public enum SleepTimerError: Error, Equatable { case noMediaPlaying, invalidValue }
 
@@ -402,7 +535,7 @@ public final class PlaybackCoordinator {
         try await enqueue {
             guard self.wantsPlayback, self.generation != nil else { throw SleepTimerError.noMediaPlaying }
             guard value > 0 else { throw SleepTimerError.invalidValue }
-            try await self.startTimer(mode: mode, value: value)
+            try self.startTimer(mode: mode, value: value)
             self.publish(.stateChanged)
         }.value
     }
@@ -433,25 +566,44 @@ public final class PlaybackCoordinator {
         }.value
     }
 
-    private func startTimer(mode: SleepTimerMode, value: Int64) async throws {
+    /// A started timer has time left (`value` > 0), so nothing it reports expires: no pause, no save.
+    private func startTimer(mode: SleepTimerMode, value: Int64) throws {
         guard engine is any PlaybackVolumeControlling else { throw PlaybackVolumeError.unsupportedEngine }
         var timer = sleepTimer ?? SleepTimer()
         let events = timer.start(mode: mode, value: value, nowMilliseconds: monotonicClock())
         sleepTimer = timer
-        try await deliverSleepTimerEvents(events)
+        let expired = try applySleepTimerEvents(events)
+        assert(!expired, "a started sleep timer has time left")
     }
 
-    private func autoEnableSleepTimer() async throws {
+    private func autoEnableSleepTimer() throws {
         guard sleepTimer == nil, let settings = sleepTimerPreferences?.value,
               settings.autoEnable, settings.includes(hour: Calendar.current.component(.hour, from: clock())),
               let value = settings.timerValue, value > 0 else { return }
-        try await startTimer(mode: settings.mode, value: value)
+        try startTimer(mode: settings.mode, value: value)
+    }
+
+    private static func expires(_ events: [SleepTimerEvent]) -> Bool {
+        events.contains { if case .updated(let value) = $0 { value.milliseconds == 0 } else { false } }
     }
 
     private func deliverSleepTimerEvents(_ events: [SleepTimerEvent]) async throws {
+        guard try applySleepTimerEvents(events) else { return }
+        let cleanup = sleepTimer?.stop() ?? []
+        sleepTimer = nil; sleepTimerValue = nil
+        for effect in cleanup { if case .shakeListening = effect { onSleepTimerFeedback?(effect) } }
+        // pauseCurrent pauses the engine before it saves; restore even if saving fails.
+        var pauseFailure: (any Error)?
+        do { try await pauseCurrent() } catch { pauseFailure = error }
+        try (engine as? any PlaybackVolumeControlling)?.setSleepTimerVolume(1)
+        if let pauseFailure { throw pauseFailure }
+    }
+
+    /// Applies what the timer reports; returns whether it expired (the caller then pauses before restoring the volume).
+    private func applySleepTimerEvents(_ events: [SleepTimerEvent]) throws -> Bool {
         // At expiry the faded audio stops first and only then is the volume restored, on every
         // route: a restore before the pause could be heard at full level.
-        let expired = events.contains { if case .updated(let value) = $0 { value.milliseconds == 0 } else { false } }
+        let expired = Self.expires(events)
         for event in events {
             switch event {
             case .enabled(let value): sleepTimerValue = value
@@ -464,16 +616,7 @@ public final class PlaybackCoordinator {
             case .expiryVibration, .resetVibration, .shakeListening: onSleepTimerFeedback?(event)
             }
         }
-        if expired {
-            let cleanup = sleepTimer?.stop() ?? []
-            sleepTimer = nil; sleepTimerValue = nil
-            for effect in cleanup { if case .shakeListening = effect { onSleepTimerFeedback?(effect) } }
-            // pauseCurrent pauses the engine before it saves; restore even if saving fails.
-            var pauseFailure: (any Error)?
-            do { try await pauseCurrent() } catch { pauseFailure = error }
-            try (engine as? any PlaybackVolumeControlling)?.setSleepTimerVolume(1)
-            if let pauseFailure { throw pauseFailure }
-        }
+        return expired
     }
 
     /// Dialog selections update the global default too; remote preset cycling changes only the current override.
@@ -524,18 +667,23 @@ public final class PlaybackCoordinator {
         return settings.value.resolved(episodeID: episode.id, feedID: feedID)
     }
 
+    /// The player's Play/Pause button: pausing moves the engine at once, like `pause()`.
     public func toggle(episodeID: Int64? = nil) async throws {
         interactionRevision &+= 1
-        try await requestPlayback {
+        try await admitStaged(startsPlayback: true, stage: {
+            guard let id = episodeID ?? self.episode?.id else { return .persist(nil) }
+            guard self.episode?.id == id, self.generation != nil, self.wantsPlayback else { return .opaque }
+            return .persist(self.pauseStage())
+        }, fallback: {
             guard let id = episodeID ?? self.episode?.id else { return }
             if self.episode?.id != id || self.generation == nil {
                 try await self.load(id, play: true, fromQueue: false)
             } else if self.wantsPlayback {
                 try await self.pauseCurrent()
             } else {
-                try await self.resume()
+                try await self.resume(residual: true)
             }
-        }.value
+        }).value
     }
 
     /// Settings changes affect only the matching selected feed, including paused/preparing media.
@@ -550,11 +698,11 @@ public final class PlaybackCoordinator {
         }.value
     }
 
+    /// The engine seeks at once, even while an earlier save waits for the store; the seek's own record keeps its place.
     public func seek(to positionMilliseconds: Int64) async throws {
         interactionRevision &+= 1
-        try await enqueue {
-            await self.seekCurrent(to: positionMilliseconds)
-        }.value
+        try await admitStaged(stage: { .persist(self.seekStage(to: positionMilliseconds)) },
+                              fallback: { await self.seekCurrent(to: positionMilliseconds) }).value
     }
 
     /// Cover arrows preserve playback intent; a dialog row starts playback.
@@ -562,7 +710,17 @@ public final class PlaybackCoordinator {
     /// so a suspended resume cannot seek an episode selected by another action.
     public func seekChapter(episodeID: Int64, to positionMilliseconds: Int64, startPlayback: Bool) async throws {
         interactionRevision &+= 1
-        try await (startPlayback ? requestPlayback : enqueue) {
+        guard startPlayback else {
+            try await admitStaged(stage: {
+                guard self.episode?.id == episodeID, self.pendingStreamingEpisodeID == nil else { return .persist(nil) }
+                return .persist(self.seekStage(to: positionMilliseconds))
+            }, fallback: {
+                guard self.episode?.id == episodeID, self.pendingStreamingEpisodeID == nil else { return }
+                await self.seekCurrent(to: positionMilliseconds)
+            }).value
+            return
+        }
+        try await requestPlayback {
             guard self.episode?.id == episodeID,
                   self.pendingStreamingEpisodeID == nil || self.pendingStreamingEpisodeID == episodeID else { return }
             if startPlayback, !self.wantsPlayback { try await self.playCurrent() }
@@ -593,12 +751,24 @@ public final class PlaybackCoordinator {
     /// superseding claim (PROTOCOL §8.6). A recording failure never undoes the seek; automatic seeks (ending skip,
     /// rewind after pause) call the engine directly.
     private func seekCurrent(to positionMilliseconds: Int64) async {
+        await seekStage(to: positionMilliseconds)?()
+    }
+
+    /// A seek's engine stage: the engine moves now; the returned record (nil: none) writes what was captured here.
+    /// Its failure is ignored, as the seek's always was; its result applies only to the session that captured it.
+    private func seekStage(to positionMilliseconds: Int64) -> (@MainActor () async -> Void)? {
         let before = currentReading()?.sample.positionMilliseconds ?? sample?.positionMilliseconds
-        guard moveEngine(to: positionMilliseconds), let session, let before else { return }
-        if let rebased = try? await store.recordSeekIntent(sessionID: session.id, from: before,
-                                                           to: Int32(truncatingIfNeeded: positionMilliseconds),
-                                                           wantsPlayback: wantsPlayback, now: clock()),
-           self.session?.id == rebased.id { self.session = rebased }
+        guard moveEngine(to: positionMilliseconds), let session, let before, let generation else { return nil }
+        let sessionID = session.id, target = Int32(truncatingIfNeeded: positionMilliseconds)
+        let wants = wantsPlayback, now = clock()
+        return {
+            // A failure before it retired this playback: as a seek arriving then, it records nothing.
+            guard self.generation == generation else { return }
+            if let rebased = try? await self.stored(.recordSeekIntent(sessionID: sessionID, from: before, to: target,
+                                                                      wantsPlayback: wants, now: now), {
+                try await self.store.recordSeekIntent(sessionID: sessionID, from: before, to: target, wantsPlayback: wants, now: now)
+            }), self.generation == generation, self.session?.id == rebased.id { self.session = rebased }
+        }
     }
 
     /// The paused seek a person's slider drag makes, without recording anything: the engine moves and the shown
@@ -658,11 +828,21 @@ public final class PlaybackCoordinator {
         }.value
     }
 
+    /// A skip that seeks moves the engine at once (see `seek`); one past the end completes the episode in its turn.
     public func skipInterval(seconds: Int32, direction: PlaybackIntervalDirection? = nil) async throws {
         interactionRevision &+= 1
-        try await enqueue {
+        try await admitStaged(stage: { self.skipIntervalStage(seconds: seconds, direction: direction) }, fallback: {
             try await self.skipCurrentInterval(seconds: seconds, direction: direction)
-        }.value
+        }).value
+    }
+
+    private func skipIntervalStage(seconds: Int32, direction: PlaybackIntervalDirection?) -> Stage {
+        guard generation != nil, let sample = currentReading()?.sample ?? self.sample else { return .persist(nil) }
+        switch PlaybackTiming.intervalSkip(positionMilliseconds: sample.positionMilliseconds,
+            durationMilliseconds: sample.durationMilliseconds, seconds: seconds, direction: direction) {
+        case .complete: return .opaque
+        case .seek(let target): return .persist(seekStage(to: target))
+        }
     }
 
     private func skipCurrentInterval(seconds: Int32, direction: PlaybackIntervalDirection?) async throws {
@@ -688,6 +868,7 @@ public final class PlaybackCoordinator {
         }
         generation = nil
         engine.unload()
+        onceAdmittedEpisodeID = nil
         phase = episode == nil ? .idle : .stopped
         publish(.stateChanged)
     }
@@ -695,7 +876,9 @@ public final class PlaybackCoordinator {
     public func resetPlaybackPosition(episodeID: Int64) async throws {
         interactionRevision &+= 1
         try await enqueue {
-            try await self.store.resetPlaybackPosition(episodeID: episodeID)
+            try await self.stored(.resetPlaybackPosition(episodeID: episodeID)) {
+                try await self.store.resetPlaybackPosition(episodeID: episodeID)
+            }
             defer { self.publish(.libraryChanged); self.publish(.stateChanged) }
             guard self.episode?.id == episodeID || self.session?.episodeID == episodeID else { return }
             // Retire without pauseCurrent/save/finish: those paths could rewrite
@@ -707,6 +890,7 @@ public final class PlaybackCoordinator {
             self.sample = nil
             self.wantsPlayback = false
             self.streamingPolicy = StreamingAdmissionPolicy()
+            self.onceAdmittedEpisodeID = nil
             self.phase = .idle
             self.engine.unload()
             try self.speedPreferences?.clearCurrent()
@@ -716,7 +900,9 @@ public final class PlaybackCoordinator {
     public func deleteDownloadedMedia(episodeID: Int64, deleteRemovesFromQueue: Bool = false) async throws {
         interactionRevision &+= 1
         try await enqueue {
-            try await self.store.requestMediaDeletion(episodeID: episodeID, deleteRemovesFromQueue: deleteRemovesFromQueue)
+            try await self.stored(.requestMediaDeletion(episodeID: episodeID)) {
+                try await self.store.requestMediaDeletion(episodeID: episodeID, deleteRemovesFromQueue: deleteRemovesFromQueue)
+            }
             defer { self.publish(.libraryChanged); self.publish(.stateChanged) }
             guard self.episode?.id == episodeID || self.session?.episodeID == episodeID else { return }
             self.generation = nil
@@ -726,6 +912,7 @@ public final class PlaybackCoordinator {
             self.sample = nil
             self.wantsPlayback = false
             self.streamingPolicy = StreamingAdmissionPolicy()
+            self.onceAdmittedEpisodeID = nil
             self.phase = .idle
             self.engine.unload()
             try self.speedPreferences?.clearCurrent()
@@ -736,8 +923,9 @@ public final class PlaybackCoordinator {
         deleteRemovesFromQueue: Bool = false) async throws -> EpisodeMediaDeletionOutcome {
         var outcome = EpisodeMediaDeletionOutcome.stale
         try await enqueue {
-            outcome = try await self.store.requestMediaDeletion(target: target,
-                deleteRemovesFromQueue: deleteRemovesFromQueue)
+            outcome = try await self.stored(.requestMediaDeletion(episodeID: target.episodeID)) {
+                try await self.store.requestMediaDeletion(target: target, deleteRemovesFromQueue: deleteRemovesFromQueue)
+            }
             guard outcome == .deleted else { return }
             self.interactionRevision &+= 1
             try self.retireDeletedPlayback([target.episodeID])
@@ -776,7 +964,7 @@ public final class PlaybackCoordinator {
         defer { publish(.libraryChanged); publish(.stateChanged) }
         generation = nil; commandID = nil; session = nil
         episode = nil; sample = nil; wantsPlayback = false
-        streamingPolicy = StreamingAdmissionPolicy(); phase = .idle
+        streamingPolicy = StreamingAdmissionPolicy(); onceAdmittedEpisodeID = nil; phase = .idle
         engine.unload()
         try speedPreferences?.clearCurrent()
     }
@@ -826,20 +1014,97 @@ public final class PlaybackCoordinator {
         }
     }
 
-    private func admit(_ operation: @escaping @MainActor () async throws -> Void) -> Task<Void, any Error> {
+    /// Every command and engine event runs in admission order, one after another, so every store call keeps that
+    /// order. Only engine stages (`admitStaged`) may run before their turn.
+    private func admit(entry: Admission = Admission(),
+                       _ operation: @escaping @MainActor () async throws -> Void) -> Task<Void, any Error> {
         let previous = tail
         sequence &+= 1
         let sequence = sequence
+        admitted.append(entry)
         let task = Task { @MainActor in
             _ = try? await previous?.value
-            defer { if self.sequence == sequence { self.tail = nil } }
+            self.running = entry
+            defer {
+                self.running = nil
+                self.admitted.removeAll { $0 === entry }
+                if self.sequence == sequence { self.tail = nil }
+                self.advanceEngineStages()
+            }
             try await operation()
         }
         tail = task
         return task
     }
 
-    private func load(_ id: Int64, play: Bool, fromQueue: Bool, adoption: ExternalAdoption? = nil) async throws {
+    /// A pause, a seek or a position or state event: its engine stage runs as soon as everything admitted before it
+    /// is residual (only captured store writes left), at admission or when an earlier admission becomes residual,
+    /// never before an earlier engine stage or past an unfinished command. Its own store write waits for its turn, and
+    /// `fallback` runs the whole command then when its stage is opaque. An engine event never runs a stage inside the
+    /// engine's callback: its stage runs on the next main-actor turn at the earliest.
+    private func admitStaged(startsPlayback: Bool = false, event: Bool = false,
+                             stage: @escaping @MainActor () -> Stage,
+                             fallback: @escaping @MainActor () async throws -> Void,
+                             finished: (@MainActor () -> Void)? = nil) -> Task<Void, any Error> {
+        guard !isRetired else { finished?(); return Task { throw CancellationError() } }
+        if startsPlayback { playRequests += 1; onPlaybackRequested?() }
+        let entry = Admission()
+        entry.stage = stage
+        let task = admit(entry: entry) {
+            defer { if startsPlayback { self.playRequests -= 1 }; finished?() }
+            guard let stage = entry.stage else { try await entry.persistence?(); return }
+            entry.stage = nil
+            let staging = self.stagingEngine
+            self.stagingEngine = true
+            let outcome = stage()
+            self.stagingEngine = staging
+            guard case .persist(let persistence) = outcome else { try await fallback(); return }
+            self.becomeResidual()
+            try await persistence?()
+        }
+        if event { Task { @MainActor [weak self] in self?.advanceEngineStages() } } else { advanceEngineStages() }
+        return task
+    }
+
+    /// Tests: commands and engine events admitted and not finished, and how many engine stages among them wait.
+    var admissionsForTesting: (admitted: Int, stagesWaiting: Int) {
+        (admitted.count, admitted.filter { $0.stage != nil }.count)
+    }
+
+    /// The running command has only captured store writes left (then their results and publishing).
+    private func becomeResidual() {
+        running?.residual = true
+        advanceEngineStages()
+    }
+
+    /// Runs, in admission order, the engine stages whose every earlier admission is residual.
+    private func advanceEngineStages() {
+        guard hoistsEngineStages, !stagingEngine else { return }
+        stagingEngine = true
+        defer { stagingEngine = false }
+        var index = 0
+        while index < admitted.count {
+            let entry = admitted[index]
+            if !entry.residual {
+                guard let stage = entry.stage, case .persist(let persistence) = stage() else { return }
+                entry.stage = nil
+                entry.persistence = persistence
+                entry.residual = true
+            }
+            index += 1
+        }
+    }
+
+    /// A store write of the coordinator (`storeGate` sees it first in tests).
+    private func stored<T>(_ call: @autoclosure () -> PlaybackStoreCall, _ write: () async throws -> T) async throws -> T {
+#if DEBUG
+        if let storeGate { try await storeGate(call()) }
+#endif
+        return try await write()
+    }
+
+    private func load(_ id: Int64, play: Bool, fromQueue: Bool, adoption: ExternalAdoption? = nil,
+                      startPosition: Int64? = nil, route: RouteActivation? = nil) async throws {
         guard let next = try await store.episode(id: id) else { throw FeedLibraryError.missingEpisode(id) }
         serverLibrary = await store.isServerLibrary
         guard next.details.media != nil else { throw FeedLibraryError.invalidMutation }
@@ -853,6 +1118,7 @@ public final class PlaybackCoordinator {
         try requireSilenceSupport(resolvedSkipSilence, loadingNewMedia: true)
         guard resolvedSpeed.isFinite, resolvedSpeed > 0 else { throw PlaybackSpeedError.invalidSpeed }
         if let adoption { guard adoption.isCurrent() else { throw CancellationError() }; _ = try adoption.state() }
+        if let route { guard route.isCurrent() else { throw CancellationError() } }
         let retainedSession = adoption != nil && episode?.id == id && generation != nil ? session : nil
         // Replacing the item keeps the audio session for it (as Media3 keeps focus across items); a
         // replacement that does not reach the engine's load releases it.
@@ -876,13 +1142,24 @@ public final class PlaybackCoordinator {
             }
         }
         else if generation != nil { try await pauseCurrent() }
-        adoption?.didRetire()
+        // A person's command that came while the current item settled wins before anything is retired: a seek or an
+        // interval skip queued behind this load still finds its item loaded.
+        if let route { guard route.isCurrent() else { throw CancellationError() } }
+        adoption?.didRetire(); route?.didRetire()
         generation = nil
         if let adoption {
             guard adoption.isCurrent() else { throw CancellationError() }
             try adoption.activate()
-        } else { engine.unload() }
+        } else {
+            engine.unload()
+            if let route {
+                guard route.isCurrent() else { throw CancellationError() }
+                try route.activate()
+            }
+        }
         streamingPolicy.willLoadEpisode()
+        onceAdmittedEpisodeID = nil
+        confirmationPosition = nil
         let access: PlaybackStreamingAccess?
         do { access = try await streamingAccess?(next) }
         catch {
@@ -895,24 +1172,31 @@ public final class PlaybackCoordinator {
             publish(.stateChanged)
             throw error
         }
-        if let access,
-           case .confirm(let pendingID) = streamingPolicy.loadedMedia(.init(id: id, needsStreaming: access.needsStreaming),
-                streamingAllowed: access.streamingAllowed, isCasting: access.isCasting) {
-            showStreamingConfirmation(pendingID)
-            return
+        if let access {
+            let once = streamingPolicy.allowStreamingThisTime
+            if case .confirm(let pendingID) = streamingPolicy.loadedMedia(.init(id: id, needsStreaming: access.needsStreaming),
+                    streamingAllowed: access.streamingAllowed, isCasting: access.isCasting) {
+                showStreamingConfirmation(pendingID)
+                return
+            }
+            if once { onceAdmittedEpisodeID = id }
         }
         let intro = PlaybackTiming.introSkip(positionMilliseconds: next.userState.positionMilliseconds,
                                              durationMilliseconds: next.details.media?.durationMilliseconds ?? 0,
                                              preferences: feedSkip ?? prefs.skip)
         let external = try adoption?.state()
-        let position = external.map { Int64($0.sample.positionMilliseconds) } ?? (fromQueue ? intro.positionMilliseconds : Int64(PlaybackTiming.positionAfterPause(
+        let position = external.map { Int64($0.sample.positionMilliseconds) } ?? startPosition.map { max(0, $0) }
+            ?? (fromQueue ? intro.positionMilliseconds : Int64(PlaybackTiming.positionAfterPause(
             positionMilliseconds: Int32(truncatingIfNeeded: intro.positionMilliseconds),
             lastPlayedMilliseconds: lastPlayedHere(next), nowMilliseconds: milliseconds())))
         let baseline = fromQueue ? next.userState.positionMilliseconds : Int32(truncatingIfNeeded: position)
         do {
             if let retainedSession { session = retainedSession }
-            else { session = try await store.beginPlayback(episodeID: id, positionMilliseconds: baseline,
-                                                    enqueueLocation: prefs.enqueueLocation) }
+            else {
+                session = try await stored(.beginPlayback(episodeID: id, positionMilliseconds: baseline)) {
+                    try await store.beginPlayback(episodeID: id, positionMilliseconds: baseline, enqueueLocation: prefs.enqueueLocation)
+                }
+            }
         } catch { storageFailure(); throw error }
         baselineUsesPreparedPosition = !fromQueue && retainedSession == nil
         externalPreparation = adoption != nil
@@ -949,7 +1233,9 @@ public final class PlaybackCoordinator {
         publish(.stateChanged)
     }
 
-    private func resume() async throws {
+    /// `residual`: the command does nothing after this, so once the engine plays, a pause or seek admitted after it
+    /// moves the engine without waiting for the recording below.
+    private func resume(residual: Bool = false) async throws {
         guard let episode, generation != nil else { return }
         if let access = try await streamingAccess?(episode) {
             let state: StreamingAdmissionPolicy.PlayerState = phase == .preparing || phase == .buffering ? .buffering : .ready
@@ -975,27 +1261,34 @@ public final class PlaybackCoordinator {
             lastSaveMilliseconds = monotonicClock()
             phase = currentReading()?.buffering == true ? .buffering : .playing
         } else { engine.play(commandID: nextCommand()) }
-        if phase != .preparing { try await autoEnableSleepTimer() }
+        if phase != .preparing { try autoEnableSleepTimer() }
         publish(.stateChanged)
         // Intentional play on a prepared engine (PROTOCOL §8): after the engine command, a server library starts the
         // load's sync session or records the resume's claim. Never fails playback; a preparing engine records at .ready.
         if let intent, let session, let generation {
-            _ = try? await store.recordPlaybackIntent(sessionID: session.id, positionMilliseconds: intent.position,
-                                                      durationMilliseconds: intent.duration, baseline: generation,
-                                                      intentional: true, now: intent.time)
+            let sessionID = session.id
+            if residual { becomeResidual() }
+            _ = try? await stored(.recordPlaybackIntent(sessionID: sessionID, positionMilliseconds: intent.position,
+                                                        durationMilliseconds: intent.duration, intentional: true, now: intent.time)) {
+                try await store.recordPlaybackIntent(sessionID: sessionID, positionMilliseconds: intent.position,
+                                                     durationMilliseconds: intent.duration, baseline: generation,
+                                                     intentional: true, now: intent.time)
+            }
         }
     }
 
-    private func showStreamingConfirmation(_ id: Int64) {
+    private func showStreamingConfirmation(_ id: Int64, positionMilliseconds: Int64? = nil) {
         // Keep saved/displayed episode metadata, but retire all callbacks and stop
         // remote playback. The pending ID owns direct Play until another selection.
         generation = nil
         commandID = nil
         engine.unload()
+        onceAdmittedEpisodeID = nil
         wantsPlayback = false
         phase = .awaitingStreamingConfirmation
+        confirmationPosition = positionMilliseconds.map { (id, $0) }
         if let episode {
-            sample = .init(positionMilliseconds: episode.userState.positionMilliseconds,
+            sample = .init(positionMilliseconds: positionMilliseconds.map { Int32(clamping: $0) } ?? episode.userState.positionMilliseconds,
                            durationMilliseconds: episode.details.media?.durationMilliseconds ?? 0, status: .paused)
         }
         publish(.streamingConfirmationRequired(episodeID: id))
@@ -1003,17 +1296,30 @@ public final class PlaybackCoordinator {
     }
 
     private func pauseCurrent() async throws {
+        try await pauseStage()?()
+    }
+
+    /// A pause's engine stage: the engine pauses and the player shows paused now; the returned save (nil: none)
+    /// writes the paused sample captured here.
+    private func pauseStage() -> (@MainActor () async throws -> Void)? {
         wantsPlayback = false
-        guard generation != nil else { return }
+        guard generation != nil else { return nil }
         let preparing = phase == .preparing
         engine.pause(commandID: nextCommand())
+        var save: SaveCapture?
         if !preparing {
             if let reading = currentReading() { sample = reading.sample }
             sample?.status = .paused
-            try await save(synchronize: episode.map { preferences($0).end.synchronize } ?? false)
+            save = captureSave(synchronize: episode.map { preferences($0).end.synchronize } ?? false)
             phase = .paused
         }
         publish(.stateChanged)
+        return persistence(of: save)
+    }
+
+    private func persistence(of save: SaveCapture?) -> (@MainActor () async throws -> Void)? {
+        guard let save else { return nil }
+        return { try await self.persist(save) }
     }
 
     /// When this device last played `episode`, as the rewinds after a pause or an interruption measure it: Android's
@@ -1045,14 +1351,40 @@ public final class PlaybackCoordinator {
     }
 
     private func save(synchronize: Bool = false, at timestamp: Date? = nil) async throws {
-        guard let session, let sample else { return }
+        guard let capture = captureSave(synchronize: synchronize, at: timestamp) else { return }
+        try await persist(capture)
+    }
+
+    private func captureSave(synchronize: Bool = false, at timestamp: Date? = nil) -> SaveCapture? {
+        guard let session, let sample else { return nil }
+        return .init(sessionID: session.id, generation: generation, sample: sample, now: timestamp ?? clock(),
+                     synchronize: synchronize)
+    }
+
+    /// Whether the playback that captured `save` is still the current one.
+    private func owns(_ save: SaveCapture) -> Bool { generation == save.generation && session?.id == save.sessionID }
+
+    /// Writes a captured save in its turn. After a failure before it retired that playback nothing is written, as a
+    /// command arriving then would not have saved. Its result applies only to the playback that captured it; its
+    /// failure fails that playback here, in its turn, showing the sample it failed to save (a later pause or seek
+    /// already moved the engine, which the failure stops), and is dropped for any other.
+    private func persist(_ save: SaveCapture) async throws {
+        guard generation == save.generation else { return }
+        let saved: LibraryEpisode
         do {
-            guard let saved = try await store.recordPlayback(sessionID: session.id, sample: sample,
-                                                             now: timestamp ?? clock(), synchronize: synchronize) else {
-                throw FeedLibraryError.invalidMutation
-            }
-            episode = saved
-        } catch { storageFailure(); throw error }
+            guard let result = try await stored(.recordPlayback(sessionID: save.sessionID, sample: save.sample, now: save.now,
+                                                                synchronize: save.synchronize), {
+                try await store.recordPlayback(sessionID: save.sessionID, sample: save.sample, now: save.now,
+                                               synchronize: save.synchronize)
+            }) else { throw FeedLibraryError.invalidMutation }
+            saved = result
+        } catch {
+            guard owns(save) else { return }
+            sample = save.sample
+            storageFailure()
+            throw error
+        }
+        if owns(save) { episode = saved }
         // DBWriter.setFeedMediaPlaybackInformation does not publish FeedItemEvent.
         // Distinguish periodic position writes from queue/item changes for screen refreshes.
         publish(.positionSaved)
@@ -1063,6 +1395,7 @@ public final class PlaybackCoordinator {
         engine.pause(commandID: nextCommand())
         generation = nil
         engine.unload()
+        onceAdmittedEpisodeID = nil
         wantsPlayback = false
         phase = .failed
         publish(.storageFailed)
@@ -1092,8 +1425,11 @@ public final class PlaybackCoordinator {
         else if phase != .preparing, let reading = currentReading() { sample = reading.sample; try await save() }
         let result: PlaybackEndResult
         do {
-            guard let ended = try await store.endPlayback(sessionID: session.id, reason: reason,
-                                                          preferences: prefs.end, now: timestamp ?? clock(), continueQueue: continueQueue) else {
+            let now = timestamp ?? clock()
+            guard let ended = try await stored(.endPlayback(sessionID: session.id, reason: reason, now: now), {
+                try await store.endPlayback(sessionID: session.id, reason: reason, preferences: prefs.end, now: now,
+                                            continueQueue: continueQueue)
+            }) else {
                 throw FeedLibraryError.invalidMutation
             }
             result = ended
@@ -1110,6 +1446,7 @@ public final class PlaybackCoordinator {
         let reservation = reason != .switched && result.nextEpisodeID != nil ? engine as? any PlaybackSessionReserving : nil
         reservation?.reserveSessionForNextItem()
         engine.unload()
+        onceAdmittedEpisodeID = nil
         // Retire the reader before unlinking media. File-provider latency and
         // failure must not hold up the next episode or player commands.
         scheduleCompletionEffects()
@@ -1125,15 +1462,28 @@ public final class PlaybackCoordinator {
     }
 
     /// `receivedAt` stamps what is saved; `monotonic` (the same moment) paces checkpoints and the clock timer.
-    private func handle(_ event: PlaybackEngineEvent, receivedAt: Date, monotonic: Int64) async throws {
+    private func handle(_ event: PlaybackEngineEvent, receivedAt: Date, monotonic: Int64, route: UUID?) async throws {
         if case .failed(let token, let message) = event {
             guard token == generation else { return }
             try await pauseCurrent()
             generation = nil
             engine.unload()
+            onceAdmittedEpisodeID = nil
             phase = .failed
             publish(.engineFailed(message))
             publish(.stateChanged)
+            return
+        }
+        if case .streamingConfirmationRequired(let token) = event {
+            // The route fetches through the phone (a Cast relay) and the network does not admit streaming for this
+            // episode; nothing reached the route. Pause as a failure would, then ask Once/Always as a refused load
+            // does, resuming where the route was asked to start.
+            guard token == generation, (engine as? RoutedPlaybackEngine)?.routeID == route, let episode else { return }
+            let resumeAt = engine.reading.flatMap { $0.generation == token ? Int64($0.sample.positionMilliseconds) : nil }
+            try await pauseCurrent()
+            guard token == generation, (engine as? RoutedPlaybackEngine)?.routeID == route,
+                  case .confirm(let id) = streamingPolicy.requireConfirmation(mediaID: episode.id) else { return }
+            showStreamingConfirmation(id, positionMilliseconds: resumeAt)
             return
         }
         if case .mediaServicesReset(let final) = event {
@@ -1150,6 +1500,7 @@ public final class PlaybackCoordinator {
             }
             generation = nil
             engine.unload()
+            onceAdmittedEpisodeID = nil
             phase = episode == nil ? .idle : .stopped
             publish(.stateChanged)
             return
@@ -1160,8 +1511,9 @@ public final class PlaybackCoordinator {
             guard final.generation == generation, final.isPrepared, let session else { return }
             var settled = final.sample
             settled.status = sample?.status ?? settled.status
-            guard let saved = try await store.recordPlaybackTimelineReset(sessionID: session.id,
-                    finalSample: settled, now: receivedAt) else { throw FeedLibraryError.invalidMutation }
+            guard let saved = try await stored(.timelineReset(sessionID: session.id, sample: settled, now: receivedAt), {
+                try await store.recordPlaybackTimelineReset(sessionID: session.id, finalSample: settled, now: receivedAt)
+            }) else { throw FeedLibraryError.invalidMutation }
             episode = saved.episode
             self.session = saved.session
             settled.positionMilliseconds = 0
@@ -1173,10 +1525,16 @@ public final class PlaybackCoordinator {
             publish(.stateChanged)
             return
         }
+        if case .position = event {
+            try await handleInTurn(event, receivedAt: receivedAt, monotonic: monotonic); return
+        }
+        if case .stateChanged = event {
+            try await handleInTurn(event, receivedAt: receivedAt, monotonic: monotonic); return
+        }
         var reading: PlaybackEngineReading
         switch event {
-        case .ready(let value), .stateChanged(let value), .position(let value), .ended(let value): reading = value
-        case .failed, .timelineReset, .mediaServicesReset: return
+        case .ready(let value), .ended(let value): reading = value
+        case .stateChanged, .position, .failed, .timelineReset, .mediaServicesReset, .streamingConfirmationRequired: return
         }
         guard reading.generation == generation else { return }
         if reading.commandID != commandID {
@@ -1190,35 +1548,83 @@ public final class PlaybackCoordinator {
             guard phase == .preparing else { return }
             if baselineUsesPreparedPosition, let episode, let session,
                session.startPositionMilliseconds != max(0, reading.sample.positionMilliseconds) {
-                self.session = try await store.beginPlayback(episodeID: episode.id,
-                    positionMilliseconds: reading.sample.positionMilliseconds,
-                    enqueueLocation: preferences(episode).enqueueLocation)
+                let position = reading.sample.positionMilliseconds, location = preferences(episode).enqueueLocation
+                self.session = try await stored(.beginPlayback(episodeID: episode.id, positionMilliseconds: position)) {
+                    try await store.beginPlayback(episodeID: episode.id, positionMilliseconds: position, enqueueLocation: location)
+                }
             }
             sample = reading.sample
             wantsPlayback = reading.sample.status == .playing
             if wantsPlayback {
                 phase = reading.buffering ? .buffering : .playing
                 lastSaveMilliseconds = monotonic
+                // The sleep timer's automatic start writes nothing, so it comes before the writes below, which a pause
+                // or seek admitted meanwhile does not wait for. Its failure still fails playback after them.
+                var timerFailure: (any Error)?
+                do { try autoEnableSleepTimer() } catch { timerFailure = error }
+                let intentional = !externalPreparation
+                externalPreparation = false
+                let save = captureSave(at: receivedAt)
+                let sessionID = session?.id, generation = generation, started = reading.sample
+                publish(.stateChanged)
+                becomeResidual()
                 // Playback starts (PROTOCOL §8): a server library starts the load's sync session. A Cast receiver's
                 // restored state is no press of play: listening this phone did not start is not recorded until a Play
                 // here. Never fails playback.
-                if let session, let generation {
-                    _ = try? await store.recordPlaybackIntent(sessionID: session.id, positionMilliseconds: reading.sample.positionMilliseconds,
-                                                              durationMilliseconds: reading.sample.durationMilliseconds, baseline: generation,
-                                                              intentional: !externalPreparation, now: receivedAt)
+                if let sessionID, let generation {
+                    _ = try? await stored(.recordPlaybackIntent(sessionID: sessionID, positionMilliseconds: started.positionMilliseconds,
+                                                                durationMilliseconds: started.durationMilliseconds,
+                                                                intentional: intentional, now: receivedAt)) {
+                        try await store.recordPlaybackIntent(sessionID: sessionID, positionMilliseconds: started.positionMilliseconds,
+                                                             durationMilliseconds: started.durationMilliseconds, baseline: generation,
+                                                             intentional: intentional, now: receivedAt)
+                    }
                 }
-                try await save(at: receivedAt)
-                try await autoEnableSleepTimer()
+                if let save { try await persist(save) }
+                if let timerFailure, self.generation == generation { sample = started; throw timerFailure }
+                return
             } else {
                 phase = .paused
                 if externalPreparation { try await save(at: receivedAt) }
             }
             externalPreparation = false
-        case .stateChanged:
+        case .ended:
+            guard phase != .preparing else { return }
+            sample = reading.sample
+            try await finish(.ended, finalSample: reading.sample, at: receivedAt)
+        case .stateChanged, .position, .failed, .timelineReset, .mediaServicesReset, .streamingConfirmationRequired: return
+        }
+        publish(.stateChanged)
+    }
+
+    /// A position or state event in its turn: its engine stage, then its save.
+    private func handleInTurn(_ event: PlaybackEngineEvent, receivedAt: Date, monotonic: Int64) async throws {
+        switch eventStage(event, receivedAt: receivedAt, monotonic: monotonic) {
+        case .persist(let persistence): try await persistence?()
+        case .opaque: if case .position(let reading) = event { try await expiringTick(reading, monotonic: monotonic) }
+        }
+    }
+
+    /// The engine stage of a position or state event: what it shows and commands, its save captured (written in its
+    /// turn). `opaque` for a position whose sleep-timer tick expires the timer: that pause and save wait for its turn.
+    private func eventStage(_ event: PlaybackEngineEvent, receivedAt: Date, monotonic: Int64) -> Stage {
+        let reading: PlaybackEngineReading
+        switch event {
+        case .stateChanged(let value), .position(let value): reading = value
+        case .ready, .ended, .failed, .timelineReset, .mediaServicesReset, .streamingConfirmationRequired: return .opaque
+        }
+        guard reading.generation == generation, reading.commandID == commandID else { return .persist(nil) }
+        if case .position = event, phase == .playing || phase == .buffering, var timer = sleepTimer,
+           reading.sample.durationMilliseconds > 0 || timer.mode == .minutes,
+           Self.expires(tick(&timer, reading, monotonic: monotonic)) { return .opaque }
+        speed = reading.speed
+        skipSilence = reading.skipSilence
+        var save: SaveCapture?
+        if case .stateChanged = event {
             if phase == .preparing {
                 wantsPlayback = reading.sample.status == .playing
                 publish(.stateChanged)
-                return
+                return .persist(nil)
             }
             let wasBuffering = phase == .buffering
             let wasPlaying = phase == .playing || phase == .buffering
@@ -1227,12 +1633,14 @@ public final class PlaybackCoordinator {
             phase = wantsPlayback ? (reading.buffering ? .buffering : .playing) : .paused
             if wantsPlayback && !wasPlaying { lastSaveMilliseconds = monotonic }
             if !wantsPlayback && wasPlaying {
-                try await save(synchronize: episode.map { preferences($0).end.synchronize } ?? false, at: receivedAt)
+                save = captureSave(synchronize: episode.map { preferences($0).end.synchronize } ?? false, at: receivedAt)
             }
-            if wantsPlayback && wasBuffering && !reading.buffering { try await save(at: receivedAt) }
-            if wantsPlayback && !wasPlaying { try await autoEnableSleepTimer() }
-        case .position:
-            guard phase == .playing || phase == .buffering else { return }
+            if wantsPlayback && wasBuffering && !reading.buffering { save = captureSave(at: receivedAt) }
+            if wantsPlayback && !wasPlaying {
+                do { try autoEnableSleepTimer() } catch { storageFailure(); return .persist(nil) }
+            }
+        } else {
+            guard phase == .playing || phase == .buffering else { return .persist(nil) }
             let hasDuration = reading.sample.durationMilliseconds > 0
             if hasDuration {
                 sample = reading.sample
@@ -1241,17 +1649,14 @@ public final class PlaybackCoordinator {
             // A clock timer measures listening time even for live media. Unknown
             // duration still cannot supply episode-mode fade/display/save facts.
             if var timer = sleepTimer, hasDuration || timer.mode == .minutes {
-                let settings = sleepTimerPreferences?.value ?? .init()
-                let events = timer.tick(nowMilliseconds: monotonic,
-                    positionMilliseconds: Int64(reading.sample.positionMilliseconds),
-                    durationMilliseconds: Int64(reading.sample.durationMilliseconds),
-                    vibrate: settings.vibrate, shakeToReset: settings.shakeToReset)
+                let events = tick(&timer, reading, monotonic: monotonic)
                 sleepTimer = timer
-                try await deliverSleepTimerEvents(events)
-                if !wantsPlayback { publish(.stateChanged); return }
+                do { _ = try applySleepTimerEvents(events) } catch { storageFailure(); return .persist(nil) }
+                if !wantsPlayback { publish(.stateChanged); return .persist(nil) }
             }
-            guard hasDuration else { onUnknownDurationTick?(); return }
-            if monotonic &- lastSaveMilliseconds >= 5_000 { try await save(at: receivedAt); lastSaveMilliseconds = monotonic }
+            guard hasDuration else { onUnknownDurationTick?(); return .persist(nil) }
+            if monotonic &- lastSaveMilliseconds >= 5_000 { save = captureSave(at: receivedAt); lastSaveMilliseconds = monotonic }
+            // The ending skip moves the engine before the save is written; the save keeps the sample captured above.
             if let episode {
                 let skip = loadedSkipPreferences ?? preferences(episode).skip
                 if PlaybackTiming.shouldSkipEnding(positionMilliseconds: Int64(reading.sample.positionMilliseconds),
@@ -1261,12 +1666,32 @@ public final class PlaybackCoordinator {
                     publish(.endingSkipped(seconds: skip.endingSeconds))
                 }
             }
-        case .ended:
-            guard phase != .preparing else { return }
-            sample = reading.sample
-            try await finish(.ended, finalSample: reading.sample, at: receivedAt)
-        case .failed, .timelineReset, .mediaServicesReset: return
+            // Its state notice follows its save, as before (what it shows was published above).
+            if let save { return .persist({ try await self.persist(save); self.publish(.stateChanged) }) }
         }
+        publish(.stateChanged)
+        return .persist(persistence(of: save))
+    }
+
+    private func tick(_ timer: inout SleepTimer, _ reading: PlaybackEngineReading, monotonic: Int64) -> [SleepTimerEvent] {
+        let settings = sleepTimerPreferences?.value ?? .init()
+        return timer.tick(nowMilliseconds: monotonic, positionMilliseconds: Int64(reading.sample.positionMilliseconds),
+                          durationMilliseconds: Int64(reading.sample.durationMilliseconds),
+                          vibrate: settings.vibrate, shakeToReset: settings.shakeToReset)
+    }
+
+    /// A position whose tick expires the sleep timer, in its turn: the faded audio pauses and saves.
+    private func expiringTick(_ reading: PlaybackEngineReading, monotonic: Int64) async throws {
+        speed = reading.speed
+        skipSilence = reading.skipSilence
+        guard phase == .playing || phase == .buffering, var timer = sleepTimer else { return }
+        if reading.sample.durationMilliseconds > 0 {
+            sample = reading.sample
+            publishPosition(generation: reading.generation, commandID: reading.commandID)
+        }
+        let events = tick(&timer, reading, monotonic: monotonic)
+        sleepTimer = timer
+        try await deliverSleepTimerEvents(events)
         publish(.stateChanged)
     }
 
@@ -1288,9 +1713,17 @@ private extension PlaybackEngineEvent {
         switch self {
         case .ready(let value), .stateChanged(let value), .position(let value), .timelineReset(let value), .ended(let value),
              .mediaServicesReset(let value): value
-        case .failed: nil
+        case .failed, .streamingConfirmationRequired: nil
         }
     }
+}
+
+/// A Picture in Picture seek's cancellation, set from any thread, read when its engine stage runs.
+final class PictureSeekCancellation: @unchecked Sendable {
+    private let lock = NSLock()
+    private var value = false
+    var isSet: Bool { lock.withLock { value } }
+    func set() { lock.withLock { value = true } }
 }
 
 /// Counts playback an engine started by itself, from any thread (the store's adoption transaction reads it).
@@ -1300,4 +1733,16 @@ final class PlaybackResumptionFence: @unchecked Sendable {
 
     var count: UInt64 { lock.withLock { value } }
     func advance() { lock.withLock { value &+= 1 } }
+}
+
+/// A store write the coordinator makes, with the values it passes (tests trace and hold them, `storeGate`).
+enum PlaybackStoreCall: Equatable, Sendable {
+    case beginPlayback(episodeID: Int64, positionMilliseconds: Int32?)
+    case recordPlayback(sessionID: UUID, sample: PlaybackSample, now: Date, synchronize: Bool)
+    case recordPlaybackIntent(sessionID: UUID, positionMilliseconds: Int32, durationMilliseconds: Int32, intentional: Bool, now: Date)
+    case recordSeekIntent(sessionID: UUID, from: Int32, to: Int32, wantsPlayback: Bool, now: Date)
+    case timelineReset(sessionID: UUID, sample: PlaybackSample, now: Date)
+    case endPlayback(sessionID: UUID, reason: PlaybackEndReason, now: Date)
+    case resetPlaybackPosition(episodeID: Int64)
+    case requestMediaDeletion(episodeID: Int64)
 }

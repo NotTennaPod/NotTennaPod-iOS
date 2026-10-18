@@ -61,6 +61,45 @@ struct FeedLogDetailsViewTests {
         #expect(copied.last == value.clipboard && !copyButton.isEnabled)
     }
 
+    /// The server's failed refresh (a server library): Android's sections with the server's words, then when each side last
+    /// refreshed, stacked in order without overlap or clipping at phone, Duo and tablet widths, in both directions.
+    @Test func theServersFailureWithWhenEachSideLastRefreshed() throws {
+        var feed = LibraryFeed(id: 7, source: "https://example.test/feed.xml", metadata: ParsedFeed(format: .rss, title: "Podcast"), episodes: [])
+        feed.serverRefresh = ServerRefreshStatus(lastAttempt: Date(timeIntervalSince1970: 1_700_000_000), label: "parser_exception")
+        feed.localRefreshAttempt = Date(timeIntervalSince1970: 1_700_003_600)
+        let value = try #require(FeedLogDetails.refreshFailure(latestLog: nil, feed: feed, text: Appearance.text, date: { _ in "date" }))
+        #expect(value.origins == ["The server: Failed (date)", "This device: Successful (date)"])
+        let controller = FeedLogDetailsDialog.make(value) { _ in }
+        for width in [320, 402, 600, 834] as [CGFloat] {
+            for rtl in [false, true] {
+                controller.loadViewIfNeeded()
+                controller.view.semanticContentAttribute = rtl ? .forceRightToLeft : .forceLeftToRight
+                layout(controller, width: width)
+                let body = try #require(element("feedLogDetailsBody", in: controller.view, as: FeedLogDetailsBody.self))
+                body.semanticContentAttribute = controller.view.semanticContentAttribute
+                body.setNeedsLayout(); body.layoutIfNeeded()
+                let ids = ["feedLogPodcast", "feedLogStatus", "feedLogTechnical", "feedLogURL", "feedLogOrigins"]
+                var end: CGFloat = 0
+                for id in ids {
+                    let heading = try #require(element(id + "Heading", in: body, as: UILabel.self))
+                    let label = try #require(element(id, in: body, as: UILabel.self))
+                    #expect(heading.frame.minY >= end - 0.5 && label.frame.minY >= heading.frame.maxY - 0.5, "\(id) \(width) rtl=\(rtl)")
+                    #expect(label.frame.minX > 0 && label.frame.maxX < body.bounds.width, "\(id) side margins")
+                    let needed = label.sizeThatFits(CGSize(width: label.frame.width, height: .greatestFiniteMagnitude)).height
+                    #expect(needed <= label.frame.height + 0.5, "\(id) not clipped")
+                    #expect(label.textAlignment == (rtl ? .right : .left))
+                    end = label.frame.maxY
+                }
+                #expect(element("feedLogTechnical", in: body, as: UILabel.self)?.text == "")
+                #expect(element("feedLogOrigins", in: body, as: UILabel.self)?.text == "The server: Failed (date)\nThis device: Successful (date)")
+                #expect(body.bounds.height >= end)
+            }
+        }
+        #expect(value.clipboard.hasSuffix("Last refresh: \nThe server: Failed (date)\nThis device: Successful (date)"))
+        // This device's own failure (any library) shows no such section.
+        #expect(element("feedLogOrigins", in: FeedLogDetailsDialog.make(details()) { _ in }.view, as: UILabel.self) == nil)
+    }
+
     @Test func missingTitleLongDetailsRTLAndShortViewportRetainScrollableBodyAndPinnedActions() throws {
         let controller = FeedLogDetailsDialog.make(details(title: nil, diagnostic: String(repeating: "long diagnostic line\n", count: 80))) { _ in }
         for width in [320, 402, 834] as [CGFloat] {

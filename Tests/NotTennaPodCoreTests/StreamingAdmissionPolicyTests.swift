@@ -80,6 +80,28 @@ struct StreamingAdmissionPolicyTests {
                             streamingAllowed: false, isCasting: false) == .confirm(mediaID: 2))
     }
 
+    /// A cast load passes the policy; when its relay is then refused, the route's request makes the episode the pending
+    /// confirmation item, so the affirmative Play reloads it with one-time consent (instead of proceeding, which would
+    /// reload without consent and be refused again forever). Reselection still replaces it.
+    @Test func routeRefusalMakesThePendingConfirmationItem() {
+        var policy = Policy()
+        policy.willLoadEpisode()
+        #expect(policy.loadedMedia(remote, streamingAllowed: false, isCasting: true) == .proceed)
+        #expect(policy.pendingMediaID == nil)
+        #expect(policy.requireConfirmation(mediaID: 2) == .confirm(mediaID: 2))
+        #expect(policy.pendingMediaID == 2 && !policy.allowStreamingThisTime)
+        #expect(policy.play(isConfirmationItem: true, currentMedia: nil, state: .ready,
+                            streamingAllowed: false, isCasting: true) == .reload(mediaID: 2))
+        #expect(policy.pendingMediaID == nil && policy.allowStreamingThisTime)
+        policy.willLoadEpisode()
+        #expect(policy.loadedMedia(remote, streamingAllowed: false, isCasting: true) == .proceed)
+        #expect(!policy.allowStreamingThisTime)
+        _ = policy.requireConfirmation(mediaID: 2)
+        policy.willLoadEpisode()
+        #expect(policy.play(isConfirmationItem: true, currentMedia: nil, state: .ready,
+                            streamingAllowed: false, isCasting: true) == .proceed, "a reselection replaced it")
+    }
+
     // New-load and existing-item admission for every input are the 8 "load" and
     // 64 "play" rows of the Android oracle above.
 

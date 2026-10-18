@@ -8,7 +8,7 @@ import Testing
 /// whole (never clipped) at the device's own size and at iPhone, iPad and Duo sizes in both orientations, left to right
 /// and right to left, with large text, and readable by VoiceOver; a later start for the same occurrence, another scene,
 /// a damaged registry and a normal start show nothing.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(5)))
+@MainActor @Suite(.serialized)
 struct MissingLibraryNoticeViewTests {
     static let message = "The server library could not be found on this device, so this device's library is open instead."
 

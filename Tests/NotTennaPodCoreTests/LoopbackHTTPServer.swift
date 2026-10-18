@@ -16,6 +16,9 @@ final class LoopbackHTTPServer: @unchecked Sendable {
         var body = Data("<rss><channel><title>Network podcast</title><item><title>Episode</title></item></channel></rss>".utf8)
         var keepConnectionOpen = false
         var includeAutomaticContentLength = true
+        /// Paced delivery: the body is written `pace` bytes at a time, each write after the previous one was taken and
+        /// a millisecond's pause, so the client receives it in small pieces rather than in socket-buffer-sized ones.
+        var pace: Int? = nil
     }
 
     private let listener: NWListener
@@ -161,11 +164,15 @@ final class LoopbackHTTPServer: @unchecked Sendable {
         }
         for (key, value) in response.headers { output += "\(key): \(value)\r\n" }
         output += "\r\n"
+        if let pace = response.pace, pace > 0 {
+            sendPaced(Data(output.utf8), body: response.body, pace: pace, keepOpen: response.keepConnectionOpen, to: connection)
+            return
+        }
         let declared = response.headers.first { $0.key.lowercased() == "content-length" }.flatMap { Int($0.value) }
         if !response.keepConnectionOpen, let declared, declared > response.body.count {
             // A truncated body: on a real network the bytes arrive and the connection drops afterwards.
             // When the close reaches URLSession in the same read as the bytes (loopback), URLSession reports
-            // "connection lost" and drops those bytes before any delegate call (seen 2026-09-28: response,
+            // "connection lost" and drops those bytes before any delegate call (seen: a response,
             // then -1005 with no didReceive data), which is not what the code under test handles in practice.
             connection.send(content: Data(output.utf8) + response.body, contentContext: .defaultMessage, isComplete: true,
                             completion: .contentProcessed { [weak self] error in
@@ -181,6 +188,25 @@ final class LoopbackHTTPServer: @unchecked Sendable {
                         isComplete: true, completion: .contentProcessed { [weak self] error in
             if error != nil { connection.cancel() }
             else { self?.sentResponses.withLock { $0 += 1 } }
+        })
+    }
+    private func sendPaced(_ head: Data, body: Data, pace: Int, keepOpen: Bool, to connection: NWConnection) {
+        connection.send(content: head, contentContext: .defaultMessage, isComplete: true, completion: .contentProcessed { [weak self] error in
+            if error != nil { connection.cancel(); return }
+            self?.sendPiece(body, from: body.startIndex, pace: pace, keepOpen: keepOpen, to: connection)
+        })
+    }
+    private func sendPiece(_ body: Data, from index: Data.Index, pace: Int, keepOpen: Bool, to connection: NWConnection) {
+        guard index < body.endIndex else {
+            sentResponses.withLock { $0 += 1 }
+            if !keepOpen { connection.send(content: nil, contentContext: .finalMessage, isComplete: true, completion: .idempotent) }
+            return
+        }
+        let end = min(body.endIndex, index + pace)
+        connection.send(content: body[index..<end], contentContext: .defaultMessage, isComplete: true, completion: .contentProcessed { [weak self] error in
+            // A client that left ends the response.
+            guard error == nil, let self else { connection.cancel(); return }
+            self.queue.asyncAfter(deadline: .now() + .milliseconds(1)) { self.sendPiece(body, from: end, pace: pace, keepOpen: keepOpen, to: connection) }
         })
     }
     private func observeDisconnect(_ connection: NWConnection) {

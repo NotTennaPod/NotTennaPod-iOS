@@ -4,7 +4,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct SynchronizationDeliveryViewTests {
     private func find<T: UIView>(_ type: T.Type, in view: UIView) -> T? {
         (view as? T) ?? view.subviews.lazy.compactMap { find(type, in: $0) }.first

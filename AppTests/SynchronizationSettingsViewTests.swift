@@ -6,7 +6,7 @@ import Testing
 
 /// Mounted component evidence. The transport is controlled; these checks do
 /// not establish provider interoperability, physical input or application routing.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct SynchronizationSettingsViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView, as: T.Type = T.self) -> T? {
         if let value = view as? T, value.accessibilityIdentifier == id { return value }

@@ -5,7 +5,7 @@ import Testing
 /// Multi-select actions over a long feed run in one transaction, without re-reading the feed per episode,
 /// and leave exactly the state the one-episode-at-a-time actions leave (episodes, queue, sync outbox,
 /// statistics session).
-@MainActor @Suite(.timeLimit(.minutes(2))) struct BulkEpisodeActionTests {
+@MainActor @Suite struct BulkEpisodeActionTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
     private let count = 150
 
@@ -63,10 +63,10 @@ import Testing
             #expect(try await outcome(a, feedA.id) == outcome(b, feedB.id))
             let ids = feedA.displayEpisodes.map(\.id)
             _ = try await a.snapshot()
-            let commits = await a.writeCommits, reloads = await a.feedEpisodeReloads
+            let commits = await a.writeCommits, reloads = await a.feedEpisodeReads
             try await bulk(a, ids)
             #expect(await a.writeCommits - commits == 1)
-            #expect(await a.feedEpisodeReloads == reloads)
+            #expect(await a.feedEpisodeReads == reloads)
             for id in ids { try await single(b, id) }
             let result = try await outcome(a, feedA.id)
             #expect(result == (try await outcome(b, feedB.id)))

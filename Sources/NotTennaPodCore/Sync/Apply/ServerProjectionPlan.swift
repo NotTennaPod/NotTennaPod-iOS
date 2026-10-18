@@ -58,7 +58,9 @@ struct ServerPodcastFields: OptionSet, Hashable, Sendable {
     static let credentials = Self(rawValue: 1 << 3)
     static let metadata = Self(rawValue: 1 << 4)
     static let identityRules = Self(rawValue: 1 << 5)
-    static let all = Self(rawValue: (1 << 6) - 1)
+    /// The server's refresh status of the podcast (`LibraryFeed.serverRefresh`).
+    static let refreshStatus = Self(rawValue: 1 << 6)
+    static let all = Self(rawValue: (1 << 7) - 1)
 
     static func of(group: String) -> Self {
         switch group {
@@ -68,6 +70,7 @@ struct ServerPodcastFields: OptionSet, Hashable, Sendable {
         case "credentials": .credentials
         case "metadata": .metadata
         case "identity_rules": .identityRules
+        case "refresh_status": .refreshStatus
         default: []
         }
     }
@@ -157,6 +160,14 @@ struct ServerProjectionPlan {
     /// A removal whose podcast holds the player's current episode (PROTOCOL §6.8): the other episodes go, the playing one stays
     /// for the player only.
     var pinnedRemovals: [(feedID: Int64, podcast: String, episodeID: Int64)] = []
+    /// Feeds of `pinnedRemovals` and `hiddenRemovals` that go because their podcast merged into a live one (PROTOCOL
+    /// §9.7): no generation closed, so the player's episode keeps its sync identity; every other removal detaches it.
+    var mergeRemovals: Set<Int64> = []
+    /// Podcasts whose generation this plan closes (a removal, or a new generation over a closed one): the overlays of
+    /// this library's pending facts on their episodes are of the closed generation and go with its rows (PROTOCOL §6.8).
+    var closedPodcasts: Set<String> = []
+    /// The generation each removed feed's podcast had live before this plan (what a removal closes).
+    var closedGenerations: [Int64: String] = [:]
     var podcastMappings: [String: (feedID: Int64?, liveGeneration: String?)] = [:]
     var identityRules: [String: ContractJSON?] = [:]
     var episodeMappings: [String: (localID: Int64?, podcast: String, kind: String, value: String, occurrence: ContractJSON?, mergedInto: String?)] = [:]

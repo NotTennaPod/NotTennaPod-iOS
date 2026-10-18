@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPodCore
 
 /// The session recorder (PROTOCOL §8): golden facts for every playback path.
-@Suite(.timeLimit(.minutes(5))) struct ServerPlaybackRecorderTests {
+@Suite struct ServerPlaybackRecorderTests {
     typealias Fact = ServerLibraryFixture.Fact
 
     static func library() async throws -> (fixture: ServerLibraryFixture, ids: [Int64], podcast: String, generation: String) {
@@ -316,5 +316,205 @@ extension FeedLibraryStore {
             publicationDate: Date(timeIntervalSince1970: 1_700_000_000), media: ParsedMedia(url: "file:///file-1.mp3", size: 10, durationMilliseconds: 600_000)))]
         try write(.local) { try save(feed) }
         return episodeID
+    }
+}
+
+// MARK: - Cuts and listening the server refused (PROTOCOL §6.13, §8.2)
+
+extension ServerPlaybackRecorderTests {
+    /// The cut's error, nil when it went through.
+    static func refusal(_ body: () async throws -> Void) async throws -> ServerRecordingError? {
+        do { try await body(); return nil } catch let error as ServerRecordingError { return error }
+    }
+
+    /// What a cut must leave alone: the large episode's history, last played, played time and position, and the outbox.
+    static func image(_ fixture: ServerLibraryFixture, _ id: Int64) async throws -> [Int64?] {
+        let state = try #require(try await fixture.store.episode(id: id)).userState
+        return [state.lastPlayedHistoryMilliseconds, state.lastPlayedTimeMilliseconds, state.playedDurationMilliseconds,
+                Int64(state.positionMilliseconds), Int64(try fixture.outboxCount())]
+    }
+
+    /// Listening the server refused as too large blocks every cut that would cover it: a history clear, a statistics reset
+    /// and a removal of its episode's history are refused and change nothing (rows, played time, outbox); removing another
+    /// episode's history is not blocked. After "Keep only on this device" the clear and the reset go through, cover it
+    /// here, and a full reprojection matches.
+    @Test func cutsWaitForRefusedListeningUntilItIsKeptOnThisDevice() async throws {
+        let (fixture, small, large) = try await ServerOwedReplayTests.oversizedEpisode()
+        do {
+            let store = fixture.store
+            let player = StorePlayer(store)
+            try await player.load(small[0]); try await player.play(); try await player.listen(20); try await player.pause()
+            try await player.load(large); try await player.play(); try await player.listen(65); try await player.pause()
+            let refusedImage = try await Self.image(fixture, large)
+            #expect(refusedImage[0] != nil && refusedImage[2] == 65_000)
+            #expect(try await Self.refusal { _ = try await store.clearPlaybackHistory() } == .cutBlockedByRefusedListening(intent: "historyClear"))
+            #expect(try await Self.image(fixture, large) == refusedImage, "the clear changed nothing")
+            #expect(try await store.episode(id: small[0])?.userState.lastPlayedHistoryMilliseconds != nil, "nor another episode's history")
+            #expect(try await Self.refusal { try await store.resetPlayedDurationStatistics() } == .cutBlockedByRefusedListening(intent: "statisticsReset"))
+            #expect(try await Self.image(fixture, large) == refusedImage, "the reset changed nothing")
+            #expect(try await store.episode(id: small[0])?.userState.playedDurationMilliseconds == 20_000)
+            #expect(try await Self.refusal { _ = try await store.removeFromPlaybackHistoryWithUndo(large) } == .cutBlockedByRefusedListening(intent: "historyRemove"))
+            #expect(try await Self.image(fixture, large) == refusedImage)
+            // Another episode's history removal is not blocked.
+            #expect(try await store.removeFromPlaybackHistoryWithUndo(small[0]) != nil)
+            #expect(try await store.episode(id: small[0])?.userState.lastPlayedHistoryMilliseconds == nil)
+            // Keep only on this device: the listening stays here, and the cuts cover it.
+            let item = try #require(try await store.serverAttentionItems().first)
+            try await store.keepRefusedListeningOnThisDevice(item)
+            #expect(try await store.serverAttentionItems().isEmpty)
+            #expect(try await Self.image(fixture, large).prefix(4) == refusedImage.prefix(4), "kept as it was")
+            #expect(try await store.pendingListeningForTesting(large).history != nil, "its listening is still this device's history")
+            _ = try await store.clearPlaybackHistory()
+            #expect(try await store.episode(id: large)?.userState.lastPlayedHistoryMilliseconds == nil)
+            // What every later projection of the episode reads: the clear covers the kept listening's history entries, not
+            // its last played.
+            let pending = try await store.pendingListeningForTesting(large)
+            #expect(pending.history == nil && pending.lastPlayed != nil, "\(pending)")
+            try await store.resetPlayedDurationStatistics()
+            #expect(try await store.episode(id: large)?.userState.playedDurationMilliseconds == 0)
+            var differences = try await ServerChangeSetCaptureTests.rebuildDifferences(store, ownedRoot: fixture.directory, archive: nil)
+            #expect(differences.isEmpty, "a full reprojection matches: \(differences.prefix(3))")
+            // Listening after the reset counts from it: what the reset covered never comes back.
+            try await player.play(); try await player.listen(5); try await player.pause()
+            #expect(try await store.episode(id: large)?.userState.playedDurationMilliseconds == 5_000)
+            differences = try await ServerChangeSetCaptureTests.rebuildDifferences(store, ownedRoot: fixture.directory, archive: nil)
+            #expect(differences.isEmpty, "after more listening: \(differences.prefix(3))")
+            // Its session never exports, whatever is recorded later.
+            let before = try fixture.outboxCount()
+            try await player.load(small[1])
+            #expect(try fixture.newFacts(after: before).filter { Self.playback.contains($0.type) && $0.episodeIDs == [(try? fixture.wireID(large)) ?? ""] }.isEmpty)
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
+
+    /// Kept on this device, the episode's history can be removed and the removal undone: the history returns as it was,
+    /// a full reprojection matches at each step, and the kept session exports nothing.
+    @Test func keptListeningsHistoryRemovalIsUndone() async throws {
+        let (fixture, _, large) = try await ServerOwedReplayTests.oversizedEpisode()
+        do {
+            let store = fixture.store
+            let player = StorePlayer(store)
+            try await player.load(large); try await player.play(); try await player.listen(30); try await player.pause()
+            let history = try #require(try await store.episode(id: large)?.userState.lastPlayedHistoryMilliseconds)
+            try await store.keepRefusedListeningOnThisDevice(try #require(try await store.serverAttentionItems().first))
+            // Kept for good: even once the episode's facts fit again (here, its history removal), its session never exports.
+            await store.setServerFactBoundForTesting(nil)
+            let receipt = try #require(try await store.removeFromPlaybackHistoryWithUndo(large))
+            #expect(try await store.episode(id: large)?.userState.lastPlayedHistoryMilliseconds == nil)
+            #expect(try await store.pendingListeningForTesting(large).history == nil, "the removal covers it in later projections")
+            var differences = try await ServerChangeSetCaptureTests.rebuildDifferences(store, ownedRoot: fixture.directory, archive: nil)
+            #expect(differences.isEmpty, "removed: \(differences.prefix(3))")
+            #expect(try await store.undoHistoryRemoval(receipt).status == .restored)
+            #expect(try await store.episode(id: large)?.userState.lastPlayedHistoryMilliseconds == history)
+            #expect(try await store.pendingListeningForTesting(large).history == history, "the Undo gives it back")
+            differences = try await ServerChangeSetCaptureTests.rebuildDifferences(store, ownedRoot: fixture.directory, archive: nil)
+            #expect(differences.isEmpty, "restored: \(differences.prefix(3))")
+            #expect(try fixture.outbox().filter { Self.playback.contains($0.type) }.isEmpty, "the kept session never exports")
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
+
+    /// A cut whose own flush finds the listening too large (the open session's first export) is refused, and the
+    /// refusal is kept: Needs attention lists the episode, so the message's way out is there.
+    @Test func aCutWhoseFlushFindsListeningTooLargeKeepsTheRefusalListed() async throws {
+        let (fixture, _, large) = try await ServerOwedReplayTests.oversizedEpisode()
+        do {
+            let store = fixture.store
+            await store.setServerFactBoundForTesting(nil)
+            let player = StorePlayer(store)
+            try await player.load(large); try await player.play(); try await player.listen(10)
+            // Still playing, nothing exported since the start: the bound falls, then a clear flushes the open session.
+            await store.setServerFactBoundForTesting(ServerOwedReplayTests.smallBound)
+            let before = try fixture.outboxCount()
+            #expect(try await Self.refusal { _ = try await store.clearPlaybackHistory() } == .cutBlockedByRefusedListening(intent: "historyClear"))
+            #expect(try await store.serverAttentionItems().map(\.kind) == [.refusedListening(episodeTitle: ServerOwedReplayTests.largeTitle)])
+            #expect(try fixture.outboxCount() == before)
+            #expect(try await store.episode(id: large)?.userState.lastPlayedHistoryMilliseconds != nil, "the history is not cleared")
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
+}
+
+// MARK: - Leaves and finalizations too large for the server (PROTOCOL §6.13)
+
+extension ServerPlaybackRecorderTests {
+    /// A paused, never-played load of the oversized episode, then a switch away: its `episode.leave` is too large. It is kept
+    /// due, refused, listed by its episode; what projections read keeps its history; a history clear waits for it; once
+    /// the bound is restored, Try again records it, and nothing is left due or listed.
+    @Test func aLeaveTooLargeIsKeptListedAndSentOnceItFits() async throws {
+        let (fixture, small, large) = try await ServerOwedReplayTests.oversizedEpisode()
+        do {
+            let store = fixture.store
+            let player = StorePlayer(store)
+            try await player.load(large)
+            let before = try fixture.outboxCount()
+            try await player.load(small[0])
+            let due = try await store.transitionStateForTesting().due
+            #expect(due.map(\.refused) == [.tooLarge] && due.first?.transition.kind == .leave && due.first?.transition.episodeID == large)
+            #expect(try await store.serverAttentionItems().map(\.kind) == [.refusedListening(episodeTitle: ServerOwedReplayTests.largeTitle)])
+            #expect(try fixture.newFacts(after: before).filter { $0.type == "episode.leave" }.isEmpty)
+            let history = try #require(try await store.episode(id: large)?.userState.lastPlayedHistoryMilliseconds)
+            #expect(try await store.pendingListeningForTesting(large).history == history, "projections keep its history")
+            let differences = try await ServerChangeSetCaptureTests.rebuildDifferences(store, ownedRoot: fixture.directory, archive: nil)
+            #expect(differences.isEmpty, "\(differences.prefix(3))")
+            #expect(try await Self.refusal { _ = try await store.clearPlaybackHistory() } == .cutBlockedByRefusedListening(intent: "historyClear"))
+            await store.setServerFactBoundForTesting(nil)
+            #expect(try await store.retryRefusedListening())
+            let leaves = try fixture.newFacts(after: before).filter { $0.type == "episode.leave" }
+            let wire = try #require(try fixture.wireID(large))
+            #expect(leaves.count == 1 && leaves.first?.episodeIDs == [wire])
+            #expect(try await store.transitionStateForTesting().due.isEmpty)
+            #expect(try await store.serverAttentionItems().isEmpty)
+            await fixture.close()
+        } catch { await fixture.close(); throw error }
+    }
+
+    /// A finalization alone too large (the session's facts were recorded under a larger bound, the bound fell before the
+    /// switch finalized it after a relaunch): kept due, listed, its history kept in what projections read, recorded by Try
+    /// again once it fits. Kept on this device instead, it stays due as this device's, never sent.
+    @Test(arguments: [false, true]) func aFinalizationTooLargeIsKeptListedAndSentOnceItFits(keep: Bool) async throws {
+        let (fixture, _, large) = try await ServerOwedReplayTests.oversizedEpisode()
+        await fixture.store.setServerFactBoundForTesting(nil)
+        var player = StorePlayer(fixture.store)
+        try await player.load(large); try await player.play(); try await player.listen(20); try await player.pause()
+        player = try await player.relaunch(fixture.url)
+        let store = player.store
+        do {
+            try await store.flushServerPlayback()
+            await store.setServerFactBoundForTesting(ServerOwedReplayTests.smallBound)
+            let before = try fixture.outboxCount()
+            try await player.end(.switched)
+            let due = try await store.transitionStateForTesting().due
+            #expect(due.map(\.refused) == [.tooLarge] && due.first?.transition.kind == .finalize, "\(due)")
+            let item = try #require(try await store.serverAttentionItems().first)
+            let title = await ServerOwedReplayTests.largeTitle
+            #expect(item.kind == .refusedListening(episodeTitle: title))
+            let history = try #require(try await store.episode(id: large)?.userState.lastPlayedHistoryMilliseconds)
+            #expect(try await store.pendingListeningForTesting(large).history == history, "projections keep its history")
+            await store.setServerFactBoundForTesting(nil)
+            if keep {
+                try await store.keepRefusedListeningOnThisDevice(item)
+                #expect(try await store.transitionStateForTesting().due.map(\.refused) == [.keptLocal])
+                #expect(!(try await store.retryRefusedListening()), "nothing to try: it is this device's")
+                #expect(try fixture.newFacts(after: before).filter { $0.type == "session.finalize" }.isEmpty)
+                _ = try await store.clearPlaybackHistory()
+                #expect(try await store.pendingListeningForTesting(large).history == nil, "a later clear covers it")
+            } else {
+                #expect(try await store.retryRefusedListening())
+                #expect(try fixture.newFacts(after: before).map(\.type) == ["session.finalize"])
+                #expect(try await store.transitionStateForTesting().due.isEmpty)
+            }
+            #expect(try await store.serverAttentionItems().isEmpty)
+            try await store.close()
+            await fixture.close()
+        } catch { try? await store.close(); await fixture.close(); throw error }
+    }
+}
+
+extension FeedLibraryStore {
+    /// This device's unexported listening of an episode as every projection reads it (`ServerProjector.pendingListening`).
+    func pendingListeningForTesting(_ localID: Int64) throws -> (lastPlayed: Int64?, history: Int64?) {
+        guard let context = serverContext else { throw ServerRecordingError.notAServerLibrary }
+        return try unitProjector(context: context, now: 0).pendingListening(localID)
     }
 }

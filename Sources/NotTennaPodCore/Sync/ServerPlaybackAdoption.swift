@@ -1,7 +1,8 @@
 import Foundation
 
-/// The sync layer's side of adoption while paused (PROTOCOL §8.6): when an exchange has applied what another
-/// device did, and whenever the player stops playing, a remote position waiting for the player's episode is adopted
+/// The sync layer's side of adoption while paused (PROTOCOL §8.6): when what adoption depends on changed (position knowledge),
+/// after an exchange applied what another device did, at launch, and whenever the player stops playing, a remote position
+/// waiting for the player's episode is adopted
 /// through the coordinator's command queue (`PlaybackCoordinator.adoptRemotePosition`). Sync never seeks, pauses or
 /// replaces playing audio: while the player plays, prepares or waits to resume after an interruption, the position
 /// keeps waiting, and the next pause tries again. Failures are ignored; the next attempt starts over.
@@ -23,10 +24,17 @@ import Foundation
               let episodeID = playback.episode?.id else { return }
         let store = store
         running = Task { [weak self] in
-            if (try? await store.serverAdoptionWaiting(episodeID: episodeID)) == true {
+            // A rebaseline settles the version without moving the player; only an adoption goes through the
+            // coordinator's command queue (which checks again that nothing plays).
+            switch (try? await store.serverAdoptionCheck(episodeID: episodeID)) ?? .none {
+            case .adopt:
                 try? await playback.adoptRemotePosition(episodeID: episodeID) { stillPaused in
                     try await store.adoptRemotePosition(episodeID: episodeID, stillPaused: stillPaused)
                 }
+            case .rebaseline:
+                _ = try? await store.noteAdoptionBaseline(episodeID: episodeID)
+            case .none:
+                break
             }
             guard let self else { return }
             self.running = nil

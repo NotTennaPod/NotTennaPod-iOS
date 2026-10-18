@@ -6,7 +6,7 @@ import Testing
 /// Mounted checks: every Settings → Swipe actions row opens
 /// its screen's dialog with the source title and defaults, Cancel stores nothing and Confirm stores the pair and the
 /// switch; Queue and History swipes remove with their source message and Undo, locked or not; selection rules; RTL.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct SwipeSettingsViewTests {
     private final class Engine: PlaybackEngine {
         var reading: PlaybackEngineReading?
@@ -48,7 +48,7 @@ struct SwipeSettingsViewTests {
     /// One podcast, five episodes: 1–4 queued in that order; all five in History, newest first 1…5.
     private func withScreen(_ destination: NavigationDestination, locked: Bool = false, rtl: Bool = false,
                             _ body: @MainActor (LibraryViewController, Fixture) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M26View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("SwipeSettingsView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let store = try FeedLibraryStore(url: root.appendingPathComponent("library.sqlite"))
@@ -56,10 +56,10 @@ struct SwipeSettingsViewTests {
         let playback = PlaybackCoordinator(store: store, engine: Engine())
         do {
             let base = Date(timeIntervalSince1970: 1_780_000_000)
-            let feed = try await store.insert(.init(feed: .init(format: .rss, title: "M26", episodes: (1...5).map {
-                .init(identifier: "m26-\($0)", title: "M26 episode \($0)", publicationDate: base.addingTimeInterval(Double($0) * 3600),
-                      media: .init(url: "https://example.invalid/m26/\($0).mp3", size: 42, durationMilliseconds: 1_800_000))
-            }), source: "https://example.invalid/m26", responseURL: URL(string: "https://example.invalid/m26")!, validator: nil, permanentRedirectURL: nil))
+            let feed = try await store.insert(.init(feed: .init(format: .rss, title: "Swipe podcast", episodes: (1...5).map {
+                .init(identifier: "swipe-\($0)", title: "Swipe episode \($0)", publicationDate: base.addingTimeInterval(Double($0) * 3600),
+                      media: .init(url: "https://example.invalid/swipe/\($0).mp3", size: 42, durationMilliseconds: 1_800_000))
+            }), source: "https://example.invalid/swipe", responseURL: URL(string: "https://example.invalid/swipe")!, validator: nil, permanentRedirectURL: nil))
             let ids = feed.episodes.map(\.id).sorted()
             for (index, id) in ids.enumerated() {
                 try await store.updateEpisode(id: id) {

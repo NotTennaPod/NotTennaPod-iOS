@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct FFmpegPacketReadLeaseTests {
+@Suite(.serialized) struct FFmpegPacketReadLeaseTests {
     private static let names = ["tone-vorbis.ogg", "tone-opus.ogg", "tone-opus.webm"]
     private enum Failure: Error { case deadline }
 

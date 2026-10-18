@@ -38,6 +38,11 @@ struct ServerShadowStaging: Sendable {
 }
 
 enum ServerShadow {
+    /// What a switch's reveal of one episode staged into a shown podcast costs, in counted row writes: it deletes the
+    /// episode's hidden marker and updates its list keys and its podcast's counts (schema 21), three SQLite rows measured
+    /// at about 12 µs together, a counted row write's cost (about 10 µs a row written, up to two rows each).
+    static let revealWork = 1
+
     static let schema = [
         // `stage`: 1 for a row staged ahead of the unit, 0 for one the unit itself writes. Episodes
         // also: 2 for a shown row only the commit's content changes, shown ahead of the unit (stall fix (c)), 3 once
@@ -126,14 +131,16 @@ enum ServerShadow {
             try projector.addHistoryScope(input.commit, scope: &scope)
             try projector.project(scope)
             let projected = try ServerShadowScope(projector, player: try ServerFullReprojection.player(connection), live: connection)
-            // Its projection context, for its switch and every retry: the commit's resets and the
-            // retirement's withdrawn queue members.
-            let context = ServerProjectionContext(commitResets: projector.commitResets, withdrawnQueue: scope.withdrawnQueue)
+            // Its projection context, for its switch and every retry: the commit's resets, the retirement's withdrawn
+            // queue members and the queue memberships the commit removed.
+            let removed = input.commit.records.filter { $0.entity == "episode" && $0.fieldGroup == "queue_membership" && $0.value == nil }.map(\.id)
+            let context = ServerProjectionContext(commitResets: projector.commitResets, withdrawnQueue: scope.withdrawnQueue,
+                                                  removedMemberships: Set(removed))
             let source = try connection.rows("SELECT cursor FROM ntp_library WHERE id = 1").first?.first?.text.map { try SyncCursor(encoded: $0) }
             var changed = Set<Int64>()
             for (id, entry) in projector.plan.episodes where !projector.plan.createdEpisodes.contains(id) {
                 guard let row = try connection.rows("SELECT record FROM episodes WHERE id = ?", [.integer(id)]).first, let data = row[0].data else { continue }
-                if try JSONDecoder().decode(LibraryEpisode.self, from: data).userState.playState != entry.episode.userState.playState { changed.insert(id) }
+                if try JSONDecoder.libraryRecord(LibraryEpisode.self, from: data).userState.playState != entry.episode.userState.playState { changed.insert(id) }
             }
             stage = try stageSets(projector.plan, records: input.commit.records, live: connection)
             stage.ahead = try aheadRows(input, plan: projector.plan, content: stage.content, playStateChanged: changed, scope: projected,
@@ -151,7 +158,11 @@ enum ServerShadow {
         let stagedRecords = stage.records.union(stage.updates).intersection(stage.changedKeys)
         let stagedRows = stage.feeds.intersection(plan.feeds.keys).count + stage.episodes.intersection(plan.episodes.keys).count
             + stage.mappings.intersection(plan.episodeMappings.keys).count + stage.ahead.intersection(plan.episodes.keys).count
-        let switchWork = work - stagedRecords.count - stagedRows
+        // Revealing an episode staged into a shown podcast deletes its hidden marker and updates its list keys and its
+        // podcast's counts (schema 21) in the switch (`revealWork` each). A new podcast is revealed as a whole, at no cost
+        // per episode.
+        let revealed = plan.episodes.filter { stage.episodes.contains($0.key) && !stage.feeds.contains($0.value.feedID) }.count
+        let switchWork = work - stagedRecords.count - stagedRows + Self.revealWork * revealed
         // The images go to the shadow file; publication copies them with keyed statements.
         let file = try SyncSQLite(url: url, durable: false)
         defer { try? file.close() }
@@ -396,7 +407,7 @@ extension FeedLibraryStore {
         try database.execute("ATTACH DATABASE ? AS shadow", [.text(shadow.url.path)])
         defer { try? database.execute("DETACH DATABASE shadow") }
         let clock = ContinuousClock(), started = clock.now
-        let changes = try database.scalar("SELECT total_changes()")
+        let changes = database.totalChanges, steps = database.statementSteps
         let kind = workLimit == nil && ticket?.budget != nil ? ServerTransactionKind.backgroundPublication : ServerTransactionKind.publication
         var published = try syncTransactions(kind) { try write(.remote, durable: true) {
             var result = ServerUnitResult(seq: input.commit.seq)
@@ -477,7 +488,8 @@ extension FeedLibraryStore {
             }
         } }
         published.lockMilliseconds = Self.milliseconds(started.duration(to: clock.now))
-        published.rowsWritten = Int(try database.scalar("SELECT total_changes()") - changes)
+        published.lockSteps = database.statementSteps - steps
+        published.rowsWritten = Int(database.totalChanges - changes)
         published.published = true
         return published
     }

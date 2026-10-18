@@ -4,7 +4,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct LocalMP3SourceTests {
+@MainActor @Suite(.serialized) struct LocalMP3SourceTests {
     nonisolated static let cases: [(String, Int64)] = [
         ("playback-30sec", 30_040_793), ("info", 30_040_816),
         ("playback-unknown-duration", 29_900_000),

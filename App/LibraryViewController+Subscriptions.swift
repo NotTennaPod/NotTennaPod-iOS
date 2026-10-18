@@ -20,6 +20,13 @@ extension LibraryViewController {
     }
     var globalAutoDownload: Bool { automaticDownloadPreferences?.value.global ?? false }
 
+    /// Subscriptions, Archive or the drawer (`SubscriptionListQueries.load`) over the screens' library, ordered and
+    /// filtered by the kept counts and newest dates: proportional to the podcasts, never to their episodes.
+    func subscriptionList(_ preferences: SubscriptionDisplayPreferences, state: FeedSubscriptionState) -> SubscriptionListQueries.Result {
+        mirror.subscriptionList(preferences: preferences, state: state, globalAutoDownload: globalAutoDownload,
+                                latest: preferences.order == .mostRecentEpisode ? latestDates : FeedLatestDates())
+    }
+
     func renderSubscriptions(heading: UILabel, archived: Bool) {
         let preferences = subscriptionDisplay
         // setColumnNumber writes the value on every creation, persisting the device-class default.
@@ -37,10 +44,10 @@ extension LibraryViewController {
         more.accessibilityIdentifier = "subscriptionsMore"; more.frame = layout.overflow
         [search, more].forEach(toolbar.addSubview)
 
-        let result = SubscriptionListQueries.load(feeds, preferences: preferences, state: archived ? .archived : .subscribed,
-                                                  globalAutoDownload: globalAutoDownload)
+        let result = subscriptionList(preferences, state: archived ? .archived : .subscribed)
         // Tag chips; the selected chip shows its members, or falls back to All.
         let chips = SubscriptionTagChips.chips(feeds, state: archived ? .archived : .subscribed)
+        subscriptionChips = chips
         let shown = SubscriptionTagChips.shown(selected: subscriptionTag(archived: archived), in: result)
         // Remember the fallback only once the library has loaded (an empty first render must not forget the chip).
         if !feeds.isEmpty, !FeedTags.equal(shown.tag, subscriptionTag(archived: archived)) {
@@ -79,12 +86,15 @@ extension LibraryViewController {
             let pixel = 1 / max(1, traitCollection.displayScale)
             let rowHeight = gridLayout.isList ? SubscriptionsGridLayout.listRowHeight : gridLayout.gridRowHeight(showTitle: preferences.showTitle, pixel: pixel)
             let rtl = view.effectiveUserInterfaceLayoutDirection == .rightToLeft
-            // Tiles are built only near the visible area, like the episode lists.
+            // Tiles are built only near the visible area, like the episode lists, from the tiles as they are now (a patch
+            // changes them, `patchSubscriptions`).
             let library = library, showTitle = preferences.showTitle, counters = result.counters
-            let feedsByID = Dictionary(shown.feeds.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+            subscriptionTiles = Dictionary(shown.feeds.map { ($0.id, ($0, counters[$0.id, default: 0])) }, uniquingKeysWith: { first, _ in first })
+            subscriptionGridGeometry = SubscriptionGridGeometry(layout: gridLayout, rowHeight: rowHeight, top: y, rightToLeft: rtl,
+                                                                selecting: selecting, archived: archived, filtered: preferences.filter.isEnabled,
+                                                                tag: shown.tag)
             let grid = LazyContentList(top: y) { [weak self] id in
-                guard let self, let feed = feedsByID[id] else { return UIView() }
-                let counter = counters[feed.id, default: 0]
+                guard let self, let (feed, counter) = subscriptionTiles[id] else { return UIView() }
                 let chosen = selecting && subscriptionSelection.ids.contains(feed.id)
                 let cell: UIControl
                 if gridLayout.isList {

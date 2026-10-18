@@ -18,7 +18,7 @@ import Testing
         return try JSONDecoder().decode(Oracle.self, from: Data(contentsOf: url))
     }
     private func folder() throws -> URL {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M36-Buttons-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("NowPlayingButtons-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         return root
     }
@@ -107,7 +107,7 @@ import Testing
         #expect(!loading.nextTrack && !loading.changeRate && !loading.skipForward)
     }
 
-    /// Android's speed button steps through the chosen speeds (M3PS:594–614); a receiver takes at most 2×.
+    /// Android's speed button steps through the chosen speeds (`Media3PlaybackService.setNextPlaybackSpeed`); a receiver takes at most 2×.
     @Test func speedPresetsAreTheOfferedRatesWithinTheRoute() {
         let offered = { (remote: Bool) in
             NowPlayingCommandAvailability.make(state: self.snapshot(), buttons: .init(), hardware: .init(), intervals: .init(),

@@ -43,7 +43,7 @@ extension FeedLibraryStore {
         }
         do {
             try database.savepoint("ntp_owed") {
-                let writer = ServerOutboxWriter(database: database, context: context, failAfter: nil)
+                let writer = ServerOutboxWriter(database: database, context: context, failAfter: nil, factBound: factBoundOverride)
                 let s = RecordingSession(intent: .playLoad, capture: capture, writer: writer, clientTime: owed.clientTime, now: now)
                 s.queueAfter = queue
                 try syncQueueKeys(s)
@@ -66,7 +66,7 @@ extension FeedLibraryStore {
         let offset = insertion.members.firstIndex(of: id) ?? 0
         let preceding = insertion.before.prefix(min(insertion.index, insertion.before.count)) + insertion.members.prefix(offset)
         let s = RecordingSession(intent: .playLoad, capture: ChangeCapture(clientTime: Date()),
-                                 writer: ServerOutboxWriter(database: database, context: context, failAfter: nil), clientTime: 0, now: 0)
+                                 writer: ServerOutboxWriter(database: database, context: context, failAfter: nil, factBound: factBoundOverride), clientTime: 0, now: 0)
         var anchors: [Int64] = []
         for candidate in preceding.reversed() {
             guard try !isDeviceOnly(candidate, s), let feed = try feedOf(candidate, s) else { continue }
@@ -84,12 +84,14 @@ extension FeedLibraryStore {
     func replayOwedStep(_ context: ServerLibraryContext) throws -> Bool {
         owedStepAdds = 0
         guard try owedCount() > 0 else { return false }
-        let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection)
+        let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection, factBound: factBoundOverride)
         var deferred = false, replayedAdds = 0
         do {
             try database.savepoint("ntp_owed") {
                 // What the person removed from the queue since owes nothing.
-                try writer.execute("DELETE FROM ntp_owed WHERE intent IN ('queue.add', 'queue.place') AND NOT EXISTS (SELECT 1 FROM queue WHERE queue.episode_id = CAST(substr(ntp_owed.subject, 9) AS INTEGER))")
+                try writer.execute("DELETE FROM ntp_owed WHERE intent IN ('queue.add', 'queue.place', 'queue.add.refused', 'queue.add.kept') AND NOT EXISTS (SELECT 1 FROM queue WHERE queue.episode_id = CAST(substr(ntp_owed.subject, 9) AS INTEGER))")
+                // A refused add whose episode left the queue needs nothing more.
+                try writer.execute("DELETE FROM ntp_attention WHERE kind = 'queue_add_refused' AND substr(id, 11) NOT IN (SELECT subject FROM ntp_owed WHERE intent = 'queue.add.refused')")
                 if try owedSettlement() {
                     // Bounded: a short queue is settled here, a long one by `replayOwedFacts()`; until then nothing owed
                     // is recorded with a key that does not hold yet.
@@ -128,7 +130,20 @@ extension FeedLibraryStore {
                 var recorded: String?
                 for (id, owed) in added {
                     let s = try session(owed?.clientTime ?? 0)
-                    recorded = try emitOwedAdd(s, id, place: owed?.place, order: order, dependencies: try queueProvenance(members: [id], s)) ?? recorded
+                    do {
+                        recorded = try emitOwedAdd(s, id, place: owed?.place, order: order, dependencies: try queueProvenance(members: [id], s)) ?? recorded
+                    } catch ServerRecordingError.factTooLarge(let type, let bytes) {
+                        // Larger than the server accepts (PROTOCOL §6.13): not sent, and not tried again until an explicit retry (the
+                        // bound is checked before anything of it is written); the episode stays in this device's queue, Needs
+                        // attention names it, and the other owed adds go on.
+                        let subject = Self.owedSubject(id)
+                        try writer.execute("UPDATE ntp_owed SET intent = 'queue.add.refused' WHERE intent = 'queue.add' AND subject = ?", [.text(subject)])
+                        var record: ContractObject = ["episode": .integer(id)]
+                        if let title = try loadEpisode(id)?.details.title { record["title"] = .string(title) }
+                        try writer.execute("INSERT INTO ntp_attention(id, kind, record, created_at) VALUES (?, 'queue_add_refused', ?, ?) ON CONFLICT(id) DO NOTHING",
+                                           [.text(Self.refusedAddAttention(subject)), .blob(try ContractJSON.object(record).canonicalData()), .integer(s.now)])
+                        noteServerDiagnostic("too_large", "\(ServerLogValue.type(type)) \(bytes) bytes: kept in this device's queue")
+                    }
                 }
                 if let recorded {
                     // The members the load re-keyed keep showing its order with the add, until the server's keys arrive.
@@ -213,7 +228,7 @@ extension FeedLibraryStore {
         for _ in 0..<3 {
             let snapshot = try database.transaction(write: false) { try owedSettlementSnapshot() }
             let plan = try await Task.detached(priority: .utility) { try Self.planOwedSettlement(snapshot) }.value
-            let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection)
+            let writer = ServerOutboxWriter(database: database, context: context, failAfter: recorderFailureInjection, factBound: factBoundOverride)
             do {
                 let applied = try replayTransaction(settlement: true) {
                     let applied = try database.savepoint("ntp_owed") { try applyOwedSettlement(plan, snapshot: snapshot, writer: writer) }

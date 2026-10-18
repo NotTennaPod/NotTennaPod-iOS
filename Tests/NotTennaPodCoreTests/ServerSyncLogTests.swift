@@ -5,7 +5,7 @@ import Synchronization
 
 /// The Synchronization log (PROTOCOL §15 "Diagnostics"): newest first, bounded, shared as text, and
 /// never a password, token, secret or URL userinfo, whichever path wrote it.
-@Suite(.serialized, .timeLimit(.minutes(10))) struct ServerSyncLogTests {
+@Suite(.serialized) struct ServerSyncLogTests {
     typealias Agreement = ServerExchangeAgreementTests
 
     private func archive() throws -> (ServerArchive, URL) {

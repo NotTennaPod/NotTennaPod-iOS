@@ -40,6 +40,8 @@ import NotTennaPodCore
     private var displayLink: CADisplayLink?
     private var initialScrollEnabled = true
     private var recognizers: [QueueRowDrag] = []
+    /// The held row was let go (the drag ended or was cancelled): what changed under it while it was held is shown now.
+    var released: ((Int64) -> Void)?
 
     init(episodes: [LibraryEpisode], list: LazyContentList, scroll: UIScrollView,
          policy: @escaping () -> QueueInteractionPolicy, commit: @escaping (QueueManualMove, [QueueEpisodeIdentity]) -> Void) {
@@ -67,9 +69,11 @@ import NotTennaPodCore
         displayLink?.invalidate(); displayLink = nil
         if let scroll, session != nil { scroll.isScrollEnabled = initialScrollEnabled }
         source?.layer.zPosition = 0; source?.transform = .identity
+        let held = session != nil ? sourceID : nil
         session = nil; source = nil; sourceID = nil
         place(episodes.map(\.id), dragging: false)
         for recognizer in recognizers { recognizer.isEnabled = false; recognizer.isEnabled = true }
+        if let held { released?(held) }
     }
     @objc private func changed(_ gesture: QueueRowDrag) {
         guard let scroll, let id = gesture.name.flatMap(Int64.init), let row = gesture.view as? EpisodeRowView else { return }
@@ -88,6 +92,7 @@ import NotTennaPodCore
             displayLink?.invalidate(); displayLink = nil; scroll.isScrollEnabled = initialScrollEnabled
             row.layer.zPosition = 0; source = nil; sourceID = nil; session = nil
             place(completed.order, dragging: false)
+            released?(id)
             if let move = completed.move { commit(move, completed.snapshot) }
         case .cancelled, .failed: if session != nil { cancel() }
         default: break
@@ -98,7 +103,8 @@ import NotTennaPodCore
         let center = location.y - touchOffset + source.bounds.height / 2
         // Every row's centre where it is placed now, built or not.
         var centers: [Int64: CGFloat] = [:]
-        for (index, id) in list.ids.enumerated() { centers[id] = list.frames[index].midY }
+        let frames = list.frames
+        for (index, id) in list.ids.enumerated() { centers[id] = frames[index].midY }
         current.cross(centerY: center, rowCenters: centers)
         session = current; place(current.order, dragging: true)
         source.frame.origin.y = location.y - touchOffset

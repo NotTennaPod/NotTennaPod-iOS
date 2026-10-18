@@ -117,6 +117,37 @@ struct SubscribedFeedHeaderViewTests {
         }
     }
 
+    /// A server library's podcast whose server refresh fails while this device's works shows Android's notice in the
+    /// same place, at every width and in both directions; the server recovering, it goes. The information screen never
+    /// shows it.
+    @Test func theServersFailedRefreshShowsTheSameNotice() throws {
+        var model = feed()
+        model.serverRefresh = ServerRefreshStatus(lastAttempt: Date(timeIntervalSince1970: 1_700_000_000), label: "forbidden", code: 403)
+        let header = SubscribedFeedHeaderView(feed: model)
+        var actions: [SubscribedFeedHeaderView.Action] = []
+        header.onAction = { actions.append($0) }
+        for width in [320, 402, 834, 1000] as [CGFloat] {
+            for rtl in [false, true] {
+                header.semanticContentAttribute = rtl ? .forceRightToLeft : .forceLeftToRight
+                layout(header, width: width)
+                let failure: UIControl = try element("feedRefreshFailure", in: header)
+                let info: UIButton = try element("feedInformation", in: header)
+                #expect(!failure.isHidden && failure.frame.minY >= info.frame.maxY && failure.frame.maxY <= header.bounds.height + 0.5)
+                #expect(failure.frame.minX >= 0 && failure.frame.maxX <= width + 0.5, "\(width) rtl=\(rtl)")
+                #expect(failure.accessibilityLabel == "Last refresh failed. Tap to view details.")
+            }
+        }
+        try element("feedRefreshFailure", in: header, as: UIControl.self).sendActions(for: .touchUpInside)
+        #expect(actions == [.failure])
+        model.serverRefresh = ServerRefreshStatus(lastAttempt: Date(timeIntervalSince1970: 1_700_100_000))
+        header.update(feed: model, hasFilter: false, keepUpdated: true); layout(header)
+        #expect(try element("feedRefreshFailure", in: header, as: UIControl.self).isHidden)
+        model.serverRefresh?.label = "forbidden"
+        let information = SubscribedFeedHeaderView(feed: model, informationScreen: true)
+        layout(information)
+        #expect(try element("feedRefreshFailure", in: information, as: UIControl.self).isHidden)
+    }
+
     @Test func missingAuthorKeepsItsLineAboveThePreviewSubscribeStrip() throws {
         var model = LibraryFeed(id: 1, source: "https://example.invalid/feed",
             metadata: ParsedFeed(format: .rss, title: "Podcast"), episodes: [])

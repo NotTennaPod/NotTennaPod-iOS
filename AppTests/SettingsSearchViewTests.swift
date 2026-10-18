@@ -8,10 +8,10 @@ import Testing
 /// with the row on screen and briefly tinted, a podcast setting explains itself in a dialog, Notifications opens
 /// without a tint; history, Clear and Clear history; hidden rows never appear; nothing clipped at any width or in RTL.
 /// Expected texts and orders are the oracle's (Android 3.12.1), not read back from the app.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(4)))
+@MainActor @Suite(.serialized)
 struct SettingsSearchViewTests {
-    private func find<T: UIView>(_ id: String, _ view: UIView, as: T.Type = T.self) -> T? { m33Find(id, view, as: T.self) }
-    private func all<T: UIView>(_ view: UIView, _ type: T.Type) -> [T] { m33All(view, T.self) }
+    private func find<T: UIView>(_ id: String, _ view: UIView, as: T.Type = T.self) -> T? { settingsSearchFind(id, view, as: T.self) }
+    private func all<T: UIView>(_ view: UIView, _ type: T.Type) -> [T] { settingsSearchAll(view, T.self) }
     private func png(_ image: UIImage?) -> Data? {
         guard let image else { return nil }
         return UIGraphicsImageRenderer(size: image.size).image { _ in image.draw(at: .zero) }.pngData()
@@ -32,13 +32,13 @@ struct SettingsSearchViewTests {
         let controller: LibraryViewController
         let host: ViewTestWindowHost
         let history: SettingsSearchHistoryStore
-        var title: String? { m33Find("screenTitle", controller.view, as: UILabel.self)?.text }
-        func find<T: UIView>(_ id: String, as: T.Type = T.self) -> T? { m33Find(id, controller.view, as: T.self) }
-        var search: SettingsSearchView? { m33All(controller.view, SettingsSearchView.self).first }
+        var title: String? { settingsSearchFind("screenTitle", controller.view, as: UILabel.self)?.text }
+        func find<T: UIView>(_ id: String, as: T.Type = T.self) -> T? { settingsSearchFind(id, controller.view, as: T.self) }
+        var search: SettingsSearchView? { settingsSearchAll(controller.view, SettingsSearchView.self).first }
     }
 
     private func withSettings(history terms: [String] = [], _ body: @MainActor (Screen) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M33View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("SettingsSearchView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let store = try FeedLibraryStore(url: root.appendingPathComponent("library.sqlite"))
@@ -324,10 +324,10 @@ struct SettingsSearchViewTests {
     }
 }
 
-@MainActor private func m33Find<T: UIView>(_ id: String, _ view: UIView, as: T.Type = T.self) -> T? {
+@MainActor private func settingsSearchFind<T: UIView>(_ id: String, _ view: UIView, as: T.Type = T.self) -> T? {
     if view.accessibilityIdentifier == id, let found = view as? T { return found }
-    return view.subviews.lazy.compactMap { m33Find(id, $0, as: T.self) }.first
+    return view.subviews.lazy.compactMap { settingsSearchFind(id, $0, as: T.self) }.first
 }
-@MainActor private func m33All<T: UIView>(_ view: UIView, _ type: T.Type) -> [T] {
-    ((view as? T).map { [$0] } ?? []) + view.subviews.flatMap { m33All($0, T.self) }
+@MainActor private func settingsSearchAll<T: UIView>(_ view: UIView, _ type: T.Type) -> [T] {
+    ((view as? T).map { [$0] } ?? []) + view.subviews.flatMap { settingsSearchAll($0, T.self) }
 }

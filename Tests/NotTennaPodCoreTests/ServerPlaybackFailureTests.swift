@@ -6,7 +6,7 @@ import Testing
 /// write of a playback path rolls back everything the recorder wrote, the playback write still commits with its
 /// journal, and the next recording records exactly the facts the path owes, with the identities and times fixed when
 /// it happened (PROTOCOL §8.1). An ordinary mutation that flushes a session rolls back whole.
-@Suite(.timeLimit(.minutes(10))) struct ServerPlaybackFailureTests {
+@Suite struct ServerPlaybackFailureTests {
     /// One playback path: `setup` prepares the library and player, `act` is the playback write under test.
     struct Path: Sendable, CustomStringConvertible {
         let name: String

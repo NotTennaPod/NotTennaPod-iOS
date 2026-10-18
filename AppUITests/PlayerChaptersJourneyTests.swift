@@ -398,7 +398,8 @@ final class PlayerChaptersJourneyTests: XCTestCase {
         XCTAssertTrue(app.buttons["miniPlayerOpen"].waitForExistence(timeout:10)); app.buttons["miniPlayerOpen"].tap()
         let loading = app.otherElements["playerLoading"]
         XCTAssertTrue(loading.waitForExistence(timeout:10))
-        try await release(0.5)
+        // Past the streamed chapter list's first 64 KiB read (the 30 s file is 120,017 bytes), short of the 25 s chapter.
+        try await release(0.6)
         XCTAssertTrue(loading.waitForNonExistence(timeout:20))
         let position = app.staticTexts["playerPosition"]
         let initial = position.label

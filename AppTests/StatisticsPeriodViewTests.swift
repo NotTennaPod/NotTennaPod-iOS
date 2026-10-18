@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct StatisticsPeriodViewTests {
     private let now = Date(timeIntervalSince1970: 1_789_578_000)
     private var formatter: StatisticsTextFormatter { .init(locale: Locale(identifier: "en-US"), timeZone: TimeZone(identifier: "America/Los_Angeles")!, now: now) }

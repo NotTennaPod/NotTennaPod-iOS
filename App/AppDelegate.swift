@@ -49,6 +49,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var speedPreferences: PlaybackSpeedPreferenceStore?
     var navigationPreferences: NavigationPreferenceStore?
     var mobileNetworkPreferences: MobileNetworkPreferenceStore?
+    /// Remote transcripts, chapter lists and the Cast relay, by the Mobile updates options and the current network.
+    var auxiliaryAdmission: AuxiliaryNetworkAdmission?
+    /// What show notes may load by themselves: pictures, styles and fonts by "Cover images", media and frames by "Streaming".
+    var shownotesNetwork: ShownotesNetworkPolicy?
     var usage: StreamDownloadUsageStore?
     var automaticDownloads: AutomaticDownloadCoordinator?
     var automaticDownloadPreferences: AutomaticDownloadPreferenceStore?
@@ -65,6 +69,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     /// Application Support (or the UUID-isolated test library): device settings, `libraries.json`, and the standalone
     /// library's files.
     private(set) var libraryDirectory: URL?
+    /// Whether a Keep waits, read from `libraries.json` only when the file changed (`keepIsPending`).
+    var keepPendingProbe: KeepPendingProbe?
     /// The open library's files: the standalone library in `libraryDirectory`, a server library in its own folder.
     private(set) var libraryLocation: LibraryLocation?
     /// The account-level policies of the open library (PROTOCOL §15.4).
@@ -270,6 +276,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     /// A recorded switch whose activation rule holds: the database import's commit, minus the file replacement.
     private func switchLibraryGraph() async {
+        // Leaving a server library ends the player's hold of an episode cut loose from the account (PROTOCOL §6.8): once
+        // the player is retired, its rows and files go, nothing recorded.
+        retireLibraryGraph()
+        await playback?.retire().value
+        if let library, (try? await library.releaseDetachedEpisodes()) == true {
+            try? await feedDeletion?.resume().value
+        }
         await stopLibraryGraph()
         restartLibraryGraph()
     }
@@ -305,7 +318,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 #endif
             libraryDirectory = directory
 #if DEBUG
-            if !restart { try LibrarySwitchJourneyFixture.prepare(root: directory, arguments: arguments) }
+            if !restart {
+                try SeededLibraryFixtures.prepare(root: directory, arguments: arguments)
+                try LibrarySwitchJourneyFixture.prepare(root: directory, arguments: arguments)
+            }
 #endif
             // Before any library is migrated, moved by a Keep or opened: an import the system ended is completed or
             // rolled back, and its outcome kept until a person sees it. Evidence that cannot be read now makes the start
@@ -367,6 +383,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 #endif
             let store = try FeedLibraryStore(url: location.database, ownedRoot: location.ownedRoot)
             library = store
+            // A library migrated to schema 21 with episodes fills its derived list keys in short background batches, once.
+            if !store.derivedReady {
+                Task.detached(priority: .utility) {
+                    try? await store.fillDerivedData(onFailure: { error in
+                        Logger(subsystem: "org.nottennapod.app", category: "Library").error("List data fill failed, retrying: \(String(describing: error), privacy: .public)")
+                    })
+                }
+            }
             // Once the library's own files could be read: accounts created while protected data was unavailable would
             // keep an empty registry and token-removal list for the process.
             startServerAccounts(root: directory)
@@ -399,7 +423,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     for scene in UIApplication.shared.connectedScenes {
                         guard let windowScene = scene as? UIWindowScene else { continue }
                         for window in windowScene.windows {
-                            if let controller = window.rootViewController as? LibraryViewController {
+                            // A screen kept by change sets follows these changes by itself.
+                            if let controller = window.rootViewController as? LibraryViewController, controller.screenUpdater == nil {
                                 await controller.reloadLibrary(preservingEpisodeDetails: true)?.value
                             }
                         }
@@ -500,10 +525,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 #endif
             let mobilePreferences = try settingsFile("mobile-network-preferences.json") { try MobileNetworkPreferenceStore(file: $0) }
             mobileNetworkPreferences = mobilePreferences
+            let auxiliaryAdmission = AuxiliaryNetworkAdmission(preferences: mobilePreferences,
+                onceAdmittedEpisodeID: { [weak self] in self?.playback?.onceAdmittedEpisodeID })
+            self.auxiliaryAdmission = auxiliaryAdmission
+            let shownotesNetwork = ShownotesNetworkPolicy(preferences: mobilePreferences)
+            self.shownotesNetwork = shownotesNetwork
             let imageAccess = MobileImageAccess(preferences: mobilePreferences, proxyConfiguration: { proxyNetwork.newClientConfiguration() })
             EpisodeArtworkView.remoteLoader = { try await imageAccess.load($0) }
+            ArtworkImageCache.fetchAllowance = { try await imageAccess.fetchAllowance() }
+            ArtworkImageCache.unrestrictedNetwork = { try await imageAccess.waitUntilUnrestricted() }
             mobilePreferences.onChange = { [weak self, weak mobilePreferences] in
                 guard let self, let mobilePreferences else { return }
+                auxiliaryAdmission.preferencesChanged()
+                shownotesNetwork.preferencesChanged()
                 self.restartPeriodicRefresh(replace: true)
                 // A server library's sync follows the "Synchronization" mobile-data choice at once.
                 self.serverSync?.networkPolicyChanged()
@@ -579,8 +613,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             if enablesCast, let playback {
                 // The library's Cast tag (PROTOCOL §15.4 "Cast"): a server library's ID, which a library kept from it keeps.
                 let castIdentity = identity?.castLibrary ?? .standalone
+                // A public enclosure is cast by its own URL; a relay through the phone needs the streaming admission.
                 let access = CastMediaAccessOwner(store: store, authentication: feedAuthentication,
-                    network: proxyNetwork, userAgent: HTTPUserAgent.current, library: castIdentity)
+                    network: proxyNetwork, userAgent: HTTPUserAgent.current, library: castIdentity,
+                    admission: auxiliaryAdmission)
                 let castSession: any CastApplicationSession
                 #if DEBUG
                 if directory.lastPathComponent.hasPrefix("UITests-"), arguments.contains("-test-cast-group") {
@@ -626,12 +662,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                                           widget: { [weak self] in self?.playerWidget })
             let transcriptLoader = TranscriptLoader(transport: proxyNetwork,
                 cache: URLCache(memoryCapacity: 8 * 1024 * 1024, diskCapacity: 40 * 1024 * 1024,
-                    diskPath: directory.appendingPathComponent("transcript-cache").path), userAgent: HTTPUserAgent.current)
+                    diskPath: directory.appendingPathComponent("transcript-cache").path), userAgent: HTTPUserAgent.current,
+                admission: auxiliaryAdmission)
             self.transcriptLoader = transcriptLoader
             chapterAccess = EpisodeChapterAccess(store: store,
                 loader: EpisodeChapterLoader(transport: proxyNetwork,
                     cache: URLCache(memoryCapacity: 8 * 1024 * 1024, diskCapacity: 40 * 1024 * 1024,
-                        diskPath: directory.appendingPathComponent("chapter-cache").path), userAgent: HTTPUserAgent.current),
+                        diskPath: directory.appendingPathComponent("chapter-cache").path), userAgent: HTTPUserAgent.current,
+                    admission: auxiliaryAdmission),
                 proxy: { proxyNetwork.sharedConfiguration() },
                 credentials: { try await feedAuthentication.credentials(feedID: $0) }, userAgent: HTTPUserAgent.current)
             let router = MediaDownloadRouter(
@@ -680,8 +718,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             if let feedDeletion, let automaticDownloads, let episodeNotifications, let synchronizationDelivery {
+                // Screens kept by change sets patch the refresh's commits themselves: the refresh never waits for them.
                 let reloads = LibraryReloadCoalescer {
-                    for controller in Self.libraryControllers {
+                    for controller in Self.libraryControllers where controller.screenUpdater == nil {
                         await controller.reloadLibrary(preservingEpisodeDetails: true, keepsUnchangedScreen: true)?.value
                     }
                 }
@@ -776,13 +815,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                                                   clock: maintenanceClock)
             databaseMaintenance = maintenance
 #if DEBUG
-            if !restart, directory.lastPathComponent.hasPrefix("UITests-"), arguments.contains("-test-m29-download-log") {
+            if !restart, directory.lastPathComponent.hasPrefix("UITests-"), arguments.contains("-test-download-log-history") {
                 // The seeded history must exist before any maintenance looks at it.
                 maintenanceGate = Task {
                     do { try await BackgroundWorkFixture.seedDownloadLog(store: store, directory: location.folder) }
                     catch {
                         Logger(subsystem: "org.nottennapod.app", category: "TestFixture")
-                            .error("M29 fixture failed: \(String(describing: error), privacy: .public)")
+                            .error("Download log fixture failed: \(String(describing: error), privacy: .public)")
                     }
                 }
             }
@@ -882,6 +921,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         downloadErrorEvents?.cancel(); downloadErrorEvents = nil; downloadErrors = nil
         await downloads?.stop()
         downloadRouter = nil
+        await library?.closeReaders()
         try? await library?.close()
         library = nil; feedDeletion = nil; downloads = nil; playback = nil; playbackRoutes = nil; castRuntime = nil
         transcriptLoader = nil; chapterAccess = nil; automaticDownloads = nil; episodeNotifications = nil

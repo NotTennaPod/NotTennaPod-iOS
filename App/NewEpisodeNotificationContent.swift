@@ -21,9 +21,8 @@ import NotTennaPodCore
         if URL(string: identity)?.isFileURL == true {
             bytes = try await LocalFolderArtworkReader(store: store).read(feedID: candidate.feedID, identity: identity)
         } else if let url = URL(string: identity), ["http", "https"].contains(url.scheme?.lowercased() ?? "") {
-            let (data, response) = try await EpisodeArtworkView.loadRemote(url)
-            guard (response as? HTTPURLResponse).map({ (200..<300).contains($0.statusCode) }) == true else { return nil }
-            bytes = data
+            // The covers the screens show: on the phone already, or downloaded once for both.
+            bytes = await ArtworkImageCache.remoteSource(identity)
         } else { return nil }
         try Task.checkCancellation()
         guard let bytes, let image = UIImage(data: bytes), image.size.width > 0, image.size.height > 0 else { return nil }

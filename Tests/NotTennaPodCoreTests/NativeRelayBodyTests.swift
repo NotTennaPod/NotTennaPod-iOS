@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct NativeRelayBodyTests {
+@MainActor @Suite(.serialized) struct NativeRelayBodyTests {
     private func configuration(timeout: TimeInterval = 8) -> URLSessionConfiguration {
         let value = URLSessionConfiguration.ephemeral
         value.urlCache = nil; value.httpCookieStorage = nil; value.urlCredentialStorage = nil

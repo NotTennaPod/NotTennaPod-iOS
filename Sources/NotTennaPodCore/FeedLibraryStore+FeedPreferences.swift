@@ -115,6 +115,7 @@ extension FeedLibraryStore {
             guard var feed = try loadFeedHeader(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
             feed.lastUpdateFailed = true
             feed.lastRefreshAttempt = date
+            feed.localRefreshAttempt = date
             try saveHeader(feed)
             // HttpDownloader records the response code separately from its
             // human-readable category. Persist it for details and clipboard.
@@ -128,6 +129,19 @@ extension FeedLibraryStore {
             default: nil
             }
             try appendLog(.init(feedID: feedID, date: date, title: feed.title, kind: .failure(failure), detail: diagnostic ?? fallback))
+        }
+    }
+
+    /// A refresh answered "not modified" (304) after a successful one: this device's attempt time, which only the
+    /// "Last refresh" details read (`localRefreshAttempt`). Nothing Android exports changes, and no log entry is written.
+    /// After a failure the stored outcome and its time stay together until a refresh reads the feed.
+    public func recordUnchangedRefresh(feedID: Int64, date: Date) throws {
+        try Task.checkCancellation()
+        try write(.local, now: date) {
+            guard var feed = try loadFeedHeader(feedID), !feed.lastUpdateFailed,
+                  date > (feed.localRefreshAttempt ?? Date(timeIntervalSince1970: 0)) else { return }
+            feed.localRefreshAttempt = date
+            try saveHeader(feed)
         }
     }
 

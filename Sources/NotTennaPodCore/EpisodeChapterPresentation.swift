@@ -24,25 +24,39 @@ import Foundation
 
     private let surface: Surface
     private let store: FeedLibraryStore
-    private let load: @Sendable (LibraryEpisode, Bool) async throws -> [ParsedChapter]
+    private let load: @Sendable (LibraryEpisode, Bool) async throws -> EpisodeChapterLoad
+    private let wait: @Sendable (AuxiliaryNetworkAdmission.Wake) async throws -> Void
     private let displayPosition: (Int64) -> Int64
     private(set) var request: Task<Void, Never>?
+    /// One task per load with deferred parts: it reloads once when any of their conditions holds.
+    private(set) var wake: Task<Void, Never>?
+    /// A Refresh asked for and not yet done (a part of it had to wait): play/pause reloads of the same episode keep
+    /// refreshing until it is.
+    private(set) var pendingRefreshEpisodeID: Int64?
     private var token = UUID()
 
-    public init(surface: Surface, store: FeedLibraryStore, access: EpisodeChapterAccess,
-                displayPosition: @escaping (Int64) -> Int64 = { $0 }) {
-        self.surface = surface; self.store = store
-        self.displayPosition = displayPosition; showsProgress = surface == .dialog
-        load = { try await access.load(episode: $0, forceRefresh: $1) }
+    public convenience init(surface: Surface, store: FeedLibraryStore, access: EpisodeChapterAccess,
+                            displayPosition: @escaping (Int64) -> Int64 = { $0 }) {
+        let admission = access.admission
+        self.init(surface: surface, store: store, displayPosition: displayPosition,
+                  loadDeferring: { try await access.loadDeferring(episode: $0, forceRefresh: $1) },
+                  wait: { try await admission.wait(until: $0) })
+    }
+
+    convenience init(surface: Surface, store: FeedLibraryStore, displayPosition: @escaping (Int64) -> Int64 = { $0 },
+         load: @escaping @Sendable (LibraryEpisode, Bool) async throws -> [ParsedChapter]) {
+        self.init(surface: surface, store: store, displayPosition: displayPosition,
+                  loadDeferring: { .init(chapters: try await load($0, $1)) }, wait: { _ in })
     }
 
     init(surface: Surface, store: FeedLibraryStore, displayPosition: @escaping (Int64) -> Int64 = { $0 },
-         load: @escaping @Sendable (LibraryEpisode, Bool) async throws -> [ParsedChapter]) {
-        self.surface = surface; self.store = store; self.load = load
+         loadDeferring: @escaping @Sendable (LibraryEpisode, Bool) async throws -> EpisodeChapterLoad,
+         wait: @escaping @Sendable (AuxiliaryNetworkAdmission.Wake) async throws -> Void) {
+        self.surface = surface; self.store = store; self.load = loadDeferring; self.wait = wait
         self.displayPosition = displayPosition; showsProgress = surface == .dialog
     }
 
-    deinit { request?.cancel() }
+    deinit { request?.cancel(); wake?.cancel() }
 
     public var hasChapters: Bool {
         chapters.map { !$0.isEmpty } ?? (episode?.details.chapters?.isEmpty == false)
@@ -59,16 +73,19 @@ import Foundation
 
     /// Call on surface start and player-status change, not on position ticks.
     /// Refresh reads a fresh database snapshot, including updated chapter URLs.
-    public func reload(episodeID: Int64?, forceRefresh: Bool = false) {
-        request?.cancel()
+    public func reload(episodeID: Int64?, forceRefresh asked: Bool = false) {
+        request?.cancel(); wake?.cancel(); wake = nil
         token = UUID()
         let captured = token
+        if pendingRefreshEpisodeID != episodeID { pendingRefreshEpisodeID = nil }
+        if asked, let episodeID { pendingRefreshEpisodeID = episodeID }
+        let forceRefresh = pendingRefreshEpisodeID != nil
         if episodeID == nil {
             episode = nil; chapters = nil; selectedIndex = -1; positionMilliseconds = 0
         }
         guard let episodeID else { isLoading = false; onChange?(); return }
         isLoading = true
-        if surface == .dialog, forceRefresh { showsProgress = true }
+        if surface == .dialog, asked { showsProgress = true }
         onChange?()
         let store = store, load = load
         request = Task { [weak self] in
@@ -98,16 +115,21 @@ import Foundation
                 try Task.checkCancellation()
                 guard self?.token == captured else { return }
                 loadingEpisode = fresh
-                let result = try await load(fresh, forceRefresh)
+                let loaded = try await load(fresh, forceRefresh)
+                let result = loaded.chapters
                 try Task.checkCancellation()
                 guard let self, token == captured else { return }
+                // Parts that had to wait show as soon as their condition holds: the available list is published now.
+                if !loaded.deferred.isEmpty { armWake(loaded.deferred, episodeID: episodeID, forceRefresh: forceRefresh) }
+                else if forceRefresh { pendingRefreshEpisodeID = nil }
                 episode = fresh; chapters = result; selectedIndex = -1; isLoading = false
                 positionMilliseconds = positionForSurface(Int64(fresh.userState.positionMilliseconds))
                 select(at: positionMilliseconds)
                 if surface == .dialog { showsProgress = false }
                 onReloaded?()
                 onChange?()
-                if surface == .dialog, result.isEmpty { onEmpty?() }
+                // "No chapters" only when every source has answered: a part waiting for the network may still bring some.
+                if surface == .dialog, result.isEmpty, loaded.deferred.isEmpty { onEmpty?() }
             } catch {
                 guard let self, token == captured else { return }
                 isLoading = false
@@ -127,7 +149,25 @@ import Foundation
 
     public func stop() {
         token = UUID(); request?.cancel(); request = nil
+        wake?.cancel(); wake = nil
         isLoading = false
+    }
+
+    /// `wait` subscribes before it checks, so a permission that returned before this was armed is seen at once.
+    private func armWake(_ conditions: Set<AuxiliaryNetworkAdmission.Wake>, episodeID: Int64, forceRefresh: Bool) {
+        wake?.cancel()
+        let wait = wait, captured = token
+        wake = Task { [weak self] in
+            do {
+                try await withThrowingTaskGroup(of: Void.self) { group in
+                    for condition in conditions { group.addTask { try await wait(condition) } }
+                    defer { group.cancelAll() }
+                    try await group.next()
+                }
+            } catch { return }
+            guard !Task.isCancelled, let self, token == captured else { return }
+            reload(episodeID: episodeID, forceRefresh: forceRefresh)
+        }
     }
 
     private func positionForSurface(_ raw: Int64) -> Int64 {

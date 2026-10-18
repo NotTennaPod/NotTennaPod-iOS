@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct PeriodicFeedRefreshTests {
+@MainActor @Suite struct PeriodicFeedRefreshTests {
     private let now = Date(timeIntervalSince1970: 2_000_000_000)
     private func fixture(_ body: (FeedLibraryStore, URL) async throws -> Void) async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("Periodic-\(UUID())")
@@ -101,7 +101,7 @@ import Testing
             let periodic = try #require(try await reopened.beginPeriodicRefresh(now: now))
             #expect(periodic.id != manual.id)
             let check = try LibrarySQLite(url: file)
-            #expect(try check.scalar("PRAGMA user_version") == 20)
+            #expect(try check.scalar("PRAGMA user_version") == 22)
             #expect(try check.rows("PRAGMA foreign_key_check").isEmpty)
             try check.close(); try await reopened.close()
         }

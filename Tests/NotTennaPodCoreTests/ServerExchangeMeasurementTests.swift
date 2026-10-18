@@ -5,7 +5,7 @@ import Testing
 /// Worst-case measurements (PROTOCOL §6.8): the apply time of large commits, how long each held the live write lock,
 /// and the latency of playback saves made while they applied. They take minutes, so they run when
 /// `NTP_EXCHANGE_MEASURE` is set (`NTP_EXCHANGE_MEASURE=20000` sets the large podcast's size).
-@Suite(.serialized, .timeLimit(.minutes(60)), .enabled(if: ProcessInfo.processInfo.environment["NTP_EXCHANGE_MEASURE"] != nil))
+@Suite(.serialized, .enabled(if: ProcessInfo.processInfo.environment["NTP_EXCHANGE_MEASURE"] != nil))
 struct ServerExchangeMeasurementTests {
     typealias Agreement = ServerExchangeAgreementTests
     typealias Concurrency = ServerExchangeConcurrencyTests

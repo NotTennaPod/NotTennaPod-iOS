@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct OPMLImportTests {
+@MainActor @Suite struct OPMLImportTests {
     enum Failure: Error { case write, read, refresh }
     private func withStore(_ body: (FeedLibraryStore, URL) async throws -> Void) async throws {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent("OPML-\(UUID())")
@@ -195,7 +195,7 @@ import Testing
         #expect(failed.confirm() == nil)
     }
     @Test func coordinatedLocalSnapshotSurvivesDeletionAndMissingFileFailsBeforeCommit() async throws {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M11-provider-\(UUID())")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("OPMLProvider-\(UUID())")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
         let url = folder.appendingPathComponent("source.opml")

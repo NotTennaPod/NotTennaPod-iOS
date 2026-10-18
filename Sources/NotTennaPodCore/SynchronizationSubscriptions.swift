@@ -110,7 +110,7 @@ extension FeedLibraryStore {
         return try database.transaction(write: false) {
             let state = try requireSynchronization(epoch)
             return .init(timestamp: state.subscriptionTimestamp,
-                         local: try loadFeeds().filter { $0.subscriptionState == .subscribed && !$0.source.isLocalFeedSource }
+                         local: try loadFeedHeaders().filter { $0.subscriptionState == .subscribed && !$0.source.isLocalFeedSource }
                             .sorted { $0.id < $1.id }.map(\.source),
                          queuedIDs: Set(try synchronizationQueue().map(\.id)))
         }
@@ -119,7 +119,7 @@ extension FeedLibraryStore {
     func acceptsSynchronizationSubscription(_ source: String, redirected: String?, epoch: UUID) throws -> Bool {
         try Task.checkCancellation()
         let state = try requireSynchronization(epoch)
-        let local = try feeds().filter { $0.subscriptionState == .subscribed && !$0.source.isLocalFeedSource }.map(\.source)
+        let local = try feedHeaders().filter { $0.subscriptionState == .subscribed && !$0.source.isLocalFeedSource }.map(\.source)
         var removed = try synchronizationQueue().compactMap { if case .removed(let url) = $0.value { url } else { nil } }
         // A committed deletion is already a local removal, even if file teardown
         // is still running and has not queued its final subscription effect yet.
@@ -151,7 +151,7 @@ extension FeedLibraryStore {
         _ = try requireSynchronization(epoch)
         let added = try synchronizationQueue().compactMap { if case .added(let url) = $0.value { url } else { nil } }
         guard !containsExact(added, source),
-              let feed = try feeds().filter({ $0.source.utf16.elementsEqual(source.utf16) }).max(by: { $0.id < $1.id }) else { return false }
+              let feed = try feedHeaders().filter({ $0.source.utf16.elementsEqual(source.utf16) }).max(by: { $0.id < $1.id }) else { return false }
         return try requestFeedDeletion(feedID: feed.id)
     }
 

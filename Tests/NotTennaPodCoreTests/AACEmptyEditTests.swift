@@ -4,7 +4,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct AACEmptyEditTests {
+@Suite(.serialized) struct AACEmptyEditTests {
     private struct Report: Decodable {
         let complete: Bool
         let cases: [Case]

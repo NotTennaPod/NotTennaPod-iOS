@@ -18,6 +18,7 @@ final class ExchangeWorld: @unchecked Sendable {
         let registry = FeedRegistry(feeds)
         let loopback = try await LoopbackHTTPServer.start { request in
             let path = request.path.split(separator: "?").first.map(String.init) ?? request.path
+            if let responder = registry.responder(path) { return responder(request) }
             if let response = registry.response(path) { return response }
             guard let feed = registry[path] else { return .init(status: 404, body: Data()) }
             return .init(headers: ["Content-Type": "application/rss+xml"],
@@ -45,11 +46,18 @@ final class ExchangeWorld: @unchecked Sendable {
     /// Serves `response` at `path` instead (a feed document of the test's own, a redirect); nil restores the feed.
     func setResponse(_ path: String, _ response: LoopbackHTTPServer.Response?) { registry.setResponse(path, response) }
 
+    /// Answers each request for `path` with `responder` (a response that depends on the request, such as its
+    /// User-Agent); nil removes it.
+    func setResponder(_ path: String, _ responder: (@Sendable (LoopbackHTTPServer.Request) -> LoopbackHTTPServer.Response)?) {
+        registry.setResponder(path, responder)
+    }
+
     func url(_ path: String) -> String { "http://127.0.0.1:\(feeds.url.port!)/\(path)" }
 
     /// A new phone: an installation signed in, its library provisioned and attached to the account's snapshot.
-    func attach(_ name: String) async throws -> ExchangePhone {
-        let phone = try await ExchangePhone.attach(self, name: name)
+    /// `network`: the app's network gate in its HTTP transport (nil: none, every request may go).
+    func attach(_ name: String, recoverable: Bool = false, network: (any ServerSyncNetworkGate)? = nil) async throws -> ExchangePhone {
+        let phone = try await ExchangePhone.attach(self, name: name, recoverable: recoverable, network: network)
         phones.append(phone)
         return phone
     }
@@ -74,7 +82,12 @@ final class FeedRegistry: @unchecked Sendable {
     private let lock = NSLock()
     private var feeds: [String: ExchangeWorld.Feed]
     private var responses: [String: LoopbackHTTPServer.Response] = [:]
+    private var responders: [String: @Sendable (LoopbackHTTPServer.Request) -> LoopbackHTTPServer.Response] = [:]
     init(_ feeds: [String: ExchangeWorld.Feed]) { self.feeds = feeds }
+    func responder(_ path: String) -> (@Sendable (LoopbackHTTPServer.Request) -> LoopbackHTTPServer.Response)? { lock.withLock { responders[path] } }
+    func setResponder(_ path: String, _ responder: (@Sendable (LoopbackHTTPServer.Request) -> LoopbackHTTPServer.Response)?) {
+        lock.withLock { responders[path] = responder }
+    }
     func response(_ path: String) -> LoopbackHTTPServer.Response? { lock.withLock { responses[path] } }
     func setResponse(_ path: String, _ response: LoopbackHTTPServer.Response?) { lock.withLock { responses[path] = response } }
     subscript(path: String) -> ExchangeWorld.Feed? {
@@ -208,7 +221,48 @@ final class ExchangePhone: @unchecked Sendable {
                                       isForeground: { foreground.value })
     }
 
-    static func attach(_ world: ExchangeWorld, name: String) async throws -> ExchangePhone {
+    /// A device Keychain (a recoverable phone, as recovery's phones have): the engine takes successor installations and
+    /// recovers after a server restore (PROTOCOL §6.11). Nil: the plain test phone, which pauses for recovery instead.
+    private(set) var secrets: MemoryServerSecrets?
+    private(set) var libraryID = ""
+
+    private func makeEngine() throws -> ServerSyncEngine {
+        let playing = playing, foreground = foreground
+        return try ServerSyncEngine(store: store, location: location, transport: transport, vault: vault, isPlaying: { playing.value },
+                                    isForeground: { foreground.value },
+                                    installations: secrets.map { ServerInstallationKeychain(libraryID: libraryID, secrets: $0, device: DevicePhone.device) })
+    }
+
+    /// "Sign in again" on a recoverable phone, as `ServerAccounts.signInAgain` does it (PROTOCOL §15.4): the library's own
+    /// installation, or while a transition is planned and the predecessor was replaced, its successor.
+    func signInAgainOnDevice(_ server: ExchangeServer) async throws {
+        guard let secrets else { throw HarnessError.server("not a recoverable phone") }
+        var targets = try StoreServerLibraryProvisioning().signInInstallations(of: location)
+        let client = ServerClient(address: ServerAddress(entered: server.base.absoluteString)!)
+        var index = 0
+        while index < targets.count {
+            let target = targets[index]
+            index += 1
+            let saved = try secrets.installation(library: libraryID, install: target.installID)?.transportNonce
+            let nonce = target.transportNonce ?? saved ?? ContractIdentity.randomUUID()
+            do {
+                let answer = try await client.signIn(username: "alice", password: "alice-password-1", installID: target.installID,
+                                                     transportNonce: nonce, device: DevicePhone.device)
+                try secrets.saveInstallation(.init(transportNonce: nonce, token: answer.token, device: DevicePhone.device), library: libraryID,
+                                             install: target.installID)
+                try await engine.resume()
+                return
+            } catch let error as ServerClientError where error == .installationSuperseded || error == .installationConflict {
+                if index == targets.count, let fresh = await engine.planNewInstallation(), !targets.contains(fresh) { targets.append(fresh) }
+                if index == targets.count { throw error }
+            }
+        }
+        throw HarnessError.server("nothing to sign in with")
+    }
+
+    static func attach(_ world: ExchangeWorld, name: String, recoverable: Bool = false,
+                       network: (any ServerSyncNetworkGate)? = nil) async throws -> ExchangePhone {
+        let secrets = recoverable ? MemoryServerSecrets() : nil
         let nonce = ContractIdentity.randomUUID()
         let installation = try await world.server.signIn(nonce: nonce)
         let token = installation.client.token ?? ""
@@ -219,13 +273,16 @@ final class ExchangePhone: @unchecked Sendable {
         let provisioning = try FeedLibraryStore(url: location.database)
         try await provisioning.initializeServerLibrary(ServerLibraryIdentity(
             libraryID: libraryID, serverURL: world.server.base.absoluteString, serverID: "test", accountID: installation.accountID,
-            namespace: installation.namespace, username: "alice", installID: installation.installID, deviceMarker: ContractIdentity.randomUUID()))
+            namespace: installation.namespace, username: "alice", installID: installation.installID,
+            deviceMarker: try secrets?.deviceMarker() ?? ContractIdentity.randomUUID()))
         try await provisioning.close()
+        try secrets?.saveInstallation(.init(transportNonce: nonce, token: token, device: DevicePhone.device), library: libraryID, install: installation.installID)
         let client = ServerClient(address: ServerAddress(entered: world.server.base.absoluteString)!)
         let snapshot = try await ServerAttachSnapshotDownload(client: client, token: token, installID: installation.installID,
                                                               folder: location.staging!.appendingPathComponent("attach")).run()
         let box = TokenBox(token)
-        let transport = ProxyTransport(HTTPServerExchangeTransport(base: world.server.base, token: { box.value }))
+        let transport = ProxyTransport(HTTPServerExchangeTransport(base: world.server.base, network: network,
+                                                                   token: { try await box.current() }))
         let vault = MemoryCredentialVault()
         try await ServerExchangeAttachApplier(vault: { vault }, transport: { _ in transport })
             .apply(snapshot, to: ServerAttachmentTarget(location: location, libraryID: libraryID, installID: installation.installID,
@@ -233,6 +290,17 @@ final class ExchangePhone: @unchecked Sendable {
         let phone = try ExchangePhone(name: name, location: location, installation: installation, token: token, transport: transport, vault: vault)
         phone.tokenBox = box
         phone.nonce = nonce
+        if let secrets {
+            // The token is the Keychain's, for whichever installation the library holds now (a successor after recovery).
+            phone.secrets = secrets; phone.libraryID = libraryID
+            box.resolver = { [weak phone] in
+                guard let phone, let install = try await phone.store.serverInstallationID() else { return nil }
+                return try secrets.installation(library: libraryID, install: install)?.usableToken
+            }
+            await phone.engine.close()
+            phone.engine = try phone.makeEngine()
+        }
+        await ChangeOracleRegistry.install(phone.store)
         return phone
     }
 
@@ -268,15 +336,16 @@ final class ExchangePhone: @unchecked Sendable {
     /// Closes and reopens the store and engine (a relaunch).
     func relaunch() async throws {
         await engine.close()
+        ChangeOracleRegistry.verify(store, name)
         try await store.close()
         store = try FeedLibraryStore(url: location.database)
-        let playing = playing, foreground = foreground
-        engine = try ServerSyncEngine(store: store, location: location, transport: transport, vault: vault, isPlaying: { playing.value },
-                                      isForeground: { foreground.value })
+        await ChangeOracleRegistry.install(store)
+        engine = try makeEngine()
     }
 
     func close() async {
         await engine.close()
+        ChangeOracleRegistry.verify(store, name)
         try? await store.close()
     }
 
@@ -298,6 +367,17 @@ final class ProxyTransport: ServerExchangeTransport, @unchecked Sendable {
 
     init(_ server: any ServerExchangeTransport) { self.server = server }
 
+    private var bulk: ServerNetworkWait?
+    /// What the network gate says about whole-library downloads (nil: what the server transport's gate says).
+    var bulkWait: ServerNetworkWait? {
+        get { lock.withLock { bulk } }
+        set { lock.withLock { bulk = newValue } }
+    }
+    func bulkWaitReason() async -> ServerNetworkWait? {
+        if let bulkWait { return bulkWait }
+        return await server.bulkWaitReason()
+    }
+
     var handler: Handler? {
         get { lock.withLock { current } }
         set { lock.withLock { current = newValue } }
@@ -316,10 +396,20 @@ final class ProxyTransport: ServerExchangeTransport, @unchecked Sendable {
 final class TokenBox: @unchecked Sendable {
     private let lock = NSLock()
     private var token: String
+    private var resolve: (@Sendable () async throws -> String?)?
     init(_ token: String) { self.token = token }
     var value: String {
         get { lock.withLock { token } }
         set { lock.withLock { token = newValue } }
+    }
+    /// Where a recoverable phone's token comes from (its Keychain), instead of `value`.
+    var resolver: (@Sendable () async throws -> String?)? {
+        get { lock.withLock { resolve } }
+        set { lock.withLock { resolve = newValue } }
+    }
+    func current() async throws -> String? {
+        if let resolver { return try await resolver() }
+        return value
     }
 }
 
@@ -396,6 +486,7 @@ extension ServerLibraryFixture {
             row.map { value in
                 switch value {
                 case .integer(let number): String(number)
+                case .real(let number): String(number)
                 case .text(let text): text
                 case .blob(let data): data.base64EncodedString()
                 case .null: nil

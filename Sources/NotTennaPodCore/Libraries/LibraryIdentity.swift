@@ -298,18 +298,36 @@ public enum LibraryOwnedPaths {
         return changed ? Data(text.utf8) : nil
     }
 
+    /// The bytes every record holding an owned path under `root` contains: the longest component of `root` made only of
+    /// characters a file URL leaves as they are, and that no other character equals (`rewrite` matches canonically
+    /// equivalent text, where KELVIN SIGN equals K); `media` when there is none. Every record form holds it between
+    /// separators, so each of its characters stands alone there, and text equivalent to a form holds its exact bytes.
+    static func recordAnchor(_ root: String) -> Data {
+        let plain = Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJLMNOPQRSTUVWXYZ0123456789-._~".utf8)
+        var anchor = Data("media".utf8), longest = 0
+        for component in root.utf8.split(separator: UInt8(ascii: "/")) where component.count > longest && component.allSatisfy(plain.contains) {
+            anchor = Data(component); longest = component.count
+        }
+        return anchor
+    }
+
     /// Normalization before a writable open: when `paths_root` is not `folder`, one transaction rewrites
     /// the owned paths of every episode, download job and pending effect onto `folder` and updates `paths_root`.
-    /// Repeating it changes nothing. Returns the number of rewritten rows.
+    /// Repeating it changes nothing. SQLite selects the records holding the old root's anchor (a byte search, for an iOS
+    /// root its container's UUID), and only those are read and rewritten here: the work grows with the downloads, not
+    /// the library (a folder move used to decode and search every episode at launch, about 10 s for 26,000).
+    /// Returns the rows read here and the rows rewritten.
     @discardableResult
-    static func normalize(_ database: LibrarySQLite, folder: URL) throws -> Int {
-        guard let identity = try database.libraryIdentity() else { return 0 }
+    static func normalize(_ database: LibrarySQLite, folder: URL) throws -> (examined: Int, rewritten: Int) {
+        guard let identity = try database.libraryIdentity() else { return (0, 0) }
         let current = root(of: folder)
-        guard identity.pathsRoot != current else { return 0 }
+        guard identity.pathsRoot != current else { return (0, 0) }
+        let anchor = recordAnchor(identity.pathsRoot)
         return try database.transaction {
-            var rewritten = 0
+            var examined = 0, rewritten = 0
             for table in ["episodes", "download_jobs", "pending_effects"] {
-                for row in try database.rows("SELECT rowid, record FROM \(table) WHERE instr(CAST(record AS TEXT), 'media') > 0") {
+                for row in try database.rows("SELECT rowid, record FROM \(table) WHERE instr(record, ?) > 0", [.blob(anchor)]) {
+                    examined += 1
                     guard let id = row[0].integer, let data = row[1].data,
                           let next = rewrite(data, from: identity.pathsRoot, to: current) else { continue }
                     try database.execute("UPDATE \(table) SET record = ? WHERE rowid = ?", [.blob(next), .integer(id)])
@@ -317,7 +335,7 @@ public enum LibraryOwnedPaths {
                 }
             }
             try database.execute("UPDATE library_identity SET paths_root = ? WHERE id = 1", [.text(current)])
-            return rewritten
+            return (examined, rewritten)
         }
     }
 }

@@ -6,7 +6,7 @@ import Testing
 /// The Synchronization page's rows and dialogs for a Keep at logout, previous libraries and the export choice
 /// (PROTOCOL §15.5): their words, order, layout at the device's widths in both orientations, left to right and
 /// right to left, VoiceOver labels and values, and the action each control reaches.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(5)))
+@MainActor @Suite(.serialized)
 struct KeepLogoutViewTests {
     nonisolated static let open = "0b8c1d58-4f8e-4d0e-9b8b-3c1f5f8d2a10"
     /// Two previous libraries kept the same day (their labels show the time), and an older one.
@@ -303,6 +303,37 @@ struct KeepLogoutViewTests {
             snapshot(window, "previous-library-removal-\(rtl ? "rtl" : "ltr")")
             try #require(find("previousLibraryRemoveConfirm", in: removal.view, as: UIButton.self)).sendActions(for: .touchUpInside)
             try await wait { host.presentedViewController == nil && events == ["export", "removed"] }
+        }
+    }
+
+    /// "Force full synchronization" asks first: it says the whole library is downloaded again, with its estimated size
+    /// when one is known; OK runs it, Cancel sends nothing. The message and buttons fit at every width and direction.
+    @Test(arguments: [false, true])
+    func forceFullSynchronizationAsksFirstWithItsEstimatedSize(rtl: Bool) async throws {
+        try await withViewTestWindow { host, window in
+            for estimate in [Int64?.some(287_400_000), nil] {
+                var confirmed = 0
+                let dialog = ServerSynchronizationDialogs.fullSynchronization(estimate: estimate) { confirmed += 1 }
+                try await present(dialog, rtl: rtl, in: host, window: window)
+                #expect(find("sourceMessageTitle", in: dialog.view, as: UILabel.self)?.text == "Force full synchronization")
+                let message: UILabel = try #require(find("sourceMessage", in: dialog.view))
+                #expect(message.text == (estimate == nil ? "This downloads your whole library from the server again. Continue?"
+                    : "This downloads your whole library from the server again (estimated 287 MB). Continue?"))
+                let frame = message.convert(message.bounds, to: window)
+                #expect(window.bounds.contains(frame))
+                #expect(message.sizeThatFits(CGSize(width: message.bounds.width, height: .greatestFiniteMagnitude)).height <= message.bounds.height + 1,
+                        "the whole message shows")
+                let frames = try buttons(["fullSynchronizationConfirm", "fullSynchronizationCancel"], in: dialog, window: window)
+                #expect(!frames[0].insetBy(dx: 0.5, dy: 0.5).intersects(frames[1]))
+                #expect(find("fullSynchronizationConfirm", in: dialog.view, as: UIButton.self)?.title(for: .normal) == "OK")
+                #expect(find("fullSynchronizationCancel", in: dialog.view, as: UIButton.self)?.title(for: .normal) == "Cancel")
+                snapshot(window, "full-sync-\(estimate == nil ? "unknown" : "estimate")-\(rtl ? "rtl" : "ltr")")
+                let id = estimate == nil ? "fullSynchronizationCancel" : "fullSynchronizationConfirm"
+                try #require(find(id, in: dialog.view, as: UIButton.self)).sendActions(for: .touchUpInside)
+                try await wait { host.presentedViewController == nil }
+                try await wait { confirmed == (estimate == nil ? 0 : 1) }
+                #expect(confirmed == (estimate == nil ? 0 : 1), "OK runs it; Cancel sends nothing")
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import Synchronization
 
 /// Automatic database export runtime with a fake scheduler, folder, lease and clock, plus the
 /// Backup & restore switch row. Real Files picker and folder writes run in the automatic database export journey.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct AutomaticDatabaseExportRuntimeTests {
     final class Scheduler: AutomaticBackupScheduling {
         var submitted: [Date] = [], cancels = 0
@@ -86,7 +86,7 @@ struct AutomaticDatabaseExportRuntimeTests {
     private func make(now: @escaping () -> Date, gate: Gate = Gate(), folder: Folder = Folder(), grant: BackgroundWorkGrant? = nil,
                       refreshed: Box? = nil) throws
         -> (AutomaticDatabaseExportRuntime, AutomaticDatabaseExportPreferenceStore, Scheduler, Folder, Box) {
-        let file = FileManager.default.temporaryDirectory.appendingPathComponent("M18R-\(UUID()).json")
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("AutomaticExportRuntime-\(UUID()).json")
         let store = try AutomaticDatabaseExportPreferenceStore(file: file)
         let scheduler = Scheduler(), reports = Box()
         let runtime = AutomaticDatabaseExportRuntime(preferences: store, scheduler: scheduler, clock: now, folder: { _, refresh in

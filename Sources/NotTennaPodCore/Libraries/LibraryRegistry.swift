@@ -287,6 +287,52 @@ public struct LibraryRegistryFile: Sendable {
     }
 }
 
+/// Whether a Keep at logout waits (`LibraryRegistryFile.read().keeping != nil`), asked on every player state change.
+/// The registry is read again only when its file changed since the last successful read: its identity (device, inode,
+/// size, modification and status-change times) differs. The registry is written by rename, which gives it a new inode;
+/// a write in place changes its times or size. A read that fails (before the first unlock) is never kept: it answers
+/// false, as before, and the next probe reads again.
+@MainActor public final class KeepPendingProbe {
+    private struct Identity: Equatable {
+        var device: Int64, inode: UInt64, size: Int64
+        var modified: timespec, changed: timespec
+        static func == (a: Identity, b: Identity) -> Bool {
+            a.device == b.device && a.inode == b.inode && a.size == b.size
+                && a.modified.tv_sec == b.modified.tv_sec && a.modified.tv_nsec == b.modified.tv_nsec
+                && a.changed.tv_sec == b.changed.tv_sec && a.changed.tv_nsec == b.changed.tv_nsec
+        }
+        init?(_ url: URL) {
+            var info = stat()
+            guard stat(url.path, &info) == 0 else { return nil }
+            device = Int64(info.st_dev); inode = UInt64(info.st_ino); size = Int64(info.st_size)
+            modified = info.st_mtimespec; changed = info.st_ctimespec
+        }
+    }
+
+    public let root: URL
+    private let file: LibraryRegistryFile
+    private var cached: (identity: Identity, keeping: Bool)?
+    /// Registry reads made (tests).
+    public private(set) var reads = 0
+
+    public init(root: URL) { self.root = root; file = LibraryRegistryFile(root: root) }
+
+    public var isPending: Bool {
+        // No file: no Keep (as `read` finds). One that cannot be examined: read as before, never kept.
+        guard let identity = Identity(file.url) else { cached = nil; return SavedState.isAbsent(file.url) ? false : read() ?? false }
+        if let cached, cached.identity == identity { return cached.keeping }
+        cached = nil
+        guard let keeping = read() else { return false }
+        cached = (identity, keeping)
+        return keeping
+    }
+
+    private func read() -> Bool? {
+        reads += 1
+        return (try? file.read()).map { $0.keeping != nil }
+    }
+}
+
 /// Atomic, durable file replacement: write a temporary file beside the target, fsync it, rename it over the
 /// target and fsync the folder.
 enum DurableFile {

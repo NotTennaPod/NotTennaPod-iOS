@@ -94,7 +94,7 @@ extension LibraryViewController {
                 let value = input.value
                 Task { [weak self] in
                     do {
-                        let members = FeedTagEdit.members(of: tag, in: try await library.snapshot().feeds, state: state)
+                        let members = FeedTagEdit.members(of: tag, in: try await library.readers().bulk.listFeedHeaders(), state: state)
                         try await library.renameTag(tag, to: value, feedIDs: members)
                         await self?.reloadLibrary(preservingEpisodeDetails: true)?.value
                     } catch { self?.showError(error) }
@@ -117,7 +117,7 @@ extension LibraryViewController {
                 if resetChip { self?.setSubscriptionTag(FeedTags.root, archived: state == .archived, rerender: false) }
                 Task { [weak self] in
                     do {
-                        let members = FeedTagEdit.members(of: tag, in: try await library.snapshot().feeds, state: state)
+                        let members = FeedTagEdit.members(of: tag, in: try await library.readers().bulk.listFeedHeaders(), state: state)
                         try await library.deleteTag(tag, feedIDs: members)
                         await self?.reloadLibrary(preservingEpisodeDetails: true)?.value
                     } catch { self?.showError(error) }
@@ -134,7 +134,7 @@ extension LibraryViewController {
         Task { [weak self] in
             guard let self else { return }
             do {
-                guard let feed = try await library.feed(id: feedID), presentedViewController == nil else { return }
+                guard let feed = try await library.listedFeedHeader(id: feedID), presentedViewController == nil else { return }
                 switch (origin, path.last) {
                 case (.search, .search?), (.home, .destination(.home)?), (.drawer, _): break
                 default: return

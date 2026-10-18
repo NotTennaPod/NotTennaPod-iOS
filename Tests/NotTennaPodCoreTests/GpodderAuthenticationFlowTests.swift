@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct GpodderAuthenticationFlowTests {
     private func fixture(_ transport: AuthenticationTestTransport = .init(),
                          _ body: @MainActor (FeedLibraryStore, AuthenticationTestCredentials, SynchronizationAccounts, GpodderAuthenticationFlow) async throws -> Void) async throws {

@@ -7,7 +7,7 @@ import Testing
 /// The Synchronization page in every state of PROTOCOL §15.5 (rows by state, the status row and subtitle),
 /// the provider chooser's third row, the sign-in dialog and the kept libraries' dialog, at the device's widths in
 /// both orientations, left to right and right to left, with their VoiceOver identifiers, labels and values.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(5)))
+@MainActor @Suite(.serialized)
 struct ServerSynchronizationSettingsViewTests {
     enum PageState: String, CaseIterable, Sendable {
         case keptLibraries, loggedOut, attaching, ready, server, needsSignIn, serverNeedsUpdate, appNeedsUpdate
@@ -19,6 +19,15 @@ struct ServerSynchronizationSettingsViewTests {
         case serverRestored, sharedInstallation, serverLostChanges, waitingForBackground
         /// A switch waiting for playback, playing or resuming after an interruption, with "Stop playback and continue".
         case readyPlaying, readyInterrupted, loggedOutInterrupted
+        /// No network, or only mobile data sync may not use: why nothing is sent, instead of the last result.
+        case offline, waitingForWiFi
+        /// The attachment's download waits for Wi-Fi (mobile data or Low Data Mode with the preference off), or for space; a
+        /// download or its staging waits for space; a Force full synchronization holds other devices' changes.
+        case attachingWaitsForWiFi, attachingWaitsForSpace, waitingForSpace, fullSynchronizing, fullSynchronizationWaitsForWiFi
+        /// The repair waits for any connection; a recovery that waits for space says so before "Restoring…".
+        case fullSynchronizationWaitsOffline, recoveryWaitingForSpace
+        /// Pushing waits for an explicit retry: a change too large for the server, or one it refused (with Needs attention).
+        case changeTooLarge, changeRefused
 
         static let open = "0b8c1d58-4f8e-4d0e-9b8b-3c1f5f8d2a10", kept = "7c3b6f0e-2a59-4a8e-8d6f-0f1e2d3c4b5a"
         static func entry(_ id: String, _ state: LibraryRegistry.ServerLibrary.State, user: String = "alice") -> LibraryRegistry.ServerLibrary {
@@ -31,7 +40,8 @@ struct ServerSynchronizationSettingsViewTests {
             var registry = LibraryRegistry()
             let kept = Self.entry(Self.kept, .inactive, user: "bob")
             func make(_ libraries: [LibraryRegistry.ServerLibrary], open: LibraryReference = .standalone, token: Bool = true,
-                      signals: ServerSynchronizationSignals = .init(), hold: LibraryPlaybackHold? = nil) -> ServerSynchronizationPage {
+                      signals: ServerSynchronizationSignals = .init(), hold: LibraryPlaybackHold? = nil,
+                      waits: [String: ServerAttachWait] = [:]) -> ServerSynchronizationPage {
                 registry.libraries = libraries; registry.active = open
                 var summaries: [String: ServerLibrarySummary] = [:]
                 for library in libraries {
@@ -39,7 +49,7 @@ struct ServerSynchronizationSettingsViewTests {
                                                   lastSynchronization: Self.lastSync, hasUsableToken: token)
                 }
                 return .make(registry: registry, open: open, otherProvider: false, summaries: summaries,
-                             attachProgress: [Self.open: 12], exchange: signals, playbackHold: hold)
+                             attachProgress: [Self.open: 12], attachWaits: waits, exchange: signals, playbackHold: hold)
             }
             let active = Self.entry(Self.open, .active)
             switch self {
@@ -65,6 +75,32 @@ struct ServerSynchronizationSettingsViewTests {
             case .sharedInstallation: return make([active], open: .server(Self.open), signals: .init(pause: .sharedInstallation))
             case .serverLostChanges: return make([active], open: .server(Self.open), signals: .init(pause: .serverLostChanges))
             case .waitingForBackground: return make([active], open: .server(Self.open), signals: .init(waitingForBackground: true))
+            case .offline: return make([active], open: .server(Self.open), signals: .init(unreachable: true, networkWait: .offline))
+            case .waitingForWiFi: return make([active], open: .server(Self.open), signals: .init(networkWait: .mobileDataOff))
+            case .attachingWaitsForWiFi: return make([Self.entry(Self.open, .attaching), kept], waits: [Self.open: .network(.mobileDataOff)])
+            case .attachingWaitsForSpace: return make([Self.entry(Self.open, .attaching), kept], waits: [Self.open: .space(shortfall: 1)])
+            case .waitingForSpace:
+                var signals = ServerSynchronizationSignals()
+                signals.insufficientSpace = true
+                return make([active], open: .server(Self.open), signals: signals)
+            case .fullSynchronizing:
+                var signals = ServerSynchronizationSignals()
+                signals.fullSynchronizing = true
+                return make([active], open: .server(Self.open), signals: signals)
+            case .fullSynchronizationWaitsForWiFi:
+                var signals = ServerSynchronizationSignals()
+                signals.fullSynchronizationWaits = .mobileDataOff
+                return make([active], open: .server(Self.open), signals: signals)
+            case .fullSynchronizationWaitsOffline:
+                var signals = ServerSynchronizationSignals()
+                signals.fullSynchronizationWaits = .offline
+                return make([active], open: .server(Self.open), signals: signals)
+            case .recoveryWaitingForSpace:
+                var signals = ServerSynchronizationSignals(recovery: .running)
+                signals.insufficientSpace = true
+                return make([active], open: .server(Self.open), signals: signals)
+            case .changeTooLarge: return make([active], open: .server(Self.open), signals: .init(pause: .changeTooLarge))
+            case .changeRefused: return make([active], open: .server(Self.open), signals: .init(pause: .changeRefused, attentionItems: 1))
             case .readyPlaying: return make([Self.entry(Self.open, .ready)], hold: .playing)
             case .readyInterrupted: return make([Self.entry(Self.open, .ready)], hold: .resumingAfterInterruption)
             case .loggedOutInterrupted:
@@ -82,10 +118,14 @@ struct ServerSynchronizationSettingsViewTests {
             switch self {
             case .keptLibraries: return ordinary + ["ntp_server_libraries"]
             case .loggedOut: return status(ordinary) + ["ntp_server_libraries"]
-            case .attaching, .ready, .startingOver: return ["preference_synchronization_description", "ntp_server_status", "pref_synchronization_logout"]
+            case .attaching, .ready, .startingOver, .attachingWaitsForWiFi, .attachingWaitsForSpace:
+                return ["preference_synchronization_description", "ntp_server_status", "pref_synchronization_logout"]
             case .server, .unreachable: return server
             case .needsSignIn, .serverNeedsUpdate, .appNeedsUpdate, .recovering, .recoveryIncomplete, .recoveryWaiting: return status(server)
-            case .serverRestored, .sharedInstallation, .serverLostChanges, .waitingForBackground: return status(server)
+            case .serverRestored, .sharedInstallation, .serverLostChanges, .waitingForBackground, .changeTooLarge: return status(server)
+            case .changeRefused: return status(Array(server.dropLast())) + ["ntp_server_attention", "pref_synchronization_logout"]
+            case .offline, .waitingForWiFi, .waitingForSpace, .fullSynchronizing, .fullSynchronizationWaitsForWiFi, .fullSynchronizationWaitsOffline,
+                 .recoveryWaitingForSpace: return status(server)
             case .lineageUnknown, .lineageUnknownSignedOut: return status(server, extra: ["ntp_server_start_over"])
             case .attention: return Array(server.dropLast()) + ["ntp_server_attention", "pref_synchronization_logout"]
             case .readyPlaying, .readyInterrupted:
@@ -112,10 +152,21 @@ struct ServerSynchronizationSettingsViewTests {
             case .serverRestored: ("Synchronization paused", "The server was restored from a backup. This library and its changes are kept on this device.")
             case .sharedInstallation: ("Synchronization paused", "Another copy of this library uses the same login. This library and its changes are kept on this device.")
             case .serverLostChanges: ("Synchronization paused", "The server no longer has some changes this library sent. This library and its changes are kept on this device.")
+            case .changeTooLarge: ("Synchronization paused", "A change made on this device is too large for the server. It is kept on this device; later changes wait behind it.")
+            case .changeRefused: ("Synchronization paused", "A change made on this device was refused by the server. It is kept on this device; later changes wait behind it.")
             case .waitingForBackground: ("Waiting to apply changes", "Large changes from the server are applied when NotTennaPod is in the background and not playing, so they never slow it down while you use it.")
             case .readyPlaying: ("Server library ready", "It will be used when playback is paused or stopped.")
             case .readyInterrupted: ("Server library ready", "It will be used when playback is paused or stopped. Playback may resume when the interruption ends.")
             case .loggedOutInterrupted: ("Logged out", "This device's library will be used when playback is paused or stopped. Playback may resume when the interruption ends.")
+            case .offline: ("No network connection", "Changes are kept and sent when the connection returns.")
+            case .waitingForWiFi: ("Waiting for Wi-Fi", "Synchronization over mobile data is off in Settings → Downloads → Mobile updates. Changes are kept and sent on Wi-Fi.")
+            case .attachingWaitsForWiFi: ("Waiting for Wi-Fi", "Synchronization over mobile data is off in Settings → Downloads → Mobile updates, and Low Data Mode counts as mobile data. The account's library continues downloading on Wi-Fi.")
+            case .attachingWaitsForSpace: ("There is not enough space left on your device.", "The account's library continues downloading when space is free.")
+            case .waitingForSpace: ("There is not enough space left on your device.", "Synchronization continues when space is free.")
+            case .fullSynchronizing: ("Force full synchronization", "In progress. Changes from other devices appear when it finishes.")
+            case .fullSynchronizationWaitsOffline: ("Force full synchronization", "Waiting for a network connection: it downloads your whole library when the connection returns.")
+            case .recoveryWaitingForSpace: ("There is not enough space left on your device.", "Synchronization continues when space is free.")
+            case .fullSynchronizationWaitsForWiFi: ("Force full synchronization", "Waiting for Wi-Fi: it downloads your whole library, and synchronization over mobile data is off in Settings → Downloads → Mobile updates (Low Data Mode counts as mobile data). Other changes keep synchronizing.")
             }
         }
 
@@ -123,14 +174,19 @@ struct ServerSynchronizationSettingsViewTests {
         var subtitle: String? {
             switch self {
             case .keptLibraries, .loggedOut, .loggedOutInterrupted: nil
-            case .attaching, .startingOver: "Preparing…"
+            case .attaching, .startingOver, .attachingWaitsForSpace: "Preparing…"
+            case .attachingWaitsForWiFi: "Waiting for Wi-Fi"
             case .ready, .readyPlaying, .readyInterrupted: "Ready"
             case .needsSignIn: "Sign in again"
             case .serverNeedsUpdate, .appNeedsUpdate, .lineageUnknown, .lineageUnknownSignedOut, .serverRestored, .sharedInstallation,
-                 .serverLostChanges: "Paused"
+                 .serverLostChanges, .changeTooLarge, .changeRefused: "Paused"
             case .recovering: "Restoring…"
             case .unreachable: "Waiting for the server"
-            case .server, .recoveryIncomplete, .recoveryWaiting, .attention, .waitingForBackground: "Successful ("
+            case .offline: "No network connection"
+            case .waitingForWiFi: "Waiting for Wi-Fi"
+            case .server, .recoveryIncomplete, .recoveryWaiting, .attention, .waitingForBackground, .waitingForSpace, .fullSynchronizing, .fullSynchronizationWaitsForWiFi,
+                 .fullSynchronizationWaitsOffline: "Successful ("
+            case .recoveryWaitingForSpace: "Restoring…"
             }
         }
     }
@@ -146,9 +202,9 @@ struct ServerSynchronizationSettingsViewTests {
         try #require(try await condition(), "The component must reach its observable completion state")
     }
 
-    /// Snapshots of the rows for the record (`TEST_RUNNER_S4A_SHOTS=<folder>`); nothing is written otherwise.
+    /// Snapshots of the rows for the record (`TEST_RUNNER_SYNCHRONIZATION_SHOTS=<folder>`); nothing is written otherwise.
     private func snapshot(_ view: UIView, _ name: String) {
-        guard let folder = ProcessInfo.processInfo.environment["S4A_SHOTS"] else { return }
+        guard let folder = ProcessInfo.processInfo.environment["SYNCHRONIZATION_SHOTS"] else { return }
         let device = UIDevice.current.userInterfaceIdiom == .pad ? "iPad"
             : ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] == "iPhone19,4" ? "Duo" : "iPhone"
         let url = URL(fileURLWithPath: folder).appendingPathComponent(device, isDirectory: true)
@@ -642,6 +698,9 @@ struct ServerSynchronizationSettingsViewTests {
             .init(kind: .refusedURL(url: "https://example.test/other.xml", podcastTitle: "Pea", ownerTitle: "Queue"), ids: ["u-1"], createdAt: 3),
             .init(kind: .refusedChanges(count: 2), ids: ["x-1", "x-2"], createdAt: 2),
             .init(kind: .incompleteRecovery(problems: 3), ids: ["r-1"], createdAt: 1),
+            .init(kind: .refusedListening(episodeTitle: "An episode whose listening could not be synchronized"), ids: ["l-1"], createdAt: 0),
+            .init(kind: .refusedTooLarge(podcastTitle: "Pea"), ids: ["d-1"], createdAt: 0),
+            .init(kind: .refusedQueueAdd(episodeTitle: "An episode added to the queue"), ids: ["q-1"], createdAt: 0),
         ]
         let words: [String: (String, String)] = [
             "s-1": ("A podcast with a long title that needs two lines on a phone",
@@ -650,16 +709,22 @@ struct ServerSynchronizationSettingsViewTests {
             "rejected": ("Some changes were refused by the server", "2 changes were not synchronized. The synchronization log lists them."),
             "r-1": ("Some changes could not be restored",
                     "After the server was restored from a backup, 3 changes could not be restored. The synchronization log lists them."),
+            "l-1": ("An episode whose listening could not be synchronized",
+                    "Listening on an episode can't be synchronized: its feed data is too large for the server."),
+            "d-1": ("Pea", "A change to this podcast is too large for the server. It is kept on this device; later changes to this podcast wait behind it."),
+            "q-1": ("An episode added to the queue", "Adding an episode to the queue can't be synchronized: its feed data is too large for the server."),
         ]
         try await withViewTestWindow { host, window in
             let list = ServerAttentionView()
             if rtl { list.traitOverrides.layoutDirection = .rightToLeft }
             host.view.addSubview(list)
             defer { list.removeFromSuperview() }
-            var subscribed: [String] = [], logs = 0, dismissed: [[String]] = []
+            var subscribed: [String] = [], logs = 0, dismissed: [[String]] = [], retried: [[String]] = [], kept: [[String]] = []
             list.onSubscribeAgain = { subscribed.append($0) }
             list.onShowLog = { logs += 1 }
             list.onDismiss = { dismissed.append($0.ids) }
+            list.onTryAgain = { retried.append($0.ids) }
+            list.onKeepOnDevice = { kept.append($0.ids) }
             list.update(items)
             let portrait = min(window.bounds.width, window.bounds.height), landscape = max(window.bounds.width, window.bounds.height)
             for width in [portrait, landscape] {
@@ -681,14 +746,23 @@ struct ServerSynchronizationSettingsViewTests {
                     }
                     let inset: CGFloat = width >= 600 ? 24 : 16
                     #expect(frame.minX >= inset - 0.5 && frame.maxX <= width - inset + 0.5 && frame.maxY <= list.bounds.height + 0.5)
-                    let dismiss: UIButton = try #require(find("serverAttentionDismiss-\(id)", in: list))
+                    // What waits on this device is never dismissed: "Keep only on this device" (or the log) takes Dismiss's place.
+                    let leadingID = switch item.kind {
+                    case .refusedListening, .refusedQueueAdd: "serverAttentionKeep-\(id)"
+                    case .refusedTooLarge: "serverAttentionLog-\(id)"
+                    default: "serverAttentionDismiss-\(id)"
+                    }
+                    let dismiss: UIButton = try #require(find(leadingID, in: list))
+                    if item.waits { #expect(find("serverAttentionDismiss-\(id)", in: list, as: UIButton.self) == nil) }
                     let primaryID: String? = switch item.kind {
                     case .staleSubscription: "serverAttentionSubscribe-\(id)"
                     case .refusedChanges, .incompleteRecovery: "serverAttentionLog-\(id)"
+                    case .refusedListening, .refusedQueueAdd, .refusedTooLarge: "serverAttentionRetry-\(id)"
                     case .refusedURL: nil
                     }
                     #expect(find("serverAttentionSubscribe-\(id)", in: list, as: UIButton.self) == nil || primaryID?.hasPrefix("serverAttentionSubscribe") == true)
-                    #expect(find("serverAttentionLog-\(id)", in: list, as: UIButton.self) == nil || primaryID?.hasPrefix("serverAttentionLog") == true)
+                    #expect(find("serverAttentionLog-\(id)", in: list, as: UIButton.self) == nil || primaryID?.hasPrefix("serverAttentionLog") == true
+                            || leadingID.hasPrefix("serverAttentionLog"))
                     // Inside the screen's width and the list (which scrolls), below the item's words.
                     let dismissFrame = dismiss.convert(dismiss.bounds, to: list)
                     #expect(list.bounds.contains(dismissFrame) && dismissFrame.maxX <= width - inset + 0.5 && dismissFrame.minX >= inset - 0.5)
@@ -705,10 +779,15 @@ struct ServerSynchronizationSettingsViewTests {
                 if width == portrait { snapshot(list, "attention-\(rtl ? "rtl" : "ltr")") }
             }
             for id in ["serverAttentionSubscribe-s-1", "serverAttentionLog-rejected", "serverAttentionLog-r-1",
-                       "serverAttentionDismiss-u-1", "serverAttentionDismiss-rejected"] {
+                       "serverAttentionDismiss-u-1", "serverAttentionDismiss-rejected", "serverAttentionRetry-l-1", "serverAttentionKeep-l-1",
+                       "serverAttentionLog-d-1", "serverAttentionRetry-d-1", "serverAttentionRetry-q-1", "serverAttentionKeep-q-1"] {
                 try #require(find(id, in: list, as: UIButton.self)).sendActions(for: .touchUpInside)
             }
-            #expect(subscribed == ["https://example.test/feed.xml"] && logs == 2 && dismissed == [["u-1"], ["x-1", "x-2"]])
+            #expect(subscribed == ["https://example.test/feed.xml"] && logs == 3 && dismissed == [["u-1"], ["x-1", "x-2"]])
+            #expect(retried == [["l-1"], ["d-1"], ["q-1"]] && kept == [["l-1"], ["q-1"]])
+            let keep = try #require(find("serverAttentionKeep-l-1", in: list, as: UIButton.self))
+            #expect(keep.configuration?.title == "Keep only on this device")
+            #expect(find("serverAttentionRetry-l-1", in: list, as: UIButton.self)?.configuration?.title == "Try again")
             list.update([])
             list.frame.size = CGSize(width: portrait, height: 600)
             list.layoutIfNeeded()

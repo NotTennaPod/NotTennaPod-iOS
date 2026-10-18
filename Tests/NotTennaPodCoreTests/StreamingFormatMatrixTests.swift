@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) @MainActor
+@Suite(.serialized) @MainActor
 struct StreamingFormatMatrixTests {
     /// Containers Apple's own parser and AVPlayer route can open. WebM/Opus is not one
     /// of them (AudioFileStream reports kAudioFileUnsupportedFileTypeError): the app

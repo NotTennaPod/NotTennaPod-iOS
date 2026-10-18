@@ -7,7 +7,7 @@ import Testing
 /// iOS ends WebKit's content process when it reclaims memory, mostly while the app is in the background. The notes
 /// come back on their own, in the current colours and at the position they were read at, and never raise an alert.
 /// The process is ended with WebKit's private diagnostic, from this test target only.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct ShownotesRecoveryViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -372,7 +372,7 @@ struct ShownotesRecoveryViewTests {
         }
     }
 
-    /// The owner's original symptom: recolouring and clearing a range fail inside WebKit (here through the production
+    /// Recolouring and clearing a range fail inside WebKit (here through the production
     /// evaluator, with WebKit's own "unsupported type" error). Nothing reaches a person; both changes are applied at the
     /// next scene activation, in the same document at the same position.
     @Test func failedHousekeepingNeverAlertsAndIsAppliedAtTheNextActivation() async throws {

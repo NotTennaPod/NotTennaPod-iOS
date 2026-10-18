@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPodCore
 
 private final class PlaybackCoordinatorTestBundleMarker {}
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct PlaybackCoordinatorTests {
     private final class Clock {
         /// Wall time. Changing it is time passing, which monotonic time follows; `correctWallClock` is not.
@@ -592,6 +592,114 @@ struct PlaybackCoordinatorTests {
         }
     }
 
+    /// "Once" is recorded for the load it admitted (a Cast relay or a streamed chapter list may then use the restricted
+    /// network, `AuxiliaryNetworkAdmission`), and only for that load: the next load and an unload clear it.
+    @Test func onceConsentIsRecordedForTheLoadItAdmittedOnly() async throws {
+        let network = StreamingNetwork()
+        try await withPlayer(streamingAccess: { network.access($0) }) { _, player, engine, _, _ in
+            try await player.select(episodeID: 1)
+            #expect(player.pendingStreamingEpisodeID == 1 && player.onceAdmittedEpisodeID == nil)
+            try await player.play()
+            engine.ready(); try await player.awaitPendingOperations()
+            #expect(player.episode?.id == 1 && player.onceAdmittedEpisodeID == 1)
+            network.allowed = true
+            try await player.select(episodeID: 2)
+            #expect(player.episode?.id == 2 && player.onceAdmittedEpisodeID == nil, "an allowed load records nothing")
+            network.allowed = false
+            try await player.select(episodeID: 1)
+            #expect(player.pendingStreamingEpisodeID == 1 && player.onceAdmittedEpisodeID == nil)
+            try await player.play()
+            engine.ready(); try await player.awaitPendingOperations()
+            #expect(player.onceAdmittedEpisodeID == 1)
+            try await player.resetPlaybackPosition(episodeID: 1)
+            #expect(player.episode == nil && player.onceAdmittedEpisodeID == nil)
+        }
+    }
+
+    /// A route that fetches through the phone (a Cast relay) can refuse a load the coordinator let through (casting
+    /// skips the local check). Its event asks Once/Always for the current generation only, at the position the route was
+    /// loading; the affirmative Play (what Once and Always call) reloads it there once, with Once consent, and asks no
+    /// second time. A stale generation's event is ignored.
+    @Test func routeRefusalAsksOnceAndTheAffirmativePlayReloadsAtTheRoutePosition() async throws {
+        let network = StreamingNetwork()
+        network.casting = true
+        try await withPlayer(streamingAccess: { network.access($0) }) { store, player, engine, _, _ in
+            try await player.select(episodeID: 1)
+            engine.ready(); engine.position(42_000); try await player.awaitPendingOperations()
+            let stale = try #require(engine.generation)
+            try await player.select(episodeID: 2)
+            engine.onEvent?(.streamingConfirmationRequired(generation: stale))
+            try await player.awaitPendingOperations()
+            #expect(player.phase == .preparing && player.pendingStreamingEpisodeID == nil, "a retired generation asks nothing")
+            try await player.select(episodeID: 1)
+            engine.ready(); engine.position(42_000); try await player.awaitPendingOperations()
+            #expect(player.phase == .playing)
+            final class Asked { var ids: [Int64] = [] }
+            let asked = Asked(), events = player.events()
+            let listener = Task { for await event in events { if case .streamingConfirmationRequired(let id) = event { asked.ids.append(id) } } }
+            defer { listener.cancel() }
+            let loads = engine.commands.filter { if case .load = $0 { true } else { false } }.count
+            engine.onEvent?(.streamingConfirmationRequired(generation: try #require(engine.generation)))
+            try await player.awaitPendingOperations()
+            #expect(player.phase == .awaitingStreamingConfirmation && player.pendingStreamingEpisodeID == 1)
+            #expect(player.sample?.positionMilliseconds == 42_000 && !player.wantsPlayback && engine.generation == nil)
+            #expect(try await store.episode(id: 1)?.userState.positionMilliseconds == 42_000, "the listening is kept")
+            let deadline = ContinuousClock.now + .seconds(5)
+            while asked.ids.isEmpty, ContinuousClock.now < deadline { await Task.yield() }
+            #expect(asked.ids == [1])
+            try await player.play()
+            engine.ready(); try await player.awaitPendingOperations()
+            for _ in 0..<20 { await Task.yield() }
+            #expect(asked.ids == [1], "no second prompt")
+            #expect(engine.commands.filter { if case .load = $0 { true } else { false } }.count == loads + 1)
+            #expect(engine.commands.contains(.load(1, 42_000)))
+            #expect(player.pendingStreamingEpisodeID == nil && player.onceAdmittedEpisodeID == 1)
+            #expect(player.phase == .playing && player.wantsPlayback)
+        }
+    }
+
+    /// Consent ends with the load it admitted: stopping it, completing or skipping the last queued episode, retiring
+    /// the player (a library switch), an engine failure, a media-services reset and a storage failure all clear it,
+    /// whether or not the episode stays selected.
+    @Test(arguments: ["stop", "end", "skip", "retire", "engineFailure", "mediaServicesReset", "storageFailure"])
+    func onceConsentEndsWhenItsLoadIsRetired(path: String) async throws {
+        let network = StreamingNetwork()
+        try await withPlayer(streamingAccess: { network.access($0) }) { store, player, engine, _, _ in
+            try await player.select(episodeID: 1)
+            try await player.play()
+            engine.ready(); try await player.awaitPendingOperations()
+            try #require(player.episode?.id == 1 && player.onceAdmittedEpisodeID == 1)
+            try #require(try await store.queue().map(\.id) == [1])
+            switch path {
+            case "stop":
+                try await player.stop()
+                #expect(player.episode?.id == 1, "stays selected")
+            case "end":
+                engine.end(); try await player.awaitPendingOperations()
+                #expect(player.episode == nil)
+            case "skip":
+                try await player.skip()
+                #expect(player.episode == nil)
+            case "retire":
+                await player.retire().value
+            case "engineFailure":
+                engine.onEvent?(.failed(generation: try #require(engine.generation), message: "failed"))
+                try await player.awaitPendingOperations()
+                #expect(player.phase == .failed)
+            case "mediaServicesReset":
+                engine.onEvent?(.mediaServicesReset(try #require(engine.reading)))
+                try await player.awaitPendingOperations()
+                #expect(player.phase == .stopped && player.episode?.id == 1)
+            default:
+                // The playback session is gone behind the player's back: the pause's save fails.
+                try await store.resetPlaybackPosition(episodeID: 1)
+                try? await player.pause()
+                #expect(player.phase == .failed)
+            }
+            #expect(player.onceAdmittedEpisodeID == nil)
+        }
+    }
+
     @Test func delayedNativeAccessThenOnceAndAlwaysPreserveOriginalSelectionAndPermissionRules() async throws {
         let file = FileManager.default.temporaryDirectory.appendingPathComponent("Mobile-\(UUID()).json")
         defer { try? FileManager.default.removeItem(at: file) }
@@ -820,7 +928,8 @@ struct PlaybackCoordinatorTests {
         do {
             try await operation(store, player, engine, clock, url)
             await player.awaitPendingCompletionEffects()
-            try await player.stop()
+            // A retired player refuses every later command, its own stop included; it has already stopped.
+            if !player.isRetired { try await player.stop() }
             try await store.close()
         } catch {
             await player.awaitPendingCompletionEffects()

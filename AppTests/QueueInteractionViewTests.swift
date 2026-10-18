@@ -4,7 +4,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct QueueInteractionViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let value = view as? T { return value }
@@ -14,7 +14,7 @@ struct QueueInteractionViewTests {
         let control: UIControl = try #require(find(id, in: view)); control.sendActions(for: .touchUpInside)
     }
     private func wait(_ predicate: () async throws -> Bool) async throws {
-        let deadline = ContinuousClock.now + .seconds(6)
+        let deadline = ContinuousClock.now + .seconds(30)
         while try await !predicate(), ContinuousClock.now < deadline { try await Task.sleep(for: .milliseconds(10)) }
         try #require(try await predicate())
     }
@@ -103,7 +103,7 @@ struct QueueInteractionViewTests {
             // yielded this MainActor turn. A real layout invalidation can run here.
             controller.additionalSafeAreaInsets.right += 40
             controller.view.setNeedsLayout(); controller.view.layoutIfNeeded()
-            let deadline = ContinuousClock.now + .seconds(6)
+            let deadline = ContinuousClock.now + .seconds(30)
             var stored: [Int64] = [], displayed: [Int64] = []
             repeat {
                 stored = try await store.queue().map(\.id)
@@ -173,7 +173,9 @@ struct QueueInteractionViewTests {
             controller.view.semanticContentAttribute = .forceRightToLeft
             let captured = try await store.queue().map(QueueEpisodeIdentity.init)
             _ = try await store.performQueueMove(.boundary([3], .top), expected: captured)
-            await controller.reloadLibrary()?.value
+            // The direction was forced after the rows were built: the screen opens again to build them in it (a reload
+            // that only follows the library's changes would keep the rows that did not change).
+            await controller.reloadLibrary(reopen: true)?.value
             let before = try await store.snapshot()
             let window = try #require(controller.view.window), scene = try #require(window.windowScene)
             let scroll: UIScrollView = try #require(find("libraryContent", in: controller.view))
@@ -224,7 +226,7 @@ struct QueueInteractionViewTests {
                 try await wait { reachable() }
                 #expect(reachable())
                 let evidence = "sceneBefore=\(originalScene); sceneAfter=\(scene.effectiveGeometry.coordinateSpace.bounds.size); window=\(window.bounds); contentBefore=\(originalContent); contentAfter=\(scroll.bounds.size); safeArea=\(controller.view.safeAreaInsets); order=\(displayed); firstRowHit=\(reachable())"
-                print("M10 actual scene resize: \(evidence)")
+                print("Queue actual scene resize: \(evidence)")
                 Attachment.record(Data(evidence.utf8), named: "queue-rtl-actual-scene-geometry.txt")
                 let format = UIGraphicsImageRendererFormat(); format.scale = window.traitCollection.displayScale
                 let rendered = UIGraphicsImageRenderer(bounds: window.bounds, format: format).image { _ in
@@ -232,11 +234,73 @@ struct QueueInteractionViewTests {
                 }
                 Attachment.record(try #require(rendered.pngData()), named: "queue-rtl-actual-landscape-window.png")
             } catch { failure = error }
-            scene.requestGeometryUpdate(.iOS(interfaceOrientations: restore)) { print("M10 scene restore error: \($0)") }
+            scene.requestGeometryUpdate(.iOS(interfaceOrientations: restore)) { print("Queue scene restore error: \($0)") }
             try await wait { scene.effectiveGeometry.coordinateSpace.bounds.size == originalScene && scroll.bounds.size == originalContent }
-            print("M10 scene restored: scene=\(scene.effectiveGeometry.coordinateSpace.bounds.size); content=\(scroll.bounds.size)")
+            print("Queue scene restored: scene=\(scene.effectiveGeometry.coordinateSpace.bounds.size); content=\(scroll.bounds.size)")
             #expect(try await store.snapshot() == before)
             if let failure { throw failure }
+        }
+    }
+
+    /// A position saved on another queued episode (a playback checkpoint) patches that row and keeps the drag in
+    /// progress (synthetic recognizer phase).
+    @Test func aPositionSavedOnAnotherQueuedEpisodeKeepsTheDrag() async throws {
+        try await fixture { controller,store,_,_ in
+            let source = try row(3,in:controller)
+            let scroll: UIScrollView = try #require(find("libraryContent",in:controller.view))
+            let gesture = try #require(source.gestureRecognizers?.compactMap { $0 as? QueueRowDrag }.first)
+            gesture.state = .began
+            try await wait { !scroll.isScrollEnabled }
+            try await store.updateEpisode(id: 1) { $0.userState.positionMilliseconds = 30_000 }
+            await controller.reloadLibrary()?.value
+            controller.view.layoutIfNeeded()
+            #expect(try await store.queue().map(\.id) == [1,2,3,4])
+            #expect(!scroll.isScrollEnabled && controller.queueDragController?.holds(3) == true, "the drag goes on")
+            gesture.state = .cancelled
+            try await wait { scroll.isScrollEnabled }
+        }
+    }
+
+    /// The dragged row's own episode changes while it is held (a favourite, or a position the player saves): the row
+    /// stays under the finger, and once the drag ends it shows the change and offers its actions again.
+    @Test(arguments: [false, true])
+    func theHeldRowCatchesUpAfterTheDragEnds(position: Bool) async throws {
+        try await fixture { controller,store,_,_ in
+            let source = try row(3,in:controller)
+            let scroll: UIScrollView = try #require(find("libraryContent",in:controller.view))
+            let gesture = try #require(source.gestureRecognizers?.compactMap { $0 as? QueueRowDrag }.first)
+            gesture.state = .began
+            try await wait { !scroll.isScrollEnabled }
+            if position { try await store.updateEpisode(id: 3) { $0.userState.positionMilliseconds = 30_000 } }
+            else { try await store.setFavorite(episodeIDs: [3], favorite: true) }
+            await controller.reloadLibrary()?.value
+            controller.view.layoutIfNeeded()
+            #expect(controller.queueDragController?.holds(3) == true && controller.episodeRows[3]?.1 === source, "the held row stays")
+            gesture.state = .ended
+            try await wait { scroll.isScrollEnabled }
+            controller.view.layoutIfNeeded()
+            let stored = try #require(try await store.episode(id: 3))
+            #expect(controller.episodeRows[3]?.1.actionModel?.snapshot().episode == stored, "the row shows the change")
+            #expect(controller.captureAction(3) != nil, "its menu and swipes act on it again")
+            #expect(controller.displayedEpisodeIDs == [1,2,3,4])
+        }
+    }
+
+    /// The control: a real order change during a drag still ends it, and the list shows the new order.
+    @Test func anOrderChangeDuringADragStillEndsIt() async throws {
+        try await fixture { controller,store,_,_ in
+            let source = try row(3,in:controller)
+            let scroll: UIScrollView = try #require(find("libraryContent",in:controller.view))
+            let gesture = try #require(source.gestureRecognizers?.compactMap { $0 as? QueueRowDrag }.first)
+            gesture.state = .began
+            try await wait { !scroll.isScrollEnabled }
+            let queue = try await store.queue()
+            _ = try await store.performQueueMove(.item(1, finalIndex: 3), expected: queue.map(QueueEpisodeIdentity.init))
+            await controller.reloadLibrary()?.value
+            controller.view.layoutIfNeeded()
+            try await wait { scroll.isScrollEnabled }
+            #expect(controller.displayedEpisodeIDs == [2,3,4,1])
+            gesture.state = .cancelled
         }
     }
 

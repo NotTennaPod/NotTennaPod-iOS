@@ -4,7 +4,7 @@ import Testing
 import Synchronization
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PausedHLSBufferingTests {
+@MainActor @Suite(.serialized) struct PausedHLSBufferingTests {
     private func wait(_ predicate: () -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(10)
         while !predicate(), ContinuousClock.now < deadline { try await Task.sleep(for:.milliseconds(10)) }

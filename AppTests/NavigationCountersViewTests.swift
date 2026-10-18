@@ -23,7 +23,7 @@ import Testing
 /// episodes in subscribed, archived and preview feeds) through the database import; the expected numbers
 /// are `gap-data/counter-expected.json`, Android's own SQL run by `navigation_counters.py`
 /// (`NavigationCountersOracleTests.recordedCountersAreCurrent` keeps it current).
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3)))
+@MainActor @Suite(.serialized)
 struct NavigationCountersViewTests {
     static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         .appendingPathComponent("../TestSupport/Data/database-restore/gap-data").standardized

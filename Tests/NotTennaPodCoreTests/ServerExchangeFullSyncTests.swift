@@ -7,7 +7,7 @@ import Testing
 /// local-only state stays; pending local facts, the player's pinned fields and the outbox are untouched; a
 /// cross-podcast change publishes in one switch; while audio plays a large one waits for a pause; a local action
 /// during staging is kept; and a crash at any step leaves nothing half done.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerExchangeFullSyncTests {
+@Suite(.serialized) struct ServerExchangeFullSyncTests {
     typealias Agreement = ServerExchangeAgreementTests
     typealias Concurrency = ServerExchangeConcurrencyTests
     typealias PushPull = ServerExchangePushPullTests

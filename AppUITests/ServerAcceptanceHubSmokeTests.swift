@@ -1,7 +1,7 @@
 import XCTest
 
 /// The app bridge against the acceptance hub (`serve-ntp-server-fixture.py`, started by the scheme's pre-action):
-/// the app, launched with `-test-hub-bridge` and `-test-sync-crash-at push.barrier`, reports the crash point its first
+/// the app, launched with `-test-hub-bridge` and `-test-sync-crash-at pull.spooled`, reports the crash point its first
 /// attachment's catch-up reaches and is killed there (SIGKILL, after the hub's receipt); relaunched, the attachment
 /// resumes and finishes, a Mark as played in the server library is reported as the fact the recorder exported, and a
 /// hub command reaches the app and is answered.
@@ -105,12 +105,13 @@ import XCTest
         let username = try XCTUnwrap(account["username"] as? String)
         let start = try await mark("hub smoke: first launch")
 
-        // First launch: the attachment's catch-up reaches push.barrier, the bridge reports it, the hub answers with
+        // First launch: the attachment's catch-up reaches pull.spooled (a page of the server library spooled; a
+        // new device has nothing to push, so it reaches no push barrier), the bridge reports it, the hub answers with
         // its receipt and the app kills itself there.
-        launch(crashAt: "push.barrier")
+        launch(crashAt: "pull.spooled")
         let hello = try await event(after: start, ["source": "app", "kind": "hello", "library": library])
         let pid = try XCTUnwrap(hello["pid"] as? Int)
-        XCTAssertEqual(hello["crash_at"] as? String, "push.barrier")
+        XCTAssertEqual(hello["crash_at"] as? String, "pull.spooled")
         openSynchronization()
         tap("preference_synchronization_description")
         tap("syncProvider-server")
@@ -121,7 +122,7 @@ import XCTest
         tap("serverLogin")
         tap("serverAttachConfirm")
         let crash = try await event(after: start, ["source": "app", "kind": "crash_point", "armed": true, "pid": pid])
-        XCTAssertEqual(crash["point"] as? String, "push.barrier")
+        XCTAssertEqual(crash["point"] as? String, "pull.spooled")
         let exited = try await call("POST", "app/wait-exit", ["pid": pid, "timeout": 60])
         XCTAssertEqual(exited["exited"] as? Bool, true)
         XCTAssertTrue(app.wait(for: .notRunning, timeout: 30), "the app was killed at the crash point")
@@ -136,7 +137,7 @@ import XCTest
         let relaunched = try await event(after: second, ["source": "app", "kind": "hello", "library": library])
         let session = try XCTUnwrap(relaunched["session"] as? String)
         XCTAssertNotEqual(relaunched["pid"] as? Int, pid)
-        _ = try await event(after: second, ["source": "app", "kind": "crash_point", "point": "push.barrier", "armed": false,
+        _ = try await event(after: second, ["source": "app", "kind": "crash_point", "point": "pull.spooled", "armed": false,
                                             "session": session])
         // The server library opens: its podcasts show.
         let subscriptions = app.navigation("Subscriptions")

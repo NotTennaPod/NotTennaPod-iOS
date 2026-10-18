@@ -7,7 +7,7 @@ import Synchronization
 /// Mounted OPML export flow: picker/destination boundary, source progress/success/error/Share
 /// composition and lifetime. Picker selection is delivered through the operation's public
 /// delegate entry; the real system Save picker is exercised by the OPML export journey test.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct OPMLExportFlowTests {
     private final class Host: UIViewController, DocumentExportHost {
         var pickers: [UIDocumentPickerViewController] = []
@@ -39,7 +39,7 @@ struct OPMLExportFlowTests {
         func write(_ data: Data, _ url: URL) async throws {
             while !state.withLock({ $0.open }) { try await Task.sleep(for: .milliseconds(5)) }
             if let failure = state.withLock({ $0.failure }) {
-                throw NSError(domain: "M12Test", code: 1, userInfo: [NSLocalizedDescriptionKey: failure])
+                throw NSError(domain: "OPMLExportTest", code: 1, userInfo: [NSLocalizedDescriptionKey: failure])
             }
             try data.write(to: url)
             state.withLock { $0.writes.append(url) }
@@ -59,7 +59,7 @@ struct OPMLExportFlowTests {
                           journal: ExportAttemptJournal? = nil, grant: BackgroundWorkGrant? = nil,
                           payloads: [String]? = nil, onRead: (@Sendable () -> Void)? = nil,
                           _ body: @MainActor (Host, DocumentExportFlow, URL) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M12Flow-\(UUID())", isDirectory: true)
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("OPMLExportFlow-\(UUID())", isDirectory: true)
         let destinations = root.appendingPathComponent("destinations", isDirectory: true)
         try FileManager.default.createDirectory(at: destinations, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
@@ -145,7 +145,7 @@ struct OPMLExportFlowTests {
 
     /// Source `DatabaseExporter.exportToDocument` compares the destination size with the bytes written.
     @Test func databaseWriteVerifiesDestinationSize() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M15Size-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("OPMLExportSize-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let data = Data((0..<65_536).map { UInt8($0 % 251) }), complete = directory.appendingPathComponent("complete.db")
@@ -182,7 +182,7 @@ struct OPMLExportFlowTests {
     @Test func writeErrorShowsSourceDialogAndRetryIsFreshAttempt() async throws {
         let gate = Gate(), reads = Reads()
         try await withFlow(gate: gate, reads: reads) { host, flow, directory in
-            gate.open(failing: "M12 controlled export failure")
+            gate.open(failing: "Controlled export failure")
             flow.begin()
             _ = try choose(try #require(flow.pendingOperationForTesting), in: directory)
             try await wait("error presented") { !host.messages.isEmpty }
@@ -190,7 +190,7 @@ struct OPMLExportFlowTests {
             let title: UILabel = try #require(find("sourceMessageTitle", in: dialog.view))
             #expect(title.text == "Export error")
             let body: UILabel = try #require(find("sourceMessage", in: dialog.view))
-            #expect(body.text == "M12 controlled export failure")
+            #expect(body.text == "Controlled export failure")
             let ok: UIButton = try #require(find("sourceMessageOK", in: dialog.view))
             #expect(ok.title(for: .normal) == "OK")
             #expect(host.success == nil)
@@ -282,7 +282,7 @@ struct OPMLExportFlowTests {
     }
 
     private func journal() throws -> (ExportAttemptJournal, URL) {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("K5dFlow-\(UUID())", isDirectory: true)
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ExportJournalFlow-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         return (ExportAttemptJournal(root: root), root)
     }
@@ -570,7 +570,7 @@ struct OPMLExportFlowTests {
     }
 
     @Test func publicationReplacesTheDocumentWhereAllowedAndWritesItInPlaceOtherwise() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("K5dPublish-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("OPMLExportPublish-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer {
             try? FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: directory.path)

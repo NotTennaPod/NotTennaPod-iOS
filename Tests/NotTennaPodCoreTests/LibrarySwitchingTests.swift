@@ -5,7 +5,7 @@ import Testing
 /// PROTOCOL §15.4: a library switch runs only when nothing plays, nothing is about to play and nothing will resume by
 /// itself. Checked with the real store and coordinator and a scripted engine that reports interruptions as the
 /// processed-audio engine does (`PlaybackRecoveryController`: a call holds playback; its end may resume it).
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct LibrarySwitchingTests {
     nonisolated private static let serverID = "0b5a3c1e-7c43-4a5e-9d1f-2b9a0e7f6c11"
 

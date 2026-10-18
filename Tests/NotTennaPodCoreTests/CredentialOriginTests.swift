@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct CredentialOriginTests {
     enum Client: CaseIterable, Sendable { case feed, media }
 

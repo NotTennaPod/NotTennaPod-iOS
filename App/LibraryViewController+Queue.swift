@@ -116,6 +116,11 @@ extension LibraryViewController {
                 guard let self, queueVisible, queueMoveTask == nil, presentedViewController == nil else { return .init(locked: true) }
                 return queuePolicy
             }, commit: { [weak self] move, captured in self?.commitQueueMove(move, captured: captured) })
+        controller.released = { [weak self] id in
+            guard let self, let list = self.episodeList, let value = libraryEpisode(id) else { return }
+            repaintRow(id, value: value, in: list)
+            list.restoreViewOrder(in: content)
+        }
         // Rows built later (as they come near the screen) are attached when they are built.
         for (id, (_, row)) in episodeRows { controller.attach(row, id: id) }
         queueDragController = controller
@@ -142,10 +147,10 @@ extension LibraryViewController {
                     return
                 }
                 if result.status == .stale || queuedEpisodes.map(QueueEpisodeIdentity.init) != captured { reloadLibrary(); return }
-                let byID = Dictionary(uniqueKeysWithValues: queuedEpisodes.map { ($0.id, $0) })
-                queuedEpisodes = result.change.episodeIDs.compactMap { byID[$0] }
+                mirror.reorderQueue(result.change.episodeIDs)
                 episodeList?.reorder(queuedEpisodes.map(\.id))
-                feedSelectionIDs = queuedEpisodes.map(\.id)
+                if let screen = listScreen, case .queue = screen.source { listScreen?.source = .queue(queuedEpisodes.map(\.id)) }
+                else { feedSelectionIDs = queuedEpisodes.map(\.id) }
                 attachQueueDrag(); updateQueueInformation()
             } catch {
                 guard queueVisible, queuePresentationID == presentation else { return }

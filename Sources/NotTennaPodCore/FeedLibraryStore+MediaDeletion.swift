@@ -42,7 +42,7 @@ extension FeedLibraryStore {
                 episode.userState.isDownloaded = false
                 episode.userState.downloadDate = nil
                 episode.details.media?.hasEmbeddedPicture = false
-                try saveEpisode(episode, feedID: feedID)
+                try saveEpisode(episode, feedID: feedID, scope: .media)
             } else {
                 kind = .downloadFileDeleted(episode: snapshot, source: feed.source, synchronize: synchronize)
             }
@@ -64,11 +64,11 @@ extension FeedLibraryStore {
         let feedID = try feedID(forEpisode: episodeID)
         guard let row = try database.rows("SELECT record FROM feeds WHERE id = ?", [.integer(feedID)]).first else { return nil }
         let feed: LibraryFeed = try decode(row[0])
-        return try mediaDeletionTarget(episode: episode, feed: feed,
+        return try Self.mediaDeletionTarget(episode: episode, feed: feed,
             localFolder: feed.source.isLocalFeedSource ? localFolder(feedID: feedID) : nil)
     }
 
-    func mediaDeletionTarget(episode: LibraryEpisode, feed: LibraryFeed,
+    static func mediaDeletionTarget(episode: LibraryEpisode, feed: LibraryFeed,
         localFolder: LocalFolderLink?) -> EpisodeMediaDeletionTarget? {
         guard let media = episode.details.media else { return nil }
         let artifact: EpisodeMediaDeletionTarget.Media

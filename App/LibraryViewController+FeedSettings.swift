@@ -76,7 +76,7 @@ extension LibraryViewController {
         Task { [weak self] in
             await self?.feedPreferenceWrite?.value
             do {
-                guard let feed = try await library.feed(id: feedID), let self,
+                guard let feed = try await library.listedFeedHeader(id: feedID), let self,
                       case .feedSettings(let currentID) = path.last, currentID == feedID,
                       !feed.source.isLocalFeedSource, presentedViewController == nil else { return }
                 let values = FeedAutoDownload.displayOrder
@@ -94,7 +94,7 @@ extension LibraryViewController {
         Task { [weak self] in
             await self?.feedPreferenceWrite?.value
             do {
-                guard let feed = try await library.feed(id: feedID), let self,
+                guard let feed = try await library.listedFeedHeader(id: feedID), let self,
                       case .feedSettings(let currentID) = path.last, currentID == feedID,
                       feed.newEpisodeActionIsAutomatic(globalAutoDownload: automaticDownloadPreferences?.value.global ?? false),
                       presentedViewController == nil else { return }
@@ -110,7 +110,7 @@ extension LibraryViewController {
         Task { [weak self] in
             await self?.feedPreferenceWrite?.value
             do {
-                guard let feed = try await library.feed(id: feedID), let self,
+                guard let feed = try await library.listedFeedHeader(id: feedID), let self,
                       case .feedSettings(let currentID) = path.last, currentID == feedID,
                       presentedViewController == nil else { return }
                 // In a server library automatic download never forces the Inbox (PROTOCOL §9.10): the action stays the person's.
@@ -135,7 +135,7 @@ extension LibraryViewController {
         Task { [weak self] in
             await self?.feedPreferenceWrite?.value
             do {
-                guard let feed = try await library.feed(id: feedID), let self,
+                guard let feed = try await library.listedFeedHeader(id: feedID), let self,
                       case .feedSettings(let currentID) = path.last, currentID == feedID,
                       presentedViewController == nil else { return }
                 let values = FeedAutoDelete.allCases
@@ -153,7 +153,7 @@ extension LibraryViewController {
         Task { [weak self] in
             await self?.feedPreferenceWrite?.value
             do {
-                guard let feed = try await library.feed(id: feedID), let self,
+                guard let feed = try await library.listedFeedHeader(id: feedID), let self,
                       case .feedSettings(let currentID) = path.last, currentID == feedID,
                       presentedViewController == nil else { return }
                 let values = FeedVolumeAdaptation.displayOrder
@@ -174,7 +174,7 @@ extension LibraryViewController {
         Task { [weak self] in
             await self?.feedPreferenceWrite?.value
             do {
-                guard let feed = try await library.feed(id: feedID), let self,
+                guard let feed = try await library.listedFeedHeader(id: feedID), let self,
                       case .feedSettings(let currentID) = path.last, currentID == feedID,
                       presentedViewController == nil else { return }
                 present(FeedAutoSkipController.make(value: feed.skipPreferences) { [weak self] value in
@@ -190,7 +190,7 @@ extension LibraryViewController {
             // A quick reopen must see the completed preceding Save.
             await self?.feedPreferenceWrite?.value
             do {
-                guard let feed = try await library.feed(id: feedID), let self,
+                guard let feed = try await library.listedFeedHeader(id: feedID), let self,
                       case .feedSettings(let currentID) = path.last, currentID == feedID,
                       presentedViewController == nil else { return }
                 let stored = feed.tags.map { Array($0.utf16) }

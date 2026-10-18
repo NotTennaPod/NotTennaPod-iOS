@@ -2,8 +2,8 @@ import Foundation
 import NotTennaPodCore
 import GoogleCast
 
-/// The source owner must provide an authorized receiver URL and keep any relay
-/// alive until close. There is deliberately no direct-origin fallback here.
+/// The source owner must provide an authorized receiver URL (a public enclosure, or a relay it keeps alive until
+/// close). There is deliberately no fallback to another URL here.
 @MainActor final class CastPlaybackMedia {
     let item: CastMediaItemCodec.Item
     private var release: (@MainActor () -> Void)?
@@ -127,6 +127,10 @@ import GoogleCast
                 guard !Task.isCancelled, let self, self.generation == generation else { media.close(); return }
                 self.preparing = nil; self.media = media
                 self.sendLoad()
+            } catch is CastRelayStreamingDenied {
+                // Nothing was sent to the receiver; the owner asks Once/Always and loads again.
+                guard !Task.isCancelled, let self, self.generation == generation else { return }
+                self.preparing = nil; self.onEvent?(.streamingConfirmationRequired(generation: generation))
             } catch {
                 guard !Task.isCancelled, let self, self.generation == generation else { return }
                 self.preparing = nil; self.reportFailure(error.localizedDescription)

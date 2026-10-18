@@ -245,7 +245,7 @@ final class PlaybackVideoJourneyTests: XCTestCase {
     /// Runs `body` (taps or hit checks on controls) while the controls are sure to stay on screen. They hide
     /// `controlsHideDelay` after appearing (Android's 2.5 s, lengthened for the journey), so controls that were
     /// already showing can vanish between XCTest's lookup and its touch, which then lands on the video and
-    /// toggles the controls instead (iPad 2026-09-28: Sleep timer and More taps lost this way). Unless this
+    /// toggles the controls instead (on the iPad, Sleep timer and More taps were lost this way). Unless this
     /// test revealed them recently enough to leave 3.5 s for the tap, let them hide, or confirm they stay (a menu
     /// or dialog stops the autohide, as on Android), and reveal them afresh.
     @MainActor private func whileControlsShow(_ app: XCUIApplication, _ body: () -> Void) {

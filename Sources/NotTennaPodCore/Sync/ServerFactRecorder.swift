@@ -67,12 +67,30 @@ extension FeedLibraryStore {
         try syncQueueKeys(s)
         // What the playback journal made due, or an earlier playback write owes, comes first (PROTOCOL §8).
         try recordPlaybackDue(s)
+        // A local cut is recorded only once every unexported save it covers was exported (PROTOCOL §8.2).
+        if intent.isCut { try checkCutCoverage(s) }
         try mapIntent(s)
         // Recorded something: after COMMIT the sync scheduler is told, and pushes soon (PROTOCOL §6.4).
         if writer.writes > writesBefore { capture.afterCommit.append { $0.noteServerOutboxChanged() } }
         if replaying { return }
         if let first = s.pending.sorted().first {
             throw ServerRecordingError.unmappedChange(intent: intent.name, change: first.description)
+        }
+    }
+
+    /// A local cut covering listening the server refused as too large (PROTOCOL §6.13) would leave that listening out of
+    /// it: the whole action is refused, nothing changes, and the person is pointed to Needs attention ("Try again" or "Keep
+    /// only on this device"). A removal of another episode's history is not blocked.
+    private func checkCutCoverage(_ s: RecordingSession) throws {
+        var episode: Int64?
+        if s.intent == .historyRemove {
+            guard let removal = s.capture.historyRemoval else { return }
+            episode = removal.episodeID
+        }
+        // A refused leave or finalization carries a history entry: it holds back history cuts (not a statistics reset).
+        let transitionsBlock = try s.intent != .statisticsReset && !refusedTransitions(episode: episode).isEmpty
+        guard try refusedSessions(episode: episode).isEmpty, !transitionsBlock else {
+            throw ServerRecordingError.cutBlockedByRefusedListening(intent: s.intent.name)
         }
     }
 
@@ -118,13 +136,13 @@ extension FeedLibraryStore {
         let syncedBefore = try capture.queueBefore.filter { try after.contains($0) && !isDeviceOnly($0, s) }
         let syncedAfter = try s.queueAfter.filter { try before.contains($0) && !isDeviceOnly($0, s) }
         if syncedBefore != syncedAfter { s.pending.insert(.queueOrder) }
-        // Local folders (PROTOCOL §7.6): nothing about them is recorded.
+        // Local folders (PROTOCOL §7.6) and detached feeds (PROTOCOL §6.8): nothing about them is recorded.
         for change in s.pending {
             switch change {
             case .episode(let id, _), .episodeInserted(let id), .episodeDeleted(let id), .queueIn(let id), .queueOut(let id):
                 if try isDeviceOnly(id, s) { s.account(change) }
             case .feed(let id, _), .feedInserted(let id), .feedDeleted(let id), .credentials(let id):
-                if try header(id, s)?.source.isLocalFeedSource == true { s.account(change) }
+                if try header(id, s)?.source.isLocalFeedSource == true || isDetachedFeed(id) { s.account(change) }
             case .queueOrder: break
             }
         }
@@ -163,7 +181,8 @@ extension FeedLibraryStore {
     /// How a feed's facts are recorded now, from the stored registrations and mappings (`binding` without a session).
     func storedBinding(_ feedID: Int64, isLocalFolder: Bool) throws -> PodcastBinding {
         let result: PodcastBinding
-        if isLocalFolder {
+        // A detached feed (PROTOCOL §6.8) is recorded as a local folder is: never.
+        if try isLocalFolder || isDetachedFeed(feedID) {
             result = .localFolder
         } else if let row = try database.rows("SELECT r.op_id, r.author_id FROM ntp_registrations r WHERE r.feed_id = ? AND r.state = 'pending' AND EXISTS (SELECT 1 FROM ntp_drafts d WHERE d.author_id = r.author_id) ORDER BY r.created_at DESC, r.rowid DESC LIMIT 1", [.integer(feedID)]).first,
                   case .text(let op) = row[0], case .text(let author) = row[1] {
@@ -297,8 +316,9 @@ extension FeedLibraryStore {
     /// An episode named by a fact: an `EpisodeRef` for a registered podcast, or a draft placeholder carrying the
     /// occurrence fixed now (materialized when the registration resolves).
     func episodeReference(_ localID: Int64, binding: PodcastBinding, _ s: RecordingSession) throws -> (ref: ContractJSON, target: ContractJSON, entityID: String)? {
+        // A detached episode (PROTOCOL §6.8) is named by nothing, whatever binding a session kept from before.
         guard let episode = try episodeValue(localID, s), let feedID = try feedOf(localID, s),
-              let feed = try header(feedID, s) else { return nil }
+              let feed = try header(feedID, s), try !isDetachedFeed(feedID) else { return nil }
         let occurrence = occurrence(of: episode, atom: feed.metadata.format == .atom)
         switch binding {
         case .registered(let podcast, let generation):
@@ -529,8 +549,9 @@ extension FeedLibraryStore {
     /// podcast whose aliases list it. Local folders never match.
     func serverLibraryFeed(matching url: String) throws -> Int64? {
         let normalized = ContractURL.normalize(ContractURL.stripUserinfo(url))
-        // A hidden podcast (being removed, or staged and not yet revealed) is nobody's to subscribe again.
-        for row in try database.rows("SELECT id, record FROM feeds WHERE id NOT IN (SELECT feed_id FROM ntp_hidden_feeds) ORDER BY id") {
+        // A hidden podcast (being removed, or staged and not yet revealed) is nobody's to subscribe again, nor is a
+        // detached feed (PROTOCOL §6.8): subscribing again makes a podcast of its own.
+        for row in try database.rows("SELECT id, record FROM feeds WHERE id NOT IN (SELECT feed_id FROM ntp_hidden_feeds) AND id NOT IN (SELECT feed_id FROM pinned_feed_removals) ORDER BY id") {
             let feed: LibraryFeed = try decode(row[1])
             if !feed.source.isLocalFeedSource,
                ContractURL.normalize(ContractURL.stripUserinfo(feed.source)).utf8.elementsEqual(normalized.utf8) { return feed.id }

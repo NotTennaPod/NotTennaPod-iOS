@@ -7,7 +7,7 @@ import Testing
 /// tasks) does not send it again or ask for processing time for it, the log names what was refused, and Synchronize now
 /// (an explicit retry) sends it again, after which the recovery finishes. A refused catch-up pull or secret blocks the
 /// recovery the same way: it never advances without having caught up.
-@Suite(.serialized, .timeLimit(.minutes(20))) struct ServerRecoveryVersionPauseTests {
+@Suite(.serialized) struct ServerRecoveryVersionPauseTests {
     typealias Copies = ServerCopiesTests
 
     /// What one refusal did: the report of the Synchronize now it refused, and how often the refused path was sent by

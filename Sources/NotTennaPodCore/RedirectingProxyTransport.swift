@@ -2,7 +2,8 @@ import Foundation
 
 /// Redirect handling remains outside the native session so every hop selects
 /// the appropriate forward HTTP or HTTPS CONNECT configuration. Origin secrets
-/// cannot be restored after a cross-origin hop, including a return to the origin.
+/// cannot be restored after a cross-origin hop, including a return to the origin. A bounded call has one budget
+/// (`FeedTransferBudget`), which every hop and proxy-login retry draws on.
 public struct RedirectingProxyTransport: FeedHTTPTransport {
     private let transport: any FeedHTTPTransport
     public init(transport: any FeedHTTPTransport) { self.transport = transport }
@@ -11,16 +12,25 @@ public struct RedirectingProxyTransport: FeedHTTPTransport {
     }
 
     public func send(_ input: URLRequest, bodyLimit: Int) async throws -> FeedHTTPResponse {
-        try await send(input, limit: bodyLimit)
+        try await send(input, limit: FeedTransferBudget(limit: bodyLimit))
     }
 
-    private func send(_ input: URLRequest, limit: Int?) async throws -> FeedHTTPResponse {
+    public func send(_ input: URLRequest, bodyLimit: Int, completeAfter: @escaping @Sendable (Int) -> Int?) async throws -> FeedHTTPResponse {
+        try await send(input, limit: FeedTransferBudget(limit: bodyLimit), completeAfter: completeAfter)
+    }
+
+    public func send(_ input: URLRequest, budget: FeedTransferBudget, completeAfter: (@Sendable (Int) -> Int?)?) async throws -> FeedHTTPResponse {
+        try await send(input, limit: budget, completeAfter: completeAfter)
+    }
+
+    private func send(_ input: URLRequest, limit budget: FeedTransferBudget?, completeAfter: (@Sendable (Int) -> Int?)? = nil) async throws -> FeedHTTPResponse {
         let transport = try transport.requestScope()
         var request = input
         for count in 0...20 {
             try Task.checkCancellation()
             let response: FeedHTTPResponse
-            if let limit { response = try await transport.send(request, bodyLimit: limit) } else { response = try await transport.send(request) }
+            if let budget { response = try await transport.send(request, budget: budget, completeAfter: completeAfter) }
+            else { response = try await transport.send(request) }
             guard [301, 302, 303, 307, 308].contains(response.status),
                   let location = response.header("Location"),
                   let target = URL(string: location, relativeTo: response.url)?.absoluteURL,

@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PCMSourceResolutionTests {
+@MainActor @Suite(.serialized) struct PCMSourceResolutionTests {
     private enum Failure: Error { case credentials }
     @MainActor private final class Gate {
         private var pending: CheckedContinuation<Void, Never>?

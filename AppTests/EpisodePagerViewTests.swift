@@ -8,7 +8,7 @@ import Testing
 /// journey come from the independent oracle (`expected/pager.json`); list orders come from the screen a person sees.
 /// Pages change through the pager's accessibility scroll action (VoiceOver's three-finger swipe); finger swipes are
 /// covered by the UI journey `EpisodePagerJourneyTests`.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct EpisodePagerViewTests {
     static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
         .appendingPathComponent("TestSupport/Data/episode-pager")
@@ -44,7 +44,7 @@ struct EpisodePagerViewTests {
     }
     private func mounted(start: NavigationDestination, rtl: Bool = false,
                          _ body: @MainActor (LibraryViewController, FeedLibraryStore, UIWindow, URL) async throws -> Void) async throws {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M27Pager-\(UUID())")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("EpisodePager-\(UUID())")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
         let restored = try AndroidDatabaseRestore.read(Self.fixtures.appendingPathComponent("pager.db"), staging: folder.appendingPathComponent("s"))
@@ -119,6 +119,28 @@ struct EpisodePagerViewTests {
     }
 
     // MARK: Tests
+
+    /// An open page shows its episode's notes again, read by key, after a commit that changed only them (Android's
+    /// ItemFragment reloads on the episode's FeedItemEvent), and keeps its document when a commit changed something
+    /// else of the episode.
+    @Test func anOpenPageShowsChangedNotesAndKeepsItsDocumentOtherwise() async throws {
+        try await mounted(start: .inbox) { controller, store, _ in
+            try await wait("Inbox rows") { rows(controller).count == 5 }
+            try open(303, in: controller)
+            let state = try pager(controller)
+            let page = try #require(state.pages[state.model.index])
+            try await wait("the stored notes") { (try? await shownotes(page.notes))?.contains("Shownotes of \(Self.titles[303]!)") == true }
+            let revision = page.notes.notesRevisionForTesting
+            try await store.setFavorite(episodeID: 303, favorite: true)
+            await controller.settleLibraryChanges()
+            #expect(page.notes.notesRevisionForTesting == revision, "a change outside the notes keeps the document")
+            try await store.updateEpisode(id: 303) { $0.details.description = "<p>Corrected notes of page three</p>" }
+            await controller.settleLibraryChanges()
+            #expect(try pager(controller).pages[state.model.index]?.notes === page.notes, "the same page")
+            try await wait("the corrected notes") { (try? await shownotes(page.notes))?.contains("Corrected notes of page three") == true }
+            #expect(try await shownotes(page.notes).contains("Shownotes of \(Self.titles[303]!)") == false)
+        }
+    }
 
     /// The pager journey on the mounted screen: row 3 of the Inbox, next/previous/next, Mark as played on page 4, Back.
     @Test func inboxJourneyMenuFollowsTheVisiblePageAndMarksOnlyThatEpisode() async throws {

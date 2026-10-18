@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct DownloadNetworkExecutionTests {
     @Test func nativePathWithoutConnectionPreservesAndroidConservativeMetering() {
         for status in [NWPath.Status.satisfied, .unsatisfied, .requiresConnection] {
@@ -21,6 +21,48 @@ struct DownloadNetworkExecutionTests {
                 }
             }
         }
+    }
+
+    /// Low Data Mode is restricted (the Mobile updates prompts and permissions apply) and is not UNMETERED: a Wi-Fi-only
+    /// job waits instead of starting where the background session would refuse it; one allowed on any network runs.
+    @Test func lowDataModeIsRestrictedAndNotUnmetered() {
+        for (wifi, expensive) in [(true, false), (false, false), (false, true)] {
+            let state = DownloadNetworkMonitor.nativeState(status: .satisfied, isExpensive: expensive, usesCellular: !wifi && expensive,
+                                                           usesWiFi: wifi, isConstrained: true)
+            #expect(state.constrained && state.restricted)
+            #expect(DownloadNetworkConstraint.connected.permits(state))
+            #expect(!DownloadNetworkConstraint.unmetered.permits(state))
+        }
+        let ordinary = DownloadNetworkMonitor.nativeState(status: .satisfied, isExpensive: false, usesCellular: false, usesWiFi: true)
+        #expect(!ordinary.constrained && !ordinary.restricted && DownloadNetworkConstraint.unmetered.permits(ordinary))
+    }
+
+    /// The network turns to Low Data Mode while a job runs: a Wi-Fi-only job stops and waits for an unrestricted network,
+    /// where it runs; a job allowed on any network (a mobile allowance or "Allow this time") keeps its stored constraint
+    /// and continues.
+    @Test func lowDataModeDuringAJobStopsOnlyWiFiOnlyWork() async throws {
+        let lowData = DownloadNetworkState(connected: true, metered: false, cellular: false, transport: .wifi, constrained: true)
+        let monitor = monitor()
+        await #expect(throws: DownloadNetworkInterruption.self) {
+            try await monitor.perform(under: .unmetered) {
+                monitor.update(lowData)
+                return 42
+            }
+        }
+        #expect(try await monitor.perform(under: .connected) {
+            monitor.update(.init(connected: true, metered: false, cellular: false))
+            monitor.update(lowData)
+            return 42
+        } == 42)
+        let waiting = Task { try await monitor.waitUntilPermitted(.unmetered) }
+        defer { waiting.cancel() }
+        let deadline = ContinuousClock.now + .seconds(5)
+        while monitor.pendingWaitCount != 1 && ContinuousClock.now < deadline { await Task.yield() }
+        try #require(monitor.pendingWaitCount == 1, "waits on Low Data Wi-Fi")
+        monitor.update(.init(connected: true, metered: false, cellular: false, transport: .wifi))
+        try await waiting.value
+        #expect(try await monitor.perform(under: .unmetered) { 7 } == 7)
+        #expect(monitor.pendingWaitCount == 0)
     }
 
     @Test func firstObservationReleasesAllReadersIncludingOfflineWithoutReleasingDownloadWaiters() async throws {

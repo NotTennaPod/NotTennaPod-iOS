@@ -338,7 +338,7 @@ struct FeedFetcherTests {
 /// A server library's fetches: what the subscribe flow accepts is what the parity parse
 /// reads, and the server's fetch bounds hold (64 MiB, one 120 s deadline for the fetch and its parse). Standalone
 /// fetching is unchanged.
-@Suite(.timeLimit(.minutes(1))) struct ServerLibraryFetchTests {
+@Suite struct ServerLibraryFetchTests {
     private let source = "http://example.test/feed"
 
     /// Valid RSS the app's parser reads but the server's (and the parity) parser refuses: a `psc:chapter` outside

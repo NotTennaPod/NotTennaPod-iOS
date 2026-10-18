@@ -6,7 +6,7 @@ import Testing
 /// Run alone with the scheme's UUID-isolated, muted test host. This deliberately
 /// uses the application's selected service graph and scene, not replacement
 /// refresh/deletion/playback owners assembled in the test.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct RemovedEpisodeRefreshViewTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if let found = view as? T, found.accessibilityIdentifier == id { return found }

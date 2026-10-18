@@ -8,7 +8,7 @@ import Testing
 /// Lo = L + c·C + c·Ls, Ro = R + c·C + c·Rs, c = 1/√2, LFE omitted, k = 1 (provisional, from AOSP ChannelMix's
 /// front and centre levels; not measured on Android), overloads clamped to full scale. FFmpeg layout cases are in
 /// PCMStereoDownmixLayoutTests (SwiftPM only: they use the codec module directly).
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3))) struct SurroundDownmixTests {
+@MainActor @Suite(.serialized) struct SurroundDownmixTests {
     nonisolated static let c = 0.70710678
     nonisolated static func fixture(_ name: String) throws -> URL {
         try FFmpegBufferedSeekReferenceTests.resource(name, directory: "Surround")

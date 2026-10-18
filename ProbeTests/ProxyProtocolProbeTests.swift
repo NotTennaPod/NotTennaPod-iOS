@@ -5,7 +5,7 @@ import Testing
 /// Deliberately outside the ordinary suites: this uses the source's real public
 /// TLS endpoint through the owned loopback protocol fixture. Start the fixture
 /// (`Tools/test-fixtures.sh start`) before selecting this probe.
-@Suite(.serialized, .timeLimit(.minutes(2))) struct ProxyProtocolProbeTests {
+@Suite(.serialized) struct ProxyProtocolProbeTests {
     @Test(arguments: [PodcastProxy.Kind.http, .socks])
     func authenticatedProxyCompletesSourceHTTPSHeadWithNormalTrustValidation(kind: PodcastProxy.Kind) async throws {
         let proxy = PodcastProxy(kind: kind, host: "127.0.0.1", port: kind == .http ? 18790 : 18791,

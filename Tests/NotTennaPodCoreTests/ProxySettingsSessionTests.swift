@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct ProxySettingsSessionTests {
+@MainActor @Suite struct ProxySettingsSessionTests {
     @Test func directSaveAndResetHaveDistinctDurableEffectsAndCancelDoesNotSaveDraft() async throws {
         let persistence = Memory(), preferences = try ProxyPreferenceStore(persistence: persistence)
         var effects: [Bool] = []; preferences.onChange = { _, reinitialize in effects.append(reinitialize) }

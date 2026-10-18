@@ -156,11 +156,19 @@ final class ServerArchive {
         return (try ServerCommit(json), try SyncCursor(logID: log, epoch: epoch, seq: seq, digest: digest))
     }
 
+    /// The archived entries and decisions (a snapshot's items besides its records, for a download's estimate).
+    func entryAndDecisionCount() throws -> Int {
+        Int(try database.scalar("SELECT (SELECT count(*) FROM archive_entries) + (SELECT count(*) FROM archive_decisions)"))
+    }
+
     /// Archives a snapshot's entries and decisions (first attachment, PROTOCOL §15.4), in batches of one transaction.
-    func archive(entries: [ServerAcceptedEntry], decisions: [ServerDecision], now: Int64) throws {
-        try database.transaction {
-            try insert(entries: entries, now: now)
-            try insert(decisions: decisions)
+    /// `budget`: the bytes the batch may add (`SQLiteWriteBudget`; nil: no limit).
+    func archive(entries: [ServerAcceptedEntry], decisions: [ServerDecision], now: Int64, budget: Int64? = nil) throws {
+        try database.withWriteBudget(budget) {
+            try database.transaction {
+                try insert(entries: entries, now: now)
+                try insert(decisions: decisions)
+            }
         }
     }
 

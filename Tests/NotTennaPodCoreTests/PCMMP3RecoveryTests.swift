@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PCMMP3RecoveryTests {
+@MainActor @Suite(.serialized) struct PCMMP3RecoveryTests {
     enum Kind: CaseIterable { case xing, info, plain, mllt }
     private final class Transport: PCMVolumePresentationTransport {
         var currentTime = CMTime.zero

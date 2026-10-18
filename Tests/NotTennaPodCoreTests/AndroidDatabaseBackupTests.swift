@@ -11,7 +11,7 @@ import Testing
         .appendingPathComponent("../../TestSupport/Data/android-first-journey/Antennapod.db").standardized
 
     private func temp() throws -> URL {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M15-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("DatabaseBackup-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         return directory
     }
@@ -88,7 +88,7 @@ import Testing
         try AndroidDatabaseBackup.write(.init(feeds: [feed], queue: try await store.queue().map { .init(episodeID: $0.id, feedID: feed.id) },
             credentials: [feed.id: .init(username: "user", password: "secret")], speeds: speeds), to: output)
         // Evidence hook: keep this backup for Android 3.12.1 import proof (runner sets the path).
-        if let keep = ProcessInfo.processInfo.environment["M15_KEEP_BACKUP"] {
+        if let keep = ProcessInfo.processInfo.environment["DATABASE_BACKUP_KEEP"] {
             try? FileManager.default.removeItem(atPath: keep); try FileManager.default.copyItem(at: output, to: URL(fileURLWithPath: keep))
         }
 

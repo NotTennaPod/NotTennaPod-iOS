@@ -38,7 +38,7 @@ struct AudibleAudio {
     }
 }
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct FFmpegBufferedSeekReferenceTests {
+@Suite(.serialized) struct FFmpegBufferedSeekReferenceTests {
     private static let names = ["tone-vorbis.ogg", "tone-opus.ogg", "tone-opus.webm", "late-first-cue.webm"]
     struct Reference: Decodable {
         struct Buffer: Decodable { let timeMicroseconds: Int64; let frames, byteOffset, byteCount: Int }

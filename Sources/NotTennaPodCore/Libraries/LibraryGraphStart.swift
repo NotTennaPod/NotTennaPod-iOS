@@ -4,10 +4,10 @@ import Foundation
 /// library on the device, then an unfinished Keep at logout finished as far as it can be, then the library to open,
 /// which is a converted library where its markers show it while its Keep is not published.
 public enum LibraryGraphStart {
-    /// The schema-20 migration of every library on the device that is not at schema 20: each through a
+    /// The migration of every library on the device that is not at the current schema (21): each through a
     /// migrating connection of its own, under the exclusive library gate, without starting its graph. A failure rolls
-    /// back and is retried at the next graph start; meanwhile that library stays at schema 19 and no export is offered
-    /// for it. When the gate is busy (an export still collecting at a runtime restart) nothing waits: the migration
+    /// back and is retried at the next graph start; meanwhile that library stays at its schema, and one below 20 is
+    /// offered to no export. Schema 21 creates the derived tables empty; a library's rows are filled when it next opens. When the gate is busy (an export still collecting at a runtime restart) nothing waits: the migration
     /// runs at the next graph start. Returns the libraries that could not be migrated.
     @discardableResult
     public static func migrateLibraries(root: URL, gate: LibraryGate) -> [URL] {
@@ -15,7 +15,7 @@ public enum LibraryGraphStart {
         databases += ((try? LibraryLocation.all(root: root)) ?? []).filter { $0.reference != .standalone }.map(\.database)
         databases += ((try? PreviousLibraryLocation.all(root: root)) ?? []).map(\.database)
         let pending = databases.filter { database in
-            !LibraryLocation.isAbsent(database) && ((try? LibraryDatabaseInspection.schemaVersion(of: database)) ?? 0) < 20
+            !LibraryLocation.isAbsent(database) && ((try? LibraryDatabaseInspection.schemaVersion(of: database)) ?? 0) < 21
         }
         guard !pending.isEmpty else { return [] }
         guard gate.tryAcquireExclusive() else { return pending }

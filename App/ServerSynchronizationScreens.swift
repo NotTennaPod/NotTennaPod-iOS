@@ -88,6 +88,8 @@ extension LibraryViewController {
         list.onSubscribeAgain = { [weak self] url in self?.openFeedPage(url, manual: false) }
         list.onShowLog = { [weak self] in self?.openSettingsPage(.synchronizationLog) }
         list.onDismiss = { [weak self] item in self?.dismissServerAttention(item) }
+        list.onTryAgain = { [weak self] _ in self?.retryRefusedListening() }
+        list.onKeepOnDevice = { [weak self] item in self?.keepListeningOnDevice(item) }
         list.onResize = { [weak self, weak list] in
             guard let self, let list, list.superview === content else { return }
             layoutServerAttention(list)
@@ -127,6 +129,25 @@ extension LibraryViewController {
         guard let library else { return }
         Task { [weak self] in
             do { try await library.dismissServerAttention(item) } catch { self?.showError(error) }
+            self?.reloadServerAttention()
+        }
+    }
+
+    /// "Try again": Synchronize now, which tries the refused listening once more (PROTOCOL §6.13); refused again, the item stays.
+    private func retryRefusedListening() {
+        guard let sync = (UIApplication.shared.delegate as? AppDelegate)?.serverSync else { return }
+        Task { [weak self] in
+            await sync.synchronizeNow()
+            self?.reloadServerAttention()
+        }
+    }
+
+    /// "Keep only on this device": the listening stays here, never sent, and history and statistics can be cleared again (or
+    /// the episode stays in this device's queue).
+    private func keepListeningOnDevice(_ item: ServerAttentionItem) {
+        guard let library else { return }
+        Task { [weak self] in
+            do { try await library.keepRefusedListeningOnThisDevice(item) } catch { self?.showError(error) }
             self?.reloadServerAttention()
         }
     }
@@ -266,25 +287,34 @@ extension LibraryViewController {
             return (Appearance.text("ntp_server_attention_recovery_title"),
                     problems > 0 ? Appearance.plural("ntp_server_attention_recovery_sum", problems)
                         : Appearance.text("ntp_server_attention_recovery_unknown_sum"))
+        case .refusedListening(let title):
+            return (title ?? Appearance.text("ntp_server_attention_listening_title"), Appearance.text("ntp_server_attention_listening_sum"))
+        case .refusedTooLarge(let title):
+            return (title ?? Appearance.text("ntp_server_attention_too_large_title"), Appearance.text("ntp_server_attention_too_large_sum"))
+        case .refusedQueueAdd(let title):
+            return (title ?? Appearance.text("ntp_server_attention_queue_add_title"), Appearance.text("ntp_server_attention_queue_add_sum"))
         }
     }
 }
 
 /// Needs attention: each item with its title, what happened and its actions ("Subscribe again" or "Synchronization log",
-/// and "Dismiss", the confirming action trailing as in a dialog), or "Nothing needs attention". Laid out as the page's
+/// and "Dismiss"; refused listening's "Keep only on this device" and "Try again"), the confirming action trailing as in a
+/// dialog, or "Nothing needs attention". Laid out as the page's
 /// own rows are: the page's insets, text in the reading direction, actions at the trailing edge (stacked when they do
 /// not fit side by side).
 @MainActor final class ServerAttentionView: UIView {
     var onSubscribeAgain: ((String) -> Void)?
     var onShowLog: (() -> Void)?
     var onDismiss: ((ServerAttentionItem) -> Void)?
+    var onTryAgain: ((ServerAttentionItem) -> Void)?
+    var onKeepOnDevice: ((ServerAttentionItem) -> Void)?
     var onResize: (() -> Void)?
     private(set) var items: [ServerAttentionItem] = []
     private struct Row {
         let text: UIView
         let title: UILabel
         let summary: UILabel
-        /// Dismiss first, then the confirming action.
+        /// Dismiss (or Keep only on this device) first, then the confirming action.
         let actions: [UIButton]
     }
     private var rows: [Row] = []
@@ -323,14 +353,33 @@ extension LibraryViewController {
         text.accessibilityIdentifier = "ntp_server_attention_item-\(item.identifier)"
         text.accessibilityLabel = words.title; text.accessibilityValue = words.summary
         text.accessibilityTraits = .staticText
-        var actions = [button("dismiss_label", identifier: "serverAttentionDismiss-\(item.identifier)") { [weak self] in self?.onDismiss?(item) }]
+        var actions: [UIButton] = []
+        func log() -> UIButton {
+            button("ntp_server_log_title", identifier: "serverAttentionLog-\(item.identifier)") { [weak self] in self?.onShowLog?() }
+        }
+        func tryAgain() -> UIButton {
+            button("ntp_server_attention_try_again", identifier: "serverAttentionRetry-\(item.identifier)") { [weak self] in self?.onTryAgain?(item) }
+        }
+        // What waits on this device is never dismissed: it is sent ("Try again") or, where it can be, kept here for good.
+        switch item.kind {
+        case .refusedListening, .refusedQueueAdd:
+            actions.append(button("ntp_server_attention_keep_local", identifier: "serverAttentionKeep-\(item.identifier)") { [weak self] in
+                self?.onKeepOnDevice?(item)
+            })
+        case .refusedTooLarge:
+            actions.append(log())
+        default:
+            actions.append(button("dismiss_label", identifier: "serverAttentionDismiss-\(item.identifier)") { [weak self] in self?.onDismiss?(item) })
+        }
         switch item.kind {
         case .staleSubscription(let url?, _):
             actions.append(button("ntp_server_attention_subscribe_again", identifier: "serverAttentionSubscribe-\(item.identifier)") { [weak self] in
                 self?.onSubscribeAgain?(url)
             })
         case .refusedChanges, .incompleteRecovery:
-            actions.append(button("ntp_server_log_title", identifier: "serverAttentionLog-\(item.identifier)") { [weak self] in self?.onShowLog?() })
+            actions.append(log())
+        case .refusedListening, .refusedQueueAdd, .refusedTooLarge:
+            actions.append(tryAgain())
         case .staleSubscription, .refusedURL:
             break
         }

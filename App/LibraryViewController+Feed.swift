@@ -25,9 +25,7 @@ extension LibraryViewController {
 
     func feedScreen(_ feed: LibraryFeed) {
         refreshStalePreview(feed)
-        let displayed = feed.filteredDisplayEpisodes(queuedIDs: Set(queuedEpisodes.map(\.id)),
-            globalSort: navigationPreferences?.value.defaultFeedSortOrder ?? .dateNewest)
-        feedSelectionIDs = displayed.map(\.id)
+        let count = openIndexedList(.feed(feed, globalSort: navigationPreferences?.value.defaultFeedSortOrder ?? .dateNewest))
         feedPageFooter.onLoad = { [weak self] in self?.requestFeedPage(feed.id, reset: false) }
         if library != nil && feed.subscriptionState != .notSubscribed {
             let search = Appearance.icon("ic_search", label: Appearance.text("search_label")) { [weak self] in self?.openSearch(feed) }
@@ -43,13 +41,14 @@ extension LibraryViewController {
 
         let header = SubscribedFeedHeaderView(feed: feed, library: library,
             hasFilter: feed.episodeFilter.isActive, keepUpdated: feed.keepUpdated,
-            hasInteracted: feed.episodes.contains { episode in episode.userState.isFavorite || episode.userState.isDownloaded || episode.userState.playState == .played || queuedEpisodes.contains(where: { $0.id == episode.id }) })
+            hasInteracted: feedHasInteracted(feed.id))
         header.accessibilityIdentifier = "subscribedFeedHeader"
         header.onAction = { [weak self] action in self?.feedHeaderAction(action, feedID: feed.id) }
         let appBar = FeedAppBarView(header: header, information: false)
         appBar.toolbarHeight = toolbar.bounds.height
         appBar.fullHeaderHeight = header.sizeThatFits(content.bounds.size).height
-        episodes(displayed.map { (feed, $0) }, top: appBar.fullHeaderHeight, paged: true)
+        if count > 0 { indexedEpisodes(top: appBar.fullHeaderHeight, paged: true) }
+        else { episodes([], top: appBar.fullHeaderHeight, paged: true) }
         content.addSubview(appBar); feedAppBar = appBar
     }
 
@@ -85,10 +84,13 @@ extension LibraryViewController {
             Task { [weak self] in
                 do {
                     let log = try await library.logs(feedID: feedID).first
-                    let current = try await library.feed(id: feedID)
+                    let current = try await library.listedFeedHeader(id: feedID)
                     guard let self, case .feed(let visibleID) = path.last, visibleID == feedID else { return }
-                    if let log, !log.kind.isSuccessful {
-                        messages.present(FeedLogDetailsDialog.make(FeedLogDetails(log: log, feed: current, text: Appearance.text)))
+                    // This device's failed refresh, else the server's (a server library): its details, with when each side
+                    // last refreshed; otherwise the Download log.
+                    if let details = FeedLogDetails.refreshFailure(latestLog: log, feed: current, text: Appearance.text,
+                                                                   date: { SynchronizationStatusDateFormatter.string(from: $0) }) {
+                        messages.present(FeedLogDetailsDialog.make(details))
                     } else { showDownloadLog() }
                 } catch { self?.showError(error) }
             }
@@ -99,7 +101,13 @@ extension LibraryViewController {
         do {
             if feedInformation?.feedID != feed.id {
                 feedInformation = try FeedInformationScreenView(feed: feed, library: library, readStatistics: statisticsRead())
-            } else { try feedInformation?.update(feed) }
+            } else {
+                try feedInformation?.update(feed)
+                // The screen appears again (Back to it, a return to the same podcast): its statistics load against the
+                // library now. A redraw of the shown screen (its header changed) does not load them.
+                if feedInformationAppearance != navigationChanges { feedInformation?.refreshStatistics() }
+            }
+            feedInformationAppearance = navigationChanges
             guard let information = feedInformation else { return }
             information.onSubscribe = { [weak self] in self?.feedHeaderAction(.subscribe, feedID: feed.id) }
             information.onAction = { [weak self] action in
@@ -340,10 +348,10 @@ extension LibraryViewController {
         let height = feedPageFooter.sizeThatFits(content.bounds.size).height
         if case .feed(let id) = path.last, let feed = feeds.first(where: { $0.id == id }) {
             // Original recycler exposes its page control within the final three rows.
-            let count = episodeList?.ids.count ?? 0
+            let count = episodeList?.count ?? 0
             let visibleRows = episodeList?.indices(from: content.bounds.minY, to: content.bounds.maxY) ?? 0..<0
             // Rows of this library not yet shown come first (EpisodesListFragment loads its next page).
-            let nearBottom = remainingEpisodeRows == nil && (count == 0 || (!visibleRows.isEmpty && count - visibleRows.upperBound <= 3))
+            let nearBottom = !hasMoreEpisodeRows && (count == 0 || (!visibleRows.isEmpty && count - visibleRows.upperBound <= 3))
             visible = nearBottom && feed.metadata.isPaged && feed.metadata.nextPageURL != nil && manualRefresh != nil
             feedPageFooter.frame = CGRect(x: content.frame.minX, y: content.frame.maxY - height,
                 width: content.bounds.width, height: height)
@@ -654,7 +662,7 @@ extension LibraryViewController {
         headerScroll.addSubview(header)
         headerScroll.setContentOffset(.zero, animated: false)
         container.addSubview(headerScroll)
-        let web = ShownotesWebView()
+        let web = ShownotesWebView(network: shownotesNetwork)
         web.accessibilityIdentifier = "episodeShownotes"
         web.isCovered = episodeContentCovered
         web.showLinkMenu = { [weak self] link, source in self?.presentShownotesLinkMenu(link, source: source) }
@@ -735,8 +743,7 @@ extension LibraryViewController {
         guard case .episode(_, let id) = path.last, id == episodeDetailsID, let pager = visibleEpisodePager else { return }
         // Every resident page shows its own episode's current state, so a neighbour revealed by a swipe is current too.
         for page in pager.pages.values {
-            guard let feed = feeds.first(where: { $0.id == page.feedID }),
-                  let episode = feed.episodes.first(where: { $0.id == page.episodeID }) else { continue }
+            guard let (feed, episode) = libraryEpisode(page.episodeID), feed.id == page.feedID else { continue }
             page.header.update(feed: feed, episode: episode)
             page.header.update(actions: detailActions(episode, feed: feed))
         }
@@ -748,7 +755,8 @@ extension LibraryViewController {
             guard let self, let library else { return }
             do {
                 guard case .episode(let feedID, let currentID) = path.last, currentID == episodeID,
-                      let feed = try await library.feed(id: feedID), let episode = feed.episodes.first(where: { $0.id == episodeID }) else { return }
+                      let feed = try await library.listedFeedHeader(id: feedID), try await library.feedID(forEpisode: episodeID) == feedID,
+                      let episode = try await library.episode(id: episodeID) else { return }
                 try await downloads?.refresh()
                 guard case .episode(_, let visibleID) = path.last, visibleID == episodeID else { return }
                 let current = detailActions(episode, feed: feed)

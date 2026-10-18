@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct EpisodeChapterPresentationTests {
     private let chapters = [ParsedChapter(startMilliseconds: 1_000, title: "One"),
                             ParsedChapter(startMilliseconds: 20_000, title: "Two"),

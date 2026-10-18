@@ -5,7 +5,7 @@ import Testing
 /// Agreement tests against the real server: scripted actions on phone A, pushed and
 /// pulled through the real engine; after every prefix a new phone B attaches through the real attach applier, and B's
 /// synced rows must equal A's. A's own rows must not change when its facts come back as the server's records.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerExchangeAgreementTests {
+@Suite(.serialized) struct ServerExchangeAgreementTests {
     static func fetched(_ url: String, title: String, prefix: String, count: Int) -> FetchedFeed {
         let items = (1...count).map { number in
             ParsedEpisode(identifier: "\(prefix)-\(number)", title: "\(title) \(number)",

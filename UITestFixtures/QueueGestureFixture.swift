@@ -11,7 +11,7 @@ import NotTennaPodCore
         let isolated = args.firstIndex(of: "-test-library-id").flatMap { index in
             index + 1 < args.count ? UUID(uuidString: args[index + 1]) : nil
         } != nil
-        guard isolated, args.contains("-test-queue-gestures"), args.contains("-test-m10-a7-diagnostics") else {
+        guard isolated, args.contains("-test-queue-gestures"), args.contains("-test-queue-diagnostics") else {
             return UIWindow(windowScene: scene)
         }
         return QueueDiagnosticWindow(windowScene: scene)
@@ -28,7 +28,7 @@ import NotTennaPodCore
     }
     /// Public UIKit observation only; preserves the delivered touch identities and dispatch order.
     static func observeTouchEvent(_ event: UIEvent, window: UIWindow, stage: String) {
-        guard ProcessInfo.processInfo.arguments.contains("-test-m10-touch-observation"),
+        guard ProcessInfo.processInfo.arguments.contains("-test-queue-touch-observation"),
               let diagnostic, diagnostic.controller?.view.window === window,
               event.type == .touches, let touches = event.allTouches else { return }
         let values: [[String: Any]] = touches.map { touch in
@@ -43,7 +43,7 @@ import NotTennaPodCore
             "eventTimestamp": event.timestamp])
     }
     static func recordControllerEvent(_ event: String, controller: LibraryViewController, input: String? = nil) {
-        guard ProcessInfo.processInfo.arguments.contains("-test-m10-a7-diagnostics"),
+        guard ProcessInfo.processInfo.arguments.contains("-test-queue-diagnostics"),
               diagnostic?.controller === controller else { return }
         diagnostic?.record(event, extra: input.map { ["keyInput": $0] } ?? [:])
     }
@@ -75,7 +75,7 @@ import NotTennaPodCore
                 window.traitOverrides.preferredContentSizeCategory = .accessibilityExtraExtraExtraLarge
             }
             if let controller = window.rootViewController as? LibraryViewController { await controller.reloadLibrary()?.value }
-            if args.contains("-test-m10-a7-diagnostics"), let controller = window.rootViewController as? LibraryViewController {
+            if args.contains("-test-queue-diagnostics"), let controller = window.rootViewController as? LibraryViewController {
                 let diagnostic = QueueObservation(directory: directory, controller: controller)
                 Self.diagnostic = diagnostic
                 diagnostic.record("fixture-ready")
@@ -163,7 +163,11 @@ import NotTennaPodCore
                 QueueObservation.recordInterruption("after-width-assignment-before-layout", directory:directory, controller:controller, gesture:gesture)
                 controller.view.setNeedsLayout(); controller.view.layoutIfNeeded()
                 QueueObservation.recordInterruption("after-forced-layout", directory:directory, controller:controller, gesture:gesture)
-            } else if mode == "refresh" { await controller.reloadLibrary()?.value }
+            } else if mode == "refresh" {
+                // The screen read again in full (a catch-up's reopen): a reload with no change patches nothing and keeps
+                // the drag, as Android's Queue keeps it through a refresh.
+                await controller.reloadLibrary(reopen: true)?.value
+            }
             else if mode == "navigation" {
                 @MainActor func find(_ view: UIView) -> UIControl? {
                     if view.accessibilityIdentifier == "SubscriptionFragment" { return view as? UIControl }
@@ -212,12 +216,12 @@ import NotTennaPodCore
         sequence += 1
         value.merge(extra) { _, new in new }
         value["event"] = event; value["sequence"] = sequence
-        Self.append(value,to:directory.appendingPathComponent("m10-a7-observations.jsonl"))
+        Self.append(value,to:directory.appendingPathComponent("queue-observations.jsonl"))
     }
     static func recordInterruption(_ event:String,directory:URL,controller:LibraryViewController,gesture:QueueRowDrag) {
-        guard ProcessInfo.processInfo.arguments.contains("-test-m10-a7-diagnostics") else { return }
+        guard ProcessInfo.processInfo.arguments.contains("-test-queue-diagnostics") else { return }
         var value=snapshot(controller);value["event"]=event;value["observedGesture"]=Self.gesture(gesture)
-        append(value,to:directory.appendingPathComponent("m10-a7-resize.jsonl"))
+        append(value,to:directory.appendingPathComponent("queue-resize.jsonl"))
     }
     private static func append(_ input:[String:Any],to file:URL) {
         var value=input;value["systemUptime"]=ProcessInfo.processInfo.systemUptime

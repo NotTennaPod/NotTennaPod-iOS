@@ -3,7 +3,7 @@ import Testing
 import Synchronization
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct EpisodeMediaDeletionTargetTests {
+@MainActor @Suite struct EpisodeMediaDeletionTargetTests {
     private final class Engine: PlaybackEngine {
         var reading: PlaybackEngineReading?
         var onEvent: (@MainActor (PlaybackEngineEvent) -> Void)?

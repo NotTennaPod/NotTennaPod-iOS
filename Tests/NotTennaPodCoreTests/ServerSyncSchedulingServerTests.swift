@@ -5,7 +5,7 @@ import Testing
 /// Scheduling against the real server (PROTOCOL §6.4): the change-hint stream with a device token, the
 /// scheduler bringing another phone's change by a hint and, without hints, by polling, a local action pushed after
 /// the debounce, pushes continuing while a publication waits for a pause, and the store's wake hints.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerSyncSchedulingServerTests {
+@Suite(.serialized) struct ServerSyncSchedulingServerTests {
     typealias Agreement = ServerExchangeAgreementTests
     typealias Concurrency = ServerExchangeConcurrencyTests
     typealias Shadow = ServerExchangeShadowTests

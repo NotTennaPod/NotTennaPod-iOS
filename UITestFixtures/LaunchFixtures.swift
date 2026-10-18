@@ -4,6 +4,23 @@ import OSLog
 import Synchronization
 import NotTennaPodCore
 
+/// Fixtures that seed their library once and then mark it ready. Before such a library opens, one without its
+/// fixture's ready marker is emptied, whatever an earlier run left in it (another fixture version's files included), so
+/// the fixture seeds it again instead of taking it as ready or refusing it.
+enum SeededLibraryFixtures {
+    static func prepare(root: URL, arguments: [String]) throws {
+        guard root.lastPathComponent.hasPrefix("UITests-") else { return }
+        let seeded = [("-test-statistics-journey", StatisticsPeriodJourneyFixture.readyMarker),
+                      ("-test-opml-export-journey", OPMLExportJourneyFixture.readyMarker)]
+        for (argument, marker) in seeded
+        where arguments.contains(argument) && !FileManager.default.fileExists(atPath: root.appendingPathComponent(marker).path) {
+            for item in try FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil) {
+                try FileManager.default.removeItem(at: item)
+            }
+        }
+    }
+}
+
 /// UI-test launch fixtures, chosen by launch arguments and run only for a UUID-isolated test library.
 extension AppDelegate {
     /// Fixtures that prepare their library once the graph is running (first launch only, not after an import).
@@ -15,16 +32,16 @@ extension AppDelegate {
                 catch { Logger(subsystem: "org.nottennapod.app", category: "QueueFixture").error("Queue fixture failed: \(String(describing: error), privacy: .public)") }
             }
         }
-        if arguments.contains("-test-m13-statistics-journey"), directory.lastPathComponent.hasPrefix("UITests-") {
+        if arguments.contains("-test-statistics-journey"), directory.lastPathComponent.hasPrefix("UITests-") {
             Task {
                 do { try await StatisticsPeriodJourneyFixture.prepare(directory: directory, store: store) }
-                catch { Logger(subsystem: "org.nottennapod.app", category: "M13StatisticsFixture").error("M13 statistics fixture failed: \(String(describing: error), privacy: .public)") }
+                catch { Logger(subsystem: "org.nottennapod.app", category: "StatisticsFixture").error("Statistics fixture failed: \(String(describing: error), privacy: .public)") }
             }
         }
-        if arguments.contains("-test-m12-opml-export"), directory.lastPathComponent.hasPrefix("UITests-") {
+        if arguments.contains("-test-opml-export-journey"), directory.lastPathComponent.hasPrefix("UITests-") {
             Task {
                 do { try await OPMLExportJourneyFixture.prepare(directory: directory, store: store) }
-                catch { Logger(subsystem: "org.nottennapod.app", category: "M12ExportFixture").error("M12 export fixture failed: \(String(describing: error), privacy: .public)") }
+                catch { Logger(subsystem: "org.nottennapod.app", category: "OPMLExportFixture").error("OPML export fixture failed: \(String(describing: error), privacy: .public)") }
             }
         }
         if arguments.contains("-test-inbox-swipe-journey"),

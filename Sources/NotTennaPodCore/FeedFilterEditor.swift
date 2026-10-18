@@ -41,9 +41,9 @@ public final class FeedFilterEditor {
             await previous?.value
             do {
                 try await store.setEpisodeFilter(feedID: feedID, filter: filter)
-                if let feed = try await store.feed(id: feedID) { onEvent?(.saved(feed)) }
+                if let feed = try await store.listedFeedHeader(id: feedID) { onEvent?(.saved(feed)) }
             } catch {
-                if let feed = try? await store.feed(id: feedID), revision == request {
+                if let feed = try? await store.listedFeedHeader(id: feedID), revision == request {
                     selection = FeedFilterSelection(feed.episodeFilter); onEvent?(.changed)
                 }
                 onEvent?(.failed(error))

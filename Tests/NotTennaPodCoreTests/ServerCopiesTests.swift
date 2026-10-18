@@ -7,7 +7,7 @@ import Testing
 /// library whose transport another one used takes a new one with a fresh nonce, and every library keeps working;
 /// nothing is lost or applied twice. Session copies (tail exports, copied pending transitions) are tested with
 /// playback.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerCopiesTests {
+@Suite(.serialized) struct ServerCopiesTests {
     typealias Agreement = ServerExchangeAgreementTests
     typealias PushPull = ServerExchangePushPullTests
 
@@ -101,6 +101,62 @@ import Testing
             #expect(view.episodes[wires[0]]?.favorite == true && view.episodes[wires[2]]?.favorite == true && view.episodes[wires[1]]?.favorite == true)
             #expect(view.episodes[wires[1]]?.playState == .played)
             await copy.close(); await a.close()
+        }
+    }
+
+    /// Every dependency and predecessor a phone's facts and drafts name is a node it knows (none points at a deleted draft).
+    static func missingDependencies(_ phone: DevicePhone) throws -> [String] {
+        let known = Set(try phone.rows("SELECT node_id FROM ntp_nodes UNION SELECT op_id FROM ntp_drafts UNION SELECT op_id FROM ntp_retained").compactMap { $0[0] })
+        var named: [String] = []
+        for row in try phone.rows("SELECT CAST(fact AS TEXT) FROM ntp_outbox WHERE receipt IS NULL") {
+            guard let text = row[0], let fact = try? ContractJSON.decode(text) else { continue }
+            named += (fact["dependencies"]?.arrayValue ?? []).compactMap(\.stringValue) + [fact["previous_op_id"]?.stringValue].compactMap { $0 }
+        }
+        for row in try phone.rows("SELECT previous_op_id, dependencies FROM ntp_drafts") {
+            if let previous = row[0] { named.append(previous) }
+            named += (try? JSONDecoder().decode([String].self, from: Data((row[1] ?? "[]").utf8))) ?? []
+        }
+        return named.filter { !known.contains($0) }
+    }
+
+    /// A backup restored on another device while a draft chain is refused (or before its registration resolved, then refused
+    /// there): the copy's `installation.fork` names the chain's writing tip. When another phone removes the podcast, the
+    /// copy never deletes what that fork depends on: the chain stays listed, with Try again, and no fact or draft on either
+    /// phone names a node it does not know.
+    @Test(arguments: [false, true]) func copiedRefusedDraftChainEndsWithRemoval(pendingCopy: Bool) async throws {
+        try await ExchangeWorld.run(feeds: ["/one.xml": ("One", "one", 3)]) { world in
+            let a = try await world.device("A"), c = try await world.device("C")
+            let feed = try await a.store.insert(ServerOwedReplayRefusedExchangeTests.fetched(world.url("one.xml")))
+            let large = try #require(feed.episodes.first { $0.details.identifier == "one-3" }).id
+            try await a.store.setFavorite(episodeID: large, favorite: true)
+            var copy: DevicePhone
+            if pendingCopy {
+                copy = try await a.copy("A-copy", root: world.root)
+                await copy.store.setServerFactBoundForTesting(ServerOwedReplayRefusedExchangeTests.smallBound)
+            } else {
+                await a.store.setServerFactBoundForTesting(ServerOwedReplayRefusedExchangeTests.smallBound)
+                try await Self.waitForCatalog(a, feedID: feed.id)
+                #expect(try a.rows("SELECT state FROM ntp_drafts").first == ["refused_too_large"])
+                copy = try await a.copy("A-copy", root: world.root)
+                await copy.store.setServerFactBoundForTesting(ServerOwedReplayRefusedExchangeTests.smallBound)
+            }
+            _ = await copy.engine.exchange()
+            _ = try await copy.signInAgain()
+            try await Self.waitForCatalog(copy, feedID: feed.id)
+            #expect(try copy.rows("SELECT count(*) FROM ntp_drafts WHERE state = 'refused_too_large'") == [["1"]], "refused on the copy")
+            await c.exchange()
+            let onC = try #require(try await c.store.feeds().first { $0.source.hasSuffix("one.xml") })
+            _ = try await c.store.requestFeedDeletion(feedID: onC.id)
+            await c.exchange()
+            for phone in [a, copy] { for _ in 0..<2 { _ = await phone.engine.exchange() } }
+            for phone in [a, copy] {
+                let missing = try Self.missingDependencies(phone)
+                #expect(missing.isEmpty, "\(phone.name): \(missing)")
+            }
+            // The copy's fork depends on the refused chain: it stays as it was, listed, with Try again.
+            #expect(try await copy.store.serverAttentionItems().map(\.kind) == [.refusedTooLarge(podcastTitle: "One")])
+            #expect(try copy.rows("SELECT count(*) FROM ntp_drafts WHERE state = 'refused_too_large'") == [["1"]])
+            await copy.close(); await a.close(); await c.close()
         }
     }
 

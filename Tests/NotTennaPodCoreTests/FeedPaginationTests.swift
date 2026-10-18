@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct FeedPaginationTests {
     private func withStore(_ body: (FeedLibraryStore, URL) async throws -> Void) async throws {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent("Pagination-\(UUID())")

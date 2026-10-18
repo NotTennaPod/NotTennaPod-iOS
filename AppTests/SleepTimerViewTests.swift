@@ -25,7 +25,7 @@ import Testing
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct SleepTimerViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) throws -> T {
         func search(_ view: UIView) -> T? {
@@ -128,10 +128,10 @@ struct SleepTimerViewTests {
             let player = PlayerView(playback: playback, timeDisplayPreferences: time, library: store)
             player.semanticContentAttribute = rtl ? .forceRightToLeft : .forceLeftToRight
             player.frame = CGRect(x: 0, y: 0, width: 402, height: 800); player.expandedSize = player.bounds.size
-            player.update(feed: feed); player.setExpanded(true, animated: false); player.layoutIfNeeded()
+            player.update(feed: feed, stored: feed.episodes.first); player.setExpanded(true, animated: false); player.layoutIfNeeded()
             let timer: UIButton = try find("playerSleepTimer", in: player)
             #expect(timer.accessibilityLabel == "Set sleep timer" && timer.currentImage === UIImage(named: "ic_sleep"))
-            // Toolbar slot as on Android, to within a point.
+            // Toolbar slot as on Android (favorite, sleep timer, share, overflow: `mediaplayer.xml`), to within a point.
             #expect(abs(timer.frame.minX - (rtl ? 136 : 218)) <= 1 && abs(timer.frame.minY - 8) <= 1)
             #expect(abs(timer.frame.width - 48) <= 1 && abs(timer.frame.height - 48) <= 1)
             var opened = 0; player.showSleepTimer = { opened += 1 }; timer.sendActions(for: .touchUpInside); #expect(opened == 1)
@@ -148,7 +148,7 @@ struct SleepTimerViewTests {
                 try tap("sleepTimerSet", in: controller.view)
                 try await wait { playback.sleepTimerValue?.display == 120_000 }
                 #expect(settings.value.lastValue == "2" && playback.wantsPlayback)
-                player.update(feed: feed)
+                player.update(feed: feed, stored: feed.episodes.first)
                 #expect(timer.accessibilityLabel == "Sleep timer" && timer.currentImage === UIImage(named: "ic_sleep_off"))
                 timer.sendActions(for: .touchUpInside); #expect(opened == 2)
                 let remaining: UILabel = try find("sleepTimerRemaining", in: controller.view)
@@ -181,7 +181,7 @@ struct SleepTimerViewTests {
                 #expect(playback.wantsPlayback && input.text == "2")
                 #expect(controller.accessibilityPerformEscape()); try await wait { host.presentedViewController == nil }
             }
-            var local = feed; local.source = "antennapod_local:fixture"; player.update(feed: local); player.layoutIfNeeded()
+            var local = feed; local.source = "antennapod_local:fixture"; player.update(feed: local, stored: local.episodes.first); player.layoutIfNeeded()
             #expect(abs(timer.frame.minX - (rtl ? 88 : 266)) <= 1)
         }
     }

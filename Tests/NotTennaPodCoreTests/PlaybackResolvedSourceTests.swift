@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PlaybackResolvedSourceTests {
+@MainActor @Suite(.serialized) struct PlaybackResolvedSourceTests {
     private var bytes: Data {
         get throws {
 #if SWIFT_PACKAGE

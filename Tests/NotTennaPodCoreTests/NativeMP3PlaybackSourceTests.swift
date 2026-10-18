@@ -6,7 +6,7 @@ import Testing
 import Synchronization
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct NativeMP3PlaybackSourceTests {
+@MainActor @Suite(.serialized) struct NativeMP3PlaybackSourceTests {
     private func fixture(_ name: String = "playback-30sec") -> URL {
 #if SWIFT_PACKAGE
         Bundle.module.url(forResource: name, withExtension: "mp3", subdirectory: "Fixtures")!

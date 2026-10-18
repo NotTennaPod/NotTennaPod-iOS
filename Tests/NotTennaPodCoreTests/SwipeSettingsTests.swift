@@ -201,7 +201,7 @@ import Testing
         return .init(enabled: enabled ?? true, left: SwipeAction(rawValue: parts[1])!, right: SwipeAction(rawValue: parts[0])!)
     }
     private func directory() throws -> URL {
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("M26Swipe-\(UUID())")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("SwipeSettings-\(UUID())")
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         return url
     }
@@ -316,10 +316,10 @@ import Testing
         let url = root.appendingPathComponent("library.sqlite"), store = try FeedLibraryStore(url: url)
         let db = try LibrarySQLite(url: url)
         do {
-            let feed = try await store.insert(.init(feed: .init(format: .rss, title: "M26", episodes: (1...count).map {
-                .init(identifier: "m26-\($0)", title: "Episode \($0)", publicationDate: Date(timeIntervalSince1970: TimeInterval(1_700_000_000 + $0 * 60)),
+            let feed = try await store.insert(.init(feed: .init(format: .rss, title: "Swipe podcast", episodes: (1...count).map {
+                .init(identifier: "swipe-\($0)", title: "Episode \($0)", publicationDate: Date(timeIntervalSince1970: TimeInterval(1_700_000_000 + $0 * 60)),
                       media: .init(url: "https://example.test/\($0).mp3", size: 42, durationMilliseconds: 1_800_000))
-            }), source: "https://example.test/m26", responseURL: URL(string: "https://example.test/m26")!, validator: nil, permanentRedirectURL: nil))
+            }), source: "https://example.test/swipe", responseURL: URL(string: "https://example.test/swipe")!, validator: nil, permanentRedirectURL: nil))
             let ids = feed.episodes.map(\.id).sorted()
             try await body(store, db, ids)
             try db.close(); try await store.close()
@@ -455,7 +455,7 @@ import Testing
         let root = try directory(); defer { try? FileManager.default.removeItem(at: root) }
         let url = root.appendingPathComponent("library.sqlite")
         let store = try FeedLibraryStore(url: url)
-        let feed = try await store.insert(.init(feed: .init(format: .rss, title: "M26", episodes: (1...3).map {
+        let feed = try await store.insert(.init(feed: .init(format: .rss, title: "Swipe podcast", episodes: (1...3).map {
             .init(identifier: "r-\($0)", title: "R \($0)", media: .init(url: "https://example.test/r\($0).mp3", size: 42))
         }), source: "https://example.test/relaunch", responseURL: URL(string: "https://example.test/relaunch")!, validator: nil, permanentRedirectURL: nil))
         let ids = feed.episodes.map(\.id).sorted()

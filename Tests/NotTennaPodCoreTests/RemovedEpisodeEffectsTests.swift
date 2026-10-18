@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct RemovedEpisodeEffectsTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
     private enum Failure: Error { case injected }

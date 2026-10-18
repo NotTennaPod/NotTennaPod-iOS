@@ -36,6 +36,9 @@ final class SubscribedFeedHeaderView: UIView {
     private var artworkIdentity: String?
     private var artworkFeedID: Int64
     private var failed = false, hasFilter = false, keepUpdated = true
+    private var descriptionText = ""
+    /// The preview's "interacted" notice, after the podcast's episodes changed.
+    func updateInteracted(_ hasInteracted: Bool) { previewDescription.update(text: descriptionText, hasInteracted: hasInteracted) }
 
     init(feed: LibraryFeed, library: FeedLibraryStore? = nil, hasFilter: Bool = false, keepUpdated: Bool = true,
          informationScreen: Bool = false, hasInteracted: Bool = false) {
@@ -93,7 +96,8 @@ final class SubscribedFeedHeaderView: UIView {
         failure.addAction(UIAction { [weak self] _ in self?.onAction?(.failure) }, for: .touchUpInside)
         filtered.addAction(UIAction { [weak self] _ in self?.onAction?(.filter) }, for: .touchUpInside)
         update(feed: feed, hasFilter: hasFilter, keepUpdated: keepUpdated)
-        previewDescription.update(text: (try? FeedDescriptionText.format(feed.metadata.description)) ?? "", hasInteracted: hasInteracted)
+        descriptionText = (try? FeedDescriptionText.format(feed.metadata.description)) ?? ""
+        previewDescription.update(text: descriptionText, hasInteracted: hasInteracted)
         registerForTraitChanges([UITraitPreferredContentSizeCategory.self]) { (header: SubscribedFeedHeaderView, _) in
             header.title.font = Self.titleFont(); header.author.font = Appearance.font(14)
             header.restore.titleLabel?.font = Appearance.font(14, medium: true)
@@ -125,7 +129,7 @@ final class SubscribedFeedHeaderView: UIView {
 
     func update(feed: LibraryFeed, hasFilter: Bool, keepUpdated: Bool) {
         title.text = feed.title; author.text = feed.metadata.author
-        failed = !informationScreen && feed.lastUpdateFailed
+        failed = !informationScreen && feed.refreshFailed
         preview = feed.subscriptionState == .notSubscribed
         self.hasFilter = !informationScreen && !preview && hasFilter
         archived = !informationScreen && feed.subscriptionState == .archived

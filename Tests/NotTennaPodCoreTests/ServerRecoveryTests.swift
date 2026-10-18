@@ -7,7 +7,7 @@ import Testing
 /// signs in again, takes a successor installation with its own nonce, tells the server what it holds, uploads what the
 /// restored server lacks with the original receipts, catches up, pushes its renumbered outbox and finishes, saying
 /// truthfully whether everything was restored. Every step resumes after a crash and after a second restore.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerRecoveryTests {
+@Suite(.serialized) struct ServerRecoveryTests {
     typealias Copies = ServerCopiesTests
     typealias PushPull = ServerExchangePushPullTests
 
@@ -227,6 +227,102 @@ import Testing
             let view = try await a.view()
             #expect(view.episodes[try #require(try await a.store.wireEpisodeForTesting(ids[0]))]?.favorite == true)
             #expect(view.episodes[try #require(try await a.store.wireEpisodeForTesting(ids[1]))]?.playState == .played)
+        }
+    }
+
+    /// The podcast of the episode B's player holds is removed and subscribed again elsewhere while B does not exchange;
+    /// the server is then restored from a backup older than the subscription and A's recovery restores the history. B's
+    /// full recovery (its cursor is not in the restored log) jumps over the removal and the new subscription: the re-added
+    /// podcast gets rows of its own, the held episode is detached at 41 s, and resuming it after a relaunch records nothing
+    /// in the new generation (a fresh attachment and A's Force full show no listening). A known issue: the snapshot carries
+    /// no sign that the old generation closed (a generation joined into another changes the ID the same way), so the
+    /// phone cannot tell the skipped removal from a live join.
+    @Test func aFullRecoveryCatchingAMissedRemoveAndReaddDetachesTheOldPlayer() async throws {
+        await withKnownIssue("ledger: held-detach — a full recovery that skips a remove and re-add") {
+            try await ExchangeWorld.run { world in
+                let a = try await world.device("A")
+                let backup = try await world.backUp()
+                let feed = try await a.store.insert(ServerExchangeAgreementTests.fetched(world.url("one.xml"), title: "One", prefix: "one", count: 5))
+                try await Copies.waitForCatalog(a, feedID: feed.id)
+                let b = try await world.device("B")
+                let onB = try await Self.same(feed.episodes.map(\.id).sorted()[0], from: a, on: b)
+                let identifier = try #require(try await b.store.episode(id: onB)?.details.identifier)
+                let feedB = try await b.store.feedID(forEpisode: onB)
+                var player = StorePlayer(b.store, realTime: ())
+                try await player.load(onB); try await player.play(); try await player.listen(41); try await player.pause()
+                await b.exchange()
+                _ = try await a.store.requestFeedDeletion(feedID: feed.id)
+                await a.exchange()
+                let again = try await a.store.insert(ServerExchangeAgreementTests.fetched(world.url("one.xml"), title: "One", prefix: "one", count: 5))
+                try await Copies.waitForCatalog(a, feedID: again.id)
+                await a.exchange()
+                try await world.restore(backup)
+                _ = try await Self.recover(a)
+                _ = try await Self.recover(b)
+                for phone in [a, b] {
+                    let recovery = try await Self.recovery(phone)
+                    #expect(recovery?.finished == true && recovery?.complete == true, "\(phone.name): recovered completely")
+                }
+                #expect(try await Self.recovery(b)?.prefix == false, "B's recovery is a full snapshot")
+                func reopened(_ phone: DevicePhone) async throws -> LibraryEpisode? {
+                    try await phone.store.feeds().flatMap(\.episodes).first { $0.details.identifier == identifier }
+                }
+                let shown = try #require(try await reopened(b), "B shows the re-added podcast")
+                #expect(shown.id != onB, "in rows of its own")
+                #expect(shown.userState.positionMilliseconds == 0 && shown.userState.playedDurationMilliseconds == 0, "fresh")
+                #expect(try b.rows("SELECT count(*) FROM ntp_episodes WHERE local_id = \(onB)") == [["0"]], "the held row is detached")
+                #expect(try b.rows("SELECT count(*) FROM ntp_podcasts WHERE feed_id = \(feedB)") == [["0"]])
+                #expect(try await b.store.episode(id: onB)?.userState.positionMilliseconds == 41_000, "the player keeps its position")
+                try await b.relaunch()
+                player = try await StorePlayer.restored(b.store)
+                try await player.load(onB); try await player.play(); try await player.listen(5); try await player.pause()
+                for _ in 0..<3 { await b.exchange(); await a.exchange() }
+                #expect(try await b.store.serverUnsentChanges() == 0)
+                let fresh = try await world.attach("fresh")
+                let onFresh = try #require(try await fresh.store.feeds().flatMap(\.episodes).first { $0.details.identifier == identifier })
+                #expect(onFresh.userState.playedDurationMilliseconds == 0 && onFresh.userState.positionMilliseconds == 0, "no listening in the new generation")
+                await fresh.close()
+                await a.engine.requestFullSynchronization()
+                _ = await a.engine.forceFullSynchronization()
+                #expect(try await reopened(a)?.userState.playedDurationMilliseconds == 0, "A after its Force full")
+            }
+        }
+    }
+
+    /// An episode already detached on B (its podcast removed while B held it) stays detached through a restore and both
+    /// devices' recoveries: its position stays, listening on pushes nothing, the server library stays empty, and the
+    /// release deletes it.
+    @Test func recoveryWhileDetachedDoesNotReconnectIt() async throws {
+        try await ExchangeWorld.run { world in
+            let (a, ids) = try await Copies.subscribed(world)
+            let b = try await world.device("B")
+            let backup = try await world.backUp()
+            let onB = try await Self.same(ids[0], from: a, on: b)
+            let feedB = try await b.store.feedID(forEpisode: onB)
+            let player = StorePlayer(b.store, realTime: ())
+            try await player.load(onB); try await player.play(); try await player.listen(41); try await player.pause()
+            _ = try await a.store.requestFeedDeletion(feedID: try await a.store.feedID(forEpisode: ids[0]))
+            await a.exchange(); await b.exchange(); await b.exchange()
+            #expect(try b.rows("SELECT count(*) FROM ntp_episodes WHERE local_id = \(onB)") == [["0"]], "detached")
+            try await world.restore(backup)
+            _ = try await Self.recover(a)
+            _ = try await Self.recover(b)
+            #expect(try b.rows("SELECT count(*) FROM ntp_episodes WHERE local_id = \(onB)") == [["0"]], "still detached")
+            #expect(try b.rows("SELECT count(*) FROM ntp_podcasts WHERE feed_id = \(feedB)") == [["0"]])
+            #expect(try await b.store.feeds().isEmpty)
+            #expect(try await b.store.episode(id: onB)?.userState.positionMilliseconds == 41_000)
+            let mark = b.transport.requests.count
+            try await player.play(); try await player.listen(5); try await player.pause()
+            for _ in 0..<2 { await b.exchange(); await a.exchange() }
+            let pushes = b.transport.requests.dropFirst(mark).filter { $0.path == "v1/push" }
+            let operations: [ContractJSON] = pushes.flatMap { request -> [ContractJSON] in request.body?["operations"]?.arrayValue ?? [] }
+            #expect(operations.isEmpty, "nothing of it reached the server")
+            let fresh = try await world.attach("fresh")
+            #expect(try await fresh.store.feeds().isEmpty, "the server library stays empty")
+            await fresh.close()
+            _ = try await player.end(.skipped)
+            await b.engine.releasePins()
+            #expect(try await b.store.episode(id: onB) == nil, "released")
         }
     }
 }

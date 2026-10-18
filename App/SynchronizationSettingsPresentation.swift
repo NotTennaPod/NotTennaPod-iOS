@@ -340,6 +340,7 @@ import NotTennaPodCore
         case .signInAgain: Appearance.text("ntp_server_subtitle_sign_in_again")
         case .paused: Appearance.text("ntp_server_subtitle_paused")
         case .waitingForServer: Appearance.text("ntp_server_subtitle_waiting")
+        case .waitingForNetwork(let wait): status(.waitingForNetwork(wait)).title
         case .report(let status):
             Appearance.text(status.successful ? "gpodnetsync_pref_report_successful" : "gpodnetsync_pref_report_failed")
                 + " (" + SynchronizationStatusDateFormatter.string(from: status.date) + ")"
@@ -382,8 +383,32 @@ import NotTennaPodCore
         case .serverRestored: return text("ntp_server_status_paused_title", "ntp_server_status_restored_backup_sum")
         case .sharedInstallation: return text("ntp_server_status_paused_title", "ntp_server_status_shared_login_sum")
         case .serverLostChanges: return text("ntp_server_status_paused_title", "ntp_server_status_lost_changes_sum")
+        case .changeTooLarge: return text("ntp_server_status_paused_title", "ntp_server_status_change_too_large_sum")
+        case .changeRefused: return text("ntp_server_status_paused_title", "ntp_server_status_change_refused_sum")
         case .unreachable: return ("", "")
         case .waitingForBackground: return text("ntp_server_status_waiting_background_title", "ntp_server_status_waiting_background_sum")
+        case .waitingForNetwork(.offline): return text("download_error_no_connection", "ntp_server_status_offline_sum")
+        case .waitingForNetwork(.mobileDataOff): return text("ntp_server_status_wifi_title", "ntp_server_status_wifi_sum")
+        case .attachingWaits(.network(.offline)): return text("download_error_no_connection", "ntp_server_status_attach_offline_sum")
+        case .attachingWaits(.network(.mobileDataOff)): return text("ntp_server_status_wifi_title", "ntp_server_status_attach_wifi_sum")
+        case .attachingWaits(.space): return text("download_error_insufficient_space", "ntp_server_status_attach_space_sum")
+        case .waitingForSpace: return text("download_error_insufficient_space", "ntp_server_status_space_sum")
+        case .fullSynchronizing: return text("synchronization_full_sync_title", "ntp_server_status_full_sum")
+        case .fullSynchronizationWaitsForNetwork(.mobileDataOff): return text("synchronization_full_sync_title", "ntp_server_status_full_wifi_sum")
+        case .fullSynchronizationWaitsForNetwork(.offline): return text("synchronization_full_sync_title", "ntp_server_status_full_offline_sum")
+        }
+    }
+
+    /// A change a server library refused to record, in plain words (PROTOCOL §6.13): a queue too long to sort, a change too
+    /// large, a history or statistics cut that would leave out listening the server refused. Nil for any other error.
+    static func refusal(_ error: any Error) -> String? {
+        switch error as? ServerRecordingError {
+        case .factTooLarge(let type, _)?:
+            return Appearance.text(type == "queue.reorder" ? "ntp_server_sort_too_large" : "ntp_server_change_too_large")
+        case .cutBlockedByRefusedListening(let intent)?:
+            return Appearance.text(intent == "statisticsReset" ? "ntp_server_statistics_blocked" : "ntp_server_history_blocked")
+        default:
+            return nil
         }
     }
 

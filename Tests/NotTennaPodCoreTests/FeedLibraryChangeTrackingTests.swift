@@ -188,7 +188,7 @@ struct FeedLibraryChangeTrackingTests {
 
             let upgraded = try FeedLibraryStore(url: url)
             let check = try LibrarySQLite(url: url)
-            #expect(try check.scalar("PRAGMA user_version") == 20)
+            #expect(try check.scalar("PRAGMA user_version") == 22)
             #expect(try check.scalar("SELECT count(*) FROM sqlite_master WHERE type = 'trigger' AND name LIKE 'feed_changes_%'") == 6)
             #expect(try tables.map { try check.rows("SELECT * FROM \($0) ORDER BY rowid").description } == before)
             let loaded = try await upgraded.snapshot()

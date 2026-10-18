@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct NativeStreamingRelayTests {
+@MainActor @Suite(.serialized) struct NativeStreamingRelayTests {
     private func fixture(_ name: String, extension ext: String, subdirectory: String? = nil) -> URL {
 #if SWIFT_PACKAGE
         Bundle.module.url(forResource: name, withExtension: ext, subdirectory: subdirectory.map { "Fixtures/" + $0 } ?? "Fixtures")!

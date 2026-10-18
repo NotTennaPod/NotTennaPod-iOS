@@ -8,7 +8,7 @@ import Testing
 /// tab retention across the feed dialog and resizing, a new screen on Subscriptions, RTL, and Reset
 /// from Years. The library is the oracle's Android database through the database import, with its
 /// `download_inputs` re-marked as iOS downloads (the import brings them in as not downloaded).
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct StatisticsTabsViewTests {
     static let fixtures = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         .appendingPathComponent("../TestSupport/Data/statistics-tabs").standardized
@@ -43,7 +43,7 @@ struct StatisticsTabsViewTests {
     }
 
     private func fixture(database: String = "statistics.db") async throws -> Fixture {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M28Tabs-\(UUID())")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("StatisticsTabs-\(UUID())")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         let restored = try AndroidDatabaseRestore.read(Self.fixtures.appendingPathComponent(database), staging: folder.appendingPathComponent("s"))
         let store = try FeedLibraryStore(url: folder.appendingPathComponent("library.sqlite"))

@@ -28,6 +28,22 @@ struct ServerSynchronizationPageTests {
         #expect(gpodder.mode == .none && gpodder.rows.isEmpty)
     }
 
+    /// A recovery that cannot go on until space is freed says so (what unblocks it), while the subtitle still says it is
+    /// restoring; a repair waiting for a connection says that, not Wi-Fi.
+    @Test func whatOnlyFreeSpaceUnblocksComesFirst() {
+        let open = entry(a, .active)
+        var signals = ServerSynchronizationSignals(recovery: .running)
+        signals.insufficientSpace = true
+        let page = ServerSynchronizationPage.make(registry: registry([open], active: .server(a)), open: .server(a), otherProvider: false,
+                                                  summaries: [a: .init(entry: open, hasUsableToken: true)], exchange: signals)
+        #expect(page.condition == .waitingForSpace && page.subtitle == .restoring)
+        var offline = ServerSynchronizationSignals()
+        offline.fullSynchronizationWaits = .offline
+        let waiting = ServerSynchronizationPage.make(registry: registry([open], active: .server(a)), open: .server(a), otherProvider: false,
+                                                     summaries: [a: .init(entry: open, hasUsableToken: true)], exchange: offline)
+        #expect(waiting.condition == .fullSynchronizationWaitsForNetwork(.offline))
+    }
+
     @Test func attachingReadyAndLoggedOutExplainThemselves() {
         let attaching = ServerSynchronizationPage.make(registry: registry([entry(a, .attaching), entry(b, .inactive)]), open: .standalone,
                                                        otherProvider: false, summaries: [:], attachProgress: [a: 12])
@@ -144,6 +160,50 @@ struct ServerSynchronizationPageTests {
         #expect(waiting.condition == .waitingForBackground && waiting.subtitle == .report(status))
         #expect(waiting.rows == [.provider, .status, .changeLogin, .synchronize, .fullSynchronization, .log, .logout])
         #expect(page(.init(pause: .serverRestored, waitingForBackground: true)).condition == .serverRestored, "a pause explains itself first")
+        // A change too large for the server, or refused by it, pauses pushing alone (PROTOCOL §6.13): the page says so, with
+        // Needs attention when it lists something, and signing in or a running recovery still explains itself first.
+        for (pause, condition) in [(ServerSynchronizationSignals.Pause.changeTooLarge, ServerSynchronizationPage.Condition.changeTooLarge),
+                                   (.changeRefused, .changeRefused)] {
+            let paused = page(.init(pause: pause, attentionItems: 1))
+            #expect(paused.condition == condition && paused.subtitle == .paused, "\(pause)")
+            #expect(paused.rows == [.provider, .status, .changeLogin, .synchronize, .fullSynchronization, .log, .attention, .logout], "\(pause)")
+            #expect(page(token: false, .init(pause: pause)).condition == .needsSignIn)
+            #expect(page(.init(pause: pause, recovery: .running)).condition == .recovering)
+            #expect(page(.init(pause: pause, unreachable: true)).condition == condition, "the pause before what the last exchange found")
+        }
+    }
+
+    /// The exchange's pauses reach the page: a change too large and a change refused, each its own status.
+    @Test func refusedChangesReachThePage() {
+        #expect(ServerPauseReason.changeTooLarge.pullsContinue && ServerPauseReason.changeRefused.pullsContinue, "pulls go on")
+        #expect(ServerPauseReason.changeTooLarge.clearedByRetry && ServerPauseReason.changeRefused.clearedByRetry)
+        #expect(!ServerPauseReason.versionUnsupported.clearedByRetry && !ServerPauseReason.signIn.clearedByRetry)
+    }
+
+    /// No network, or only mobile data sync may not use: the status row and the subtitle say so instead of the last
+    /// "Successful (…)", before what the last exchange found (an unreachable server, waiting changes), and after a pause
+    /// or a running recovery, which explain themselves first.
+    @Test func noPermittedNetworkSaysWhyInsteadOfTheLastResult() {
+        let open = registry([entry(a, .active)], active: .server(a))
+        let status = ServerLibraryStatus(lastSynchronizedAt: 1_000, successful: true)
+        func page(token: Bool = true, _ exchange: ServerSynchronizationSignals) -> ServerSynchronizationPage {
+            .make(registry: open, open: .server(a), otherProvider: false,
+                  summaries: [a: .init(entry: entry(a, .active), unsentChanges: 2, lastSynchronization: status, hasUsableToken: token)],
+                  exchange: exchange)
+        }
+        for wait in [ServerNetworkWait.offline, .mobileDataOff] {
+            let waiting = page(.init(networkWait: wait))
+            #expect(waiting.condition == .waitingForNetwork(wait) && waiting.subtitle == .waitingForNetwork(wait), "\(wait)")
+            #expect(waiting.rows == [.provider, .status, .changeLogin, .synchronize, .fullSynchronization, .log, .logout], "\(wait)")
+            #expect(waiting.unsentChanges == 2, "changes stay counted")
+            #expect(page(.init(unreachable: true, waitingForBackground: true, networkWait: wait)).condition == .waitingForNetwork(wait))
+            #expect(page(.init(recovery: .incomplete, networkWait: wait)).condition == .waitingForNetwork(wait))
+            #expect(page(token: false, .init(networkWait: wait)).condition == .needsSignIn, "signing in comes first")
+            #expect(page(.init(pause: .serverRestored, networkWait: wait)).condition == .serverRestored, "a pause explains itself first")
+            #expect(page(.init(pause: .appNeedsUpdate, networkWait: wait)).condition == .appNeedsUpdate)
+            #expect(page(.init(recovery: .running, networkWait: wait)).condition == .recovering)
+        }
+        #expect(page(.init()).subtitle == .report(status), "the network back: the last result again")
     }
 
     @Test func settingsSearchFindsServerRowsOnlyWhileThePageShowsThem() {

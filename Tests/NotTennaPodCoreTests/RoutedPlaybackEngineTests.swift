@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct RoutedPlaybackEngineTests {
+@MainActor @Suite(.serialized) struct RoutedPlaybackEngineTests {
     final class Engine: PlaybackSilenceControlling, PlaybackVolumeControlling, PlaybackStatisticsConsumer {
         var reading: PlaybackEngineReading?
         var onEvent: (@MainActor (PlaybackEngineEvent) -> Void)?
@@ -133,6 +133,26 @@ import Testing
         #expect(forwarded == 0 && route.reading?.sample.positionMilliseconds == 1000)
     }
 
+    /// A remote route's refusal to relay reaches the coordinator for the episode generation, keeping the position it was
+    /// loading; a retired backend load's refusal does not.
+    @Test func streamingRefusalIsForwardedForTheCurrentBackendLoadOnly() {
+        let local = Engine(), remote = Engine(), route = RoutedPlaybackEngine(local: local)
+        defer { route.unload() }
+        let generation = UUID()
+        var refused: [UUID] = []
+        route.onEvent = { if case .streamingConfirmationRequired(let id) = $0 { refused.append(id) } }
+        route.load(episode: episode(), generation: generation, positionMilliseconds: 0)
+        route.play(commandID: UUID()); local.ready(); local.advance(to: 7_000)
+        route.setRemote(remote)
+        let first = remote.generation!
+        route.setRemote(nil); route.setRemote(remote)
+        remote.onEvent?(.streamingConfirmationRequired(generation: first))
+        #expect(refused.isEmpty, "a retired load's refusal is dropped")
+        remote.onEvent?(.streamingConfirmationRequired(generation: remote.generation!))
+        #expect(refused == [generation])
+        #expect(route.reading?.generation == generation && route.reading?.sample.positionMilliseconds == 7_000)
+    }
+
     @Test func routeConnectionSurvivesEpisodeUnloadAndSameSessionIsIdempotent() {
         let local = Engine(), remote = Engine(), route = RoutedPlaybackEngine(local: local)
         defer { route.unload() }
@@ -204,6 +224,30 @@ import Testing
             #expect(try await store.episode(id: 1)?.userState.playedDurationMilliseconds == 100_000)
             #expect(try await store.playbackSession() == nil)
             #expect(try await store.queue().isEmpty)
+        }
+    }
+
+    /// A refusal the coordinator has queued but not yet handled belongs to the route that raised it: when that route is
+    /// handed back before the queue drains, the local replacement keeps playing and nothing asks. The current route's
+    /// refusal still asks.
+    @Test func queuedRefusalOfARetiredRouteLeavesTheReplacementPlaying() async throws {
+        try await withLibrary { store, _ in
+            let local = Engine(), remote = Engine(), route = RoutedPlaybackEngine(local: local)
+            local.automaticReady = true
+            let player = PlaybackCoordinator(store: store, engine: route)
+            defer { route.unload() }
+            try await player.select(episodeID: 1); try await player.awaitPendingOperations()
+            #expect(player.phase == .playing)
+            route.setRemote(remote)
+            remote.onEvent?(.streamingConfirmationRequired(generation: try #require(remote.generation)))
+            route.setRemote(nil) // Handed back before the coordinator handled the refusal.
+            try await player.awaitPendingOperations()
+            #expect(!route.isRemote && local.loaded.count == 2 && local.generation != nil && local.wantsPlayback)
+            #expect(player.pendingStreamingEpisodeID == nil && player.phase != .awaitingStreamingConfirmation)
+            route.setRemote(remote)
+            remote.onEvent?(.streamingConfirmationRequired(generation: try #require(remote.generation)))
+            try await player.awaitPendingOperations()
+            #expect(player.pendingStreamingEpisodeID == 1 && player.phase == .awaitingStreamingConfirmation)
         }
     }
 

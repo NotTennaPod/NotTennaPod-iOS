@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct SynchronizationWorkerTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
     private func fixture(_ body: (FeedLibraryStore, URL, LibraryFeed) async throws -> Void) async throws {

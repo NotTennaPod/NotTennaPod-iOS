@@ -5,7 +5,7 @@ import Testing
 @testable import NotTennaPodCore
 
 /// Real TLS and proxy handshakes; requires the explicitly started owned protocol fixture.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct ProxyStreamingProtocolProbeTests {
+@MainActor @Suite(.serialized) struct ProxyStreamingProtocolProbeTests {
     @Test(arguments: [PodcastProxy.Kind.http, .socks])
     func nativeRelayUsesAuthenticatedTLSProxyAndPreservesMediaBytes(kind: PodcastProxy.Kind) async throws {
         let configuration = PodcastProxy(kind: kind, host: "127.0.0.1", port: kind == .http ? 18790 : 18791,

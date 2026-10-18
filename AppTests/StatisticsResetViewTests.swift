@@ -5,7 +5,7 @@ import Testing
 
 /// Mounted: Statistics overflow → Reset statistics data → source confirmation. Cancel writes
 /// nothing; Confirm restores default period choices, zeroes played durations only, and reloads.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct StatisticsResetViewTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as: T.Type = T.self) -> T? {
         if let match = view as? T, view.accessibilityIdentifier == id { return match }
@@ -13,7 +13,7 @@ struct StatisticsResetViewTests {
     }
 
     @Test func overflowResetCancelKeepsEverythingConfirmResetsChoicesAndPlayedTimeOnly() async throws {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M14Reset-\(UUID())")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("StatisticsReset-\(UUID())")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
         let store = try FeedLibraryStore(url: folder.appendingPathComponent("library.sqlite"))

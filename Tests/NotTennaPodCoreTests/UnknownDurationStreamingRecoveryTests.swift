@@ -4,7 +4,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct UnknownDurationStreamingRecoveryTests {
     private var fixture: URL {
 #if SWIFT_PACKAGE

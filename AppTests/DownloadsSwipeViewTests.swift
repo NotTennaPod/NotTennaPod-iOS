@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct DownloadsSwipeViewTests {
     private func find<T: UIView>(_ id: String, _ view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }

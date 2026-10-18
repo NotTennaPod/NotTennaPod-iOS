@@ -123,6 +123,23 @@ struct ServerSyncSession: Codable, Equatable, Sendable {
     var duration: Int32 = 0
     var cutAccepted: Cut?
     var cutPending: Cut?
+    /// Why the server does not get this session's listening (PROTOCOL §6.13), nil while it does.
+    var exportRefused: ExportRefusal?
+    /// Kept on this device only: the contribution a later statistics reset here covered, and the time up to which a later
+    /// history clear or removal here covered its history entries (PROTOCOL §8.8: local cuts cover local listening).
+    var localCut: Int64?
+    var localHistoryCut: Int64?
+
+    /// `tooLarge`: an export is larger than the server accepts; nothing more of the session is recorded until an explicit
+    /// retry (Synchronize now, Needs attention's "Try again"), and its listening stays here. `keptLocal`: the person chose
+    /// "Keep only on this device": its unexported listening is this device's own, never exported, and local cuts cover it.
+    enum ExportRefusal: String, Codable, Sendable {
+        case tooLarge = "too_large"
+        case keptLocal = "kept_local"
+    }
+
+    /// Whether what it journaled is owed to the server (a session kept on this device owes nothing).
+    var owesServer: Bool { exportRefused != .keptLocal }
 
     init(localSession: UUID, episodeID: Int64, incarnation: String, start: Int32) {
         id = ContractIdentity.randomUUID()
@@ -191,14 +208,15 @@ struct ServerSyncSession: Codable, Equatable, Sendable {
         if count != acceptedCount ?? 0 { acceptedCount = count }
     }
 
-    /// K: the cut at the greater ordinal, accepted or pending (PROTOCOL §8.8).
+    /// K: the cut at the greater ordinal, accepted or pending (PROTOCOL §8.8), or a local cut of a session kept on this device.
     var effectiveCut: Int64 {
-        switch (cutAccepted, cutPending) {
+        let cut: Int64 = switch (cutAccepted, cutPending) {
         case (let a?, let p?): p.ordinal > a.ordinal ? p.contribution : a.contribution
         case (let a?, nil): a.contribution
         case (nil, let p?): p.contribution
         case (nil, nil): 0
         }
+        return max(cut, localCut ?? 0)
     }
 
     /// An accepted statistics reset's cut of this session: the greatest of its exports in the reset's causal past (the
@@ -216,10 +234,12 @@ struct ServerSyncSession: Codable, Equatable, Sendable {
     }
 
     static func load(_ db: LibrarySQLite, _ condition: String, _ values: [LibrarySQLValue] = []) throws -> [ServerSyncSession] {
-        try db.rows("SELECT record FROM ntp_sessions WHERE \(condition) ORDER BY rowid", values).map { row in
+        let sessions = try db.rows("SELECT record FROM ntp_sessions WHERE \(condition) ORDER BY rowid", values).map { row in
             guard let data = row[0].data else { throw ServerRecordingError.corruptState("ntp_sessions") }
             return try JSONDecoder().decode(ServerSyncSession.self, from: data)
         }
+        SQLWorkMeter.shared.noteSessionsDecoded(sessions.count)
+        return sessions
     }
 
     static func load(_ db: LibrarySQLite, episode: Int64) throws -> [ServerSyncSession] {
@@ -248,6 +268,37 @@ struct ServerPendingTransition: Codable, Equatable, Sendable {
     var claimPosition: Int64?
     /// The provenance of an adopted claim (what a finalization or leave under it depends on).
     var claimDependencies: [String] = []
+    /// The version of the episode's position record the player's position was last decided against: set at load,
+    /// adoption, a takeover and a rebaseline; kept as stored across relaunches. Nil in a transition persisted before it.
+    var observed: ServerObservedPosition?
+    /// The newest listening known for the episode: the last played of every version a decision settled, never lower.
+    /// A version of another lineage or generation is adopted only when its listening is newer.
+    var listenedHighWater: Int64?
+}
+
+/// A version of an episode's position record (PROTOCOL §8.6): its lineage (log and epoch), generation, claim, sorted
+/// provenance and the episode's last played. `settled` when a decision about it was taken (it was adopted, it is this
+/// device's own claim, a rebaseline accepted it, or the player loaded its position from it); a version seen while this
+/// device's own intent was pending is not settled and is reconsidered when that intent retires.
+struct ServerObservedPosition: Codable, Equatable, Sendable {
+    var logID: String?
+    var epoch: Int64?
+    var generation: String?
+    var claim: String?
+    var provenance: [String] = []
+    var lastPlayed: Int64?
+    var settled = true
+
+    /// The same position record: lineage, claim and provenance. The episode's last played is a separate record: it is
+    /// evidence of listening for another lineage's version, never a change of this one (a non-owning session's activity
+    /// moves it while the position stands). `lastPlayed`: a mutation check's old rule.
+    func sameVersion(as other: ServerObservedPosition, lastPlayed: Bool = false) -> Bool {
+        sameLineage(as: other) && claim == other.claim && provenance == other.provenance && (!lastPlayed || self.lastPlayed == other.lastPlayed)
+    }
+
+    func sameLineage(as other: ServerObservedPosition) -> Bool {
+        logID == other.logID && epoch == other.epoch && generation == other.generation
+    }
 }
 
 /// A finalization or leave decided at a switch, skip or end (PROTOCOL §8.4), recorded or owed.
@@ -264,6 +315,14 @@ struct ServerTransitionFact: Codable, Equatable, Sendable {
     /// A leave's dependencies, fixed when it was decided (what the device had seen then): one recorded late (owed) is
     /// not ordered after what arrived meanwhile.
     var dependencies: [String]?
+    /// Larger than the server accepts (PROTOCOL §6.13): kept due, never recorded until an explicit retry (`tooLarge`), or
+    /// kept on this device for good (`keptLocal`). Its history entry stays this device's either way.
+    var refused: ServerSyncSession.ExportRefusal?
+    /// Kept on this device: the time up to which a later history clear or removal here covered its entry.
+    var localHistoryCut: Int64?
+
+    /// Whether its history entry shows (a kept one up to a local history cut does not).
+    var showsHistory: Bool { refused != .keptLocal || localHistoryCut.map { time > $0 } ?? true }
 }
 
 /// `ntp_library.pending_transition`: the current transition, the transition facts owed, and the journal's order: every
@@ -326,9 +385,10 @@ extension FeedLibraryStore {
     /// The journal's own writes: in the playback write's transaction, outside the recorder's savepoint (PROTOCOL §15.2).
     var journal: (String, [LibrarySQLValue]) throws -> Void { { [database] sql, values in try database.execute(sql, values) } }
 
+    /// An episode the server never sees: a local folder's (PROTOCOL §7.6), or a detached one (PROTOCOL §6.8).
     private func isLocalFolderEpisode(_ episodeID: Int64) throws -> Bool {
         guard let feed = try database.rows("SELECT feed_id FROM episodes WHERE id = ?", [.integer(episodeID)]).first?.first?.integer else { return false }
-        return try storedHeader(feed)?.source.isLocalFeedSource == true
+        return try storedHeader(feed)?.source.isLocalFeedSource == true || isDetachedFeed(feed)
     }
 
     func wireEpisode(local: Int64) throws -> String? {
@@ -348,7 +408,7 @@ extension FeedLibraryStore {
     func displayedPosition(_ episodeID: Int64) throws -> (claim: String?, position: Int64?) {
         guard let context = serverContext else { return (nil, nil) }
         var owed: (time: Int64, op: String)?
-        for session in try ServerSyncSession.load(database, episode: episodeID) {
+        for session in try ServerSyncSession.load(database, episode: episodeID) where session.owesServer {
             if !session.startRecorded, owed.map({ session.startTime >= $0.time }) ?? true { owed = (session.startTime, session.startOp) }
             for save in session.unexported { if let claim = save.claim, owed.map({ save.time >= $0.time }) ?? true { owed = (save.time, claim.op) } }
         }
@@ -393,9 +453,7 @@ extension FeedLibraryStore {
             pending.base = .init(position: max(0, session.startPositionMilliseconds), contribution: 0)
             try storeSyncSession(pending, journal)
             if transitions.current?.episodeID != session.episodeID {
-                let shown = try displayedPosition(session.episodeID)
-                transitions.current = .init(id: ContractIdentity.randomUUID(), kind: .leave, episodeID: session.episodeID,
-                                            generation: try loadedGeneration(session.episodeID), claim: shown.claim, claimPosition: shown.position)
+                transitions.current = try loadedTransition(session.episodeID)
                 try storeTransitionState(transitions, journal)
             }
             return
@@ -408,11 +466,32 @@ extension FeedLibraryStore {
         }
         try storeSyncSession(ServerSyncSession(localSession: session.id, episodeID: session.episodeID, incarnation: playbackIncarnation,
                                                start: session.startPositionMilliseconds), journal)
-        let shown = try displayedPosition(session.episodeID)
-        transitions.current = .init(id: ContractIdentity.randomUUID(), kind: .leave, episodeID: session.episodeID,
-                                    generation: try loadedGeneration(session.episodeID), claim: shown.claim, claimPosition: shown.position)
+        transitions.current = try loadedTransition(session.episodeID)
         try storeTransitionState(transitions, journal)
         try pruneSyncSessions(keeping: transitions)
+    }
+
+    /// The pending `leave` of a newly loaded episode (PROTOCOL §8.4), with the claim its position is displayed under and the
+    /// baseline the loaded position was decided against: settled when the position came from the record, not when
+    /// this device's own pending intent supplied it.
+    private func loadedTransition(_ episodeID: Int64) throws -> ServerPendingTransition {
+        let shown = try displayedPosition(episodeID)
+        var observed = try positionVersion(episodeID)
+        // Settled only when the loaded position is this version's: not under pending own intent (the local position was
+        // loaded), and not while a recovery fence shows another image (a held position, a base not installed), unless
+        // that image is this version's own claim and position.
+        var fromRecord = try !pendingOwnPositionIntent(episodeID)
+        if fromRecord, !adoptionFaults.contains(.settleFencedLoad), let wire = try wireEpisode(local: episodeID), try positionFenced(wire: wire) {
+            let raw = try database.rows("SELECT value FROM ntp_records WHERE entity = 'episode' AND id = ? AND field_group = 'position'", [.text(wire)])
+                .first?.first?.data.map { try ContractJSON.decode($0) }
+            fromRecord = raw?["claim_id"]?.stringValue == shown.claim && raw?["position"]?.integerValue == shown.position
+        }
+        observed?.settled = fromRecord
+        // Only a settled version's listening moves the high-water mark; an unsettled one is weighed when it is decided.
+        let recordListening = fromRecord || adoptionFaults.contains(.highWaterFromUnsettledLoad) ? observed?.lastPlayed ?? 0 : 0
+        let high = max(recordListening, try ownListening(episodeID))
+        return .init(id: ContractIdentity.randomUUID(), kind: .leave, episodeID: episodeID, generation: try loadedGeneration(episodeID),
+                     claim: shown.claim, claimPosition: shown.position, observed: observed, listenedHighWater: high)
     }
 
     /// The live generation of the episode's podcast as it is loaded (PROTOCOL §8.4), nil while its registration is pending.
@@ -424,6 +503,7 @@ extension FeedLibraryStore {
     /// Sessions nothing needs any more: ended or closed, nothing due, every export retired and no pending cut. The
     /// server's record then holds what they added, so `others` (PROTOCOL §8.8) counts them exactly as before.
     private func pruneSyncSessions(keeping transitions: ServerTransitionState) throws {
+        if adoptionFaults.contains(.keepAcknowledgedSessions) { return }
         let kept = Set([transitions.current?.session].compactMap { $0 } + transitions.due.compactMap(\.transition.session))
         for session in try syncSessions("state IN ('sealed', 'closed')") where !kept.contains(session.id) && !session.hasDue {
             guard session.cutPending == nil, session.exportedIndex == session.last?.index ?? 0 else { continue }
@@ -467,9 +547,10 @@ extension FeedLibraryStore {
         default:
             return false
         }
-        let id = transitions.current?.episodeID == session.episodeID ? transitions.current?.id : nil
-        transitions.current = .init(id: id ?? ContractIdentity.randomUUID(), kind: .finalize, episodeID: session.episodeID,
-                                    session: session.id, claim: session.claims.last)
+        let same = transitions.current?.episodeID == session.episodeID ? transitions.current : nil
+        transitions.current = .init(id: same?.id ?? ContractIdentity.randomUUID(), kind: .finalize, episodeID: session.episodeID,
+                                    session: session.id, claim: session.claims.last, observed: same?.observed,
+                                    listenedHighWater: same?.listenedHighWater)
         try storeSyncSession(session, journal)
         try storeTransitionState(transitions, journal)
         activeCapture?.playbackDue = true
@@ -606,8 +687,8 @@ extension FeedLibraryStore {
 
     /// Flush before cuts (PROTOCOL §8.2): every open session's unexported save is exported before a history removal, a history
     /// clear or a statistics reset, which then depends on the whole frontier.
-    func journalFlushOpenSessions(now: Int64) throws {
-        let sessions = try syncSessions("state = 'open'").filter { !$0.unexported.isEmpty }
+    func journalFlushOpenSessions(now: Int64, episodes: Set<Int64>? = nil) throws {
+        let sessions = try syncSessions("state = 'open'").filter { !$0.unexported.isEmpty && episodes?.contains($0.episodeID) != false }
         guard !sessions.isEmpty else { return }
         var transitions = try transitionState()
         for var session in sessions {
@@ -728,10 +809,14 @@ extension FeedLibraryStore {
     /// in the order they were decided (PROTOCOL §8): on each author's chain a session's facts follow its start, a seal comes
     /// before the takeover that follows it, a finalization after its session's last export. Called first in every
     /// recording but a remote one, so what an earlier write owes is recorded before anything later (PROTOCOL §8.1).
-    func recordPlaybackDue(_ s: RecordingSession) throws {
-        let owed = try database.scalar("SELECT export_owed FROM ntp_library WHERE id = 1") == 1
+    /// `episode`: only that episode's sessions and transitions (`exportJournalBeforeDetach`).
+    func recordPlaybackDue(_ s: RecordingSession, episode: Int64? = nil) throws {
+        let owed = try episode == nil && database.scalar("SELECT export_owed FROM ntp_library WHERE id = 1") == 1
         guard s.capture.playbackDue || owed else { return }
-        var sessions = try syncSessions("state != 'pending'").filter(\.hasDue)
+        // Only sessions bound to the author and generation they were played under, for one episode: nothing registers.
+        // A session the server refused, or kept on this device, records nothing (PROTOCOL §6.13).
+        var sessions = try (episode.map { try syncSessions("state != 'pending' AND episode_id = ? AND author_id IS NOT NULL", [.integer($0)]) }
+            ?? syncSessions("state != 'pending'")).filter { $0.hasDue && $0.exportRefused == nil }
         var transitions = try transitionState()
         enum Item { case start(Int), claim(Int, Int64), checkpoint(Int), end(Int), transition(Int) }
         // In the order the journal decided them (`ServerTransitionState.sequence`); within one decision a start before
@@ -743,32 +828,74 @@ extension FeedLibraryStore {
             if session.exportDue != nil, !session.unexported.isEmpty { items.append((session.exportDueSequence, 2, .checkpoint(index))) }
             if let end = session.end, !end.recorded { items.append((end.sequence, 3, .end(index))) }
         }
-        for (index, fact) in transitions.due.enumerated() { items.append((fact.sequence, 4, .transition(index))) }
+        for (index, fact) in transitions.due.enumerated() where episode.map({ episode in
+            fact.transition.episodeID == episode && (fact.transition.kind != .finalize || sessions.contains { $0.id == fact.transition.session })
+        }) ?? true {
+            items.append((fact.sequence, 4, .transition(index)))
+        }
         items.sort { ($0.sequence, $0.phase) < ($1.sequence, $1.phase) }
         // Listening the recorded facts represent needs no mark any more: an export of a session's
         // latest save represents its listening fields; an end, finalization or leave everything, its queue change too.
         var listening = Set<Int64>(), everything = Set<Int64>()
+        // A fact too large for the server (PROTOCOL §6.13) is never numbered: its session records nothing more (its later
+        // items are skipped) and keeps its listening here; the other sessions go on. Nothing of the refused fact was written
+        // (the bound is checked before its first write).
+        var refused = Set<Int>()
+        var kept: [ServerTransitionFact] = []
         for entry in items {
-            switch entry.item {
-            case .start(let index):
-                try recordStart(&sessions[index], s)
-            case .claim(let index, let saveIndex):
-                if try recordCheckpoint(&sessions[index], upTo: saveIndex, s) { listening.insert(sessions[index].episodeID) }
-            case .checkpoint(let index):
-                // The save it was due for (a pause's, the minute's), or the latest before it still unexported.
-                let due = sessions[index].exportDueIndex
-                if let save = sessions[index].unexported.last(where: { $0.index <= due }),
-                   try recordCheckpoint(&sessions[index], upTo: save.index, s) {
-                    listening.insert(sessions[index].episodeID)
+            do {
+                switch entry.item {
+                case .start(let index):
+                    guard !refused.contains(index) else { continue }
+                    try recordStart(&sessions[index], s)
+                case .claim(let index, let saveIndex):
+                    guard !refused.contains(index) else { continue }
+                    if try recordCheckpoint(&sessions[index], upTo: saveIndex, s) { listening.insert(sessions[index].episodeID) }
+                case .checkpoint(let index):
+                    guard !refused.contains(index) else { continue }
+                    // The save it was due for (a pause's, the minute's), or the latest before it still unexported.
+                    let due = sessions[index].exportDueIndex
+                    if let save = sessions[index].unexported.last(where: { $0.index <= due }),
+                       try recordCheckpoint(&sessions[index], upTo: save.index, s) {
+                        listening.insert(sessions[index].episodeID)
+                    }
+                    sessions[index].exportDue = nil
+                case .end(let index):
+                    guard !refused.contains(index) else { continue }
+                    if try recordEnd(&sessions[index], s) { everything.insert(sessions[index].episodeID) }
+                case .transition(let index):
+                    let fact = transitions.due[index]
+                    // Refused (too large) or kept on this device: it stays due, this device's own, unrecorded.
+                    if fact.refused != nil { kept.append(fact); continue }
+                    // A finalization follows its session's last export: while that session's listening is refused it waits
+                    // with it; a session kept on this device keeps every finalization of its own here, whenever it was made
+                    // (before or after Keep, after a relaunch): this device's, never sent, its history kept as the session's.
+                    if fact.transition.kind == .finalize, let id = fact.transition.session,
+                       let refusal = try sessions.first(where: { $0.id == id })?.exportRefused ?? syncSession(id)?.exportRefused {
+                        var waiting = fact
+                        if refusal == .keptLocal { waiting.refused = .keptLocal }
+                        kept.append(waiting)
+                        continue
+                    }
+                    if try recordTransition(fact, sessions: sessions, s) { everything.insert(fact.transition.episodeID) }
                 }
-                sessions[index].exportDue = nil
-            case .end(let index):
-                if try recordEnd(&sessions[index], s) { everything.insert(sessions[index].episodeID) }
-            case .transition(let index):
-                if try recordTransition(transitions.due[index], sessions: sessions, s) { everything.insert(transitions.due[index].transition.episodeID) }
+            } catch ServerRecordingError.factTooLarge(let type, let bytes) {
+                switch entry.item {
+                case .start(let index), .claim(let index, _), .checkpoint(let index), .end(let index):
+                    try refuseExport(&sessions[index], type: type, bytes: bytes, s)
+                    refused.insert(index)
+                case .transition(let index):
+                    // A leave or finalization alone too large: kept due as this device's (its history, completion and queue
+                    // decision), never recorded until an explicit retry, and listed under Needs attention.
+                    var fact = transitions.due[index]
+                    fact.refused = .tooLarge
+                    kept.append(fact)
+                    try noteRefusedListening(id: fact.op, episode: fact.transition.episodeID, type: type, bytes: bytes, s)
+                }
             }
         }
-        transitions.due = []
+        // What was refused (or kept on this device) stays due, this device's own.
+        if let episode { transitions.due = transitions.due.filter { $0.transition.episodeID != episode } + kept } else { transitions.due = kept }
         for session in sessions { try storeSyncSession(session, s.writer.execute) }
         try storeTransitionState(transitions, s.writer.execute)
         if owed {
@@ -783,6 +910,63 @@ extension FeedLibraryStore {
             try s.writer.execute("UPDATE ntp_local_playback SET fields = 0 WHERE episode_id = ? AND fields != 0", [.integer(episode)])
             try s.writer.execute("DELETE FROM ntp_local_playback WHERE episode_id = ? AND queue = 0", [.integer(episode)])
         }
+    }
+
+    /// A session export larger than the server accepts (PROTOCOL §6.13): the session records nothing more until an explicit
+    /// retry, its listening stays on this device (shown, never lost), and Needs attention names the episode, with "Try
+    /// again" and "Keep only on this device". The sync log says so once the write commits.
+    private func refuseExport(_ session: inout ServerSyncSession, type: String, bytes: Int, _ s: RecordingSession) throws {
+        session.exportRefused = .tooLarge
+        try noteRefusedListening(id: session.id, episode: session.episodeID, type: type, bytes: bytes, s)
+    }
+
+    /// Needs attention's item for refused listening (a session, or a leave or finalization), by its episode.
+    private func noteRefusedListening(id: String, episode: Int64, type: String, bytes: Int, _ s: RecordingSession) throws {
+        var record: ContractObject = ["episode": .integer(episode)]
+        if let title = try loadEpisode(episode)?.details.title { record["title"] = .string(title) }
+        try s.writer.execute("INSERT INTO ntp_attention(id, kind, record, created_at) VALUES (?, 'listening_refused', ?, ?) ON CONFLICT(id) DO UPDATE SET kind = excluded.kind, record = excluded.record",
+                             [.text(id), .blob(try ContractJSON.object(record).canonicalData()), .integer(s.now)])
+        s.capture.refusedExport = true
+        s.capture.afterCommit.append { $0.noteServerDiagnostic("too_large", "\(ServerLogValue.type(type)) \(bytes) bytes: listening kept on this device") }
+    }
+
+    /// Before the player's episode is cut loose from the account (PROTOCOL §6.8): what its journal holds that no fact carries
+    /// yet, listening saved before the removal, is exported now, each session under the author and generation it was played
+    /// under (an unbound session under the generation the episode was loaded under), never a later one. A session that
+    /// cannot be named so records nothing. Its facts are recorded as the recorder records any.
+    /// Listening the server refused as too large (PROTOCOL §6.13) is tried once more here, under its own generation as the
+    /// rest; still too large, it goes with the detached journal (`detachHeldEpisode`). What the person kept on this device
+    /// stays unsent.
+    /// `closed`: the generation the removal closed, for a session that was never bound.
+    func exportJournalBeforeDetach(_ episodeID: Int64, closed: String?, now: Int64) throws {
+        guard let context = serverContext else { return }
+        var sessions = try syncSessions("state != 'pending' AND episode_id = ?", [.integer(episodeID)])
+        var transitions = try transitionState()
+        guard !sessions.isEmpty || transitions.due.contains(where: { $0.transition.episodeID == episodeID }) else { return }
+        for index in sessions.indices where sessions[index].exportRefused == .tooLarge { sessions[index].exportRefused = nil }
+        for index in transitions.due.indices where transitions.due[index].transition.episodeID == episodeID && transitions.due[index].refused == .tooLarge {
+            transitions.due[index].refused = nil
+        }
+        let podcast = try database.rows("SELECT podcast_id FROM ntp_episodes WHERE local_id = ?", [.integer(episodeID)]).first?.first?.text
+        let loaded = transitions.current.flatMap { $0.episodeID == episodeID ? $0.generation : nil } ?? closed
+        for index in sessions.indices {
+            if sessions[index].authorID == nil {
+                guard let podcast, let loaded else { continue }
+                sessions[index].authorID = context.mainAuthor
+                sessions[index].podcastID = podcast
+                sessions[index].generationID = loaded
+            }
+            if sessions[index].exportDue == nil { markExportDue(&sessions[index], now: now, &transitions) }
+            try storeSyncSession(sessions[index], journal)
+        }
+        try storeTransitionState(transitions, journal)
+        let capture = ChangeCapture(clientTime: Date(timeIntervalSince1970: Double(now) / 1_000))
+        capture.playbackDue = true
+        let s = RecordingSession(intent: .remote, capture: capture,
+                                 writer: ServerOutboxWriter(database: database, context: context, failAfter: nil, factBound: factBoundOverride),
+                                 clientTime: now, now: now)
+        try recordPlaybackDue(s, episode: episodeID)
+        if s.writer.writes > 0 { activeCapture?.afterCommit.append { $0.noteServerOutboxChanged() } }
     }
 
     /// `session.start {episode, session_id, start_position, activity: true, observed_claim?, duration?, baseline}` (PROTOCOL §8, §6.10
@@ -927,18 +1111,80 @@ extension FeedLibraryStore {
     /// A statistics reset of this library (PROTOCOL §8.8): every session it covers gets its pending cut, the contribution at
     /// its latest export (the flush exported every open session first). A session whose facts wait on a pending
     /// registration is covered by that chain's deferred reset (PROTOCOL §15.2).
+    /// A session kept on this device is cut locally at its whole contribution: the reset covers its listening here as the
+    /// server's cut covers what it exported.
     func notePendingStatisticsCut(_ s: RecordingSession, main: String, deferred: [String: String]) throws {
-        for var session in try syncSessions("state != 'pending'") where session.startRecorded {
-            guard let latest = session.exports.last(where: { $0.void != true }) else { continue }
-            var op = main
-            if let registration = session.registrationOp,
-               try database.rows("SELECT state FROM ntp_registrations WHERE op_id = ?", [.text(registration)]).first?.first?.text == "pending" {
-                guard let draft = deferred[registration] else { continue }
-                op = draft
+        for var session in try syncSessions("state != 'pending'") {
+            var changed = false
+            if session.exportRefused == .keptLocal { session.localCut = session.contribution; changed = true }
+            if session.startRecorded, let latest = session.exports.last(where: { $0.void != true }) {
+                var op: String? = main
+                if let registration = session.registrationOp,
+                   try database.rows("SELECT state FROM ntp_registrations WHERE op_id = ?", [.text(registration)]).first?.first?.text == "pending" {
+                    op = deferred[registration]
+                }
+                if let op { session.cutPending = .init(op: op, ordinal: latest.ordinal, contribution: latest.contribution); changed = true }
             }
-            session.cutPending = .init(op: op, ordinal: latest.ordinal, contribution: latest.contribution)
+            if changed { try storeSyncSession(session, s.writer.execute) }
+        }
+    }
+
+    /// A history clear (`episode` nil) or removal here covers the history entries of sessions kept on this device up to
+    /// `time`. Returns each covered session's earlier cut, for the removal's Undo.
+    func noteLocalHistoryCut(_ s: RecordingSession, episode: Int64?, time: Int64) throws -> [(session: String, previous: Int64?)] {
+        var covered: [(session: String, previous: Int64?)] = []
+        for var session in try keptSessions(episode: episode) {
+            covered.append((session.id, session.localHistoryCut))
+            session.localHistoryCut = max(session.localHistoryCut ?? time, time)
             try storeSyncSession(session, s.writer.execute)
         }
+        // A leave or finalization kept on this device, the same.
+        var transitions = try transitionState()
+        var changed = false
+        for index in transitions.due.indices where transitions.due[index].refused == .keptLocal
+            && (episode == nil || transitions.due[index].transition.episodeID == episode) {
+            covered.append((transitions.due[index].op, transitions.due[index].localHistoryCut))
+            transitions.due[index].localHistoryCut = max(transitions.due[index].localHistoryCut ?? time, time)
+            changed = true
+        }
+        if changed { try storeTransitionState(transitions, s.writer.execute) }
+        return covered
+    }
+
+    /// An Undo of a removal gives the kept sessions and transitions it covered their earlier history cut back.
+    func restoreLocalHistoryCuts(_ s: RecordingSession, _ covered: [(session: String, previous: Int64?)]) throws {
+        var transitions = try transitionState()
+        var changed = false
+        for (id, previous) in covered {
+            if var session = try syncSession(id) {
+                guard session.exportRefused == .keptLocal else { continue }
+                session.localHistoryCut = previous
+                try storeSyncSession(session, s.writer.execute)
+            } else if let index = transitions.due.firstIndex(where: { $0.op == id && $0.refused == .keptLocal }) {
+                transitions.due[index].localHistoryCut = previous
+                changed = true
+            }
+        }
+        if changed { try storeTransitionState(transitions, s.writer.execute) }
+    }
+
+    /// Leaves and finalizations the server refused as too large (of `episode`, or all).
+    func refusedTransitions(episode: Int64? = nil) throws -> [ServerTransitionFact] {
+        try transitionState().due.filter { $0.refused == .tooLarge && (episode == nil || $0.transition.episodeID == episode) }
+    }
+
+    /// Sessions kept on this device (of `episode`, or all).
+    func keptSessions(episode: Int64? = nil) throws -> [ServerSyncSession] {
+        let kept = "CAST(record AS TEXT) LIKE '%\"exportRefused\":\"kept_local\"%'"
+        guard let episode else { return try syncSessions(kept) }
+        return try syncSessions("episode_id = ? AND \(kept)", [.integer(episode)])
+    }
+
+    /// Sessions whose listening the server refused as too large (of `episode`, or all).
+    func refusedSessions(episode: Int64? = nil) throws -> [ServerSyncSession] {
+        let refused = "CAST(record AS TEXT) LIKE '%\"exportRefused\":\"too_large\"%'"
+        guard let episode else { return try syncSessions(refused) }
+        return try syncSessions("episode_id = ? AND \(refused)", [.integer(episode)])
     }
 
     /// In the unit that applies a commit (PROTOCOL §6.8): this library's session facts the commit refused add nothing

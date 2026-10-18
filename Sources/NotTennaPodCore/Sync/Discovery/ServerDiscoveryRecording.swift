@@ -16,8 +16,8 @@ extension FeedLibraryStore {
     static let observationEntryOverhead = 600
     /// A fact's envelope besides its items, at most (op and author IDs, sequence, type, times, the podcast target).
     static let observationFactOverhead = 2 << 10
-    /// An item record larger than this is never observed (the framed fact bound is 8 MiB): the server's own fetch
-    /// covers it, and the outbox is never blocked by it.
+    /// An item larger than this, with its occurrence and entry, is never observed (nor one over half the fact bound the
+    /// server advertises, PROTOCOL §6.13): the server's own fetch covers it, and the outbox is never blocked by it.
     static let observationItemLimit = 4 << 20
     /// How long a newly registered podcast's observations wait for its first canonical metadata (PROTOCOL §9.4).
     static let firstPopulationWait: Int64 = 10 * 60_000
@@ -91,12 +91,16 @@ extension FeedLibraryStore {
                 try noteObservedFeed(batch.feedID, hash: feedHash, s)
             }
         }
-        // The batch's last observed hashes in one read.
+        // The batch's last observed hashes: as the merge read them in this transaction, else in one read.
         var hashes: [String: String] = [:]
-        for chunk in Self.chunks(batch.items.map { ContractJSON.string(Self.ledgerKey(localEpisode: $0.localID)) }) {
-            for row in try database.rows("SELECT id, parse_hash FROM ntp_observed WHERE entity = 'episode' AND id IN (SELECT value FROM json_each(?))",
-                                         [.text(ContractJSON.array(chunk).canonicalText)]) {
-                if let id = row[0].text, let hash = row[1].text { hashes[id] = hash }
+        if let observed = batch.observedHashes {
+            for item in batch.items { if let hash = observed[item.localID] { hashes[Self.ledgerKey(localEpisode: item.localID)] = hash } }
+        } else {
+            for chunk in Self.chunks(batch.items.map { ContractJSON.string(Self.ledgerKey(localEpisode: $0.localID)) }) {
+                for row in try database.rows("SELECT id, parse_hash FROM ntp_observed WHERE entity = 'episode' AND id IN (SELECT value FROM json_each(?))",
+                                             [.text(ContractJSON.array(chunk).canonicalText)]) {
+                    if let id = row[0].text, let hash = row[1].text { hashes[id] = hash }
+                }
             }
         }
         var changed = batch.items.filter { hashes[Self.ledgerKey(localEpisode: $0.localID)] != $0.hash }
@@ -117,6 +121,22 @@ extension FeedLibraryStore {
     /// first. Returns their op IDs.
     private func emitObservations(_ changed: [ServerDiscoveryBatch.Item], feedRecord: ContractJSON?, batchID: String, fetchTime: Int64,
                                   binding: PodcastBinding, _ s: RecordingSession) throws -> [String] {
+        // Within the bound the server advertises (PROTOCOL §6.13): an item, or the podcast's own record, too large for a fact
+        // of its own is not observed (the server's own fetch covers it); the log says so, and everything else is observed. The
+        // bound is read only when something is to be observed (an unchanged refresh observes nothing).
+        var feedRecord = feedRecord
+        if let record = feedRecord, try record.canonicalBytes().count + Self.observationFactOverhead > min(Self.observationBytes, s.writer.factBound / 2) {
+            let bytes = try record.canonicalBytes().count
+            s.capture.afterCommit.append { $0.noteServerDiagnostic("too_large", "catalog.observe podcast record \(bytes) bytes: not observed") }
+            feedRecord = nil
+        }
+        var skipped = 0
+        defer {
+            if skipped > 0 {
+                let count = skipped
+                s.capture.afterCommit.append { $0.noteServerDiagnostic("too_large", "catalog.observe \(count) items: not observed") }
+            }
+        }
         var podcast: String?
         if case .registered(let id, _) = binding { podcast = id }
         var items: [(item: ServerDiscoveryBatch.Item, record: ContractJSON, size: Int, wire: String?)] = []
@@ -145,13 +165,14 @@ extension FeedLibraryStore {
                 wire = try podcast.map { try wireEpisodeID(item.localID, podcast: $0, occurrence: (item.key.kind, item.key.value), s) }
                 canonical = try wire.flatMap { try serverRecord("episode", $0, "metadata") }
             }
+            observationTally.note(item.fields, canonical: ServerCatalogRecords.fields(ofCanonical: canonical))
             if ServerCatalogRecords.fields(ofCanonical: canonical) == item.fields {
                 notes.append(.init(local: item.localID, hash: item.hash, op: nil, catalogOnly: false))
                 continue
             }
-            guard item.size <= Self.observationItemLimit else { continue }
             let occurrence = try ContractJSON.object(item.evidence.occurrence(item.key)).canonicalBytes().count
             let size = item.size + occurrence + Self.observationEntryOverhead
+            guard size <= min(Self.observationItemLimit, s.writer.factBound / 2) else { skipped += 1; continue }
             var record: ContractObject = ["fields": item.fields]
             if let revision = canonical?["revision"]?.stringValue { record["base"] = .string(revision) }
             items.append((item, .object(record), size, wire))

@@ -123,7 +123,12 @@ import GoogleCast
                 if let access = self.mediaAccess {
                     admittedMedia = try await access.authorizedMedia(episodeID: id, contentURL: status.contentURL)
                     if admittedMedia == nil {
-                        admittedMedia = try await access.prepare(episodeID: id)
+                        do { admittedMedia = try await access.prepare(episodeID: id) }
+                        catch is CastRelayStreamingDenied {
+                            try await self.confirmRelay(episodeID: id, client: client, identity: snapshot.identity,
+                                                        revision: revision, current: current)
+                            return
+                        }
                         ownsPreparation = true
                     }
                     guard current(), !Task.isCancelled else { throw CancellationError() }
@@ -153,6 +158,27 @@ import GoogleCast
                 if self?.revision == revision { self?.unresolved = .failed(error.localizedDescription) }
             }
         }
+    }
+
+    /// The receiver's item needs a new relay that this network does not admit (no lease survived, and Streaming is off
+    /// on a restricted network). It cannot be adopted: select its episode at the receiver's position on a new route,
+    /// which asks Once/Always, and either resumes where the receiver was. Only once the player has settled its current
+    /// item, and only if this restoration is still current and no person's command came meanwhile, is the receiver's
+    /// stale item stopped and the route installed; otherwise a newer selection wins and the receiver is left alone.
+    private func confirmRelay(episodeID: Int64, client: any CastMediaClient, identity: CastSessionIdentity, revision: UUID,
+                              current: @escaping @MainActor () -> Bool) async throws {
+        guard current(), !Task.isCancelled, let latest = client.snapshot else { throw CancellationError() }
+        let position = Int64(latest.positionMilliseconds)
+        let valid: @MainActor () -> Bool = { [weak self] in self?.revision == revision && current() }
+        try await player.selectOnRoute(episodeID: episodeID, positionMilliseconds: position, activateRoute: { [weak self] in
+            guard let self, valid() else { throw CancellationError() }
+            // Stopping the item changes the receiver's status; this restoration's rechecks end here.
+            client.onStatus = nil
+            client.send(.stop) { _ in }.cancel()
+            let engine = CastPlaybackEngine(client: client, automaticallyPoll: self.automaticallyPoll, library: self.library,
+                                            prepareMedia: self.prepareMedia)
+            self.binding.install(engine: engine, identity: identity)
+        }, isCurrent: valid)
     }
 
     func awaitRestoration() async { await restoration?.value }

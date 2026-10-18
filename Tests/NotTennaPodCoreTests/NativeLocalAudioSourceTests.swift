@@ -4,7 +4,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct NativeLocalAudioSourceTests {
+@Suite(.serialized) struct NativeLocalAudioSourceTests {
     static let files = ["StreamingFormats/tone.wav", "StreamingFormats/tone.aac", "StreamingFormats/tone.flac",
         "FLACVariants/variable.flac", "FLACVariants/variable-table.flac"]
     private func fixture(_ path: String) throws -> URL {

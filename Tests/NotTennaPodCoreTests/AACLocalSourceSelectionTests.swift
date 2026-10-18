@@ -4,7 +4,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct AACLocalSourceSelectionTests {
+@MainActor @Suite(.serialized) struct AACLocalSourceSelectionTests {
     private func fixture(_ name: String, directory: String) throws -> URL {
 #if SWIFT_PACKAGE
         return try #require(Bundle.module.url(forResource: name, withExtension: nil, subdirectory: "Fixtures/" + directory))

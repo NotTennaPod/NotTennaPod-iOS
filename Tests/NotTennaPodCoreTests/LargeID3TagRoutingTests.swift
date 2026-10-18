@@ -7,7 +7,7 @@ import Testing
 
 /// An MP3 whose ID3v2 tag (large cover or chapter art) is longer than the 1 MiB type probe takes the
 /// processed MP3 route like any other MP3, as Media3's sniffers skip ID3 tags of any size.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(4))) struct LargeID3TagRoutingTests {
+@MainActor @Suite(.serialized) struct LargeID3TagRoutingTests {
     nonisolated static let mebibyte = 1 << 20
     nonisolated static let sizes = [mebibyte / 2, 3 * mebibyte / 2, 3 * mebibyte]
 

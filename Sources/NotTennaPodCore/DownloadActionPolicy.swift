@@ -19,7 +19,11 @@ public struct DownloadActionPolicy: Equatable, Sendable {
         let elapsed = (nowMilliseconds / 1000) &- bypassTimeSeconds
         let bypass = elapsed < 300
         if allowMobile || !restrictedNetwork || bypass {
-            return .request(ignoreConstraints: bypassChoice == .now, showMobileNotice: bypass && bypassChoice == .now)
+            // "Allow this time" covers only what is asked within its five minutes: a later request on Wi-Fi keeps the
+            // Wi-Fi-only constraint (Android lets it leak into later jobs, which costs mobile data). A job created within
+            // the window keeps the constraint it was stored with.
+            let allowedNow = bypassChoice == .now && bypass
+            return .request(ignoreConstraints: allowedNow, showMobileNotice: allowedNow)
         }
         return .confirmation(showVPNAdvice: restrictedNetwork && vpnOverWiFi)
     }

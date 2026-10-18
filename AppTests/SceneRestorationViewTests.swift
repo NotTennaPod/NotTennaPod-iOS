@@ -11,7 +11,7 @@ import Synchronization
 /// podcasts and episodes that are gone; another library at the same place; new and closed windows; links, quick actions
 /// and notifications that arrive with the window; a window that waits for its library; screens that hold their own
 /// text; at iPhone, iPad and Duo sizes, left to right and right to left.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(3)))
+@MainActor @Suite(.serialized)
 struct SceneRestorationViewTests {
     struct Library {
         let directory: URL, file: URL

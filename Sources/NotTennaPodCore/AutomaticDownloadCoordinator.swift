@@ -130,32 +130,32 @@ import Foundation
         if !preferences.queue, preferences.cleanup == -2 || preferences.cacheSize == -1 {
             // Nothing can be selected (no feed downloads automatically, the queue is not included)
             // and nothing can be cleaned: the pass would end with no effect (the defaults).
-            let feeds = try await store.feeds()
+            let feeds = try await store.feedHeaders()
             try Task.checkCancellation()
             if !feeds.contains(where: { $0.subscriptionState == .subscribed
                 && ($0.autoDownload == .enabled || ($0.autoDownload == .global && preferences.global)) }) { return }
         }
-        let snapshot = try await store.snapshot()
-        // A server library's pending releases stand in for NEW episodes (PROTOCOL §9.9); nil in a standalone library.
-        let releases = try await store.serverReleaseCandidates()
+        // Keys of the episodes a pass can act on, not the library. A server library's pending releases stand
+        // in for NEW episodes (PROTOCOL §9.9); nil in a standalone library.
+        let (library, releases) = try await store.automaticDownloadLibrary()
         try Task.checkCancellation()
-        // Walking the whole library happens off the main thread (queue changes trigger this pass).
+        // Selecting happens off the main thread (queue changes trigger this pass).
         let now = clock()
         let (candidates, downloaded, reclaimable) = await Task.detached(priority: .utility) {
-            let candidates = AutomaticDownloadPolicy.candidates(feeds: snapshot.feeds, queue: snapshot.queue, preferences: preferences,
-                                                                releases: releases)
-            let downloaded = snapshot.feeds.lazy.filter { $0.subscriptionState == .subscribed }
-                .reduce(0) { $0 + $1.episodes.count { $0.details.media != nil && $0.userState.isDownloaded } }
-            let reclaimable = AutomaticDownloadPolicy.cleanupCandidates(feeds: snapshot.feeds,
-                queuedIDs: Set(snapshot.queue.map(\.id)), policy: preferences.cleanup, now: now)
+            let candidates = AutomaticDownloadPolicy.candidates(library, preferences: preferences, releases: releases)
+            let downloaded = AutomaticDownloadPolicy.downloadedCount(library)
+            let reclaimable = AutomaticDownloadPolicy.cleanupCandidates(library, queuedIDs: Set(library.queue),
+                                                                        policy: preferences.cleanup, now: now)
             return (candidates, downloaded, reclaimable)
         }.value
         try Task.checkCancellation()
         let active = try await store.downloadJobs().count
         let room = AutomaticDownloadPolicy.cleanupCount(downloaded: downloaded, candidates: candidates.count, cacheSize: preferences.cacheSize)
         var deleted = 0
-        for episode in reclaimable.prefix(room) {
+        for item in reclaimable.prefix(room) {
             try Task.checkCancellation()
+            // Only the episodes cleaned are read whole. One gone since the selection was cleaned by its removal.
+            guard let episode = try await store.episode(id: item.id) else { deleted += 1; continue }
             try await cleanup(episode)
             // Count completed removal, not attempted deletion. A failed cleanup
             // must not create imaginary cache space for subsequent downloads.
@@ -173,7 +173,7 @@ import Foundation
         // A release is done once its download is requested or nothing will download it; a blocked one stays pending.
         if let releases {
             try await store.finishServerReleases(requested.intersection(releases)
-                .union(AutomaticDownloadPolicy.settledReleases(feeds: snapshot.feeds, releases: releases)))
+                .union(AutomaticDownloadPolicy.settledReleases(library, releases: releases)))
         }
     }
 }

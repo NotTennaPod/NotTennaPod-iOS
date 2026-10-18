@@ -1,9 +1,9 @@
 import XCTest
 
 /// Actual journey on a UUID library seeded from the `mixed` Android database (DEBUG hook, through the
-/// database import). Expectations come from the independent oracle: its runner may supply them in `M21_EXPECTED`
-/// (with `M21_DATABASE`); otherwise the test uses the committed fixture database and the oracle output for it
-/// recorded below. The runner can also check the saved preferences and the orders this test prints (`M21-OBSERVED …`).
+/// database import). Expectations come from the independent oracle: its runner may supply them in `SUBSCRIPTIONS_EXPECTED`
+/// (with `SUBSCRIPTIONS_DATABASE`); otherwise the test uses the committed fixture database and the oracle output for it
+/// recorded below. The runner can also check the saved preferences and the orders this test prints (`SUBSCRIPTIONS-OBSERVED …`).
 /// Subscriptions (default order) → Sort alphabetically → Counter unplayed → 3 columns, titles on then off →
 /// filter Kept updated + Counter greater than zero → Archive → relaunch keeps everything → drawer agrees.
 @MainActor final class SubscriptionsJourneyTests: XCTestCase {
@@ -15,10 +15,10 @@ import XCTest
     override func setUpWithError() throws {
         continueAfterFailure = false
         let environment = ProcessInfo.processInfo.environment
-        let expectations = try environment["M21_EXPECTED"].map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let expectations = try environment["SUBSCRIPTIONS_EXPECTED"].map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
             ?? Data(Self.mixedDatabaseExpectations.utf8)
         expected = try XCTUnwrap(try JSONSerialization.jsonObject(with: expectations) as? [String: Any])
-        let database = environment["M21_DATABASE"] ?? URL(fileURLWithPath: #filePath)
+        let database = environment["SUBSCRIPTIONS_DATABASE"] ?? URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("TestSupport/Data/subscriptions-screen/databases/mixed.db").path
         XCTAssertTrue(FileManager.default.fileExists(atPath: database), "missing seed database \(database)")
@@ -36,7 +36,7 @@ import XCTest
         let result = placed.sorted { lhs, rhs in
             abs(lhs.frame.minY - rhs.frame.minY) > 1 ? lhs.frame.minY < rhs.frame.minY : lhs.frame.minX < rhs.frame.minX
         }.map(\.id)
-        print("M21-OBSERVED \(name) \(result.map(String.init).joined(separator: ","))")
+        print("SUBSCRIPTIONS-OBSERVED \(name) \(result.map(String.init).joined(separator: ","))")
         return result
     }
     private func menu(_ item: String) {
@@ -107,7 +107,7 @@ import XCTest
         XCTAssertTrue(app.buttons["drawerFiltered"].waitForExistence(timeout: 5), app.debugDescription)
         let rows = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'drawer-feed-' OR identifier BEGINSWITH 'drawer-folder-'"))
             .allElementsBoundByIndex.sorted { $0.frame.minY < $1.frame.minY }.map(\.identifier)
-        print("M21-OBSERVED drawer \(rows.joined(separator: ","))")
+        print("SUBSCRIPTIONS-OBSERVED drawer \(rows.joined(separator: ","))")
         XCTAssertEqual(rows, expected["drawer"] as? [String])
         XCTAssertEqual(app.buttons["drawer-SubscriptionFragment"].value as? String, expected["entry_counter"] as? String)
         app.terminate()

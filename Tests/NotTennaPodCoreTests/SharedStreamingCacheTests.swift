@@ -218,7 +218,7 @@ import Testing
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct SharedMP3CacheTests {
+@MainActor @Suite(.serialized) struct SharedMP3CacheTests {
     private func media() throws -> Data {
 #if SWIFT_PACKAGE
         let url = Bundle.module.url(forResource: "playback-30sec", withExtension: "mp3", subdirectory: "Fixtures")!

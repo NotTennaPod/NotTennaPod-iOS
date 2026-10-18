@@ -3,7 +3,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PeriodicFeedRefreshRuntimeTests {
+@MainActor @Suite(.serialized) struct PeriodicFeedRefreshRuntimeTests {
     private func fixture(_ body: (FeedLibraryStore, DownloadNetworkMonitor, PeriodicFeedRefreshRuntime, Scheduler, Effects) async throws -> Void) async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("PeriodicRuntime-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)

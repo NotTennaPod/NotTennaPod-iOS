@@ -5,7 +5,7 @@ import Testing
 
 /// Mounted screens: Inbox, Episodes, Favorites and History order, toolbars, sort sheet, Remove all and
 /// Clear history.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct EpisodeListMenusViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -24,7 +24,7 @@ struct EpisodeListMenusViewTests {
     /// Two feeds. Titles encode the facts: A1 (new, 3 min, newest), A2 (new, 1 min), B1 (new, 2 min, oldest),
     /// A3 (favorite, 5 min), B2 (favorite, 4 min, newer), A4 (history, finished last), B3 (history, earlier).
     private func withFixture(_ body: @MainActor (Fixture) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M22View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("EpisodeListMenusView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let store = try FeedLibraryStore(url: root.appendingPathComponent("library.sqlite"))

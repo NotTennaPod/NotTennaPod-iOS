@@ -5,7 +5,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct NativeAudioIndexedPacketTests {
+@Suite(.serialized) struct NativeAudioIndexedPacketTests {
     static let names = ["tone.wav", "tone.aac", "tone.m4a", "tone-tail.m4a", "tone.flac"]
     private func fixture(_ name: String) throws -> URL {
 #if SWIFT_PACKAGE

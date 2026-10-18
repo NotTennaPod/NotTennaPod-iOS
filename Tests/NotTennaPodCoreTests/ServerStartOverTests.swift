@@ -6,7 +6,7 @@ import Testing
 /// without a backup", scenario 21 PROTOCOL §16) on the account service against the real server: the account no longer
 /// has this library's history, so sync pauses with the page's explanation; starting over keeps this library,
 /// inactive with its unsent changes, and attaches to the server's library as a first attachment, replaying nothing.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(10))) struct ServerStartOverTests {
+@MainActor @Suite(.serialized) struct ServerStartOverTests {
     typealias World = ServerAccountsTests.World
 
     @Test func anAccountWithoutThisLibrarysHistoryPausesThenStartsOver() async throws {

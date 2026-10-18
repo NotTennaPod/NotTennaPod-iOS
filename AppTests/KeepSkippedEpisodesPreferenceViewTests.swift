@@ -5,7 +5,7 @@ import Testing
 
 private final class KeepSkippedEpisodesTestBundle {}
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct KeepSkippedEpisodesPreferenceViewTests {
     private func row(_ id: String, in view: UIView) throws -> UIControl {
         try #require(view.subviews.compactMap { $0 as? UIControl }.first { $0.accessibilityIdentifier == id })

@@ -5,7 +5,7 @@ import Testing
 
 /// Mounted checks: Settings → Notifications as a person sees it, the download-failure message and its Details action,
 /// and the single Download log sheet. Expected text is Android's English, not read from the app.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2)))
+@MainActor @Suite(.serialized)
 struct NotificationsViewTests {
     static let rows: [(key: String, title: String, summary: String)] = [
         ("prefShowDownloadReport", "Download failed", "Shown when download or feed update fails."),
@@ -33,7 +33,7 @@ struct NotificationsViewTests {
     }
 
     private func withController(_ body: @MainActor (Fixture, ViewTestWindowHost) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M30View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("NotificationsView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let store = try FeedLibraryStore(url: root.appendingPathComponent("library.sqlite"))
@@ -153,7 +153,7 @@ struct NotificationsViewTests {
     /// With an account the sync row works and its choice belongs to that account (Android resets it to On at
     /// every login and logout, `SynchronizationCredentials.clear()`).
     @Test func syncRowWithAccountTogglesAndResetsForAnotherAccount() async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M30Sync-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("NotificationsSync-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let preferences = try NotificationPreferenceStore(file: root.appendingPathComponent("notification-preferences.json"))

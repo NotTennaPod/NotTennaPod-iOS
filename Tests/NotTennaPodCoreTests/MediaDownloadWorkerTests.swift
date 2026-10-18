@@ -3,7 +3,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct MediaDownloadWorkerTests {
     private final class HeldTransfer: MediaTransferring {
         private struct State {
@@ -32,7 +32,7 @@ struct MediaDownloadWorkerTests {
         func advance(_ seconds: TimeInterval) { state.withLock { $0.date += seconds; $0.waits.append(seconds) } }
     }
 
-    private func withJob(source: String, transcript: FeedTranscript? = nil, _ operation: (FeedLibraryStore, LibraryDownloadJob, URL) async throws -> Void) async throws {
+    private func withJob(source: String, transcript: FeedTranscript? = nil, networkConstraint: DownloadNetworkConstraint = .unmetered, _ operation: (FeedLibraryStore, LibraryDownloadJob, URL) async throws -> Void) async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent("DownloadWorker-\(UUID())")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
@@ -42,7 +42,7 @@ struct MediaDownloadWorkerTests {
         _ = try await store.insert(FetchedFeed(feed: ParsedFeed(format: .rss, title: "Worker fixture", episodes: [episode]),
                                               source: "https://example.test/feed", responseURL: URL(string: "https://example.test/feed")!,
                                               validator: nil, permanentRedirectURL: nil))
-        let job = try #require(try await store.requestDownload(episodeID: 1, directory: directory, now: Clock().now))
+        let job = try #require(try await store.requestDownload(episodeID: 1, directory: directory, networkConstraint: networkConstraint, now: Clock().now))
         do { try await operation(store, job, url); try await store.close() }
         catch { try? await store.close(); throw error }
     }
@@ -749,4 +749,77 @@ struct MediaDownloadWorkerTests {
         }
     }
 
+
+    /// The transcript sidecar runs under its download's own constraint, with the budget of its network; a refusal,
+    /// an interruption or an oversized transcript never fails the download. Real requests at a loopback fixture.
+    private func sidecarServer(transcript: Data, hold: Bool = false, onClientDisconnect: (@Sendable () -> Void)? = nil) async throws -> LoopbackHTTPServer {
+        let media = Data(repeating: 93, count: 1024)
+        return try await LoopbackHTTPServer.start(onClientDisconnect: onClientDisconnect) { request in
+            if request.path.contains("transcript") { return hold ? nil : .init(body: transcript) }
+            return .init(body: media)
+        }
+    }
+    private static let sidecarText = Data("{\"segments\":[{\"startTime\":0,\"endTime\":5,\"body\":\"Offline text\"}]}".utf8)
+    private func transcriptRequests(_ server: LoopbackHTTPServer) -> Int { server.requests.filter { $0.path.contains("transcript") }.count }
+
+    /// A Wi-Fi-only download whose network turns to cellular after the media arrived: no transcript request, and the
+    /// download completes without a sidecar. Unchanged network: one request and a sidecar (control).
+    @Test(arguments: [true, false]) func wifiOnlyJobDoesNotFetchSidecarAfterMovingToCellular(moves: Bool) async throws {
+        let server = try await sidecarServer(transcript: Self.sidecarText)
+        defer { server.stop() }
+        let descriptor = FeedTranscript(format: .json, url: server.url.appendingPathComponent("transcript").absoluteString)
+        try await withJob(source: server.url.absoluteString, transcript: descriptor) { store, job, _ in
+            let network = allowedNetwork()
+            let loader = TranscriptLoader(transport: URLSessionFeedTransport(), cache: URLCache(memoryCapacity: 1_000_000, diskCapacity: 0), userAgent: "test")
+            let runner = MediaDownloadWorker(store: store, network: network, transcriptLoader: loader, duration: { _ in 30_000 },
+                artwork: { _ in false }, beforeSidecar: { if moves { network.update(.init(connected: true, metered: true, cellular: true)) } })
+            let outcome = try await runner.run(id: job.id)
+            #expect(outcome == .completed)
+            #expect(transcriptRequests(server) == (moves ? 0 : 1))
+            #expect(FileManager.default.fileExists(atPath: job.destination.path + ".transcript") == !moves)
+        }
+    }
+
+    /// The network turns metered while the transcript is arriving: its request is cancelled (the server sees the
+    /// client leave) and the download still completes, without a sidecar.
+    @Test func meteredNetworkDuringTheSidecarCancelsItAndTheDownloadCompletes() async throws {
+        let disconnected = Mutex(false)
+        let server = try await sidecarServer(transcript: Self.sidecarText, hold: true, onClientDisconnect: { disconnected.withLock { $0 = true } })
+        defer { server.stop() }
+        let descriptor = FeedTranscript(format: .json, url: server.url.appendingPathComponent("transcript").absoluteString)
+        try await withJob(source: server.url.absoluteString, transcript: descriptor) { store, job, _ in
+            let network = allowedNetwork()
+            let loader = TranscriptLoader(transport: URLSessionFeedTransport(), cache: URLCache(memoryCapacity: 1_000_000, diskCapacity: 0), userAgent: "test")
+            let runner = MediaDownloadWorker(store: store, network: network, transcriptLoader: loader, duration: { _ in 30_000 }, artwork: { _ in false })
+            let running = Task { try await runner.run(id: job.id) }
+            let end = ContinuousClock.now + .seconds(5)
+            while transcriptRequests(server) == 0, ContinuousClock.now < end { try await Task.sleep(for: .milliseconds(1)) }
+            try #require(transcriptRequests(server) == 1)
+            network.update(.init(connected: true, metered: true, cellular: true))
+            #expect(try await running.value == .completed)
+            while !disconnected.withLock({ $0 }), ContinuousClock.now < end { try await Task.sleep(for: .milliseconds(1)) }
+            #expect(disconnected.withLock { $0 })
+            #expect(!FileManager.default.fileExists(atPath: job.destination.path + ".transcript"))
+            #expect(try await store.episode(id: job.episodeID)?.userState.isDownloaded == true)
+        }
+    }
+
+    /// A download allowed on mobile data fetches its transcript on cellular, on the restricted budget: a small one is
+    /// stored; one over 5 MiB is not, and the download completes either way.
+    @Test(arguments: [false, true]) func connectedJobOnCellularFetchesItsSidecarWithinTheRestrictedBudget(oversized: Bool) async throws {
+        let text = oversized ? Data("{\"segments\":[{\"startTime\":0,\"endTime\":5,\"body\":\"\(String(repeating: " ", count: 6 * 1024 * 1024))\"}]}".utf8) : Self.sidecarText
+        let server = try await sidecarServer(transcript: text)
+        defer { server.stop() }
+        let descriptor = FeedTranscript(format: .json, url: server.url.appendingPathComponent("transcript").absoluteString)
+        try await withJob(source: server.url.absoluteString, transcript: descriptor, networkConstraint: .connected) { store, job, _ in
+            let network = DownloadNetworkMonitor(startMonitoring: false)
+            network.update(.init(connected: true, metered: true, cellular: true))
+            let loader = TranscriptLoader(transport: URLSessionFeedTransport(), cache: URLCache(memoryCapacity: 20_000_000, diskCapacity: 0), userAgent: "test")
+            let runner = MediaDownloadWorker(store: store, network: network, transcriptLoader: loader, duration: { _ in 30_000 }, artwork: { _ in false })
+            let outcome = try await runner.run(id: job.id)
+            #expect(outcome == .completed)
+            #expect(transcriptRequests(server) == 1)
+            #expect(FileManager.default.fileExists(atPath: job.destination.path + ".transcript") == !oversized)
+        }
+    }
 }

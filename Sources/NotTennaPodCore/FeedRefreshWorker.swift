@@ -98,7 +98,8 @@ public struct FeedRefreshWorker: Sendable {
 
     private func execute(_ request: FeedRefreshRequest) async throws {
         try await emit(.prepareNotifications, request)
-        var feeds = request.eligibleFeeds(from: try await store.feeds(), now: clock())
+        // Headers only: choosing the feeds decodes no episode (each refresh reads what it needs of its own feed).
+        var feeds = request.eligibleFeeds(from: try await store.feedHeaders(), now: clock())
         if request.periodic?.allowMobile == false,
            feeds.contains(where: { !$0.source.isLocalFeedSource }),
            try await network.observedState().restricted {

@@ -4,10 +4,11 @@ import Testing
 
 struct QueueManualInteractionTests {
     private enum StoredCell: Equatable {
-        case integer(Int64), text([UInt16]), blob(Data), null
+        case integer(Int64), real(UInt64), text([UInt16]), blob(Data), null
         init(_ value: LibrarySQLValue) {
             switch value {
             case .integer(let value): self = .integer(value)
+            case .real(let value): self = .real(value.bitPattern)
             case .text(let value): self = .text(Array(value.utf16))
             case .blob(let value): self = .blob(value)
             case .null: self = .null

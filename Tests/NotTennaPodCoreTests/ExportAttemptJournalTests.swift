@@ -9,7 +9,7 @@ import Testing
 @Suite(.serialized)
 struct ExportAttemptJournalTests {
     private func folder() throws -> URL {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("K5d-\(UUID())", isDirectory: true)
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ExportAttemptJournal-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: root.appendingPathComponent("Documents"), withIntermediateDirectories: true)
         return root
     }

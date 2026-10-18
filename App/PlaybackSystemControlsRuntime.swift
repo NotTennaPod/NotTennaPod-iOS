@@ -186,7 +186,7 @@ import OSLog
             if let state, let episode = playback.episode {
                 metadataTask = Task { [weak self, library] in
                     guard let feedID = try? await library.feedID(forEpisode: episode.id),
-                          let feed = try? await library.playbackFeed(id: feedID), !Task.isCancelled,
+                          let feed = try? await library.playbackFeedHeader(id: feedID), !Task.isCancelled,
                           let self, active, controls.snapshot?.identity == state.identity else { return }
                     self.feed = feed
                     // Lock-screen artwork is 512 px: load the large decode, not the 400 px row size.
@@ -218,13 +218,13 @@ import OSLog
         commands.changePlaybackRateCommand.isEnabled = offered.changeRate
         commands.skipForwardCommand.preferredIntervals = [NSNumber(value: intervals.value.forwardSeconds)]
         commands.skipBackwardCommand.preferredIntervals = [NSNumber(value: intervals.value.rewindSeconds)]
-        // Android's speed button steps through the chosen speeds (M3PS:594–614); system rate controls
+        // Android's speed button steps through the chosen speeds (`Media3PlaybackService.setNextPlaybackSpeed`); system rate controls
         // step through these supported rates.
         commands.changePlaybackRateCommand.supportedPlaybackRates = offered.supportedRates.map { NSNumber(value: $0) }
     }
 
     /// Setting `nowPlayingInfo` makes iOS re-encode the artwork (7–14 % CPU when done on every playback tick,
-    /// 2026-10-01 device profile). It is set only when something shown changes or the position leaves the
+    /// a device profile). It is set only when something shown changes or the position leaves the
     /// track iOS extrapolates from the published position and rate (seeks, stalls).
     private func publishNowPlaying(_ state: PlaybackSystemSnapshot?) {
         guard let state else {

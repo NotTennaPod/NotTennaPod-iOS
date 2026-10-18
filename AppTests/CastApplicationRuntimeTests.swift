@@ -2,6 +2,8 @@ import UIKit
 import XCTest
 import GoogleCast
 import ObjectiveC
+import Testing
+import Synchronization
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
@@ -928,6 +930,301 @@ import ObjectiveC
         XCTAssertTrue(options.suspendSessionsWhenBackgrounded)
         for name in ["castSession:didReceiveMultizoneStatus:", "castSession:didAddMultizoneDevice:", "castSession:didUpdateMultizoneDevice:", "castSession:didRemoveMultizoneDeviceWithID:", "sessionManager:willStartCastSession:", "sessionManager:castSession:didReceiveDeviceVolume:muted:", "sessionManager:session:didUpdateDevice:"] {
             XCTAssertNotNil(class_getInstanceMethod(GoogleCastApplicationSession.self, NSSelectorFromString(name)), name)
+        }
+    }
+}
+
+/// A relayed cast asks the existing Once/Always confirmation before any relay or receiver LOAD, whichever way the
+/// relay is needed (a session connecting with an episode selected, a selection, a reload, a restoration); a public
+/// enclosure is cast by its own URL with no confirmation and no request from the phone.
+@MainActor @Suite(.serialized)
+struct CastRelayAdmissionJourneyTests {
+    typealias Session = CastApplicationRuntimeTests.Session
+    typealias Local = RoutedPlaybackEngineTests.Engine
+    private final class Vault: SynchronizationCredentialStore, Sendable {
+        let values = Mutex<[UUID: String]>([:])
+        func insert(_ password: String, id: UUID) { values.withLock { $0[id] = password } }
+        func password(id: UUID) throws -> String { try values.withLock { guard let value = $0[id] else { throw URLError(.userAuthenticationRequired) }; return value } }
+        func remove(id: UUID) { _ = values.withLock { $0.removeValue(forKey: id) } }
+    }
+    private final class Count: Sendable {
+        let value = Mutex(0)
+        func increment() { value.withLock { $0 += 1 } }
+        var count: Int { value.withLock { $0 } }
+    }
+    @MainActor private final class Prompts { var episodes: [Int64] = [] }
+    /// Called whenever the player reads its preferences (a pause's save reads them as it begins).
+    @MainActor private final class PreferenceReads {
+        weak var player: PlaybackCoordinator?
+        var hook: (@MainActor (PlaybackCoordinator) -> Void)?
+    }
+    private struct Harness {
+        let store: FeedLibraryStore, auth: FeedAuthentication, mobile: MobileNetworkPreferenceStore
+        let network: DownloadNetworkMonitor, player: PlaybackCoordinator, routes: RoutedPlaybackEngine, local: Local
+        let access: CastMediaAccessOwner, relays: Count, publisher: LoopbackHTTPServer, enclosure: String
+        let episode: LibraryEpisode, other: LibraryEpisode, prompts: Prompts, directory: URL, reads: PreferenceReads
+    }
+    private static let cellular = DownloadNetworkState(connected: true, metered: true, cellular: true)
+
+    private func wait(_ predicate: () async throws -> Bool, sourceLocation: SourceLocation = #_sourceLocation) async throws {
+        let deadline = ContinuousClock.now + .seconds(5)
+        while try await !predicate(), ContinuousClock.now < deadline { try await Task.sleep(for: .milliseconds(5)) }
+        try #require(try await predicate(), sourceLocation: sourceLocation)
+    }
+    private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
+        if view.accessibilityIdentifier == id, let value = view as? T { return value }
+        for child in view.subviews { if let value: T = find(id, in: child) { return value } }
+        return nil
+    }
+
+    /// A library on a restricted network with Streaming off; the feed has stored credentials when `credentials`.
+    private func withHarness(credentials: Bool, downloaded: Bool, _ body: (Harness) async throws -> Void) async throws {
+        let directory = URL.temporaryDirectory.appendingPathComponent("cast-journey-\(UUID())")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let publisher = try await LoopbackHTTPServer.start { _ in .init(body: Data("publisher audio".utf8)) }
+        defer { publisher.stop() }
+        let enclosure = "http://127.0.0.1:\(publisher.url.port!)/media.mp3"
+        let store = try FeedLibraryStore(url: directory.appendingPathComponent("library.sqlite"))
+        do {
+            let feed = try await store.insert(FetchedFeed(feed: .init(format: .rss, title: "Cast feed", episodes: [
+                .init(identifier: "1", title: "Cast episode", media: .init(url: enclosure, size: 25, durationMilliseconds: 100_000)),
+                .init(identifier: "2", title: "Other episode", media: .init(url: enclosure + "?2", size: 25, durationMilliseconds: 100_000))]),
+                source: "https://publisher.invalid/feed", responseURL: URL(string: "https://publisher.invalid/feed")!,
+                validator: nil, permanentRedirectURL: nil))
+            let id = feed.episodes[0].id
+            let auth = FeedAuthentication(store: store, vault: Vault())
+            if credentials { try await auth.save(.init(username: "publisher", password: "fixture"), feedID: feed.id) }
+            if downloaded {
+                for item in feed.episodes {
+                    try await store.updateEpisode(id: item.id) { $0.userState.isDownloaded = true; $0.userState.localFileURL = "file:///app/downloaded.mp3" }
+                }
+            }
+            let mobile = try MobileNetworkPreferenceStore(file: directory.appendingPathComponent("mobile.json"))
+            try mobile.updateAllowed(["images"])
+            let network = DownloadNetworkMonitor(startMonitoring: false)
+            network.update(Self.cellular)
+            let local = Local(); local.automaticReady = true
+            let routes = RoutedPlaybackEngine(local: local)
+            // As the app does: the coordinator's own check skips casting; the relay decides in the access owner.
+            let streaming = StreamingAccessProvider(preferences: mobile, network: network)
+            let reads = PreferenceReads()
+            let player = PlaybackCoordinator(store: store, engine: routes, preferences: { [reads] _ in
+                if let player = reads.player { reads.hook?(player) }
+                return .init()
+            }, streamingAccess: { [routes] episode in
+                var access = try await streaming.access(for: episode)
+                access.isCasting = routes.isRemote
+                return access
+            })
+            let admission = AuxiliaryNetworkAdmission(network: network, preferences: mobile,
+                onceAdmittedEpisodeID: { [weak player] in player?.onceAdmittedEpisodeID })
+            reads.player = player
+            let relays = Count()
+            let access = CastMediaAccessOwner(store: store, authentication: auth, network: .init(configuration: .init()),
+                userAgent: "AntennaPod/test", admission: admission, resolveEndpoint: {
+                    relays.increment(); return try await ReceiverNetworkRoute.endpoint(address: $0.address, port: $0.port)
+                })
+            let prompts = Prompts(), events = player.events()
+            let listener = Task { for await event in events { if case .streamingConfirmationRequired(let id) = event { prompts.episodes.append(id) } } }
+            defer { listener.cancel() }
+            let episode = try #require(try await store.episode(id: id))
+            let other = try #require(try await store.episode(id: feed.episodes[1].id))
+            try await body(Harness(store: store, auth: auth, mobile: mobile, network: network, player: player, routes: routes,
+                local: local, access: access, relays: relays, publisher: publisher, enclosure: enclosure, episode: episode,
+                other: other, prompts: prompts, directory: directory, reads: reads))
+            reads.hook = nil
+            try await player.stop(); routes.unload()
+            try await store.close()
+        } catch { try? await store.close(); throw error }
+    }
+
+    /// The binding-level journey: a downloaded episode of a feed with credentials plays locally; a Cast session connects
+    /// on a restricted network with Streaming off. Nothing is relayed and the receiver gets no LOAD until the person
+    /// answers the existing dialog. Its real Once (or Always) action then gives exactly one relay and one LOAD, and asks
+    /// no second time.
+    @Test(arguments: ["streamingOnce", "streamingAlways"])
+    func routeTransferAsksBeforeRelayingADownloadedCredentialedEpisode(choice: String) async throws {
+        try await withHarness(credentials: true, downloaded: true) { h in
+            let time = try TimeDisplayPreferenceStore(file: h.directory.appendingPathComponent("time.json"))
+            let root = LibraryViewController(library: h.store, startupError: nil, downloads: nil, playback: h.player,
+                timeDisplayPreferences: time, navigationPreferences: nil, speedPreferences: nil,
+                mobileNetworkPreferences: h.mobile, usage: nil, feedAuthentication: h.auth)
+            let session = Session()
+            let runtime = CastApplicationRuntime(session: session, player: h.player, routes: h.routes, media: h.access)
+            try await withViewTestWindow { host, _ in
+                host.addChild(root); host.view.addSubview(root.view); root.didMove(toParent: host)
+                root.view.frame = host.view.bounds; root.view.layoutIfNeeded()
+                await root.reloadLibrary()?.value
+                try await h.player.select(episodeID: h.episode.id, play: true)
+                try await wait { h.player.phase == .playing }
+                h.local.advance(to: 21_000); try await h.player.awaitPendingOperations()
+                #expect(h.local.loaded.count == 1 && h.prompts.episodes.isEmpty, "a downloaded episode plays locally without asking")
+                session.connect()
+                try await wait { root.presentedViewController is SourceMessageController && root.presentedViewController?.isBeingPresented == false }
+                #expect(h.relays.count == 0 && session.client.loads.isEmpty, "no relay and no LOAD before consent")
+                #expect(h.player.pendingStreamingEpisodeID == h.episode.id && h.prompts.episodes == [h.episode.id])
+                #expect(h.player.sample?.positionMilliseconds == 21_000)
+                let prompt = try #require(root.presentedViewController)
+                let button: UIButton = try #require(find(choice, in: prompt.view))
+                button.sendActions(for: .touchUpInside)
+                try await wait { session.client.loads.count == 1 }
+                #expect(h.relays.count == 1)
+                #expect(session.client.loadData(session.client.loads[0]).startTime == 21)
+                session.client.finishLoad(session.client.loads[0], state: .playing, position: 21_000)
+                try await wait { h.player.phase == .playing && root.presentedViewController == nil }
+                try await h.player.awaitPendingOperations()
+                #expect(h.prompts.episodes == [h.episode.id], "no second prompt")
+                #expect(session.client.loads.count == 1 && h.relays.count == 1)
+                #expect(h.mobile.allows(.streaming) == (choice == "streamingAlways"))
+                #expect(h.player.onceAdmittedEpisodeID == h.episode.id)
+                #expect(h.publisher.requests.isEmpty, "the relay fetches only when the receiver asks")
+            }
+            runtime.end(stopReceiver: true)
+        }
+    }
+
+    /// The same transfer for a public episode: no prompt, one LOAD with the publisher's URL, no relay, and no request
+    /// from the phone to the publisher.
+    @Test func publicTransferIsCastByItsEnclosureWithoutAsking() async throws {
+        try await withHarness(credentials: false, downloaded: true) { h in
+            let session = Session()
+            let runtime = CastApplicationRuntime(session: session, player: h.player, routes: h.routes, media: h.access)
+            try await h.player.select(episodeID: h.episode.id, play: true)
+            try await wait { h.player.phase == .playing }
+            session.connect()
+            try await wait { session.client.loads.count == 1 }
+            let information = session.client.loadData(session.client.loads[0]).queueData!.items![0].mediaInformation
+            #expect(information.contentID == h.enclosure)
+            #expect(information.metadata?.string(forKey: CastMediaItemCodec.localFileURLKey) == "file:///app/downloaded.mp3")
+            session.client.finishLoad(session.client.loads[0], state: .playing, position: 3_000)
+            try await wait { h.player.phase == .playing }
+            #expect(h.prompts.episodes.isEmpty && h.player.pendingStreamingEpisodeID == nil)
+            #expect(h.relays.count == 0 && h.publisher.requests.isEmpty)
+            runtime.end(stopReceiver: true)
+        }
+    }
+
+    /// Selecting a relayed episode while already casting asks; Once relays it once. Pause and resume reuse the live
+    /// relay. After a stop, the reload asks again (consent ended with its load).
+    @Test func selectionResumeAndReloadWhileCasting() async throws {
+        try await withHarness(credentials: true, downloaded: false) { h in
+            let session = Session()
+            let runtime = CastApplicationRuntime(session: session, player: h.player, routes: h.routes, media: h.access)
+            session.connect()
+            #expect(h.routes.isRemote)
+            try await h.player.select(episodeID: h.episode.id, play: true)
+            try await wait { h.player.pendingStreamingEpisodeID == h.episode.id }
+            #expect(h.relays.count == 0 && session.client.loads.isEmpty && h.prompts.episodes == [h.episode.id])
+            try await h.player.play() // Once
+            try await wait { session.client.loads.count == 1 }
+            session.client.finishLoad(session.client.loads[0], state: .playing, position: 5_000)
+            try await wait { h.player.phase == .playing }
+            #expect(h.relays.count == 1)
+            try await h.player.pause()
+            try await h.player.play()
+            try await h.player.awaitPendingOperations()
+            #expect(h.relays.count == 1 && session.client.loads.count == 1, "the live relay is reused")
+            #expect(h.prompts.episodes == [h.episode.id])
+            try await h.player.stop()
+            try await h.player.play()
+            try await wait { h.player.pendingStreamingEpisodeID == h.episode.id }
+            #expect(h.relays.count == 1 && session.client.loads.count == 1)
+            #expect(h.prompts.episodes == [h.episode.id, h.episode.id])
+            runtime.end(stopReceiver: true)
+        }
+    }
+
+    /// A relaunch finds the receiver playing a relayed item with no live lease, and the network does not admit a new
+    /// relay: the receiver's item is stopped and the episode asks, at the receiver's position, which Once resumes. A
+    /// receiver playing a public enclosure is adopted with no prompt and no LOAD.
+    @Test(arguments: [true, false])
+    func restorationAsksAtTheReceiverPositionOrAdoptsADirectItem(credentials: Bool) async throws {
+        try await withHarness(credentials: credentials, downloaded: false) { h in
+            let client = CastPlaybackEngineTests.Client()
+            client.snapshot = .init(mediaID: String(h.episode.id), loadID: nil, mediaSessionID: 42,
+                positionMilliseconds: 60_000, durationMilliseconds: 100_000, state: .playing, speed: 1,
+                contentURL: credentials ? "http://127.0.0.1:9/old-relay" : h.enclosure)
+            var problems: [String] = []
+            let controller = CastReceiverSessionController(player: h.player, routes: h.routes, automaticallyPoll: false,
+                mediaAccess: h.access, prepareMedia: h.access.prepare, onProblem: { problems.append($0) })
+            controller.receive(.connected(.init(identity: .init(deviceID: "receiver", sessionID: "session"), client: client,
+                media: nil, status: client.snapshot, receiverAddress: .init(address: "127.0.0.1", port: 8009)), resumed: true))
+            try await wait { client.requests.count == 1 }
+            client.requests[0].callback(.completed)
+            await controller.awaitRestoration()
+            try await h.player.awaitPendingOperations()
+            #expect(controller.unresolved == nil && problems.isEmpty)
+            guard credentials else {
+                #expect(client.loads.isEmpty && h.relays.count == 0 && h.prompts.episodes.isEmpty)
+                #expect(h.player.episode?.id == h.episode.id && h.player.phase == .playing)
+                #expect(h.publisher.requests.isEmpty)
+                return
+            }
+            try await wait { h.player.pendingStreamingEpisodeID == h.episode.id }
+            #expect(client.requests.contains { if case .stop = $0.command { true } else { false } }, "the stale item is stopped")
+            #expect(client.loads.isEmpty && h.relays.count == 0)
+            #expect(h.player.phase == .awaitingStreamingConfirmation && h.player.sample?.positionMilliseconds == 60_000)
+            try await h.player.play() // Once
+            try await wait { client.loads.count == 1 }
+            #expect(client.loadData(client.loads[0]).startTime == 60, "resumes where the receiver was")
+            #expect(h.relays.count == 1 && h.prompts.episodes == [h.episode.id])
+        }
+    }
+
+    /// A denied restoration settles the phone's current playback before it installs the receiver's route. A person's
+    /// command meanwhile (here while that pause is being saved) wins: selecting another episode plays it; a seek or an
+    /// interval skip lands on the item still loaded here. The restoration gives up before retiring anything, the
+    /// receiver gets no STOP and no LOAD, the route is not installed, and nothing asks.
+    @Test(arguments: ["select", "seek", "skip"])
+    func deniedRestorationYieldsToACommandMadeWhileItSettlesPlayback(command: String) async throws {
+        try await withHarness(credentials: true, downloaded: true) { h in
+            try await h.player.select(episodeID: h.episode.id, play: true)
+            try await wait { h.player.phase == .playing }
+            h.local.advance(to: 10_000); try await h.player.awaitPendingOperations()
+            let client = CastPlaybackEngineTests.Client()
+            client.snapshot = .init(mediaID: String(h.episode.id), loadID: nil, mediaSessionID: 42,
+                positionMilliseconds: 60_000, durationMilliseconds: 100_000, state: .playing, speed: 1,
+                contentURL: "http://127.0.0.1:9/old-relay")
+            let controller = CastReceiverSessionController(player: h.player, routes: h.routes, automaticallyPoll: false,
+                mediaAccess: h.access, prepareMedia: h.access.prepare, onProblem: { Issue.record("\($0)") })
+            @MainActor final class Selection { var task: Task<Void, any Error>? }
+            let selection = Selection()
+            h.reads.hook = { [other = h.other] player in
+                // The pause's save begins: the person acts.
+                guard selection.task == nil, !player.wantsPlayback else { return }
+                selection.task = Task {
+                    switch command {
+                    case "select": try await player.select(episodeID: other.id, play: true)
+                    case "seek": try await player.seek(to: 70_000)
+                    default: try await player.skipInterval(seconds: 30)
+                    }
+                }
+            }
+            controller.receive(.connected(.init(identity: .init(deviceID: "receiver", sessionID: "session"), client: client,
+                media: nil, status: client.snapshot, receiverAddress: .init(address: "127.0.0.1", port: 8009)), resumed: true))
+            try await wait { client.requests.count == 1 }
+            client.requests[0].callback(.completed)
+            await controller.awaitRestoration()
+            try await wait { selection.task != nil }
+            try await selection.task?.value
+            try await h.player.awaitPendingOperations()
+            if command == "select" {
+                #expect(h.player.episode?.id == h.other.id && h.player.phase == .playing, "the newer selection stays")
+                #expect(h.local.loaded.last?.0.id == h.other.id)
+            } else {
+                // The item stays loaded here, paused by the restoration's settling, where the person moved it.
+                let target: Int32 = command == "seek" ? 70_000 : 40_000
+                #expect(h.player.episode?.id == h.episode.id && h.player.phase == .paused)
+                #expect(h.local.generation != nil && h.local.loaded.count == 1 && h.local.position == target)
+                #expect(h.player.sample?.positionMilliseconds == target)
+                try await h.player.play()
+                #expect(h.player.phase == .playing && h.local.wantsPlayback, "still usable")
+            }
+            #expect(!h.routes.isRemote)
+            #expect(!client.requests.contains { if case .stop = $0.command { true } else { false } }, "no stale STOP")
+            #expect(client.loads.isEmpty && h.relays.count == 0 && h.prompts.episodes.isEmpty)
+            #expect(controller.unresolved == nil)
         }
     }
 }

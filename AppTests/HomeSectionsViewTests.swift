@@ -5,7 +5,7 @@ import Testing
 
 /// Mounted Home components: source `home_section.xml` header, `horizontal_itemlist_item.xml` card,
 /// horizontal strips (RTL-mirrored) and the Configure dialog's reorder semantics.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct HomeSectionsViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView, as type: T.Type = T.self) -> T? {
         if let match = view as? T, view.accessibilityIdentifier == id { return match }

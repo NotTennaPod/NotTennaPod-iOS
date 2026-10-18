@@ -1,4 +1,4 @@
 # The NotTennaPod-Web commit of the release candidate (PROTOCOL §16), with the web actor the hub drives
 # (docs/ACTOR-PROTOCOL.md, protocol 1). `Tools/ntp-server.sh --with-web` builds it from an archived copy of the
 # sibling checkout into internal/webui/dist of the pinned server and into .work/ntp-web/<commit>/ for the actor.
-9c8f0787a0c49cff04113af18cecb6ef3538fa34
+b352bacaa091055214efbf3b304b78fcf0c4064b

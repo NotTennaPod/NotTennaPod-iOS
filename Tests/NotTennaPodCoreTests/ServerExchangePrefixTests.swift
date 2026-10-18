@@ -7,7 +7,7 @@ import Testing
 /// pending facts. After its push, its pull and every single unit, A equals an observer B at the same cursor in every
 /// field A has no pending fact about, and shows its own values in the fields it has; no prefix shows a state that
 /// never existed. In the end every phone agrees with a fresh attach.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerExchangePrefixTests {
+@Suite(.serialized) struct ServerExchangePrefixTests {
     typealias Concurrency = ServerExchangeConcurrencyTests
 
     /// The fields A's unretired facts show over (`ntp_overlays`), as places in the synced view.

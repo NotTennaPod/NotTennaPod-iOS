@@ -47,14 +47,48 @@ final class ServerOutboxWriter {
     let database: LibrarySQLite
     let context: ServerLibraryContext
     private let failAfter: Int?
+    private let boundOverride: Int?
     private(set) var writes = 0
+    /// The largest fact this library numbers (PROTOCOL §6.13): the framed bound the server advertised, at most 8 MiB. A fact
+    /// over it is never numbered (`factTooLarge`), so nothing the server can never accept blocks the outbox.
+    private(set) lazy var factBound: Int = boundOverride ?? (try? Self.storedFactBound(database)) ?? ServerBounds().factBound
 #if DEBUG
     /// The outbox entries this writer added, for the hub bridge once their transaction commits.
     private(set) var exported: [ServerDebugHooks.Export] = []
 #endif
 
-    init(database: LibrarySQLite, context: ServerLibraryContext, failAfter: Int?) {
-        self.database = database; self.context = context; self.failAfter = failAfter
+    /// `factBound`: a test's bound in place of the advertised one.
+    init(database: LibrarySQLite, context: ServerLibraryContext, failAfter: Int?, factBound: Int? = nil) {
+        self.database = database; self.context = context; self.failAfter = failAfter; boundOverride = factBound
+    }
+
+    /// The fact bound of the bounds the server last advertised (`ntp_library.bounds`).
+    static func storedFactBound(_ database: LibrarySQLite) throws -> Int {
+        let stored = try database.rows("SELECT bounds FROM ntp_library WHERE id = 1").first?.first?.data
+        return ServerBounds(try stored.map { try ContractJSON.decode($0) }).factBound
+    }
+
+    /// Refuses a fact of `bytes` canonical bytes over the bound, before anything of it is written.
+    func checkFactSize(_ bytes: Int, type: String) throws {
+        guard bytes > factBound else { return }
+        throw ServerRecordingError.factTooLarge(type: type, bytes: bytes)
+    }
+
+    /// The longest ID a draft's materialization writes in place of a placeholder (an `e0:` episode ID).
+    static let longestMaterializedID = 67
+
+    /// What a draft can grow to once materialized, at most (PROTOCOL §15.2): its template with every placeholder replaced by
+    /// IDs of the longest length (an episode reference's three, a target's two), the dependencies materialization adds (the
+    /// registration's resolution and the chain's predecessor) beside its own, and the fact's envelope.
+    static func materializedEstimate(template: [UInt8], dependencies: Int) -> Int {
+        let marker = Array("\"ntp_".utf8)
+        var placeholders = 0, index = 0
+        while index + marker.count <= template.count {
+            if template[index] == marker[0], Array(template[index..<(index + marker.count)]) == marker { placeholders += 1; index += marker.count }
+            else { index += 1 }
+        }
+        let id = longestMaterializedID + 24
+        return template.count + placeholders * 3 * id + (dependencies + 2) * (longestMaterializedID + 3) + 1_024
     }
 
     func execute(_ sql: String, _ values: [LibrarySQLValue] = []) throws {
@@ -121,6 +155,14 @@ final class ServerOutboxWriter {
                     authorID: String? = nil, opID fixedOpID: String? = nil) throws -> String {
         let opID = fixedOpID ?? ContractIdentity.randomUUID()
         let authorID = authorID ?? context.mainAuthor
+        // A registration author whose chain stopped at a draft too large to number (PROTOCOL §15.2): what follows it on the
+        // chain waits behind it as a draft, never numbered, so it never holds back the outbox.
+        if authorID != context.mainAuthor, let registration = try blockedChain(authorID) {
+            let template: ContractJSON = ["type": .string(type), "targets": .array(ServerFactTarget.sorted(targets).map(\.json)),
+                                          "payload": .object(Self.sanitized(payload)), "secret_ids": .array(secretIDs.map(ContractJSON.string))]
+            return try appendDraft(registrationOp: registration, authorID: authorID, type: type, template: template,
+                                   dependencies: dependencies, overlays: overlays, clientTime: clientTime, now: now, opID: opID)
+        }
         let author = try authorPosition(authorID)
         let fact = Self.fact(opID: opID, authorID: authorID, authorSeq: author.seq, previousOpID: author.previous,
                              dependencies: dependencies, type: type, clientTime: clientTime, targets: targets, payload: payload)
@@ -139,6 +181,7 @@ final class ServerOutboxWriter {
     func insertOutboxEntry(opID: String, authorID: String, authorSeq: Int64, type: String, fact: ContractJSON,
                            secretIDs: [String], now: Int64) throws {
         let bytes = try fact.canonicalBytes()
+        try checkFactSize(bytes.count, type: type)
         let slot = try database.scalar("SELECT next_install_seq FROM ntp_library WHERE id = 1")
         try execute("UPDATE ntp_library SET next_install_seq = next_install_seq + 1 WHERE id = 1")
         try execute("INSERT INTO ntp_outbox(install_seq, op_id, author_id, author_seq, type, fact, content_hash, secret_ids, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -176,10 +219,12 @@ final class ServerOutboxWriter {
                      dependencies: [String] = [], overlays: [ServerOverlay] = [], clientTime: Int64, now: Int64,
                      opID fixedOpID: String? = nil) throws -> String {
         let opID = fixedOpID ?? ContractIdentity.randomUUID()
+        let templateBytes = try template.canonicalBytes()
+        try checkFactSize(Self.materializedEstimate(template: templateBytes, dependencies: dependencies.count), type: type)
         let author = try authorPosition(authorID)
         try execute("INSERT INTO ntp_drafts(op_id, author_id, author_seq, previous_op_id, client_time, registration_op, kind, template, dependencies, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     [.text(opID), .text(authorID), .integer(author.seq), author.previous.map(LibrarySQLValue.text) ?? .null,
-                     .integer(clientTime), .text(registrationOp), .text(type), .blob(Data(try template.canonicalBytes())),
+                     .integer(clientTime), .text(registrationOp), .text(type), .blob(Data(templateBytes)),
                      .text(String(decoding: try JSONEncoder().encode(Self.sortedUnique(dependencies)), as: UTF8.self)), .integer(now)])
         try execute("UPDATE ntp_authors SET next_seq = next_seq + 1, last_op_id = ? WHERE author_id = ?", [.text(opID), .text(authorID)])
         let clock = try nextClock()
@@ -188,6 +233,12 @@ final class ServerOutboxWriter {
         try execute("INSERT INTO ntp_nodes(node_id, knowledge_clock, frontier, kind) VALUES (?, ?, 0, 'draft')", [.text(opID), .integer(clock)])
         try writeOverlays(overlays, opID: opID, clock: clock)
         return opID
+    }
+
+    /// The registration of `authorID`'s chain when a draft on it was too large to number: the chain waits from there.
+    func blockedChain(_ authorID: String) throws -> String? {
+        try database.rows("SELECT d.registration_op FROM ntp_drafts d JOIN ntp_authors a ON a.registration_op = d.registration_op WHERE a.author_id = ? AND d.state = 'refused_too_large' LIMIT 1",
+                          [.text(authorID)]).first?.first?.text
     }
 
     /// The registration's own author, created with it (PROTOCOL §15.4).

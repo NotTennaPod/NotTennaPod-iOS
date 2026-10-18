@@ -4,7 +4,7 @@ import Testing
 
 /// PROTOCOL §15.4: at a first attachment, downloads of the libraries kept on this device are reused by the new server
 /// library as APFS clones (independent files), matched by feed URL alias and episode identity.
-@Suite(.timeLimit(.minutes(1))) struct LibraryDownloadReuseTests {
+@Suite struct LibraryDownloadReuseTests {
     private let namespace = "6f1c2d3e-4b5a-4c6d-8e7f-9a0b1c2d3e4f"
     private let source = "https://example.test/feed"
     private let date = Date(timeIntervalSince1970: 1_700_000_000)

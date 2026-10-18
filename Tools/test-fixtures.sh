@@ -187,14 +187,17 @@ seed_files() {
   mkdir -p "$store"
   # Earlier test exports would trigger the Save picker's replace prompt.
   rm -f "$store"/AntennaPodBackup-*.db(N) "$store"/NotTennaPodBackup-*.db(N) "$store"/antennapod-feeds-*.(opml|html)(N) "$store"/nottennapod-feeds-*.(opml|html)(N) "$store"/antennapod-favorites-*.html(N) "$store"/nottennapod-favorites-*.html(N)
-  cp TestSupport/Data/database-restore/android-3.12.1/emulator-parity-library.db $P/M16/*.db "$store/"
-  rm -rf "$store/M18"; mkdir "$store/M18"
+  # The storage's folders are all this seed's own, made again below: any other folder an earlier seed left (under
+  # another name) would push the journeys' folders out of the picker's view.
+  rm -rf "$store"/*(/N)
+  cp TestSupport/Data/database-restore/android-3.12.1/emulator-parity-library.db $P/DatabaseImport/*.db "$store/"
+  rm -rf "$store/DatabaseExport"; mkdir "$store/DatabaseExport"
   # The OPML journeys use these fixed library IDs (their Files folders are named after them), so each run also
   # starts their app libraries empty; an earlier run's imported subscriptions would otherwise still be there.
   local id app=$(xcrun simctl get_app_container $DEVICE org.nottennapod.app data 2>/dev/null)
   for id in 9A490CDF-7E51-457F-9576-188511EB247C F0483971-C6CE-430B-ACAA-EB6A521272AC C49DFF3B-C214-4EE7-A820-1FFAE7CB4EFF \
             5C4734B7-61CA-487F-B3AC-5ED0BFAE3208 39724F84-202F-4455-9037-1ED941C991C9; do
-    rm -rf "$store/M11-$id"; mkdir "$store/M11-$id"; cp $P/M11/*.opml "$store/M11-$id/"
+    rm -rf "$store/OPML-$id"; mkdir "$store/OPML-$id"; cp $P/OPML/*.opml "$store/OPML-$id/"
     [ -n "$app" ] && rm -rf "$app/Library/Application Support/UITests-$id"
   done
   echo "test-fixtures: Files storage seeded"

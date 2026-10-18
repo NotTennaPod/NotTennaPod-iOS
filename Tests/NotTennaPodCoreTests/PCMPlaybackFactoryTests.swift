@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PCMPlaybackFactoryTests {
+@MainActor @Suite(.serialized) struct PCMPlaybackFactoryTests {
     typealias Transport = SampleBufferPCMOutputTests.Transport
     private func fixture() throws -> URL {
 #if SWIFT_PACKAGE

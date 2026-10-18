@@ -7240,7 +7240,7 @@
     {
      "episode": 1,
      "feed": 1,
-     "item_identifier": "m24-1-1",
+     "item_identifier": "tag-1-1",
      "column": "read",
      "before": -1,
      "after": 0
@@ -7248,7 +7248,7 @@
     {
      "episode": 2,
      "feed": 1,
-     "item_identifier": "m24-1-2",
+     "item_identifier": "tag-1-2",
      "column": "read",
      "before": -1,
      "after": 0
@@ -7256,7 +7256,7 @@
     {
      "episode": 6,
      "feed": 3,
-     "item_identifier": "m24-3-1",
+     "item_identifier": "tag-3-1",
      "column": "read",
      "before": -1,
      "after": 0
@@ -7264,7 +7264,7 @@
     {
      "episode": 7,
      "feed": 3,
-     "item_identifier": "m24-3-2",
+     "item_identifier": "tag-3-2",
      "column": "read",
      "before": -1,
      "after": 0
@@ -7272,7 +7272,7 @@
     {
      "episode": 8,
      "feed": 3,
-     "item_identifier": "m24-3-3",
+     "item_identifier": "tag-3-3",
      "column": "read",
      "before": -1,
      "after": 0

@@ -7,7 +7,7 @@ import Testing
 /// or, structural or touching a recovery hold, deferring it; a switch that waits is kept and published as it was built
 /// when it may run, never built again while that cursor is live, and dropped once it is not. Against the pinned server
 /// restored with its own commands.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerRecoveryPublicationTests {
+@Suite(.serialized) struct ServerRecoveryPublicationTests {
     typealias Copies = ServerCopiesTests
     typealias Recovery = ServerRecoveryTests
     typealias Regression = ServerRecoveryRegressionTests

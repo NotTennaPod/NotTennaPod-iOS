@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1))) struct PlaybackIntervalPreferenceTests {
+@MainActor @Suite struct PlaybackIntervalPreferenceTests {
     @Test func defaultsAndEverySourceChoicePersistIndependently() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

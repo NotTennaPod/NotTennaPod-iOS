@@ -4,14 +4,16 @@ import OSLog
 
 // Statistics: tab bar and pager, Subscriptions, Years and Downloads.
 extension LibraryViewController {
-    /// Loads every page. Years also reloads on each StatisticsEvent (Filter OK, Reset); Downloads
-    /// reloading with them shows the same values.
-    func refreshSubscriptionStatistics() {
+    /// Loads every page: at the screen's open and when it appears again (onStart). On each StatisticsEvent (Filter OK,
+    /// Reset) Subscriptions and Years load again, and Downloads, which loads onStart only, does not. Never on routine
+    /// library changes, as Android's statistics fragments do not listen to them.
+    func refreshSubscriptionStatistics(downloads: Bool = true) {
         guard statisticsVisible else { return }
         statisticsActive = true
+        statisticsLoads += 1
         subscriptionStatistics?.load(preferences: statisticsPreferences?.value ?? .init(), formatter: .init())
         yearStatistics?.load()
-        downloadStatistics?.load()
+        if downloads { downloadStatistics?.load() }
         if !renderingContent { render() }
     }
 
@@ -22,9 +24,11 @@ extension LibraryViewController {
                                         identifiers: ["subscriptions", "years", "downloads"])
         pager.onSelect = { [weak self] index in
             guard let self, let tab = StatisticsTab(rawValue: index), statisticsVisible else { return }
+            let selected = tab != statisticsTab
             statisticsTab = tab
-            // The toolbar menu follows the settled page (PagedToolbarFragment:25–43).
-            render()
+            // The page the person selects appears, and loads against the library now (as each fragment loads in onStart);
+            // the toolbar menu follows the settled page (PagedToolbarFragment:25–43).
+            if selected { refreshSubscriptionStatistics() } else { render() }
         }
         statisticsPagerStorage = pager
         return pager
@@ -171,8 +175,12 @@ extension LibraryViewController {
         do { try statisticsPreferences?.update(.init()) } catch { showError(error); return }
         Task { [weak self] in
             do { try await library.resetPlayedDurationStatistics() }
-            catch { Logger(subsystem: "org.nottennapod.app", category: "Statistics").error("Statistics reset failed: \(String(describing: error), privacy: .public)") }
-            self?.refreshSubscriptionStatistics()
+            catch {
+                Logger(subsystem: "org.nottennapod.app", category: "Statistics").error("Statistics reset failed: \(String(describing: error), privacy: .public)")
+                // Refused because listening the server refused would be left out: the person is told where to resolve it.
+                if ServerSynchronizationText.refusal(error) != nil { self?.showError(error) }
+            }
+            self?.refreshSubscriptionStatistics(downloads: false)
         }
     }
 

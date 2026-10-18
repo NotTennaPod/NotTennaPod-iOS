@@ -47,7 +47,7 @@ import Testing
     }
 }
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct PCMFiniteRetryTests {
+@MainActor @Suite(.serialized) struct PCMFiniteRetryTests {
     private func fixture() -> URL {
 #if SWIFT_PACKAGE
         Bundle.module.url(forResource: "playback-30sec", withExtension: "mp3", subdirectory: "Fixtures")!

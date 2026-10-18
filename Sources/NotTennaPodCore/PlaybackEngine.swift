@@ -84,6 +84,9 @@ public enum PlaybackEngineEvent: Sendable {
     /// engine has closed them. Final reading, paused. Not a playback failure: the item stays selected and paused,
     /// and only a later explicit Play builds new objects (Apple QA1749: no reactivation without the person).
     case mediaServicesReset(PlaybackEngineReading)
+    /// The route must fetch this generation's media through the phone (a Cast relay), and the network does not admit
+    /// streaming for it: nothing was sent to the route. The owner asks for consent (Once/Always) and loads it again.
+    case streamingConfirmationRequired(generation: UUID)
 }
 
 @MainActor

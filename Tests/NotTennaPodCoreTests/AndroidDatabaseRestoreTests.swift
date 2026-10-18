@@ -12,7 +12,7 @@ import Testing
         .appendingPathComponent("../../TestSupport/Data/database-restore/android-3.12.1").standardized
 
     private func temp() throws -> URL {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M16-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("DatabaseRestore-\(UUID())", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         return directory
     }
@@ -36,7 +36,7 @@ import Testing
         #expect(one.userState.playState == .played && one.userState.positionMilliseconds == 3_883)
         #expect(one.userState.playedDurationMilliseconds == 33_930 && one.userState.lastPlayedTimeMilliseconds == 1_789_251_404_017)
         #expect(one.userState.lastPlayedHistoryMilliseconds == 1_789_251_404_017 && one.details.media?.durationMilliseconds == 30_040)
-        #expect(!one.userState.isDownloaded && one.userState.localFileURL == nil, "D1-R: Android path never exists on iOS")
+        #expect(!one.userState.isDownloaded && one.userState.localFileURL == nil, "an Android file path never exists on iOS")
         #expect(two.userState.playState == .unplayed && two.userState.playedDurationMilliseconds == 0, "NULL played_duration reads 0")
         #expect(two.userState.lastPlayedHistoryMilliseconds == nil)
         #expect(snapshot.queue.map(\.id) == [1])
@@ -88,13 +88,13 @@ import Testing
     // Restore → export → Android state, field by field: AndroidBackupRoundTripOracleTests,
     // which runs the independent Python oracle on all four real Android libraries.
 
-    /// Oracle harness (runner-only): import every `.db` in M16_ORACLE_INPUT and write the database re-export
-    /// (or the rejection text) to M16_ORACLE_OUTPUT for `TestSupport/BackupChecker`.
-    @Test(.enabled(if: ProcessInfo.processInfo.environment["M16_ORACLE_INPUT"] != nil))
+    /// Oracle harness (runner-only): import every `.db` in DATABASE_RESTORE_ORACLE_INPUT and write the database re-export
+    /// (or the rejection text) to DATABASE_RESTORE_ORACLE_OUTPUT for `TestSupport/BackupChecker`.
+    @Test(.enabled(if: ProcessInfo.processInfo.environment["DATABASE_RESTORE_ORACLE_INPUT"] != nil))
     func oracleHarnessExportsEveryInput() async throws {
         let environment = ProcessInfo.processInfo.environment
-        let input = URL(fileURLWithPath: try #require(environment["M16_ORACLE_INPUT"]))
-        let output = URL(fileURLWithPath: try #require(environment["M16_ORACLE_OUTPUT"]))
+        let input = URL(fileURLWithPath: try #require(environment["DATABASE_RESTORE_ORACLE_INPUT"]))
+        let output = URL(fileURLWithPath: try #require(environment["DATABASE_RESTORE_ORACLE_OUTPUT"]))
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let names = try FileManager.default.contentsOfDirectory(atPath: input.path).filter { $0.hasSuffix(".db") }.sorted()
         #expect(!names.isEmpty)
@@ -236,7 +236,7 @@ import Testing
         try speeds.restore(feeds: journal.feedSpeeds, silence: journal.feedSilence)
         try await store.clearRestoreJournal()
         #expect(speeds.value.feeds == [1: 1.75] && speeds.value.silence.feeds == [1: .aggressive])
-        #expect(speeds.value.currentEpisodeID == nil && speeds.value.temporary == PlaybackSpeed.useGlobal, "D4")
+        #expect(speeds.value.currentEpisodeID == nil && speeds.value.temporary == PlaybackSpeed.useGlobal, "the current episode's speed is not restored")
         #expect(try await store.pendingRestoreJournal() == nil)
         try await store.close()
     }

@@ -11,7 +11,7 @@ import Foundation
 /// both present. k = 1 is provisional: derived from AOSP's stereo downmix
 /// (system/media audio_utils ChannelMix.h, android-15/16: front at unity, centre
 /// at 1/√2, no normalisation), not measured on Android; overloads clamp to full
-/// scale, as the device output does. The plan deliberately differs from that
+/// scale, as the device output does. This downmix deliberately differs from that
 /// matrix: LFE omitted (ChannelMix 0.5), side and back each 0.5 when both are
 /// present (ChannelMix 1/√2 each), and an Int16 clamp at full scale where
 /// ChannelMix clamps its float mix at ±√2. Other positions use ChannelMix's

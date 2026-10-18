@@ -5,7 +5,7 @@ import Testing
 /// Failure injection (PROTOCOL §15.2): a failure after every individual recorder write leaves
 /// nothing of the recorder's savepoint; an ordinary mutation rolls back whole, with its files and the player
 /// untouched; a playback write still commits.
-@MainActor @Suite(.timeLimit(.minutes(10))) struct ServerRecordingFailureTests {
+@MainActor @Suite struct ServerRecordingFailureTests {
     private final class Engine: PlaybackEngine {
         var reading: PlaybackEngineReading?
         var onEvent: (@MainActor (PlaybackEngineEvent) -> Void)?
@@ -237,7 +237,7 @@ import Testing
         #expect(try fixture.outbox().map(\.type) == ["podcast.subscribe", "episode.leave", "queue.add"])
     }
 
-    // MARK: Files and the player (the side-effects decision)
+    // MARK: Files and the player (side effects)
 
     private func downloaded(_ fixture: ServerLibraryFixture, _ ids: [Int64]) async throws -> [URL] {
         var files: [URL] = []

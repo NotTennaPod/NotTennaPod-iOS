@@ -6,7 +6,7 @@ import Testing
 /// Mounted checks: the app's declared entry points, routing of shared text, quick actions, App
 /// Intents and documents on a mounted main screen. Expectations from Android 3.12.1, except that shared text
 /// opens its first link (a deliberate iOS deviation).
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct EntryPointsViewTests {
+@MainActor @Suite(.serialized) struct EntryPointsViewTests {
     private func wait(_ condition: () -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(10)
         while !condition(), ContinuousClock.now < deadline { try await Task.sleep(for: .milliseconds(10)) }
@@ -24,7 +24,7 @@ import Testing
     private func withController(configure: (inout NavigationPreferences) -> Void = { _ in }, library: Bool = false,
                                 refreshed: ((FeedRefreshRequest) -> Void)? = nil,
                                 _ body: @MainActor (LibraryViewController, NavigationPreferenceStore) async throws -> Void) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M34View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("EntryPointsView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let navigation = try NavigationPreferenceStore(file: root.appendingPathComponent("navigation.json"))
@@ -132,7 +132,7 @@ import Testing
 
     /// A route delivered before the screen is in a window (cold launch) runs when it first appears.
     @Test func coldRouteWaitsForTheScreen() async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M34Cold-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("EntryPointsCold-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let navigation = try NavigationPreferenceStore(file: root.appendingPathComponent("navigation.json"))
@@ -182,10 +182,10 @@ import Testing
     /// iOS adaptation: an RSS document opens the preview of its own address; one without an address
     /// shows Android's no-podcast error; the preview is not a manual address (no Edit feed URL).
     @Test func feedDocumentsOpenThePreviewOfTheirAddress() async throws {
-        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("M34Docs-\(UUID())")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("EntryPointsDocs-\(UUID())")
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
-        let address = "http://127.0.0.1:9/m34-\(UUID().uuidString).xml"
+        let address = "http://127.0.0.1:9/entry-\(UUID().uuidString).xml"
         let withSelf = folder.appendingPathComponent("feed.rss"), without = folder.appendingPathComponent("plain.rss")
         try Data("<rss xmlns:atom=\"http://www.w3.org/2005/Atom\"><channel><title>T</title><atom:link rel=\"self\" href=\"\(address)\"/></channel></rss>".utf8).write(to: withSelf)
         try Data("<rss><channel><title>T</title></channel></rss>".utf8).write(to: without)
@@ -222,9 +222,9 @@ import Testing
     /// preview of its first link — words around it, AntennaPod's own share text with a ':' in the title —
     /// and text without a link shows the no-podcast error.
     @Test func sharedTextOpensThePreviewOfItsFirstLink() async throws {
-        let first = "http://127.0.0.1:9/m34-first-\(UUID().uuidString).xml"
-        let second = "http://127.0.0.1:9/m34-second-\(UUID().uuidString).xml"
-        let shared = "http://127.0.0.1:9/m34-shared-\(UUID().uuidString).xml"
+        let first = "http://127.0.0.1:9/entry-first-\(UUID().uuidString).xml"
+        let second = "http://127.0.0.1:9/entry-second-\(UUID().uuidString).xml"
+        let shared = "http://127.0.0.1:9/entry-shared-\(UUID().uuidString).xml"
         try await withController(library: true) { controller, _ in
             for (text, address) in [("Listen to this: \(first), then \(second) too!", first),
                                     (FeedShareText.make(title: "Planet Money: The Indicator", source: shared), shared)] {

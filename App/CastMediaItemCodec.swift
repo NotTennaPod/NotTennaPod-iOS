@@ -25,6 +25,10 @@ import NotTennaPodCore
     }
 
     static func encode(_ item: Item, loadID: UUID? = nil) -> GCKMediaQueueItem {
+        // The access owner strips or leaves out every address carrying userinfo; this only checks it.
+        assert([item.contentURL, item.localPlaybackURL, item.artworkURL?.absoluteString].allSatisfy { address in
+            address.flatMap(URLComponents.init(string:)).map { $0.user == nil && $0.password == nil } ?? true
+        }, "A Cast item carries userinfo")
         let metadata = GCKMediaMetadata(metadataType: .generic)
         if let title = item.title { metadata.setString(title, forKey: kGCKMetadataKeyTitle) }
         if let subtitle = item.subtitle { metadata.setString(subtitle, forKey: kGCKMetadataKeySubtitle) }

@@ -2,15 +2,18 @@
 import UIKit
 import NotTennaPodCore
 
-/// Explicit UUID test libraries only (`-test-library-id` + `-test-m12-opml-export`). Seeds feeds that
+/// Explicit UUID test libraries only (`-test-library-id` + `-test-opml-export-journey`). Seeds feeds that
 /// exercise export rules without network: renamed order, Atom, escaping/token address, imported
 /// placeholder without type, and archived/preview exclusions. Optional one-time write failure
-/// (`-test-m12-export-fail-once`) is labelled injected; the real Save picker is never replaced.
+/// (`-test-opml-export-fail-once`) is labelled injected; the real Save picker is never replaced.
 @MainActor enum OPMLExportJourneyFixture {
-    static var enabled: Bool { ProcessInfo.processInfo.arguments.contains("-test-m12-opml-export") }
+    /// Written once the library is seeded; a library without it is emptied before it opens (`SeededLibraryFixtures`).
+    nonisolated static let readyMarker = "opml-export-fixture-ready"
+
+    static var enabled: Bool { ProcessInfo.processInfo.arguments.contains("-test-opml-export-journey") }
 
     static func prepare(directory: URL, store: FeedLibraryStore) async throws {
-        let marker = directory.appendingPathComponent("m12-export-fixture-ready")
+        let marker = directory.appendingPathComponent(readyMarker)
         if !FileManager.default.fileExists(atPath: marker.path) {
             guard try await store.snapshot().feeds.isEmpty else { throw CocoaError(.fileWriteFileExists) }
             // Real parser metadata from in-memory documents; no network.
@@ -26,7 +29,7 @@ import NotTennaPodCore
             let bravo = try await insert("https://bravo.example/feed", rss("Bravo Feed", link: "https://bravo.example/"))
             try await store.updatePreferences(feedID: bravo.id) { $0.customTitle = "Zulu Display" }
             _ = try await insert("https://alpha.example/feed",
-                "<feed xmlns=\"http://www.w3.org/2005/Atom\"><title>alpha feed</title><id>urn:m12:alpha</id></feed>")
+                "<feed xmlns=\"http://www.w3.org/2005/Atom\"><title>alpha feed</title><id>urn:opml-export:alpha</id></feed>")
             // Parsed titles are HTML-decoded like Android's HtmlCompat.fromHtml; a user custom title
             // carries literal markup characters that the export must escape.
             let escaping = try await insert("https://example.test/feed?token=fixture&x=1",
@@ -40,7 +43,7 @@ import NotTennaPodCore
         for scene in UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }) {
             for window in scene.windows {
                 if let controller = window.rootViewController as? LibraryViewController { await controller.reloadLibrary()?.value }
-                window.accessibilityIdentifier = "m12ExportFixtureReady"
+                window.accessibilityIdentifier = "opmlExportFixtureReady"
             }
         }
     }
@@ -56,11 +59,11 @@ import NotTennaPodCore
 
     /// One injected failure before any byte is written, then the real coordinated write.
     static func writer() -> DocumentExportOperation.Writer? {
-        guard enabled, ProcessInfo.processInfo.arguments.contains("-test-m12-export-fail-once") else { return nil }
+        guard enabled, ProcessInfo.processInfo.arguments.contains("-test-opml-export-fail-once") else { return nil }
         let failure = FailOnce()
         return { data, url in
             if failure.consume() {
-                throw NSError(domain: "M12Fixture", code: 1, userInfo: [NSLocalizedDescriptionKey: "M12 controlled export failure"])
+                throw NSError(domain: "OPMLExportFixture", code: 1, userInfo: [NSLocalizedDescriptionKey: "Controlled export failure"])
             }
             try await DocumentExportOperation.coordinatedWrite(data, to: url)
         }

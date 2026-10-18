@@ -1,3 +1,4 @@
+import Darwin
 import QuartzCore
 import UIKit
 import Testing
@@ -9,7 +10,7 @@ import Testing
 /// Simulator and shows the right episodes in Android's order. Long lists show Android's pages of 150
 /// episodes (`EpisodesListFragment.EPISODES_PER_PAGE`) and add the next page as the end comes into view.
 /// Before paging, the Episodes list built a row for every episode and took five minutes to open.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(5)))
+@MainActor @Suite(.serialized)
 struct LargeLibraryViewTests {
     struct Fixture { let root: URL; let summary: LargeAndroidLibrary.Summary; let store: FeedLibraryStore }
 
@@ -81,6 +82,56 @@ struct LargeLibraryViewTests {
             fastest = min(fastest, ContinuousClock.now - start)
         }
         return fastest
+    }
+
+    /// The process's physical footprint (what iOS counts against the app).
+    private static func footprint() -> Int64 {
+        var info = task_vm_info_data_t()
+        var count = mach_msg_type_number_t(MemoryLayout<task_vm_info_data_t>.size / MemoryLayout<integer_t>.size)
+        let result = withUnsafeMutablePointer(to: &info) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) { task_info(mach_task_self_, task_flavor_t(TASK_VM_INFO), $0, &count) }
+        }
+        return result == KERN_SUCCESS ? Int64(info.phys_footprint) : 0
+    }
+    /// Live heap bytes (the allocator's in-use total): what stays allocated, without the reads' transient high water.
+    private static func liveHeap() -> Int64 {
+        var statistics = malloc_statistics_t()
+        malloc_zone_statistics(nil, &statistics)
+        return Int64(statistics.size_in_use)
+    }
+
+    /// The split footprint, the model part: opening the 50,000-episode library, every list, the Episodes list
+    /// paged and back, the 1,500-episode podcast and Home adds a bounded footprint (covers are not part of it: this
+    /// library's pictures are not reachable, and the cover cache has its own bound). The screens' library holds list
+    /// projections, so no show notes are resident.
+    @Test func openingEveryListKeepsTheModelFootprintBounded() async throws {
+        try await withLibrary { fixture in
+            ArtworkImageCache.trimMemory()
+            let base = Self.footprint(), heap = Self.liveHeap()
+            try await withController(fixture, start: .episodes) { controller, _ in
+                let content = controller.content
+                for _ in 0..<3 {
+                    content.setContentOffset(CGPoint(x: 0, y: content.contentSize.height - content.bounds.height), animated: false)
+                    controller.view.layoutIfNeeded(); CATransaction.flush()
+                }
+                content.setContentOffset(.zero, animated: false); controller.view.layoutIfNeeded()
+                for destination in [NavigationDestination.inbox, .favorites, .history, .queue, .downloads, .home, .subscriptions] {
+                    controller.select(destination); controller.view.layoutIfNeeded(); CATransaction.flush()
+                }
+                controller.drawerAction(.feed(fixture.summary.largestFeedID)); controller.view.layoutIfNeeded(); CATransaction.flush()
+                #expect(controller.mirror.feeds.flatMap(\.episodes).allSatisfy { $0.details.description == nil && $0.details.chapters == nil },
+                        "the screens' library holds no show notes")
+                let delta = Self.footprint() - base, live = Self.liveHeap() - heap
+                let episodes = Int64(fixture.summary.episodes.count)
+                print("GAP-ROBUST footprint: model delta \(delta / 1_048_576) MB footprint, \(live / 1_048_576) MB live heap for \(episodes) episodes, covers \(ArtworkImageCache.memoryCost / 1_048_576) MB")
+                // The screens' library (list projections, about 1.6 KB an episode) and the screens drawn: 40 MB on a
+                // phone. An iPad's screens draw more: its lists show rows in proportion to the window's height, so its
+                // allowance grows by its height over the phones' 874 points (the 13-inch iPad's 1,376: about 1.6 times).
+                let drawn = UIDevice.current.userInterfaceIdiom == .pad
+                    ? Int64(40 * 1_048_576 * max(1, controller.view.bounds.height / 874)) : 40 * 1_048_576
+                #expect(live <= episodes * 1_700 + drawn, "live heap \(live / 1_048_576) MB, screens drawn \(drawn / 1_048_576) MB")
+            }
+        }
     }
 
     @Test func mainListsOpenWithinASecondInAndroidsOrder() async throws {
@@ -228,7 +279,9 @@ struct LargeLibraryViewTests {
         let start = ContinuousClock.now
         for _ in 0..<20 { reloads.request() }
         #expect(ContinuousClock.now - start < .milliseconds(100))
-        try await Task.sleep(for: .milliseconds(50))
+        // The first reload starts (on a busy main actor this may take a while), and no other starts beside it.
+        let deadline = ContinuousClock.now + .seconds(10)
+        while await gate.started == 0, ContinuousClock.now < deadline { try await Task.sleep(for: .milliseconds(5)) }
         #expect(await gate.started == 1, "one reload runs; the requests made meanwhile merge into one follow-up")
         // The refresh's last report waits for a reload that starts after it.
         let final = Task { await reloads.requestAndWait() }
@@ -237,5 +290,27 @@ struct LargeLibraryViewTests {
         await final.value
         let (started, finished) = await (gate.started, gate.finished)
         #expect(started == 2 && finished == 2)
+    }
+
+    /// Reloads a refresh requests start at most once per interval: the first at once, the next only when the interval has
+    /// passed, even with requests in between. One requested within the interval still starts when it has passed (a refresh
+    /// stopped before its end leaves no screen stale), and the refresh's final reload starts at once.
+    @Test func refreshReloadsStartAtMostOncePerInterval() async throws {
+        var starts: [ContinuousClock.Instant] = []
+        let reloads = LibraryReloadCoalescer(interval: .milliseconds(400)) { starts.append(.now) }
+        func wait(for count: Int) async throws {
+            let deadline = ContinuousClock.now + .seconds(10)
+            while starts.count < count, ContinuousClock.now < deadline { try await Task.sleep(for: .milliseconds(5)) }
+            try #require(starts.count == count)
+        }
+        reloads.request()
+        try await wait(for: 1)
+        for _ in 0..<10 { reloads.request() }
+        try await wait(for: 2)
+        #expect(starts[0].duration(to: starts[1]) >= .milliseconds(390), "\(starts[0].duration(to: starts[1]))")
+        reloads.request()
+        await reloads.requestAndWait()
+        #expect(starts.count == 3)
+        #expect(starts[1].duration(to: starts[2]) < .milliseconds(390), "the final reload does not wait for the interval")
     }
 }

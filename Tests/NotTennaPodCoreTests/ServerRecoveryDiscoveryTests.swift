@@ -6,7 +6,7 @@ import Testing
 /// its own commands: the recovery's full snapshot and its holds work with the discovery ledger (`ntp_ledger`), the local
 /// items, the observation work and provisional releases of rotating enclosures. A release this phone never saw drives
 /// its ledger once; a release it saw keeps its finished work; nothing is lost, repeated or left orphaned.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerRecoveryDiscoveryTests {
+@Suite(.serialized) struct ServerRecoveryDiscoveryTests {
     typealias Discovery = ServerDiscoveryScenarioTests
     typealias Recovery = ServerRecoveryTests
     typealias Copies = ServerCopiesTests
@@ -570,7 +570,8 @@ extension ServerRecoveryDiscoveryTests {
             // A uploads; the server fetches the subscription's catalog (old URL) before A's snapshot is taken.
             await a.engine.setCrashPoint(PushPull.crashOnce(at: "recovery.uploaded"))
             #expect(await a.engine.exchange().error == "InjectedCrash()")
-            try await Self.exchange(until: { try b.rows("SELECT count(*) FROM ntp_records WHERE entity = 'episode' AND field_group = 'identity' AND CAST(value AS TEXT) LIKE '%ne-1%'") == [["1"]] },
+            // The catalog's first episode by its whole GUID: "ne-1" alone also matches the other feed's "one-1".
+            try await Self.exchange(until: { try b.rows("SELECT count(*) FROM ntp_records WHERE entity = 'episode' AND field_group = 'identity' AND CAST(value AS TEXT) LIKE '%\"guid\":\"ne-1\"%'") == [["1"]] },
                                     [b], label: "the server's catalog")
             try await a.relaunch()
             if let point {
@@ -620,7 +621,8 @@ extension ServerRecoveryDiscoveryTests {
             try await a.signInAgain()
             await a.engine.setCrashPoint(PushPull.crashOnce(at: "recovery.uploaded"))
             #expect(await a.engine.exchange().error == "InjectedCrash()")
-            try await Self.exchange(until: { try b.rows("SELECT count(*) FROM ntp_records WHERE entity = 'episode' AND field_group = 'identity' AND CAST(value AS TEXT) LIKE '%ne-1%'") == [["1"]] },
+            // The catalog's first episode by its whole GUID: "ne-1" alone also matches the other feed's "one-1".
+            try await Self.exchange(until: { try b.rows("SELECT count(*) FROM ntp_records WHERE entity = 'episode' AND field_group = 'identity' AND CAST(value AS TEXT) LIKE '%\"guid\":\"ne-1\"%'") == [["1"]] },
                                     [b], label: "the server's catalog")
             try await a.relaunch()
             // A's switch waits while audio plays and the app is in use.

@@ -287,7 +287,7 @@ extension LibraryViewController {
                     return
                 }
                 let source = try FeedAddress.prepare(resolved.url)
-                if let library, let existing = try await library.snapshot().feeds.first(where: { $0.source == source }) {
+                if let library, let existing = try await library.readers().bulk.listFeedHeaders().first(where: { $0.source == source }) {
                     try Task.checkCancellation()
                     await reloadLibrary()?.value
                     try Task.checkCancellation()
@@ -421,7 +421,9 @@ extension LibraryViewController {
             speedPreferences: speedPreferences, mobileNetworkPreferences: mobileNetworkPreferences, usage: usage, loadSnapshot: loadSnapshot,
             manualRefresh: manualRefresh, podcastSearch: podcastSearch,
             previewFeedID: feedID, feedAuthentication: feedAuthentication,
-            automaticDownloadPreferences: automaticDownloadPreferences, downloadPreferences: downloadPreferences, proxyPreferences: proxyPreferences, proxyTransport: proxyTransport, playbackHardwarePreferences: playbackHardwarePreferences, statisticsPreferences: statisticsPreferences, refreshNetwork: refreshNetwork)
+            automaticDownloadPreferences: automaticDownloadPreferences, downloadPreferences: downloadPreferences, proxyPreferences: proxyPreferences, proxyTransport: proxyTransport,
+            // A preview's video player offers Transcript and Chapters: the same admitted loaders as the app's.
+            transcriptLoader: transcriptLoader, chapterAccess: chapterAccess, shownotesNetwork: shownotesNetwork, playbackHardwarePreferences: playbackHardwarePreferences, statisticsPreferences: statisticsPreferences, refreshNetwork: refreshNetwork)
         let preview = container ?? FeedPreviewController(content: child, recoveredBySearch: recoveredBySearch)
         if container != nil { preview.replaceContent(child); preview.showRecoveryNoticeIfNeeded(recoveredBySearch) }
         preview.onClose = nil
@@ -433,7 +435,7 @@ extension LibraryViewController {
                 await withCheckedContinuation { continuation in preview.dismiss(animated: true) { continuation.resume() } }
             }
             await openNotification(.feed(id))
-            if changed, let feed = try await library.feed(id: id) { requestFeedRefresh(feed) }
+            if changed, let feed = try await library.listedFeedHeader(id: id) { requestFeedRefresh(feed) }
         }
         if container == nil { present(preview, animated: true) }
     }

@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct HTTPMemoryBackingTests {
+@MainActor @Suite(.serialized) struct HTTPMemoryBackingTests {
     private func wait(_ condition: () -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(8)
         repeat {

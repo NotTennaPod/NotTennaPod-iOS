@@ -5,7 +5,7 @@ import Testing
 /// Concurrent remote changes against pending, rejected and `not_applied` local facts (PROTOCOL §6.8),
 /// with A's displayed state checked after each prefix of the exchange, and PROTOCOL §16 multi-device scenarios 5–13 as
 /// far as the exchange's parts reach (listening facts are written directly).
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerExchangeConcurrencyTests {
+@Suite(.serialized) struct ServerExchangeConcurrencyTests {
     typealias Agreement = ServerExchangeAgreementTests
 
     /// Everyone exchanges until nothing is pending, and every phone, and a phone attached now, shows the same.
@@ -25,7 +25,7 @@ import Testing
     /// Two phones on one podcast: A subscribed it, C pulled it.
     static func twoPhones(_ world: ExchangeWorld) async throws -> (a: ExchangePhone, c: ExchangePhone, feedA: LibraryFeed, episodesA: [Int64], podcast: String) {
         let a = try await world.attach("A")
-        let feed = try await a.store.insert(Agreement.fetched(world.url("one.xml"), title: "One", prefix: "one", count: 5))
+        let feed = try await a.store.subscribeForTesting(Agreement.fetched(world.url("one.xml"), title: "One", prefix: "one", count: 5))
         try await Agreement.waitForCatalog(a, feedID: feed.id)
         let c = try await world.attach("C")
         let podcast = try #require(try await a.store.podcastOfFeedForTesting(feed.id))

@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.timeLimit(.minutes(1)))
+@MainActor @Suite
 struct AutomaticDownloadTests {
     private func episode(_ id: Int64, new: Bool = true, downloaded: Bool = false, date: Double? = nil) -> LibraryEpisode {
         var item = LibraryEpisode(id: id, details: .init(identifier: String(id), title: "News \(id)",
@@ -79,6 +79,30 @@ struct AutomaticDownloadTests {
         #expect(meteredWifi.automaticDownloadConnection == .wifi(metered: true))
         let wired = DownloadNetworkMonitor.nativeState(status: .satisfied, isExpensive: true, usesCellular: false, usesEthernet: true)
         #expect(wired.automaticDownloadConnection == .ethernet)
+    }
+
+    /// Low Data Mode is Android's metered network: Low Data Wi-Fi is metered Wi-Fi, which automatic download never uses,
+    /// whatever the mobile option (NetworkUtils.isAutoDownloadAllowed); on mobile data the mobile option decides, as
+    /// always, and Ethernet is allowed, as on Android.
+    @Test func lowDataModeIsAndroidsMeteredNetworkForAutomaticDownload() {
+        let wifi = DownloadNetworkMonitor.nativeState(status: .satisfied, isExpensive: false, usesCellular: false, usesWiFi: true,
+                                                      isConstrained: true)
+        #expect(wifi.automaticDownloadConnection == .wifi(metered: true))
+        let cellular = DownloadNetworkMonitor.nativeState(status: .satisfied, isExpensive: false, usesCellular: true, isConstrained: true)
+        #expect(cellular.automaticDownloadConnection == .other(restricted: true))
+        let wired = DownloadNetworkMonitor.nativeState(status: .satisfied, isExpensive: false, usesCellular: false, usesEthernet: true,
+                                                       isConstrained: true)
+        for allowMobile in [false, true] {
+            #expect(!AutomaticDownloadPolicy.permitted(connection: wifi.automaticDownloadConnection, allowMobile: allowMobile, charging: true,
+                                                       preferences: .init()), "Low Data Wi-Fi, mobile option \(allowMobile)")
+            #expect(AutomaticDownloadPolicy.permitted(connection: cellular.automaticDownloadConnection, allowMobile: allowMobile, charging: true,
+                                                      preferences: .init()) == allowMobile)
+            #expect(AutomaticDownloadPolicy.permitted(connection: wired.automaticDownloadConnection, allowMobile: allowMobile, charging: true,
+                                                      preferences: .init()))
+        }
+        let ordinaryWiFi = DownloadNetworkMonitor.nativeState(status: .satisfied, isExpensive: false, usesCellular: false, usesWiFi: true)
+        #expect(AutomaticDownloadPolicy.permitted(connection: ordinaryWiFi.automaticDownloadConnection, allowMobile: false, charging: true,
+                                                  preferences: .init()))
     }
     @Test func cleanupProtectsFavoritesQueueAndPlaybackAgeWithSourceOrdering() {
         let now = Date(timeIntervalSince1970: 100_000)

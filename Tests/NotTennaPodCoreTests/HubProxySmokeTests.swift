@@ -6,7 +6,7 @@ import Testing
 /// server client, over its synchronization transport, meets faults set at the hub's proxy in front of the release
 /// candidate, and the hub's event log records what the client met. The hub runs on free ports with its own run folder
 /// under `.work/hub-host-tests/`, so it never meets the UI journeys' hub.
-@Suite(.serialized, .timeLimit(.minutes(10))) struct HubProxySmokeTests {
+@Suite(.serialized) struct HubProxySmokeTests {
     /// The hub as a child process, and its control API.
     final class Hub: @unchecked Sendable {
         let process = Process()

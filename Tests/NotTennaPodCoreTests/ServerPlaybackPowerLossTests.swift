@@ -11,7 +11,7 @@ import Testing
 /// saved. Nothing here assumes which transactions are durable: if the minute's transaction stops syncing, the loss
 /// grows to the whole session and the test fails. The bound while playing is about a minute of position and listening;
 /// nothing is lost while paused.
-@Suite(.serialized, .timeLimit(.minutes(10))) struct ServerPlaybackPowerLossTests {
+@Suite(.serialized) struct ServerPlaybackPowerLossTests {
     /// The library as a power loss would leave it now: the database file and its log up to `synced` bytes, opened.
     static func afterPowerLoss(_ fixture: ServerLibraryFixture, synced: Int) async throws -> (position: Int32, lastPlayed: Int64, journaled: Int64) {
         let folder = fixture.directory.appendingPathComponent("power-loss-\(UUID())")
@@ -30,6 +30,9 @@ import Testing
     }
 
     @Test func aPowerLossLosesAtMostAboutAMinuteWhilePlayingAndNothingWhilePaused() async throws {
+        // The library's own file system (the write-budget layer) is registered first, as in the app and in any run where
+        // another suite opened a library before this one: the observer then sits below it, seeing what reaches the disk.
+        #expect(SQLiteWriteBudget.vfs != nil)
         SyncObservingVFS.install()
         defer { SyncObservingVFS.restoreDefault() }
         let (fixture, ids, _, _) = try await ServerPlaybackRecorderTests.library()

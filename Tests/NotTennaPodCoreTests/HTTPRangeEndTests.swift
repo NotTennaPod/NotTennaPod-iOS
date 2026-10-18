@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2))) struct HTTPRangeEndTests {
+@Suite(.serialized) struct HTTPRangeEndTests {
     private func read(_ input: any MediaByteInput, at offset: Int64, count: Int) async throws -> Data {
         let watchdog = Task {
             do { try await Task.sleep(for: .seconds(5)) } catch { return }

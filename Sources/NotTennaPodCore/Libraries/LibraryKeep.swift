@@ -388,6 +388,11 @@ public struct LibraryKeep {
             }
             try database.execute("DELETE FROM feeds WHERE id IN (SELECT feed_id FROM ntp_hidden_feeds WHERE state = 'staging')")
         }
+        // The player's hold of such a podcast's episode ends with the account (PROTOCOL §6.8): its saved selection and
+        // session go, so the standalone deletion finishes it at once; nothing else of the player changes.
+        let held = "SELECT id FROM episodes WHERE feed_id IN (SELECT feed_id FROM pinned_feed_removals)"
+        try database.execute("DELETE FROM playback_session WHERE episode_id IN (\(held))")
+        try database.execute("DELETE FROM playback_selection WHERE episode_id IN (\(held))")
         // 3. Secret-only feed credentials go to the existing cleanup; feed_credentials and its items stay.
         try database.execute("INSERT OR IGNORE INTO feed_credential_cleanup(credential_id) SELECT credential_id FROM ntp_secrets WHERE credential_id NOT IN (SELECT credential_id FROM feed_credentials)")
         // 4. Stored paths stay as written; `paths_root` maps them wherever the library is.
@@ -401,9 +406,19 @@ public struct LibraryKeep {
         // deterministic encoding, so only that key goes.
         for row in try database.rows("SELECT id, record FROM episodes WHERE instr(CAST(record AS TEXT), '\"playedHereMilliseconds\"') > 0") {
             guard let id = row[0].integer, let data = row[1].data else { throw FeedLibraryError.corruptRecord }
-            var episode = try JSONDecoder().decode(LibraryEpisode.self, from: data)
+            let stored = try JSONDecoder.libraryRecord(LibraryEpisode.self, from: data)
+            var episode = stored
             episode.userState.playedHereMilliseconds = nil
-            try database.execute("UPDATE episodes SET record = ? WHERE id = ?", [.blob(try FeedLibraryStore.encodedEpisodeRecord(episode)), .integer(id)])
+            try database.execute("UPDATE episodes SET record = ? WHERE id = ?",
+                                 [.blob(try FeedLibraryStore.encodedEpisodeRecord(episode, replacing: stored)), .integer(id)])
+        }
+        // And each podcast's server refresh status: a library that no longer syncs with a server shows none. This
+        // device's own refresh outcome and times stay as they were.
+        for row in try database.rows("SELECT id, record FROM feeds WHERE instr(CAST(record AS TEXT), '\"serverRefresh\"') > 0") {
+            guard let id = row[0].integer, let data = row[1].data else { throw FeedLibraryError.corruptRecord }
+            var feed = try JSONDecoder.libraryRecord(LibraryFeed.self, from: data)
+            feed.serverRefresh = nil
+            try database.execute("UPDATE feeds SET record = ? WHERE id = ?", [.blob(try FeedLibraryStore.encodedFeedRecord(feed)), .integer(id)])
         }
         // 6. The conversion is recorded; the library's identity and Cast tag stay its server library ID.
         try database.execute("UPDATE library_identity SET keep_operation = ?, keep_role = 'converted', archive_id = NULL WHERE id = 1", [.text(operation)])

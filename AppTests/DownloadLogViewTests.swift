@@ -3,7 +3,18 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+extension FeedLibraryStore {
+    /// A feed's server refresh status as a server library's projection sets it.
+    func setServerRefreshForTesting(_ status: ServerRefreshStatus?, feedID: Int64) throws {
+        try write(.remote) {
+            guard var feed = try loadFeedHeader(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
+            feed.serverRefresh = status
+            try saveHeader(feed)
+        }
+    }
+}
+
+@MainActor @Suite(.serialized)
 struct DownloadLogViewTests {
     private func element<T: UIView>(_ id: String, in view: UIView, as: T.Type = T.self) -> T? {
         if let value = view as? T, value.accessibilityIdentifier == id { return value }
@@ -112,6 +123,51 @@ struct DownloadLogViewTests {
                 controller.dismiss(animated: false)
                 try await wait { controller.presentedViewController == nil }
 
+            }
+        }
+    }
+
+    /// A server library's podcast whose server refresh fails, with no failure of this device's and nothing in its log:
+    /// its notice opens the server's details (Android's dialog, the server's words and detail, when each side last
+    /// refreshed), not an empty Download log. The server recovering, the notice goes.
+    @Test func theNoticeOfTheServersFailureOpensItsDetails() async throws {
+        try await fixture { library, root in
+            try await library.setServerRefreshForTesting(ServerRefreshStatus(lastAttempt: Date().addingTimeInterval(-7_200), label: "not_found",
+                                                                             code: 404, detail: "Not Found"), feedID: 1)
+            #expect(try await library.logs(feedID: 1).isEmpty)
+            #expect(try await library.feed(id: 1)?.lastUpdateFailed == false)
+            let preferences = try NavigationPreferenceStore(file: root.appendingPathComponent("navigation.json"))
+            var value = preferences.value; value.defaultPage = NavigationDestination.subscriptions.rawValue
+            try preferences.update(value)
+            let controller = LibraryViewController(library: library, startupError: nil, downloads: nil, playback: nil,
+                timeDisplayPreferences: nil, navigationPreferences: preferences, speedPreferences: nil, mobileNetworkPreferences: nil, usage: nil)
+            try await withViewTestWindow { host, _ in
+                host.addChild(controller); host.view.addSubview(controller.view); controller.didMove(toParent: host)
+                controller.view.frame = host.view.bounds
+                defer { controller.dismiss(animated: false); controller.willMove(toParent: nil); controller.view.removeFromSuperview(); controller.removeFromParent() }
+                await controller.reloadLibrary()?.value
+                controller.view.setNeedsLayout(); controller.view.layoutIfNeeded()
+                let feed: UIControl = try #require(element("subscriptionFeed-1", in: controller.view))
+                #expect(feed.accessibilityLabel == "Log podcast, Last refresh failed. Tap to view details.")
+                feed.sendActions(for: .touchUpInside); controller.view.layoutIfNeeded()
+                let failure: UIControl = try #require(element("feedRefreshFailure", in: controller.view))
+                #expect(!failure.isHidden)
+                failure.sendActions(for: .touchUpInside)
+                try await wait { controller.presentedViewController is SourceMessageController && controller.presentedViewController?.isBeingPresented == false }
+                let dialog = try #require(controller.presentedViewController)
+                let words = [("feedLogPodcast", "Log podcast"),
+                             ("feedLogStatus", "The podcast host's server does not know where to find the file. It may have been deleted."),
+                             ("feedLogTechnical", "Not Found"), ("feedLogURL", "https://example.test/feed")]
+                for (id, text) in words { #expect(element(id, in: dialog.view, as: UILabel.self)?.text == text, "\(id)") }
+                let origins = try #require(element("feedLogOrigins", in: dialog.view, as: UILabel.self))
+                #expect(origins.text?.hasPrefix("The server: Failed (") == true && origins.text?.contains("This device") == false)
+                #expect(element("feedLogOriginsHeading", in: dialog.view, as: UILabel.self)?.text == "Last refresh")
+                controller.dismiss(animated: false)
+                try await wait { controller.presentedViewController == nil }
+                try await library.setServerRefreshForTesting(ServerRefreshStatus(lastAttempt: Date()), feedID: 1)
+                await controller.reloadLibrary()?.value
+                controller.view.layoutIfNeeded()
+                #expect(element("feedRefreshFailure", in: controller.view, as: UIControl.self)?.isHidden != false)
             }
         }
     }

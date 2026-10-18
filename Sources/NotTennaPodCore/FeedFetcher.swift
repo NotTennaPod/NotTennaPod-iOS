@@ -35,6 +35,9 @@ public struct FetchedFeed: Sendable, Equatable {
     /// The parse at record level, which a server library observes and identifies items by (PROTOCOL §9.4); nil when
     /// the fetch did not make one (the store then maps `feed`).
     public var catalog: ServerCatalogParse? = nil
+    /// The parse's digest (`FeedLibraryStore.refreshParseDigest`), made outside the store by the refresh service; nil
+    /// when not made (the store then makes it).
+    var parseDigest: Data? = nil
 
     public var proposedSourceUpdate: String? { permanentRedirectURL ?? feed.redirectURL }
 }
@@ -183,8 +186,15 @@ public struct FeedFetcher: Sendable {
                 return .updated(fetched)
             } catch let error as ParityParseError {
                 try Task.checkCancellation()
-                failureDiagnostic(error.detail ?? error.label)
-                guard input.classifiesDocuments else { throw FeedFetchError(parity: error) }
+                // Never the parse's internal label: a refusal without a detail says where the document stops being
+                // well-formed XML, or plainly that it could not be parsed.
+                guard input.classifiesDocuments else {
+                    let readable = error.readable(body: response.body)
+                    try Task.checkCancellation()
+                    failureDiagnostic(readable.detail)
+                    throw readable.error
+                }
+                failureDiagnostic(error.detail ?? ParityParseError.unreadableFeed)
                 parityRefusal = error
             }
         }
@@ -208,7 +218,7 @@ public struct FeedFetcher: Sendable {
         if let index = parsed.episodes.firstIndex(where: { $0.title == nil }) {
             throw FeedFetchError.missingEpisodeTitle(index: index)
         }
-        if let parityRefusal { throw FeedDocumentError.broken(message: parityRefusal.detail ?? parityRefusal.label) }
+        if let parityRefusal { throw FeedDocumentError.broken(message: parityRefusal.detail ?? ParityParseError.unreadableFeed) }
         if input.generateMissingArtwork, parsed.imageURL?.isEmpty != false { parsed.imageURL = GenerativeCoverPattern.artworkPrefix + input.source }
         try Task.checkCancellation()
         return .updated(FetchedFeed(feed: parsed, source: input.source, responseURL: response.url,

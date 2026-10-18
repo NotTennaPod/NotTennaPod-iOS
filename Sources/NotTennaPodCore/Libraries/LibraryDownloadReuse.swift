@@ -75,12 +75,12 @@ public enum LibraryDownloadReuse {
             var order: [Int64] = []
             for row in try connection.rows("SELECT id, record FROM feeds ORDER BY id") {
                 guard let id = row[0].integer, let data = row[1].data else { throw FeedLibraryError.corruptRecord }
-                feeds[id] = try JSONDecoder().decode(LibraryFeed.self, from: data)
+                feeds[id] = try JSONDecoder.libraryRecord(LibraryFeed.self, from: data)
                 order.append(id)
             }
             for row in try connection.rows("SELECT feed_id, record FROM episodes ORDER BY feed_id, pubdate DESC, id") {
                 guard let feedID = row[0].integer, let data = row[1].data else { throw FeedLibraryError.corruptRecord }
-                var episode = try JSONDecoder().decode(LibraryEpisode.self, from: data)
+                var episode = try JSONDecoder.libraryRecord(LibraryEpisode.self, from: data)
                 if let writtenUnder, let path = episode.userState.localFileURL {
                     episode.userState.localFileURL = LibraryOwnedPaths.resolve(path, writtenUnder: writtenUnder, current: current)
                 }
@@ -143,7 +143,7 @@ public extension FeedLibraryStore {
             episode.userState.isDownloaded = true
             episode.userState.downloadDate = date
             episode.userState.autoDownloadEnabled = false
-            try saveEpisode(episode, feedID: feedID(forEpisode: episodeID))
+            try saveEpisode(episode, feedID: feedID(forEpisode: episodeID), scope: .media)
             return true
         }
     }

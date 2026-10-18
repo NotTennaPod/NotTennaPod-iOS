@@ -3,7 +3,7 @@ import CoreText
 import NotTennaPodCore
 
 @MainActor final class ChaptersController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    private let binding: PlayerChapterBinding
+    let binding: PlayerChapterBinding
     private let playback: PlaybackCoordinator
     private let library: FeedLibraryStore
     private let access: EpisodeChapterAccess
@@ -104,7 +104,7 @@ import NotTennaPodCore
             if let episode = state.episode, feeds[episode.id] == nil {
                 feedTask?.cancel()
                 feedTask = Task { [weak self, library] in
-                    guard let feed = try? await library.playbackFeed(id: library.feedID(forEpisode: episode.id)), !Task.isCancelled else { return }
+                    guard let feed = try? await library.playbackFeedHeader(id: library.feedID(forEpisode: episode.id)), !Task.isCancelled else { return }
                     self?.feeds[episode.id] = feed; self?.metricsWidth = -1; self?.view.setNeedsLayout()
                 }
             }

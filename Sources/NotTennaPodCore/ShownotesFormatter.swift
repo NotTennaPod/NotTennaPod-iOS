@@ -71,14 +71,111 @@ public enum ShownotesFormatter {
     /// afterwards, so the parser never copies or scans it; the result is the same as passing it first in
     /// `defaultFontCSS`.
     public static func webKitDocument(_ html: String, defaultFontCSS: String, leadingCSS: String = "") throws -> String {
+        try preparedWebKitDocument(html, defaultFontCSS: defaultFontCSS, leadingCSS: leadingCSS).html
+    }
+
+    /// The remote subresources show notes can load by themselves, each governed by one Mobile updates option.
+    public struct SubresourceClasses: OptionSet, Hashable, Sendable {
+        public let rawValue: Int
+        public init(rawValue: Int) { self.rawValue = rawValue }
+        /// Pictures, styles and fonts: "Cover images".
+        public static let small = SubresourceClasses(rawValue: 1)
+        /// Media and embedded documents (frames, objects): "Streaming".
+        public static let heavy = SubresourceClasses(rawValue: 2)
+        public static let all: SubresourceClasses = [.small, .heavy]
+    }
+
+    /// The document WebKit loads, and the classes it may load by itself.
+    public struct WebKitDocument: Equatable, Sendable {
+        public let html: String
+        /// Conservative: a class is present when anything in the document could load it (false positives allowed).
+        /// An embedded document counts as both, since its own content is not known.
+        public let classes: SubresourceClasses
+    }
+
+    /// Hints that make WebKit fetch or connect ahead of use (a prefetched main resource is a `document` load), and the
+    /// refresh that replaces the notes. They show nothing, so the whole element goes before WebKit sees it.
+    private static let resourceHints: Set<String> = ["prefetch", "preload", "modulepreload", "prerender", "preconnect", "dns-prefetch"]
+
+    /// `webKitDocument`, with the classes it may load. `contentSecurityPolicy` (used when content rules are not
+    /// available) becomes the head's first element.
+    public static func preparedWebKitDocument(_ html: String, defaultFontCSS: String, leadingCSS: String = "",
+                                              contentSecurityPolicy: String? = nil) throws -> WebKitDocument {
         let document = try SwiftSoup.parse(html)
         try document.select("meta[name=viewport]").remove()
+        for link in try document.select("link[rel]") {
+            let tokens = try link.attr("rel").lowercased().split(whereSeparator: { " \t\n\r\u{0C}".contains($0) })
+            if tokens.contains(where: { resourceHints.contains(String($0)) }) { try link.remove() }
+        }
+        for meta in try document.select("meta[http-equiv]") {
+            if try meta.attr("http-equiv").trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "refresh" { try meta.remove() }
+        }
+        let classes = try subresourceClasses(document)
         let marker = leadingCSS.isEmpty ? "" : "/*ap-leading-css*/"
         try document.head()?.prepend("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>\(marker)\(defaultFontCSS)</style>")
+        if let contentSecurityPolicy {
+            try document.head()?.prepend("<meta http-equiv=\"Content-Security-Policy\" content=\"\(contentSecurityPolicy)\">")
+        }
         let output = try document.outerHtml()
-        // The prepended style is the head's first element, so the first marker is ours.
-        guard !marker.isEmpty, let range = output.range(of: marker) else { return output }
-        return output.replacingCharacters(in: range, with: leadingCSS)
+        // The prepended style is the head's first style element, so the first marker is ours.
+        guard !marker.isEmpty, let range = output.range(of: marker) else { return WebKitDocument(html: output, classes: classes) }
+        return WebKitDocument(html: output.replacingCharacters(in: range, with: leadingCSS), classes: classes)
+    }
+
+    /// A strict policy allowing only the given classes: the fallback when WebKit's content rules cannot be compiled.
+    /// Scripts never run; inline styles and `data:` content (the notes' own font) always work. The document's policy
+    /// does not reach into a remote frame, and `object-src` admits pictures whatever `img-src` says, so embedded
+    /// documents and objects load only when both classes are allowed.
+    public static func contentSecurityPolicy(allowing allowed: SubresourceClasses) -> String {
+        let small = allowed.contains(.small), heavy = allowed.contains(.heavy)
+        let embedded = small && heavy
+        return [
+            "default-src 'none'", "script-src 'none'",
+            small ? "img-src * data: blob:" : "img-src data: blob:",
+            small ? "style-src * 'unsafe-inline' data:" : "style-src 'unsafe-inline' data:",
+            small ? "font-src * data:" : "font-src data:",
+            small ? "connect-src *" : "connect-src 'none'",
+            heavy ? "media-src * data: blob:" : "media-src data: blob:",
+            embedded ? "frame-src * data:" : "frame-src 'none'",
+            embedded ? "child-src * data:" : "child-src 'none'",
+            embedded ? "object-src *" : "object-src 'none'"
+        ].joined(separator: "; ")
+    }
+
+    private static let heavyElements: Set<String> = ["video", "audio", "source", "track", "iframe", "frame", "object", "embed",
+                                                     "applet", "portal", "bgsound"]
+    /// Embedded documents: whatever they contain may load either class.
+    private static let embeddedDocuments: Set<String> = ["iframe", "frame", "object", "embed", "applet", "portal", "source"]
+    private static let resourceAttributes: Set<String> = ["src", "srcset", "data", "poster", "background", "href", "xlink:href",
+                                                          "imagesrcset", "lowsrc", "dynsrc", "codebase", "archive"]
+
+    private static func subresourceClasses(_ document: Document) throws -> SubresourceClasses {
+        var classes: SubresourceClasses = []
+        for element in try document.getAllElements() {
+            let tag = element.tagName().lowercased()
+            if heavyElements.contains(tag) {
+                classes.insert(.heavy)
+                if embeddedDocuments.contains(tag) { classes.insert(.small) }
+            }
+            if tag == "svg" || tag == "math" { classes.insert(.small) }
+            if tag == "style", cssMayLoad(element.data()) { classes.insert(.small) }
+            for attribute in element.getAttributes()?.asList() ?? [] {
+                let key = attribute.getKey().lowercased()
+                if key == "style", cssMayLoad(attribute.getValue()) { classes.insert(.small) }
+                // Links a person taps are not automatic loads; a media element's own source is Heavy.
+                guard resourceAttributes.contains(key), !(key == "href" && ["a", "area", "base"].contains(tag)),
+                      !(["video", "audio", "track", "bgsound"].contains(tag) && key != "poster") else { continue }
+                classes.insert(.small)
+            }
+            if classes == .all { break }
+        }
+        return classes
+    }
+
+    /// Whether CSS could load anything: a resource function, an import, or an escape (which could spell either).
+    private static func cssMayLoad(_ css: String) -> Bool {
+        let compact = css.lowercased().filter { !$0.isWhitespace }
+        return ["url(", "image(", "image-set(", "cross-fade(", "element(", "src(", "@import", "\\"].contains { compact.contains($0) }
     }
 
     public static func timecodeMilliseconds(for link: String) -> Int32? {

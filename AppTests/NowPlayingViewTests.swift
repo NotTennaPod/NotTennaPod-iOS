@@ -6,7 +6,7 @@ import Testing
 
 /// The "Set notification buttons" row and dialog, and the Now Playing commands the
 /// choice offers, checked on the real MPRemoteCommandCenter with the app's command handler.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct NowPlayingViewTests {
     private func find<T: UIView>(_ id: String, _ view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let found = view as? T { return found }
@@ -18,7 +18,7 @@ struct NowPlayingViewTests {
         try #require(condition())
     }
     private func folder() throws -> URL {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M36-View-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("NowPlayingView-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         return root
     }

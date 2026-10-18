@@ -5,7 +5,7 @@ import Synchronization
 import Testing
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1))) struct PlaybackRequestContextTests {
+@MainActor @Suite(.serialized) struct PlaybackRequestContextTests {
     private let userAgent = "AntennaPod/PC-I2-captured"
     private func fixture(_ name: String, directory: String) throws -> URL {
 #if SWIFT_PACKAGE

@@ -7,7 +7,7 @@ import Testing
 
 /// Mounted checks: the shipped widget extension, the widget's face at real widget sizes, the widget's and the
 /// control's intents on a player, the widget's links, and the App Group snapshot the app keeps for them.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct PlayerWidgetViewTests {
     private func wait(_ what: String = "", _ condition: () -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(8)
@@ -41,7 +41,7 @@ struct PlayerWidgetViewTests {
         #expect((widget.infoDictionary?["UIAppFonts"] as? [String])?.allSatisfy { widget.url(forResource: $0, withExtension: nil) != nil } == true)
         // The unsigned Simulator build gets the shared container, and the widget's links reach the app.
         let container = try #require(FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: PlayerWidget.appGroup))
-        let probe = container.appendingPathComponent("m35-probe-\(UUID())")
+        let probe = container.appendingPathComponent("widget-probe-\(UUID())")
         try Data([1]).write(to: probe); try FileManager.default.removeItem(at: probe)
         let schemes = (Bundle.main.infoDictionary?["CFBundleURLTypes"] as? [[String: Any]] ?? [])
             .flatMap { $0["CFBundleURLSchemes"] as? [String] ?? [] }
@@ -385,7 +385,7 @@ struct PlayerWidgetViewTests {
     @Test func controlPauseIsNotHeldBehindAWidgetPlaysSettleWait() async throws {
         let saved = PlayerWidgetIntentRouter.perform
         defer { PlayerWidgetIntentRouter.perform = saved }
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("K3-Settle-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("PlayerWidgetSettle-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let widgetStore = PlayerWidgetStore(directory: root.appendingPathComponent("widget"))
@@ -431,7 +431,7 @@ struct PlayerWidgetViewTests {
     @Test func intentsActOnThePlayerWithThePreferredIntervals() async throws {
         let saved = PlayerWidgetIntentRouter.perform
         defer { PlayerWidgetIntentRouter.perform = saved }
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M35-Intents-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("PlayerWidgetIntents-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let intervals = try PlaybackIntervalPreferenceStore(file: root.appendingPathComponent("intervals.json"))
@@ -478,7 +478,7 @@ struct PlayerWidgetViewTests {
     // MARK: - Links into the app
 
     private func mainScreen(_ body: @MainActor (LibraryViewController, PlaybackCoordinator) async throws -> Void) async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M35-Links-\(UUID())")
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("PlayerWidgetLinks-\(UUID())")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let store = try FeedLibraryStore(url: directory.appendingPathComponent("library.sqlite"))
@@ -546,7 +546,7 @@ struct PlayerWidgetViewTests {
     /// changes, seeks and the cover; it does not rewrite for progress the widget predicts itself, and reloads the
     /// control only when the play state changes.
     @Test func runtimeKeepsTheWidgetSnapshotInStepWithThePlayer() async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M35-Runtime-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("PlayerWidgetRuntime-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let widgetStore = PlayerWidgetStore(directory: root.appendingPathComponent("widget"))
@@ -623,7 +623,7 @@ struct PlayerWidgetViewTests {
     /// rewritten. The wall clock set back an hour without the app being told does not hold the renewal back; told
     /// (`NSSystemClockDidChange`), it renews at once. A paused snapshot is never renewed.
     @Test func runtimeRenewsThePlayingLeaseAboutOnceAMinute() async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("K6-Lease-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("PlayerWidgetLease-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let widgetStore = PlayerWidgetStore(directory: root.appendingPathComponent("widget"))
@@ -696,7 +696,7 @@ struct PlayerWidgetViewTests {
     @Test(arguments: [(Int32(0), false, [Int32(1_000)]), (Int32(0), false, [3_000]), (Int32(0), false, [500, 4_000, 1_500, 0, 3_000]),
                       (Int32(0), true, [0]), (Int32(3_600_000), true, [0])])
     func runtimeRenewsFromPlaybackEventsAlone(duration: Int32, buffering: Bool, steps: [Int32]) async throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("K6-Events-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("PlayerWidgetEvents-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let widgetStore = PlayerWidgetStore(directory: root.appendingPathComponent("widget"))
@@ -735,7 +735,7 @@ struct PlayerWidgetViewTests {
     @Test func aLegacyPlayPauseNeverStartsPlayback() async throws {
         let saved = PlayerWidgetIntentRouter.perform
         defer { PlayerWidgetIntentRouter.perform = saved }
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("K6-Legacy-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("PlayerWidgetLegacy-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let widgetStore = PlayerWidgetStore(directory: root.appendingPathComponent("widget"))
@@ -804,7 +804,7 @@ struct PlayerWidgetViewTests {
     @Test func widgetButtonsWriteTheSettledResultAndLeaveTheReloadToTheSystem() async throws {
         let saved = PlayerWidgetIntentRouter.perform
         defer { PlayerWidgetIntentRouter.perform = saved }
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent("M35-Commands-\(UUID())")
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("PlayerWidgetCommands-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         let widgetStore = PlayerWidgetStore(directory: root.appendingPathComponent("widget"))

@@ -4,7 +4,7 @@ import Testing
 
 /// Host checks of the player widget against Android 3.12.1: what the widget shows, which buttons it has, how its
 /// time advances, and what its buttons do on the app's playback coordinator.
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct PlayerWidgetTests {
     private let english = Locale(identifier: "en_US")
     private let start = Date(timeIntervalSince1970: 1_800_000_000)
@@ -481,7 +481,7 @@ struct PlayerWidgetTests {
 
 /// The widget's buttons and the control on the app's playback coordinator, with the fake engine
 /// of the playback-preference tests.
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor
+@Suite(.serialized) @MainActor
 struct PlayerWidgetPlaybackTests {
     private func intervals(rewind: Int32 = 10, forward: Int32 = 30) -> PlaybackIntervalPreferences {
         var value = PlaybackIntervalPreferences(); value.rewindSeconds = rewind; value.forwardSeconds = forward

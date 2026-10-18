@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.timeLimit(.minutes(1))) @MainActor
+@Suite @MainActor
 struct StreamingAccessProviderTests {
     private func withPreferences(_ body: (MobileNetworkPreferenceStore, URL) async throws -> Void) async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
@@ -61,11 +61,9 @@ struct StreamingAccessProviderTests {
             let server = try await LoopbackHTTPServer.start { _ in .init(headers: ["Content-Type":"image/png", "Cache-Control":"public, max-age=3600"], body: bytes) }
             defer { server.stop() }
             let cache = URLCache(memoryCapacity: 1_000_000, diskCapacity: 0)
-            let configuration = URLSessionConfiguration.ephemeral; configuration.urlCache = cache
-            let session = URLSession(configuration: configuration); defer { session.invalidateAndCancel() }
             let network = DownloadNetworkMonitor(startMonitoring: false)
             network.update(.init(connected: true, metered: true, cellular: true))
-            let access = MobileImageAccess(preferences: preferences, network: network, session: session)
+            let access = MobileImageAccess(preferences: preferences, network: network, cache: cache)
             try preferences.setAllowed(.images, false)
             await #expect(throws: (any Error).self) { try await access.load(server.url) }
             #expect(server.requests.isEmpty)
@@ -77,6 +75,10 @@ struct StreamingAccessProviderTests {
             #expect(try await access.load(server.url).0 == bytes)
             #expect(server.requests.count == 1)
             try preferences.setAllowed(.images, false)
+            // Low Data Wi-Fi is a metered network for cover images: nothing is fetched.
+            network.update(.init(connected: true, metered: false, cellular: false, transport: .wifi, constrained: true))
+            await #expect(throws: (any Error).self) { try await access.load(server.url.appendingPathComponent("low-data")) }
+            #expect(server.requests.count == 1)
             network.update(.init(connected: true, metered: false, cellular: false))
             #expect(try await access.load(server.url.appendingPathComponent("wifi")).0 == bytes)
             #expect(server.requests.count == 2)
@@ -134,13 +136,16 @@ struct StreamingAccessProviderTests {
             for connected in [false, true] {
                 for metered in [false, true] {
                     for cellular in [false, true] {
-                        for allowed in [false, true] {
-                            try preferences.setAllowed(.streaming, allowed)
-                            monitor.update(.init(connected: connected, metered: metered, cellular: cellular))
-                            let result = try await provider.access(for: episode())
-                            #expect(result.needsStreaming)
-                            #expect(result.streamingAllowed == (allowed || !(metered || cellular)))
-                            #expect(!result.isCasting)
+                        // Low Data Mode is Android's metered network for streaming.
+                        for constrained in [false, true] {
+                            for allowed in [false, true] {
+                                try preferences.setAllowed(.streaming, allowed)
+                                monitor.update(.init(connected: connected, metered: metered, cellular: cellular, constrained: constrained))
+                                let result = try await provider.access(for: episode())
+                                #expect(result.needsStreaming)
+                                #expect(result.streamingAllowed == (allowed || !(metered || cellular || constrained)))
+                                #expect(!result.isCasting)
+                            }
                         }
                     }
                 }

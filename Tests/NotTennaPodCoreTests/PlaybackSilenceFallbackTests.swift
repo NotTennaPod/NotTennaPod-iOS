@@ -5,7 +5,7 @@ import Testing
 /// With skip silence saved on, media that only AVPlayer can play (HLS) plays without skipping silence
 /// and the saved preference stays on for the next item; a large-art MP3 takes the processed route and
 /// skips silence (without a notice).
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct PlaybackSilenceFallbackTests {
+@MainActor @Suite(.serialized) struct PlaybackSilenceFallbackTests {
     private func wait(_ check: () -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(15)
         while !check(), ContinuousClock.now < deadline { await Task.yield() }

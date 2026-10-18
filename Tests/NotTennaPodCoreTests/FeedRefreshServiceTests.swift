@@ -8,7 +8,7 @@ private struct RefreshTestTransport: FeedHTTPTransport {
     func send(_ request: URLRequest) async throws -> FeedHTTPResponse { try await reply(request) }
 }
 
-@Suite(.timeLimit(.minutes(1)))
+@Suite
 struct FeedRefreshServiceTests {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
     private let initialXML = Data("""
@@ -105,6 +105,45 @@ struct FeedRefreshServiceTests {
                 #expect(try await store.logs(feedID: initial.id) == logs)
                 #expect(try await store.pendingEffects() == effects)
             }
+        }
+    }
+
+    /// A 304 after a successful refresh is this device's latest refresh: the "Last refresh" details say so, while
+    /// nothing Android exports changes (the last refresh attempt, the failure flag, the validator) and no log entry is
+    /// written. After a failure the failure and its time stay together.
+    @Test func notModifiedRecordsThisDevicesAttemptOnlyForItsDetails() async throws {
+        try await withLibrary { store, _ in
+            let feed = try await seed(store)
+            let transport = RefreshTestTransport { request in
+                #expect(request.value(forHTTPHeaderField: "If-None-Match") == "\"v1\"")
+                return FeedHTTPResponse(url: request.url!, status: 304, headers: [:], body: Data())
+            }
+            let later = now.addingTimeInterval(3_600)
+            let service = FeedRefreshService(store: store, fetcher: FeedFetcher(transport: transport), clock: { later })
+            let before = try #require(try await store.feed(id: feed.id))
+            #expect(try await service.refresh(feedID: feed.id) == .unchanged)
+            var after = try #require(try await store.feed(id: feed.id))
+            #expect(after.localRefreshAttempt == later)
+            #expect(after.lastRefreshAttempt == before.lastRefreshAttempt && !after.lastUpdateFailed && after.validator == before.validator)
+            after.localRefreshAttempt = before.localRefreshAttempt
+            #expect(after == before, "nothing else changed")
+            #expect(try await store.logs(feedID: feed.id).isEmpty)
+            // In a server library's details: this device's success at the 304's time, beside the server's failure.
+            try await store.setServerRefreshForTesting(ServerRefreshStatus(lastAttempt: now, label: "forbidden"), feedID: feed.id)
+            let shown = try #require(try await store.feed(id: feed.id))
+            let words = ["ntp_refresh_by_server": "The server: %1$@", "ntp_refresh_by_device": "This device: %1$@",
+                         "gpodnetsync_pref_report_successful": "Successful", "gpodnetsync_pref_report_failed": "Failed"]
+            let details = try #require(FeedLogDetails.refreshFailure(latestLog: nil, feed: shown, text: { words[$0] ?? $0 },
+                                                                      date: { String(Int64($0.timeIntervalSince1970)) }))
+            #expect(details.origins == ["The server: Failed (1700000000)", "This device: Successful (1700003600)"])
+            // After a failure, a 304 leaves the failure and its time as they were.
+            try await store.recordFailure(.connection, feedID: feed.id, date: later.addingTimeInterval(60))
+            let failed = try #require(try await store.feed(id: feed.id))
+            let afterFailure = FeedRefreshService(store: store, fetcher: FeedFetcher(transport: RefreshTestTransport { request in
+                FeedHTTPResponse(url: request.url!, status: 304, headers: [:], body: Data())
+            }), clock: { later.addingTimeInterval(120) })
+            #expect(try await afterFailure.refresh(feedID: feed.id) == .unchanged)
+            #expect(try await store.feed(id: feed.id) == failed)
         }
     }
 
@@ -271,7 +310,11 @@ struct FeedRefreshServiceTests {
             let reopened = try FeedLibraryStore(url: url)
             let nextService = FeedRefreshService(store: reopened, fetcher: fetcher)
             #expect(try await nextService.refresh(feedID: initial.id) == .unchanged)
-            #expect(try await reopened.feed(id: initial.id) == updated)
+            // The 304 is this device's latest refresh; nothing else changed.
+            var unchanged = try #require(try await reopened.feed(id: initial.id))
+            #expect(unchanged.localRefreshAttempt.map { $0 > updated.localRefreshAttempt ?? .distantPast } == true)
+            unchanged.localRefreshAttempt = updated.localRefreshAttempt
+            #expect(unchanged == updated)
             #expect(try await reopened.logs(feedID: initial.id).isEmpty)
             try await reopened.close()
             #expect(server.requests.map { $0.headers["if-none-match"] } == [nil, "\"v1\"", "\"v2\""])

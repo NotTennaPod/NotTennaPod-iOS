@@ -269,11 +269,16 @@ import AVFoundation
             else { onEvent?(.failed(generation: generation, message: message)) }
             return
         }
+        if case .streamingConfirmationRequired(let id) = event {
+            guard id == backendGeneration else { return }
+            onEvent?(.streamingConfirmationRequired(generation: generation))
+            return
+        }
         let raw: PlaybackEngineReading
         switch event {
         case .ready(let value), .stateChanged(let value), .position(let value), .timelineReset(let value), .ended(let value),
              .mediaServicesReset(let value): raw = value
-        case .failed: return
+        case .failed, .streamingConfirmationRequired: return
         }
         guard raw.generation == backendGeneration else { return }
         if case .ready = event { backendPrepared = raw.isPrepared }
@@ -290,7 +295,7 @@ import AVFoundation
         case .timelineReset: onEvent?(.timelineReset(value))
         case .ended: onEvent?(.ended(value))
         case .mediaServicesReset: onEvent?(.mediaServicesReset(value))
-        case .failed: break
+        case .failed, .streamingConfirmationRequired: break
         }
     }
 }

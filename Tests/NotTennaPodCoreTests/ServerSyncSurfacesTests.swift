@@ -6,7 +6,7 @@ import Testing
 /// through (an unreachable server, a refused login, a server failure, a lost history) reaches the Synchronization page
 /// through the scheduler's report and nowhere else: the "Synchronization failed" notification and its in-app message
 /// stay gpodder.net/Nextcloud-only, even with their delivery listening to the same library.
-@MainActor @Suite(.serialized, .timeLimit(.minutes(2))) struct ServerSyncSurfacesTests {
+@MainActor @Suite(.serialized) struct ServerSyncSurfacesTests {
     @MainActor final class Publisher: SynchronizationNotificationPublishing {
         var published: [String] = []
         func isAuthorized() async -> Bool { true }

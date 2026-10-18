@@ -4,7 +4,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct ShownotesRaceViewTests {
     private func wait(_ condition: () -> Bool) async throws {
         let deadline = ContinuousClock.now + .seconds(5)

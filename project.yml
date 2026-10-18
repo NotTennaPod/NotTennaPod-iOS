@@ -326,7 +326,7 @@ targets:
       - path: Tests/NotTennaPodCoreTests/Fixtures/ADTSTruncation
         type: folder
         buildPhase: resources
-      # ADTS configuration changes and surround as stereo (audio plan F7, F8). The FFmpeg channel-layout
+      # ADTS configuration changes and surround as stereo. The FFmpeg channel-layout
       # cases (PCMStereoDownmixLayoutTests) import the codec module directly and stay SwiftPM-only.
       - Tests/NotTennaPodCoreTests/ADTSFormatChangeTests.swift
       - Tests/NotTennaPodCoreTests/SurroundDownmixTests.swift
@@ -527,6 +527,13 @@ schemes:
         NotTennaPodViewTests: [test]
     test:
       targets: [NotTennaPodViewTests]
+      # The show-notes tests' loopback TLS certificates (Tools/shownotes-tls-fixture.sh), made fresh into .work.
+      preActions:
+        - name: Generate show-notes TLS fixture certificates
+          settingsTarget: NotTennaPod
+          script: |
+            mkdir -p "$SRCROOT/.work/test-fixtures"
+            "$SRCROOT/Tools/shownotes-tls-fixture.sh" > "$SRCROOT/.work/test-fixtures/shownotes-tls.log" 2>&1
       commandLineArguments:
         "-test-library-id 39F9E878-12C4-45CB-A73B-09065D8A41F7": true
         "-test-muted-playback": true

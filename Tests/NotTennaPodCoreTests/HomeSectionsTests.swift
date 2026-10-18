@@ -20,7 +20,7 @@ import Testing
     }
 
     private func load(_ database: URL) async throws -> (feeds: [LibraryFeed], queue: [LibraryEpisode]) {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M20-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("HomeSections-\(UUID())", isDirectory: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let restored = try AndroidDatabaseRestore.read(database, staging: directory.appendingPathComponent("s"))
         let store = try FeedLibraryStore(url: directory.appendingPathComponent("library.sqlite"))

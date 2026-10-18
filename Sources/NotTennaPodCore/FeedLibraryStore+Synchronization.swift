@@ -18,7 +18,14 @@ extension FeedLibraryStore {
             // The lowest-ID episode for each exact GUID and media URL, built once: matching each remote action by
             // scanning and decoding the library took minutes on a first sync of a long history.
             var byGUID: [[UInt16]: (id: Int64, feedID: Int64)] = [:], byURL: [[UInt16]: (id: Int64, feedID: Int64)] = [:]
-            if !selected.isEmpty {
+            // With the derived keys complete, each action is matched by the GUID or media URL index.
+            let keyed = keyedReads
+            func lowest(_ column: String, _ value: String) throws -> (id: Int64, feedID: Int64)? {
+                guard let row = try database.rows("SELECT id, feed_id FROM episode_list_keys WHERE \(column) = ? AND hidden = 0 ORDER BY id LIMIT 1",
+                                                  [.text(value)]).first, let id = row[0].integer, let feed = row[1].integer else { return nil }
+                return (id, feed)
+            }
+            if !selected.isEmpty && !keyed {
                 for feed in try loadFeeds() {
                     for episode in feed.episodes {
                         func keep(_ text: String?, in table: inout [[UInt16]: (id: Int64, feedID: Int64)]) {
@@ -39,7 +46,8 @@ extension FeedLibraryStore {
                 guard milliseconds >= 0, milliseconds <= Int64(Int32.max) else { continue }
                 let guid = SynchronizationActionPolicy.validGUID(action.guid)
                 // A valid GUID matches only by GUID; otherwise the media URL is matched.
-                let match = if let guid { byGUID[Array(guid.utf16)] } else { byURL[Array(action.episode.utf16)] }
+                let match = keyed ? try (guid.map { try lowest("guid", $0) } ?? lowest("media_url", action.episode))
+                    : guid.map { byGUID[Array($0.utf16)] } ?? byURL[Array(action.episode.utf16)]
                 guard let match, var episode = try loadEpisode(match.id), let media = episode.details.media else { continue }
                 let id = match.id, feedID = match.feedID
                 episode.userState.positionMilliseconds = Int32(milliseconds)

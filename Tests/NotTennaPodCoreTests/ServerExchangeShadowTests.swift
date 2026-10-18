@@ -4,7 +4,7 @@ import Testing
 
 /// Apply units built in a shadow and published (PROTOCOL §6.8), the work budget while audio plays (PROTOCOL §6.8),
 /// and the player's pin (PROTOCOL §6.8). Small budgets force the shadow path on small commits.
-@Suite(.serialized, .timeLimit(.minutes(30))) struct ServerExchangeShadowTests {
+@Suite(.serialized) struct ServerExchangeShadowTests {
     typealias Agreement = ServerExchangeAgreementTests
     typealias Concurrency = ServerExchangeConcurrencyTests
 

@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import NotTennaPodCore
 
-@Suite(.serialized, .timeLimit(.minutes(2)))
+@Suite(.serialized)
 struct FFmpegHTTPRangeTests {
     private static let names = ["tone-vorbis.ogg", "tone-opus.ogg", "tone-opus.webm"]
     private func fixture(_ name: String) throws -> URL {

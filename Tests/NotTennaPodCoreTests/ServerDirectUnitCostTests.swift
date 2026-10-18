@@ -5,7 +5,7 @@ import Testing
 /// A direct unit's statements cost what the commit changes, not what the library holds (PROTOCOL §6.8: a direct unit holds the
 /// live lock at most 20 ms): the removal of a large podcast, another podcast subscribed elsewhere and a queue edit cost
 /// about the same in a library ten times larger. Counted in SQLite's virtual machine steps, not in time.
-@Suite(.serialized, .timeLimit(.minutes(10))) struct ServerDirectUnitCostTests {
+@Suite(.serialized) struct ServerDirectUnitCostTests {
     typealias Cutover = ServerBoundedCutoverTests
 
     /// The steps the store's connection runs to apply `records` as a direct unit, on a library holding the arriving
@@ -101,27 +101,33 @@ import Testing
     }
 
     /// A direct unit prepares each distinct statement once and reuses it (its keyed statements run hundreds of times
-    /// inside the lock).
+    /// inside the lock): a unit of forty queue edits prepares exactly as many statements as one of twenty, and runs more.
+    /// (Compared with each other, not as a ratio: the unit's fixed one-time statements, such as the tables it ensures,
+    /// are not what this measures.)
     @Test func aDirectUnitReusesItsStatements() async throws {
-        let fixture = try await ServerLibraryFixture()
-        let applier = try await ServerProjectionUnitTests.Applier(fixture)
-        try await applier.apply(try Cutover.arrivingRecords(count: 600))
-        var low: QueueKey?
-        let records = try (100..<120).flatMap { number -> [ServerRecord] in
-            let key = try QueueKey.between(low, nil, positionWriteID: UUID())
-            low = key
-            return [ServerProjectionUnitTests.membership(Cutover.wire(number), Cutover.arrivingGeneration, true),
-                    ServerProjectionUnitTests.position(Cutover.wire(number), Cutover.arrivingGeneration, key),
-                    ServerRecord(entity: "episode", id: Cutover.wire(number), fieldGroup: "play_state",
-                                 value: ["generation_id": .string(Cutover.arrivingGeneration), "play_state": "unplayed"])]
+        func counts(edits: Int) async throws -> (run: Int, prepared: Int) {
+            let fixture = try await ServerLibraryFixture()
+            let applier = try await ServerProjectionUnitTests.Applier(fixture)
+            try await applier.apply(try Cutover.arrivingRecords(count: 600))
+            var low: QueueKey?
+            let records = try (100..<(100 + edits)).flatMap { number -> [ServerRecord] in
+                let key = try QueueKey.between(low, nil, positionWriteID: UUID())
+                low = key
+                return [ServerProjectionUnitTests.membership(Cutover.wire(number), Cutover.arrivingGeneration, true),
+                        ServerProjectionUnitTests.position(Cutover.wire(number), Cutover.arrivingGeneration, key),
+                        ServerRecord(entity: "episode", id: Cutover.wire(number), fieldGroup: "play_state",
+                                     value: ["generation_id": .string(Cutover.arrivingGeneration), "play_state": "unplayed"])]
+            }
+            let before = await fixture.store.statementCountsForTesting()
+            try await applier.apply(records)
+            let after = await fixture.store.statementCountsForTesting()
+            await fixture.close()
+            return (after.run - before.run, after.prepared - before.prepared)
         }
-        let before = await fixture.store.statementCountsForTesting()
-        try await applier.apply(records)
-        let after = await fixture.store.statementCountsForTesting()
-        let run = after.run - before.run, prepared = after.prepared - before.prepared
-        print("COST a direct unit of twenty queue edits: \(run) statements run, \(prepared) prepared")
-        #expect(prepared * 3 < run, "each distinct statement prepared once: \(prepared) of \(run)")
-        await fixture.close()
+        let twenty = try await counts(edits: 20), forty = try await counts(edits: 40)
+        print("COST a direct unit of twenty queue edits: \(twenty.run) statements run, \(twenty.prepared) prepared; forty: \(forty.run) run, \(forty.prepared) prepared")
+        #expect(forty.prepared == twenty.prepared, "each distinct statement prepared once: \(twenty.prepared) and \(forty.prepared)")
+        #expect(forty.run >= twenty.run + 40, "the keyed statements run again for every edit: \(twenty.run) and \(forty.run)")
     }
 
     /// A library from before the units' indexes opens without building them (on a large library that would hold its

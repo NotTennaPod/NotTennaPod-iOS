@@ -23,7 +23,7 @@ import Testing
 
     /// Restores an Android fixture and re-marks the oracle's download inputs as iOS downloads.
     private func library(_ file: String, downloads: [[String: Any]], reset: Bool = false) async throws -> [LibraryFeed] {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("M28-\(UUID())", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("StatisticsTabs-\(UUID())", isDirectory: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let restored = try AndroidDatabaseRestore.read(Self.fixtures.appendingPathComponent(file), staging: directory.appendingPathComponent("s"))
         let store = try FeedLibraryStore(url: directory.appendingPathComponent("library.sqlite"))

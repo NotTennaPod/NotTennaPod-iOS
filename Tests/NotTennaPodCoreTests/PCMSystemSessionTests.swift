@@ -43,6 +43,9 @@ import Testing
             events.post(.interrupted(reason: 0))
             try await wait { player.phase == .paused }
             #expect(!outputs.values[0].playing && !player.wantsPlayback)
+            // The pause does not wait for its save (it is stored after the engine paused): the stored position follows.
+            let saved = ContinuousClock.now.advanced(by: .seconds(3))
+            while try await store.episode(id: 1)?.userState.positionMilliseconds != 200, ContinuousClock.now < saved { await Task.yield() }
             #expect(try await store.episode(id: 1)?.userState.positionMilliseconds == 200)
             clock.now += elapsed
             events.post(.resumptionRecommended(true))

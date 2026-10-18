@@ -20,6 +20,7 @@ public final class DownloadNetworkMonitor: @unchecked Sendable {
         var listeners: [UUID: AsyncStream<DownloadNetworkState>.Continuation] = [:]
         var revision: UInt64 = 0
         var disconnectedRevision: UInt64 = 0
+        /// The last update an UNMETERED job may not continue across: a metered or a Low Data network.
         var meteredRevision: UInt64 = 0
     }
     private enum OperationResult<Value: Sendable>: Sendable { case completed(Value), networkLost }
@@ -33,19 +34,21 @@ public final class DownloadNetworkMonitor: @unchecked Sendable {
         monitor.pathUpdateHandler = { [weak self] path in
             self?.update(Self.nativeState(status: path.status, isExpensive: path.isExpensive,
                                           usesCellular: path.usesInterfaceType(.cellular),
-                                          usesWiFi: path.usesInterfaceType(.wifi), usesEthernet: path.usesInterfaceType(.wiredEthernet)))
+                                          usesWiFi: path.usesInterfaceType(.wifi), usesEthernet: path.usesInterfaceType(.wiredEthernet),
+                                          isConstrained: path.isConstrained))
         }
         monitor.start(queue: DispatchQueue(label: "AntennaPod.DownloadNetwork"))
     }
 
     deinit { monitor.cancel() }
 
-    static func nativeState(status: NWPath.Status, isExpensive: Bool, usesCellular: Bool, usesWiFi: Bool = false, usesEthernet: Bool = false) -> DownloadNetworkState {
+    static func nativeState(status: NWPath.Status, isExpensive: Bool, usesCellular: Bool, usesWiFi: Bool = false, usesEthernet: Bool = false,
+                            isConstrained: Bool = false) -> DownloadNetworkState {
         // Android ConnectivityService.isActiveNetworkMetered returns true when
         // active capabilities are absent. An unsatisfied iOS path's expense flag
         // alone must not make the source's offline streaming warning disappear.
         .init(connected: status == .satisfied, metered: status != .satisfied || isExpensive,
-              cellular: usesCellular, transport: usesWiFi ? .wifi : (usesEthernet ? .ethernet : .other))
+              cellular: usesCellular, transport: usesWiFi ? .wifi : (usesEthernet ? .ethernet : .other), constrained: isConstrained)
     }
 
     public var current: DownloadNetworkState? { state.withLock { $0.network } }
@@ -148,7 +151,7 @@ public final class DownloadNetworkMonitor: @unchecked Sendable {
             state.network = network
             state.revision += 1
             if !network.connected { state.disconnectedRevision = state.revision }
-            if network.metered { state.meteredRevision = state.revision }
+            if network.metered || network.constrained { state.meteredRevision = state.revision }
             let ready = state.waiters.filter { _, waiter in
                 if let revision = waiter.invalidatedAfter { return Self.lossRevision(waiter.constraint, state) > revision }
                 return waiter.constraint.permits(network)

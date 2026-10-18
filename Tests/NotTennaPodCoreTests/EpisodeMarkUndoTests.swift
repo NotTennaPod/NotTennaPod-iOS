@@ -348,7 +348,7 @@ struct EpisodeMarkUndoTests {
             let tables = try sql(url, "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").compactMap { $0[0] }
             let before = try tables.map { try sql(url, "SELECT * FROM \($0)") }
             let upgraded = try FeedLibraryStore(url: url)
-            #expect(try sql(url, "PRAGMA user_version") == [["20"]])
+            #expect(try sql(url, "PRAGMA user_version") == [["22"]])
             #expect(try tables.map { try sql(url, "SELECT * FROM \($0)") } == before)
             #expect(try sql(url, "SELECT count(*) FROM episode_swipe_undo") == [["0"]])
             try await upgraded.close()
@@ -368,7 +368,7 @@ struct EpisodeMarkUndoTests {
             #expect(try diskEpisode(url, id) == before)
             _ = try sql(url, "DROP VIEW episode_swipe_undo")
             let recovered = try FeedLibraryStore(url: url)
-            #expect(try sql(url, "PRAGMA user_version") == [["20"]])
+            #expect(try sql(url, "PRAGMA user_version") == [["22"]])
             try await recovered.close()
         }
     }

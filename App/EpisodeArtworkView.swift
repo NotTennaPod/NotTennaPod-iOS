@@ -66,7 +66,10 @@ final class EpisodeArtworkView: UIView {
         }
         let pixels = maxPixels
         request = Task { [weak self] in
-            for value in [source, fallback].compactMap({ $0 }) {
+            // A web picture over the restricted-network limit: the next one shows meanwhile, and it replaces
+            // that once the network is unrestricted (an episode's own picture over its podcast's cover).
+            var waiting: String?
+            candidates: for value in [source, fallback].compactMap({ $0 }) {
                 if Task.isCancelled { return }
                 if value.hasPrefix(EpisodeArtworkSelection.embeddedPrefix) {
                     do {
@@ -74,10 +77,8 @@ final class EpisodeArtworkView: UIView {
                         try Task.checkCancellation()
                         guard let decoded = await ArtworkImageCache.decode(bytes, maxPixels: pixels) else { continue }
                         try Task.checkCancellation()
-                        self?.image.image = decoded
-                        self?.placeholder.isHidden = true
-                        self?.artworkLoaded(value)
-                        return
+                        self?.show(decoded, from: value)
+                        break candidates
                     } catch is CancellationError { return }
                     catch { continue }
                 }
@@ -85,7 +86,7 @@ final class EpisodeArtworkView: UIView {
                     self?.model = value
                     self?.placeholder.isHidden = true
                     self?.artworkLoaded(value)
-                    return
+                    break candidates
                 }
                 guard let url = URL(string: value) else { continue }
                 if url.isFileURL {
@@ -94,27 +95,35 @@ final class EpisodeArtworkView: UIView {
                         try Task.checkCancellation()
                         guard let decoded = await ArtworkImageCache.decode(bytes, maxPixels: pixels) else { continue }
                         try Task.checkCancellation()
-                        self?.image.image = decoded
-                        self?.placeholder.isHidden = true
-                        self?.artworkLoaded(value)
-                        return
+                        self?.show(decoded, from: value)
+                        break candidates
                     } catch is CancellationError { return }
                     catch { continue }
                 }
                 guard ["http", "https"].contains(url.scheme?.lowercased() ?? "") else { continue }
                 let loaded = await ArtworkImageCache.remoteImage(value, maxPixels: pixels)
                 if Task.isCancelled { return }
-                guard let loaded else { continue }
-                self?.image.image = loaded
-                self?.placeholder.isHidden = true
-                self?.artworkLoaded(value)
-                return
+                guard let loaded else {
+                    if waiting == nil, ArtworkImageCache.isDeferred(value) { waiting = value }
+                    continue
+                }
+                self?.show(loaded, from: value)
+                break candidates
             }
+            guard let waiting, await ArtworkImageCache.waitForUnrestrictedNetwork(), !Task.isCancelled,
+                  let loaded = await ArtworkImageCache.remoteImage(waiting, maxPixels: pixels), !Task.isCancelled else { return }
+            self?.model = nil; self?.generatedSize = nil
+            self?.show(loaded, from: waiting)
         }
     }
     required init?(coder: NSCoder) { fatalError() }
     deinit { request?.cancel() }
     func cancelLoading() { request?.cancel(); request = nil }
+    private func show(_ decoded: UIImage, from source: String) {
+        image.image = decoded
+        placeholder.isHidden = true
+        artworkLoaded(source)
+    }
     private func artworkLoaded(_ source: String) {
         displayedSource = source
         if presentation != .standard { backgroundColor = .clear }

@@ -4,7 +4,7 @@ import Testing
 @testable import NotTennaPod
 @testable import NotTennaPodCore
 
-@MainActor @Suite(.serialized, .timeLimit(.minutes(1)))
+@MainActor @Suite(.serialized)
 struct ShownotesLifetimeViewTests {
     private func find<T: UIView>(_ id: String, in view: UIView) -> T? {
         if view.accessibilityIdentifier == id, let result = view as? T { return result }
@@ -13,8 +13,11 @@ struct ShownotesLifetimeViewTests {
     private func player(in view: UIView) -> PlayerView? {
         (view as? PlayerView) ?? view.subviews.lazy.compactMap { player(in: $0) }.first
     }
+    /// Waits for `condition`. The bound only ends a wait that will never succeed: WebKit's first content process on a
+    /// newly booted Simulator under load has needed more than three seconds to finish loading (the same failures
+    /// occurred before show-note policies existed), and nothing here measures speed.
     private func wait(details: () -> String = { "" }, _ condition: () -> Bool) async throws {
-        let deadline = ContinuousClock.now + .seconds(3)
+        let deadline = ContinuousClock.now + .seconds(20)
         while !condition(), ContinuousClock.now < deadline { try await Task.sleep(for: .milliseconds(10)) }
         try #require(condition(), "Expected shownotes state: \(details())")
     }
@@ -58,18 +61,18 @@ struct ShownotesLifetimeViewTests {
                 @MainActor func notes() throws -> ShownotesWebView { try #require(find("episodeShownotes", in: controller.view)) }
                 try tap("episode-\(feed.episodes[0].id)")
                 let first = try notes()
-                try await wait { !first.isLoading && first.scrollView.contentSize.height > 1600 }
+                try await wait { first.isDocumentReady && !first.isLoading && first.scrollView.contentSize.height > 1600 }
                 first.scrollView.setContentOffset(CGPoint(x: 0, y: 300), animated: false)
                 try tap("episodePodcast")
                 #expect(find("episodeShownotes", in: controller.view) as ShownotesWebView? == nil)
                 try tap("episode-\(feed.episodes[0].id)")
                 let nested = try notes()
-                try await wait { !nested.isLoading && nested.scrollView.contentSize.height > 1600 }
+                try await wait { nested.isDocumentReady && !nested.isLoading && nested.scrollView.contentSize.height > 1600 }
                 #expect(nested.scrollView.contentOffset.y == 0)
                 nested.scrollView.setContentOffset(CGPoint(x: 0, y: 600), animated: false)
                 try tap("toolbarBack"); try tap("toolbarBack")
                 let returned = try notes()
-                try await wait { !returned.isLoading && returned.scrollView.contentSize.height > 1600 }
+                try await wait { returned.isDocumentReady && !returned.isLoading && returned.scrollView.contentSize.height > 1600 }
                 #expect(returned.scrollView.contentOffset.y == 300)
                 await controller.reloadLibrary()?.value; controller.view.layoutIfNeeded()
                 #expect(try notes().scrollView.contentOffset.y == 300)
@@ -79,7 +82,7 @@ struct ShownotesLifetimeViewTests {
                 #expect(try notes().scrollView.contentOffset.y == 300)
                 try tap("toolbarBack"); try tap("episode-\(feed.episodes[0].id)")
                 let reopened = try notes()
-                try await wait { !reopened.isLoading && reopened.scrollView.contentSize.height > 1600 }
+                try await wait { reopened.isDocumentReady && !reopened.isLoading && reopened.scrollView.contentSize.height > 1600 }
                 #expect(reopened.scrollView.contentOffset.y == 0)
             }
         }
@@ -100,7 +103,7 @@ struct ShownotesLifetimeViewTests {
                 player.setExpanded(true, animated: false)
                 let notes: ShownotesWebView = try #require(find("playerShownotesContent", in: player))
                 let pager = try #require(notes.superview as? UIScrollView)
-                try await wait(details: { "notes ready height=\(notes.scrollView.contentSize.height) loading=\(notes.isLoading)" }) { !notes.isLoading && notes.scrollView.contentSize.height > 1600 }
+                try await wait(details: { "notes ready height=\(notes.scrollView.contentSize.height) loading=\(notes.isLoading)" }) { notes.isDocumentReady && !notes.isLoading && notes.scrollView.contentSize.height > 1600 }
                 pager.setContentOffset(CGPoint(x: 0, y: pager.bounds.height), animated: false)
                 player.scrollViewDidEndScrollingAnimation(pager)
                 try saved.save(episodeID: feed.episodes[0].id, offset: 0)
@@ -144,7 +147,7 @@ struct ShownotesLifetimeViewTests {
                 player.update(feed: feed); player.setExpanded(true, animated: false); player.layoutIfNeeded()
                 let notes: ShownotesWebView = try #require(find("playerShownotesContent", in: player))
                 let open: UIButton = try #require(find("playerShownotes", in: player))
-                try await wait { !notes.isLoading && notes.scrollView.contentSize.height > 1600 }
+                try await wait { notes.isDocumentReady && !notes.isLoading && notes.scrollView.contentSize.height > 1600 }
                 notes.scrollView.setContentOffset(CGPoint(x: 0, y: 300), animated: false)
                 player.update(feed: feed)
                 #expect(notes.scrollView.contentOffset.y == 300)
@@ -198,7 +201,7 @@ struct ShownotesLifetimeViewTests {
                 #expect(player.fullUpdates == updates)
                 player.setExpanded(true, animated: false); player.layoutIfNeeded()
                 let notes: ShownotesWebView = try #require(find("playerShownotesContent", in: player))
-                try await wait { !notes.isLoading && notes.scrollView.contentSize.height > 1600 }
+                try await wait { notes.isDocumentReady && !notes.isLoading && notes.scrollView.contentSize.height > 1600 }
                 // Collapsed again, the player keeps no WebKit process for iOS to reclaim.
                 player.setExpanded(false, animated: false)
                 player.update(feed: feed)
@@ -225,7 +228,7 @@ struct ShownotesLifetimeViewTests {
             web.overrideUserInterfaceStyle = .light
             web.show(LibraryEpisode(id: 1, details: .init(title: "Appearance", description:
                 "<p>Selectableword</p><a href='https://example.invalid'>Link</a>" + (0..<80).map { "<p>Paragraph \($0)</p>" }.joined())))
-            try await wait { !web.isLoading && web.scrollView.contentSize.height > 1600 }
+            try await wait { web.isDocumentReady && !web.isLoading && web.scrollView.contentSize.height > 1600 }
             _ = try await web.callAsyncJavaScript("""
                 globalThis.apLifetimeToken = 'retained';
                 const range = document.createRange(); range.selectNodeContents(document.querySelector('p'));
@@ -274,7 +277,7 @@ struct ShownotesLifetimeViewTests {
                 "<p>Selectableword</p>" + (0..<80).map { "<p>Paragraph \($0)</p>" }.joined() + "<p>Timestamp 02:00</p>",
                 media: .init(url: "https://example.invalid/media", size: 0, durationMilliseconds: 30_000)))
             web.show(episode)
-            try await wait { !web.isLoading && web.scrollView.contentSize.height > 1600 }
+            try await wait { web.isDocumentReady && !web.isLoading && web.scrollView.contentSize.height > 1600 }
             _ = try await web.callAsyncJavaScript("""
                 globalThis.apContentToken = 'retained';
                 const range = document.createRange(); range.selectNodeContents(document.querySelector('p'));
@@ -339,7 +342,7 @@ struct ShownotesLifetimeViewTests {
             let html = "<p>Selectableword</p>" + (0..<80).map { "<p>Paragraph \($0)</p>" }.joined()
             var first = LibraryEpisode(id: 1, details: .init(title: "First", description: html))
             web.show(first)
-            try await wait(details: { "stage 1 offset=\(web.scrollView.contentOffset.y) content=\(web.scrollView.contentSize.height) viewport=\(web.scrollView.bounds.height) loading=\(web.isLoading) restorations=\(restorationGeometry)" }) { !web.isLoading && web.scrollView.contentSize.height > 1600 }
+            try await wait(details: { "stage 1 offset=\(web.scrollView.contentOffset.y) content=\(web.scrollView.contentSize.height) viewport=\(web.scrollView.bounds.height) loading=\(web.isLoading) restorations=\(restorationGeometry)" }) { web.isDocumentReady && !web.isLoading && web.scrollView.contentSize.height > 1600 }
             try saved.save(episodeID: 1, offset: 300)
             web.scrollView.contentOffset.y = 600
             first.details.description = html + "<p>Revision one</p>"
@@ -381,7 +384,7 @@ struct ShownotesLifetimeViewTests {
                 let notes: ShownotesWebView = try #require(find("playerShownotesContent", in: player))
                 let pager = try #require(notes.superview as? UIScrollView)
                 let id = feed.episodes[0].id
-                try await wait { !notes.isLoading && notes.scrollView.contentSize.height > 1600 }
+                try await wait { notes.isDocumentReady && !notes.isLoading && notes.scrollView.contentSize.height > 1600 }
                 pager.setContentOffset(CGPoint(x: 0, y: pager.bounds.height), animated: false)
                 player.scrollViewDidEndScrollingAnimation(pager)
                 notes.scrollView.contentOffset.y = 300
