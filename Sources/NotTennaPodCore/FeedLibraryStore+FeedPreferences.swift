@@ -8,6 +8,17 @@ extension FeedLibraryStore {
         try write(.registers) { try updatePreferencesInTransaction(feedID: feedID, change: change) }
     }
 
+    /// A podcast's New episodes action dialog. Android saves every tapped entry, the one already shown included
+    /// (`MaterialListPreference`), so the choice is recorded even when this device already has it (another device may
+    /// have changed it meanwhile).
+    public func setNewEpisodesAction(_ action: NewEpisodesAction, feedID: Int64) throws {
+        try Task.checkCancellation()
+        try write(.registers) {
+            activeCapture?.newEpisodesActionTargets.insert(feedID)
+            try updatePreferencesInTransaction(feedID: feedID) { $0.newEpisodesAction = action }
+        }
+    }
+
     /// Bulk edit: the same change applied to each feed (in the given order) in one transaction, each
     /// from its current stored preferences. Either every feed changes or none does.
     public func updatePreferences(feedIDs: [Int64],
@@ -36,7 +47,7 @@ extension FeedLibraryStore {
         }
     }
 
-    private func updatePreferencesInTransaction(feedID: Int64,
+    func updatePreferencesInTransaction(feedID: Int64,
                                                 change: (inout FeedLibraryPreferences) throws -> Void) throws {
         guard var feed = try loadFeedHeader(feedID) else { throw FeedLibraryError.missingFeed(feedID) }
         var preferences = FeedLibraryPreferences(customTitle: feed.customTitle, subscriptionState: feed.subscriptionState,

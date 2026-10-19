@@ -100,14 +100,19 @@ extension LibraryViewController {
         messages.present(controller)
     }
 
+    /// Every episode button on screen (rows, Home's rows in each section and its cards) shows the download and playback
+    /// state, and the playing episode's row and card their background.
     func updateDownloadRows() {
         for (episode, card, localFeed) in homeCards {
             let job = downloads?.activeJob(source: episode.details.media?.url)
+            let playing = playback?.episode?.id == episode.id && playback?.wantsPlayback == true
             card.actionButton.update(episode: episode, job: job, progress: job.flatMap { downloads?.progress[$0.id] },
-                                     playing: playback?.episode?.id == episode.id && playback?.wantsPlayback == true,
+                                     playing: playing,
                                      localFeed: localFeed, streamOverDownload: navigationPreferences?.value.streamOverDownload == true)
+            card.setPlaying(playing)
         }
-        for (episode, row) in episodeRows.values {
+        let twins = homeRows.filter { episodeRows[$0.episode.id]?.1 !== $0.row }.map { ($0.episode, $0.row) }
+        for (episode, row) in Array(episodeRows.values) + twins {
             let job = downloads?.activeJob(source: episode.details.media?.url)
             row.updateDownload(job: job, progress: job.flatMap { downloads?.progress[$0.id] },
                                playing: playback?.episode?.id == episode.id && playback?.wantsPlayback == true,

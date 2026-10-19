@@ -1,9 +1,10 @@
 import Foundation
 
 /// The shared swipe helper changes state without resetting position or emitting
-/// a manual played/unplayed synchronization action.
+/// a manual played/unplayed synchronization action. A swipe marks the state it was accepted for (`markPlayed`,
+/// `markUnplayed`), whatever the episode's state when the mark is written.
 public enum EpisodeSwipeMark: Sendable {
-    case removeInbox, togglePlayed
+    case removeInbox, togglePlayed, markPlayed, markUnplayed
 }
 
 /// A committed state delta, not a saved episode to write back during Undo.

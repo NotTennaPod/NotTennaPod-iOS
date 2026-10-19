@@ -123,8 +123,14 @@ extension FeedLibraryStore {
     public func deleteTag(_ tag: String, feedIDs: [Int64]) throws {
         try updatePreferences(feedIDs: feedIDs) { _, preferences in preferences.tags = FeedTagEdit.deleted(preferences.tags, tag) }
     }
-    /// Keep updated, Episode notifications, Include in auto downloads, Delete after playing.
+    /// Keep updated, Episode notifications, Include in auto downloads, Delete after playing. Android sets the chosen
+    /// value on every selected feed; Keep updated, the one of them that syncs, is recorded for each of them, also one
+    /// already showing the value.
     public func applyBulk(_ preference: FeedBulkPreference, feedIDs: [Int64]) throws {
-        try updatePreferences(feedIDs: feedIDs) { _, preferences in preference.apply(to: &preferences) }
+        try Task.checkCancellation()
+        try write(.registers) {
+            if case .keepUpdated = preference { activeCapture?.keepUpdatedTargets.formUnion(feedIDs) }
+            for id in feedIDs { try updatePreferencesInTransaction(feedID: id) { preference.apply(to: &$0) } }
+        }
     }
 }

@@ -15,6 +15,8 @@
 "home_welcome_text" = "You are not subscribed to any podcasts yet. Open the menu to add a podcast.";
 "no_items_header_label" = "No queued episodes";
 "no_items_label" = "Add an episode by downloading it, or long press an episode and select \"Add to queue\".";
+"no_queue_items_inbox_has_items_label" = "No episodes lined up, but there are new episodes that await you!";
+"no_queue_items_inbox_has_items_button_label" = "Go to inbox";
 "no_subscriptions_head_label" = "No subscriptions";
 "no_subscriptions_label" = "To subscribe to a podcast, press the plus icon below.";
 "home_new_empty_text" = "New episodes will show up here. You can then decide whether you are interested in them.";

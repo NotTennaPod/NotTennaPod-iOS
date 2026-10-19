@@ -13,6 +13,16 @@ struct HomeSectionContent: Equatable {
             && zip(lhs.rows, rhs.rows).allSatisfy { $0.1 == $1.1 && RowPaint.Header($0.0) == RowPaint.Header($1.0) }
             && zip(lhs.feeds, rhs.feeds).allSatisfy { $0.id == $1.id && $0.title == $1.title && $0.metadata.imageURL == $1.metadata.imageURL }
     }
+
+    /// Whether `other` shows the same episodes, podcasts and badge in the same places, its episodes differing at most in
+    /// their playback (`LibraryEpisode.differsOnlyInPlayback`): a position save, which cards and rows show in place.
+    func differsOnlyInPlayback(from other: Self) -> Bool {
+        var same = other
+        same.rows = zip(rows, other.rows).map { mine, theirs in
+            mine.1.id == theirs.1.id && mine.1.differsOnlyInPlayback(from: theirs.1) ? (theirs.0, mine.1) : theirs
+        } + other.rows.dropFirst(rows.count)
+        return self == same
+    }
 }
 
 /// One drawn Home section: what it shows, its views and where it is.
@@ -115,9 +125,19 @@ extension LibraryViewController {
         for index in homeSections.indices {
             let state = homeSections[index]
             let now = homeContent(state.section)
-            if now == state.shown, !stale[index] {
+            // A position save keeps the section's views: its cards show their progress in place, and its rows were
+            // shown it in place by the patch; a row whose progress line came or went takes its new height, and what
+            // follows it moves.
+            if !stale[index], now == state.shown || now.differsOnlyInPlayback(from: state.shown) {
                 if shift != 0 { state.views.forEach { $0.frame.origin.y += shift } }
+                homeSections[index].shown = now
                 homeSections[index].top += shift
+                if now != state.shown {
+                    showHomePlayback(state)
+                    let grown = fitHomeRows(state.views)
+                    homeSections[index].height += grown
+                    shift += grown
+                }
                 continue
             }
             // A strip keeps the person's place: its first visible card, or the nearest one that stays.
@@ -163,7 +183,32 @@ extension LibraryViewController {
         strip.contentOffset.x = min(max(0, x), max(0, strip.contentSize.width - strip.bounds.width))
     }
 
-    /// The rows and cards of views that leave.
+    /// Each row of a Home section takes the height it needs (a playback change can add or remove its progress line), the
+    /// section's views below it moving with it; returns the section's change of height.
+    private func fitHomeRows(_ views: [UIView]) -> CGFloat {
+        var grown: CGFloat = 0
+        for row in views.compactMap({ $0 as? EpisodeRowView }).sorted(by: { $0.frame.minY < $1.frame.minY }) {
+            let delta = row.sizeThatFits(CGSize(width: row.bounds.width, height: .greatestFiniteMagnitude)).height - row.frame.height
+            guard abs(delta) >= 0.5 else { continue }
+            let bottom = row.frame.maxY
+            row.frame.size.height += delta
+            for view in views where view !== row && view.frame.minY >= bottom - 0.5 { view.frame.origin.y += delta }
+            grown += delta
+        }
+        return grown
+    }
+
+    /// A section's cards show their episodes' playback in place (`HorizontalItemViewHolder.bind` of the same holder),
+    /// with the player's live position over the stored one, as the action model holds it.
+    private func showHomePlayback(_ state: HomeSectionState) {
+        guard let strip = state.views.lazy.compactMap({ $0 as? HomeStrip }).first else { return }
+        for case let card as HomeEpisodeCard in strip.itemViews {
+            guard let episode = card.actionModel?.snapshot().episode ?? libraryEpisode(card.episodeID)?.episode else { continue }
+            card.showPlayback(of: episode)
+        }
+    }
+
+    /// The rows and cards of views that leave. An episode's row in another section stays, with its own registration.
     private func forgetHomeViews(_ views: [UIView]) {
         let leaving = Set(views.map(ObjectIdentifier.init))
         func inside(_ view: UIView) -> Bool {
@@ -172,9 +217,9 @@ extension LibraryViewController {
             return false
         }
         homeCards.removeAll { inside($0.1) }
+        homeRows.removeAll { inside($0.row) }
         for (id, value) in episodeRows where inside(value.1) {
-            episodeRows[id] = nil
-            homeRowScopes[id] = nil
+            episodeRows[id] = homeRows.first { $0.episode.id == id }.map { ($0.episode, $0.row) }
         }
     }
 

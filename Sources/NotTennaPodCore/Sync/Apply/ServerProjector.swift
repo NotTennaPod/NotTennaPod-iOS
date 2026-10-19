@@ -1137,7 +1137,10 @@ final class ServerProjector {
         // queue inside the live lock): the same values `wireEpisode`, `record` and `overlays` give one at a time.
         let members = try QueueMemberReads(self, candidates: candidates)
         for id in candidates {
-            guard let row = try episodeRow(id), row.episode.details.media != nil || currentSet.contains(id) else { continue }
+            // An episode without media shows when the queue holds it (Android's queue joins its media optionally): this
+            // device never queues one itself, but another client's add or a feed that dropped an enclosure can. As on Android,
+            // playback refuses it, automatic download skips it, and playback that reaches it in the queue stops there.
+            guard let row = try episodeRow(id) else { continue }
             if plan.pinnedRemovals.contains(where: { $0.feedID == row.feedID }) { continue }
             if try isLocalFolder(row.feedID) {
                 if currentSet.contains(id) { deviceOnly.append(id) }

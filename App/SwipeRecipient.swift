@@ -25,21 +25,30 @@ import NotTennaPodCore
     }
     func perform(direction: EpisodeSwipeDirection, model: EpisodeActionModel,
                  filter: FeedEpisodeFilter, target: EpisodeMediaDeletionTarget?, item: EpisodeListItem? = nil) async {
+        await accept(direction: direction, model: model, filter: filter, target: target, item: item)?()
+    }
+    /// What a swipe in `direction` does, settled now (the configured action and its decision for the captured model,
+    /// filter and target); nil when the gesture is disabled. The result performs it, whenever it is called.
+    func accept(direction: EpisodeSwipeDirection, model: EpisodeActionModel, filter: FeedEpisodeFilter,
+                target: EpisodeMediaDeletionTarget?, item: EpisodeListItem? = nil) -> (@MainActor () async -> Void)? {
         switch preferences.gesture(on: screen, direction: direction) {
-        case .disabled: return
-        case .configure: configure()
+        case .disabled: return nil
+        case .configure: return { [configure] in configure() }
         case .action(let action):
             let decision = action.decision(item: item ?? model.snapshot(), filter: filter)
-            switch decision.recipient {
-            case .markWithUndo:
-                _ = await coordinator.perform(model: model, action: action == .removeInbox ? .removeInbox : .togglePlayed,
-                    target: target, offersUndo: decision.undo != nil)
-            case .list(.removeQueue):
-                await offers.removeQueue(episodeID: model.episodeID, offersUndo: decision.undo == .queuePosition)
-            case .removeHistory:
-                await offers.removeHistory(episodeID: model.episodeID, offersUndo: decision.undo == .historyDate)
-            case .none: break
-            default: await ordinary(decision, model, target)
+            return { [coordinator, offers, ordinary] in
+                switch decision.recipient {
+                case .markWithUndo(let mark):
+                    // The state settled at acceptance, not a toggle of whatever the episode is when it runs.
+                    _ = await coordinator.perform(model: model, action: mark == .removeInbox ? .removeInbox
+                        : mark == .markPlayed ? .markPlayed : .markUnplayed, target: target, offersUndo: decision.undo != nil)
+                case .list(.removeQueue):
+                    await offers.removeQueue(episodeID: model.episodeID, offersUndo: decision.undo == .queuePosition)
+                case .removeHistory:
+                    await offers.removeHistory(episodeID: model.episodeID, offersUndo: decision.undo == .historyDate)
+                case .none: break
+                default: await ordinary(decision, model, target)
+                }
             }
         }
     }

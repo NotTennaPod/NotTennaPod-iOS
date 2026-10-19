@@ -141,11 +141,17 @@ extension LibraryViewController {
         let pagerList = items.map { EpisodePagerItem(feedID: $0.0.id, episodeID: $0.1.id) }
         let cards = items.map { feed, episode in
             let playing = playback?.episode?.id == episode.id && playback?.wantsPlayback == true
-            let card = HomeEpisodeCard(feed: feed, episode: episode, library: library, playing: playing, episodeCover: usesEpisodeCover,
+            // The card acts through the episode's action model, as a row does, and shows the player's live position.
+            let model = actionModel(feed: feed, episode: episode)
+            applyLivePosition(model)
+            let card = HomeEpisodeCard(feed: feed, episode: model.snapshot().episode, library: library, playing: playing,
+                episodeCover: usesEpisodeCover,
                 action: { [weak self] in self?.downloadAction(episode.id) },
                 open: { [weak self] in self?.openEpisode(feedID: feed.id, episodeID: episode.id, list: pagerList) })
-            homeRowScopes[episode.id] = homeRowScopes[episode.id] ?? .episodes
-            card.contextMenu = { [weak self] anchor, fraction in self?.showListEpisodeMenu(episode.id, feedID: feed.id, anchor: anchor, fraction: fraction) }
+            card.actionModel = model
+            card.contextMenu = { [weak self] anchor, fraction in
+                self?.showListEpisodeMenu(episode.id, feedID: feed.id, anchor: anchor, fraction: fraction, home: .episodes)
+            }
             let job = downloads?.activeJob(source: episode.details.media?.url)
             let localFeed = feed.source.isLocalFeedSource
             card.actionButton.update(episode: episode, job: job, progress: job.flatMap { downloads?.progress[$0.id] }, playing: playing,
@@ -162,8 +168,7 @@ extension LibraryViewController {
     }
 
     private func homeRows(_ rows: [(LibraryFeed, LibraryEpisode)], scope: EpisodeSelectionScope, y: CGFloat) -> CGFloat {
-        for (_, episode) in rows { homeRowScopes[episode.id] = scope }
-        return addEpisodeRows(rows, top: y)
+        addEpisodeRows(rows, top: y, home: scope)
     }
 
     private func showHomeConfiguration() {

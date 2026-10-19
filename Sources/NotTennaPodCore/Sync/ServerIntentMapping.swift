@@ -154,8 +154,14 @@ extension FeedLibraryStore {
                 }
             }
             var policy = ContractObject()
-            if before.keepUpdated != after.keepUpdated { policy["keep_updated"] = .bool(after.keepUpdated) }
-            if before.newEpisodesAction != after.newEpisodesAction { policy["new_episodes_action"] = Self.wire(after.newEpisodesAction) }
+            // A bulk Keep updated names every selected podcast, and the New episodes action dialog its podcast, also one
+            // this device already showed with the value (a podcast the account does not know records nothing, as below).
+            if before.keepUpdated != after.keepUpdated || s.capture.keepUpdatedTargets.contains(feedID) {
+                policy["keep_updated"] = .bool(after.keepUpdated)
+            }
+            if before.newEpisodesAction != after.newEpisodesAction || s.capture.newEpisodesActionTargets.contains(feedID) {
+                policy["new_episodes_action"] = Self.wire(after.newEpisodesAction)
+            }
             if !policy.isEmpty {
                 let properties = policy.members
                 try emitPodcastFact(s, feedID: feedID, type: "podcast.set_policy", payload: policy,
@@ -164,9 +170,12 @@ extension FeedLibraryStore {
                 s.account(.feed(feedID, .keepUpdated)); s.account(.feed(feedID, .newEpisodesAction))
             }
         }
-        let favorites = s.capture.episodeOrder.filter { id in
+        // A changed favorite, and every episode an explicit Add or Remove favorite named, also one this device already
+        // showed with the value: the command is the person's latest word on it (PROTOCOL §7.1, §7.3).
+        let favorites = try s.capture.episodeOrder.filter { id in
             guard let change = s.capture.episodes[id], let before = change.before, let after = change.after else { return false }
-            return before.userState.isFavorite != after.userState.isFavorite
+            if before.userState.isFavorite != after.userState.isFavorite { return true }
+            return try s.capture.favoriteTargets.contains(id) && isKnownToAccount(id, s)
         }
         try emitEpisodeFacts(s, type: "favorite.set", members: favorites,
                              extra: { id in ["on": .bool(s.capture.episodes[id]?.after?.userState.isFavorite ?? false)] },
@@ -241,6 +250,16 @@ extension FeedLibraryStore {
     }
 
     // MARK: - Episode state, Inbox and favorites
+
+    /// Whether an episode's podcast is known to the account (registered, or a registration pending): an explicit command
+    /// that changed nothing here names it, but never registers a preview or names a local folder's episode for it.
+    func isKnownToAccount(_ id: Int64, _ s: RecordingSession) throws -> Bool {
+        guard let feed = try feedOf(id, s) else { return false }
+        switch try binding(feed, s) {
+        case .registered, .pending: return true
+        case .localFolder, .unregistered: return false
+        }
+    }
 
     /// The episodes the body wrote that still exist, in the order it wrote them.
     private func touched(_ s: RecordingSession) -> [Int64] {
@@ -651,10 +670,16 @@ extension FeedLibraryStore {
     private func mapQueueRemove(_ s: RecordingSession, reason: ServerIntent.QueueRemovalReason) throws {
         let after = Set(s.queueAfter)
         let removed = s.capture.queueBefore.filter { !after.contains($0) }
-        try emitEpisodeFacts(s, type: "queue.remove", members: removed, bulkKey: "episodes",
+        // An explicit Remove from queue also names each selected episode this device did not show queued: it is the
+        // person's latest word on its membership (PROTOCOL §7.6, "the last in order wins").
+        var named = Set(removed)
+        let unqueued = try s.capture.queueRemovalTargets.filter { id in
+            try !after.contains(id) && named.insert(id).inserted && isKnownToAccount(id, s)
+        }
+        try emitEpisodeFacts(s, type: "queue.remove", members: removed + unqueued, bulkKey: "episodes",
                              extra: { _ in ["reason": .string(reason.rawValue)] },
                              overlays: { entity, _ in [self.register(entity, "queue_membership", false)] },
-                             dependencies: try queueProvenance(s))
+                             dependencies: try queueProvenance(s) + queueProvenance(members: unqueued, s))
         for id in removed { s.account(.queueOut(id)) }
         if let receipt = s.capture.queueRemovalReceipt, let key = s.removedKeys[receipt.episodeID] {
             s.capture.afterCommit.append { store in store.queueRemovalKeys[receipt.operationID] = key }

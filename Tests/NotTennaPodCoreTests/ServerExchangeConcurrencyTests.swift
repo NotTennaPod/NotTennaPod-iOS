@@ -363,6 +363,121 @@ import Testing
         }
     }
 
+    /// Multi-select Add to favorites on A covers every selected episode, one that A's stale copy still shows as favorite
+    /// although C has removed it since: the later explicit Add stars it everywhere.
+    @Test func offeredBulkAddFavoriteKeepsTheIntentForAnAlreadyFavoriteSelection() async throws {
+        try await ExchangeWorld.run { world in
+            let (a, c, _, ids, _) = try await Self.twoPhones(world)
+            try await a.store.setFavorite(episodeID: ids[0], favorite: true)
+            await a.exchange()
+            await c.exchange()
+            let firstOnC = try await Self.same(ids[0], from: a, on: c)
+            try await c.store.setFavorite(episodeID: firstOnC, favorite: false)
+            await c.exchange()
+            let first = try #require(try await a.store.episode(id: ids[0]))
+            let second = try #require(try await a.store.episode(id: ids[1]))
+            #expect(first.userState.isFavorite && !second.userState.isFavorite)
+            let items = [first, second].map { EpisodeListItem(episode: $0, local: false) }
+            #expect(EpisodeListMenu.actions(items, selection: true).contains(.addFavorite))
+            let executor = await EpisodeListActionExecutor(store: a.store, download: { _ in }, delete: { _ in }, reset: { _ in })
+            _ = try await executor.perform(.addFavorite, items: items, selection: true)
+            #expect(try await a.store.episode(id: ids[0])?.userState.isFavorite == true)
+            #expect(try await a.store.episode(id: ids[1])?.userState.isFavorite == true)
+            let writes = try await a.store.serverOutbox(after: try await a.store.serverExchangeState().acked, limit: 500)
+            #expect(writes.count == 2, "one favorite fact per selected episode")
+            await a.exchange()
+            await c.exchange()
+            #expect(try await a.store.serverUnsentChanges() == 0)
+            #expect(try await a.store.episode(id: ids[1])?.userState.isFavorite == true)
+            #expect(try await a.store.episode(id: ids[0])?.userState.isFavorite == true, "the later Add to favorites covers both selected episodes")
+            #expect(try await c.store.episode(id: firstOnC)?.userState.isFavorite == true, "the other phone shows the later explicit Add")
+        }
+    }
+
+    /// Multi-select Remove from queue on A covers every selected episode, one that A's stale copy does not show queued
+    /// although C has queued it since: the later explicit removal takes it out everywhere.
+    @Test func offeredBulkRemoveFromQueueKeepsTheIntentForAnUnqueuedSelection() async throws {
+        try await ExchangeWorld.run { world in
+            let (a, c, _, ids, _) = try await Self.twoPhones(world)
+            _ = try await a.store.enqueue([ids[0]])
+            await a.exchange()
+            await c.exchange()
+            let secondOnC = try await Self.same(ids[1], from: a, on: c)
+            _ = try await c.store.enqueue([secondOnC])
+            await c.exchange()
+            #expect(try await a.store.queue().map(\.id) == [ids[0]])
+            let first = try #require(try await a.store.episode(id: ids[0]))
+            let second = try #require(try await a.store.episode(id: ids[1]))
+            let items = [EpisodeListItem(episode: first, local: false, queued: true), EpisodeListItem(episode: second, local: false)]
+            #expect(EpisodeListMenu.actions(items, selection: true).contains(.removeQueue))
+            let executor = await EpisodeListActionExecutor(store: a.store, download: { _ in }, delete: { _ in }, reset: { _ in })
+            _ = try await executor.perform(.removeQueue, items: items, selection: true)
+            #expect(try await a.store.queue().isEmpty)
+            let writes = try await a.store.serverOutbox(after: try await a.store.serverExchangeState().acked, limit: 500)
+            #expect(writes.count == 1, "one removal naming both selected episodes")
+            await a.exchange()
+            await c.exchange()
+            #expect(try await a.store.serverUnsentChanges() == 0)
+            #expect(try await a.store.queue().isEmpty, "the later removal covers both selected episodes")
+            #expect(try await c.store.queue().isEmpty, "the other phone shows the later explicit removal")
+            try await Self.converge(world, [a, c], "bulk removal")
+        }
+    }
+
+    /// A bulk Keep updated on A covers every selected podcast, one that A's stale copy already shows with the chosen value
+    /// although C has changed it since: the later explicit choice applies to it everywhere.
+    @Test func aBulkKeepUpdatedCoversAnAlreadyMatchingSelectedPodcast() async throws {
+        try await ExchangeWorld.run { world in
+            let (a, c, first, _, podcast) = try await Self.twoPhones(world)
+            let second = try await a.store.subscribeForTesting(Agreement.fetched(world.url("two.xml"), title: "Two", prefix: "two", count: 3))
+            try await Agreement.waitForCatalog(a, feedID: second.id)
+            await c.exchange()
+            try await a.store.applyBulk(.keepUpdated(false), feedIDs: [first.id])
+            await a.exchange()
+            await c.exchange()
+            let firstOnC = try await Self.feed(of: podcast, on: c)
+            try await c.store.updatePreferences(feedID: firstOnC) { $0.keepUpdated = true }
+            await c.exchange()
+            let localFirst = try #require(try await a.store.feed(id: first.id))
+            let localSecond = try #require(try await a.store.feed(id: second.id))
+            #expect(!localFirst.keepUpdated && localSecond.keepUpdated)
+            #expect(FeedBulkAction.visible([localFirst, localSecond], archiveScreen: false).contains(.keepUpdated))
+            try await a.store.applyBulk(.keepUpdated(false), feedIDs: [first.id, second.id])
+            #expect(try await a.store.feed(id: first.id)?.keepUpdated == false)
+            #expect(try await a.store.feed(id: second.id)?.keepUpdated == false)
+            let writes = try await a.store.serverOutbox(after: try await a.store.serverExchangeState().acked, limit: 500)
+            #expect(writes.count == 2, "one explicit policy fact per selected podcast")
+            await a.exchange()
+            await c.exchange()
+            #expect(try await a.store.serverUnsentChanges() == 0)
+            #expect(try await a.store.feed(id: second.id)?.keepUpdated == false)
+            #expect(try await a.store.feed(id: first.id)?.keepUpdated == false, "the later bulk choice applies to the whole selection")
+            #expect(try await c.store.feed(id: firstOnC)?.keepUpdated == false, "the later bulk choice reaches the other phone")
+        }
+    }
+
+    /// Choosing, in a podcast's New episodes action dialog on A, the value A's stale copy shows although C has changed it
+    /// since: the later explicit choice applies everywhere.
+    @Test func choosingTheShownNewEpisodesActionKeepsTheLaterChoice() async throws {
+        try await ExchangeWorld.run { world in
+            let (a, c, first, _, podcast) = try await Self.twoPhones(world)
+            let firstOnC = try await Self.feed(of: podcast, on: c)
+            #expect(try await a.store.feed(id: first.id)?.newEpisodesAction == .global)
+            try await c.store.updatePreferences(feedID: firstOnC) { $0.newEpisodesAction = .queue }
+            await c.exchange()
+            #expect(try await a.store.feed(id: first.id)?.newEpisodesAction == .global)
+            try await a.store.setNewEpisodesAction(.global, feedID: first.id)
+            #expect(try await a.store.feed(id: first.id)?.newEpisodesAction == .global)
+            let writes = try await a.store.serverOutbox(after: try await a.store.serverExchangeState().acked, limit: 500)
+            #expect(writes.count == 1, "the explicit choice is recorded")
+            await a.exchange()
+            await c.exchange()
+            #expect(try await a.store.serverUnsentChanges() == 0)
+            #expect(try await a.store.feed(id: first.id)?.newEpisodesAction == .global, "the later explicit choice stands here")
+            #expect(try await c.store.feed(id: firstOnC)?.newEpisodesAction == .global, "the later explicit choice reaches the other phone")
+        }
+    }
+
     /// 13. Undo of a mark played restores the previous state and position on every device.
     @Test func scenario13UndoOfAMarkRestoresStateAndPositionEverywhere() async throws {
         try await ExchangeWorld.run { world in

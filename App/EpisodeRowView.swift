@@ -15,14 +15,15 @@ final class EpisodeRowView: UIView {
     private var progress: UIProgressView?
     private let cover: EpisodeArtworkView
     private let drag = UIImageView(image: UIImage(named: "ic_drag_lighttheme"))
-    private let presentation: EpisodeRowPresentation
+    private var presentation: EpisodeRowPresentation
+    private let queued: Bool, queueScreen: Bool
     private var draggable: Bool
     private let showsSecondaryAction: Bool
     private let prefersDelete: Bool
     private let localFeed: Bool
     private var metadataHeight: CGFloat
     private let downloadButton: EpisodeDownloadButton
-    private let episode: LibraryEpisode
+    private var episode: LibraryEpisode
     // Data identity is owned by the list presentation, independently of this view.
     var actionModel: EpisodeActionModel?
     var swipe: EpisodeRowSwipe?
@@ -33,18 +34,31 @@ final class EpisodeRowView: UIView {
             })]
         }
     }
+    /// Source `bg_episode_list_item.xml`: `colorSecondaryContainer` when selected or activated (the playing episode, not
+    /// during selection: `EpisodeItemListAdapter` deactivates rows in action mode), and the ripple on a press.
     private let selectedBackground = UIView()
+    private let pressedBackground = UIView()
+    private var selected = false
     private var selectionMode = false
     private var downloadState: (LibraryDownloadJob?, MediaDownloadProgress?, Bool, Bool)?
     func setSelected(_ selected: Bool, selectionMode: Bool = false) {
+        self.selected = selected
         if self.selectionMode != selectionMode {
             self.selectionMode = selectionMode
             if let state = downloadState { updateDownload(job: state.0, progress: state.1, playing: state.2, streamOverDownload: state.3) }
         }
-        selectedBackground.isHidden = !selected
+        updateBackground()
         if selected { openButton.accessibilityTraits.insert(.selected) }
         else { openButton.accessibilityTraits.remove(.selected) }
     }
+    /// Selection, or the playing episode outside selection (`itemView.setActivated(isCurrentlyPlaying)`); playback is
+    /// never spoken as selected.
+    private func updateBackground() {
+        selectedBackground.isHidden = !(selected || (downloadState?.2 == true && !selectionMode))
+    }
+    /// Whether the row shows the playing episode's background, or a press's (tests).
+    var showsPlayingBackground: Bool { !selectedBackground.isHidden && !selected }
+    var showsPressedFeedback: Bool { !pressedBackground.isHidden }
     /// Queue measures a new row before attachment; use its actual container environment.
     func configureQueueLayout(traits: UITraitCollection, rightToLeft: Bool) {
         semanticContentAttribute = rightToLeft ? .forceRightToLeft : .forceLeftToRight
@@ -87,12 +101,13 @@ final class EpisodeRowView: UIView {
         let point = gesture.location(in: self)
         contextMenu?(self, CGPoint(x: point.x / max(1, bounds.width), y: point.y / max(1, bounds.height)))
     }
-    private let openButton = UIButton(type: .custom)
+    private let openButton = PressableButton(type: .custom)
 
     init(feed: LibraryFeed, episode: LibraryEpisode, queued: Bool, queueScreen: Bool, showRemainingTime: Bool,
          activelyPlaying: Bool, showsSecondaryAction: Bool = true, prefersDelete: Bool = false, library: FeedLibraryStore? = nil,
          episodeCover: Bool = true, downloadAction: @escaping () -> Void, open: @escaping () -> Void) {
         self.episode = episode
+        self.queued = queued; self.queueScreen = queueScreen
         self.showsSecondaryAction = showsSecondaryAction
         self.prefersDelete = prefersDelete
         localFeed = feed.source.isLocalFeedSource
@@ -107,7 +122,11 @@ final class EpisodeRowView: UIView {
         super.init(frame: .zero)
         selectedBackground.backgroundColor = Appearance.selected; selectedBackground.layer.cornerRadius = 12
         selectedBackground.isHidden = true; selectedBackground.isUserInteractionEnabled = false
-        addSubview(selectedBackground)
+        pressedBackground.backgroundColor = UIColor { $0.userInterfaceStyle == .dark ? UIColor(white: 1, alpha: 0.2) : UIColor(white: 0, alpha: 0.12) }
+        pressedBackground.layer.cornerRadius = 12
+        pressedBackground.isHidden = true; pressedBackground.isUserInteractionEnabled = false
+        addSubview(selectedBackground); addSubview(pressedBackground)
+        openButton.highlightChanged = { [weak self] pressed in self?.pressedBackground.isHidden = !pressed }
         openButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(held(_:))))
         openButton.accessibilityIdentifier = "episode-\(episode.id)"
         openButton.accessibilityLabel = episode.details.title
@@ -175,6 +194,28 @@ final class EpisodeRowView: UIView {
                               localFeed: localFeed, streamOverDownload: streamOverDownload,
                               prefersDelete: prefersDelete && !selectionMode)
         if !showsSecondaryAction { downloadButton.isHidden = true }
+        updateBackground()
+    }
+
+    /// A commit that changed only the episode's playback (`LibraryEpisode.differsOnlyInPlayback`): the row shows its
+    /// position, progress, duration and spoken value as a row built from it does, keeping its views (Android's rows are
+    /// not rebound by a position save). Its height may change with the progress line; the list sets it.
+    func showPlayback(of episode: LibraryEpisode, activelyPlaying: Bool, showRemainingTime: Bool) {
+        guard episode.id == self.episode.id else { return }
+        self.episode = episode
+        presentation = EpisodeRowPresentation(episode: episode, inQueue: queued, queueScreen: queueScreen,
+                                              activelyPlaying: activelyPlaying, showRemainingTime: showRemainingTime)
+        duration.text = presentation.duration; position.text = presentation.position
+        duration.isHidden = presentation.duration == nil
+        position.isHidden = presentation.position == nil
+        if presentation.progressPercent != nil || progress != nil {
+            let bar = progressBar()
+            bar.isHidden = presentation.progressPercent == nil
+            bar.progress = Float(presentation.progressPercent ?? 0) / 100
+        }
+        if let state = downloadState { updateDownload(job: state.0, progress: state.1, playing: state.2, streamOverDownload: state.3) }
+        updateAccessibilityValue()
+        setNeedsLayout()
     }
 
     func updatePlaybackPosition(position value: Int32, duration length: Int32, showRemainingTime: Bool) {
@@ -210,9 +251,18 @@ final class EpisodeRowView: UIView {
     }
 
     override func sizeThatFits(_ size: CGSize) -> CGSize { CGSize(width: size.width, height: layout(for: size.width).height) }
+    /// A row that leaves its list (removed, rebuilt or released) takes its swipe background with it, whatever its gesture
+    /// or animation was doing; a row a patch moves takes it along.
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+        if newSuperview == nil { swipe?.rowWillLeave() }
+    }
+    override var frame: CGRect { didSet { swipe?.rowMoved() } }
+    override var center: CGPoint { didSet { swipe?.rowMoved() } }
     override func layoutSubviews() {
         super.layoutSubviews()
         selectedBackground.frame = bounds.insetBy(dx: 4, dy: 2)
+        pressedBackground.frame = selectedBackground.frame
         let layout = layout(for: bounds.width)
         cover.frame = layout.cover
         drag.frame = layout.dragHandle
@@ -261,6 +311,14 @@ final class EpisodeRowView: UIView {
     static func showsProgressLine(_ episode: LibraryEpisode, activelyPlaying: Bool) -> Bool {
         guard let media = episode.details.media else { return false }
         return activelyPlaying || episode.userState.positionMilliseconds > 0 || media.durationMilliseconds > 0
+    }
+}
+
+/// The row's open button, which reports its pressed state (Android's ripple on touch-down).
+private final class PressableButton: UIButton {
+    var highlightChanged: ((Bool) -> Void)?
+    override var isHighlighted: Bool {
+        didSet { if isHighlighted != oldValue { highlightChanged?(isHighlighted) } }
     }
 }
 

@@ -230,10 +230,13 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     /// The sleep timer as last seen, and the dialog starts already accounted for.
     var sleepTimerWasActive = false
     var personalSleepTimerStarts: UInt64 = 0
-    /// Home: cards for live download/playing updates and the source screen each Home row belongs to
-    /// (See what's new rows act like Inbox rows, Manage downloads rows like Downloads rows).
+    /// Home: cards for live download/playing updates, and every row with the section it was built in (See what's new
+    /// rows act like Inbox rows, Manage downloads rows like Downloads rows). An episode can have a row in both sections
+    /// and a card, as Android's sections each list it: each keeps its own menu, swipe and updates.
     var homeCards: [(LibraryEpisode, HomeEpisodeCard, localFeed: Bool)] = []
-    var homeRowScopes: [Int64: EpisodeSelectionScope] = [:]
+    var homeRows: [(episode: LibraryEpisode, row: EpisodeRowView, scope: EpisodeSelectionScope)] = []
+    /// The empty Queue shows the Inbox's invitation (`QueueFragment.loadItems`).
+    var queueEmptyOffersInbox = false
     /// Home's sections as drawn, each patched alone when what it shows changes (`LibraryViewController+OtherScreens`).
     var homeSections: [HomeSectionState] = []
     var homeShowsWelcome = false
@@ -331,7 +334,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
 
     /// The player's revision a stored position of the selected episode is newer than, or nil (the player wrote it, or no
     /// player holds the episode). Kept across rebuilt rows, so the overlay resumes with the first later sample.
-    private func storedAhead(_ episode: LibraryEpisode) -> UInt64? {
+    func storedAhead(_ episode: LibraryEpisode) -> UInt64? {
         guard let playback, let held = playback.episode, held.id == episode.id else { return nil }
         let position = episode.userState.positionMilliseconds
         guard held.userState.positionMilliseconds != position else { storedAheadOfPlayer = nil; return nil }
@@ -365,7 +368,9 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     }
 
     func captureAction(_ id: Int64) -> CapturedAction? {
-        guard let binding = actionBindings[id], episodeRows[id]?.1.actionModel === binding.model else { return nil }
+        // The model a row or a Home card on screen is bound to.
+        guard let binding = actionBindings[id], episodeRowViews(id).contains(where: { $0.actionModel === binding.model })
+                || homeCards.contains(where: { $0.1.actionModel === binding.model }) else { return nil }
         let search: LibrarySearchSession?
         if case .search(let view) = path.last { search = view.session } else { search = nil }
         return .init(model: binding.model, feedID: binding.feedID, source: binding.source, presentation: actionPresentation, search: search, searchRevision: search?.resultRevision, deletionTarget: binding.deletionTarget)
@@ -379,8 +384,12 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         episodeActionPositionRevision = update.revision
         guard let playback, let binding = actionBindings[update.episodeID],
               playback.isCurrent(update, after: binding.positionRevision), view.window != nil else { return }
-        guard let row = episodeRows[update.episodeID]?.1, row.actionModel === binding.model,
-              row.window != nil, row.isDescendant(of: content) else {
+        // Every row of the episode on screen (Home can show it in two sections) and its Home cards.
+        let rows = episodeRowViews(update.episodeID).filter {
+            $0.actionModel === binding.model && $0.window != nil && $0.isDescendant(of: content)
+        }
+        let cards = homeCards.map(\.1).filter { $0.actionModel === binding.model && $0.window != nil }
+        guard !rows.isEmpty || !cards.isEmpty else {
             // A long list's row released away from the screen is built again from its model.
             if episodeList?.frame(of: update.episodeID) != nil, episodeRows[update.episodeID] == nil {
                 binding.model.receivePlaybackPosition(positionMilliseconds: update.positionMilliseconds,
@@ -392,8 +401,18 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
             durationMilliseconds: update.durationMilliseconds)
         // Nothing is drawn while the app is in the background; the next update after its return shows the position.
         guard UIApplication.shared.applicationState != .background else { return }
-        row.updatePlaybackPosition(position: update.positionMilliseconds, duration: update.durationMilliseconds,
-            showRemainingTime: timeDisplayPreferences?.value.showRemainingTime == true)
+        for row in rows {
+            row.updatePlaybackPosition(position: update.positionMilliseconds, duration: update.durationMilliseconds,
+                showRemainingTime: timeDisplayPreferences?.value.showRemainingTime == true)
+        }
+        for card in cards { card.updatePlaybackPosition(position: update.positionMilliseconds, duration: update.durationMilliseconds) }
+    }
+
+    /// Every built row of episode `id`: its row in the open list or search, and on Home its rows in each section.
+    func episodeRowViews(_ id: Int64) -> [EpisodeRowView] {
+        var rows = episodeRows[id].map { [$0.1] } ?? []
+        for entry in homeRows where entry.episode.id == id && !rows.contains(where: { $0 === entry.row }) { rows.append(entry.row) }
+        return rows
     }
 
     /// The fence of every action result (a list action's, a swipe's and its Undo's), checked before anything is changed.
@@ -1630,7 +1649,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         // The visible Settings search page keeps its field (and keyboard) across re-renders.
         let retainedSettingsSearch: UIView? = if case .settingsSearch(let search) = path.last { search } else { nil }
         content.subviews.filter { $0 !== retainedPager && $0 !== retainedSettingsSearch }.forEach { $0.removeFromSuperview() }
-        episodeRows.removeAll(); rowPaints.removeAll(); homeCards.removeAll(); homeRowScopes.removeAll(); homeSections.removeAll()
+        episodeRows.removeAll(); rowPaints.removeAll(); homeCards.removeAll(); homeRows.removeAll(); homeSections.removeAll()
         subscriptionGridGeometry = nil
         episodeList = nil; subscriptionGrid = nil; displayedEpisodeValues.removeAll(); displayedFeedHeaders.removeAll()
         navigation.subviews.forEach { $0.removeFromSuperview() }
@@ -1715,8 +1734,7 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
             renderQueueToolbar(heading: heading)
             let rows = openCollectionList(.queue)
             if queuedEpisodes.isEmpty { feedSelection.end(); selectionScope = nil }
-            if queuedEpisodes.isEmpty { empty(title: "no_items_header_label", message: "no_items_label") }
-            else { episodes(rows) }
+            if queuedEpisodes.isEmpty { queueEmpty() } else { episodes(rows) }
         case .destination(.inbox): renderInbox(heading: heading)
         case .destination(.favorites): renderFavorites(heading: heading)
         case .destination(.downloads): renderDownloads(heading: heading)
@@ -1987,17 +2005,6 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
         present(dialog, animated: true)
     }
 
-    private func empty(title: String, message: String) {
-        let heading = Appearance.label(Appearance.text(title), size: 16, bold: true)
-        heading.textAlignment = .center
-        heading.frame = CGRect(x: 40, y: max(0, content.bounds.midY - 40), width: content.bounds.width - 80, height: 28)
-        let detail = Appearance.label(Appearance.text(message), size: 14)
-        detail.textAlignment = .center
-        detail.frame = CGRect(x: 40, y: heading.frame.maxY, width: content.bounds.width - 80, height: 72)
-        content.addSubview(heading)
-        content.addSubview(detail)
-    }
-
     private var orderedEpisodeRows: [EpisodeRowView] {
         episodeRows.values.map(\.1).sorted { $0.frame.minY < $1.frame.minY }
     }
@@ -2180,11 +2187,13 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     }
 
     /// Home's few rows inside its sections, built at once; returns their bottom.
-    func addEpisodeRows(_ values: [(LibraryFeed, LibraryEpisode)], top: CGFloat) -> CGFloat {
+    /// `home`: the Home section they are in.
+    func addEpisodeRows(_ values: [(LibraryFeed, LibraryEpisode)], top: CGFloat, home: EpisodeSelectionScope) -> CGFloat {
         let pagerList = values.map { EpisodePagerItem(feedID: $0.0.id, episodeID: $0.1.id) }
         var y = top
         for (feed, storedEpisode) in values {
-            let row = makeEpisodeRow(feed: feed, storedEpisode: storedEpisode, pagerList: pagerList)
+            let row = makeEpisodeRow(feed: feed, storedEpisode: storedEpisode, pagerList: pagerList, home: home)
+            homeRows.append((storedEpisode, row, home))
             let size = row.sizeThatFits(CGSize(width: content.bounds.width, height: .greatestFiniteMagnitude))
             row.frame = CGRect(origin: CGPoint(x: 0, y: y), size: size)
             if let feedAppBar, feedAppBar.superview === content { content.insertSubview(row, belowSubview: feedAppBar) }
@@ -2195,7 +2204,10 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
     }
 
     /// `pagerList`: the rows a tap pages through (Home's section); nil: the open list's members at the time of the tap.
-    private func makeEpisodeRow(feed: LibraryFeed, storedEpisode: LibraryEpisode, pagerList: [EpisodePagerItem]?) -> EpisodeRowView {
+    /// `home`: the Home section the row is in, whose menu and swipe settings it uses (another row of the episode may be in
+    /// another section).
+    private func makeEpisodeRow(feed: LibraryFeed, storedEpisode: LibraryEpisode, pagerList: [EpisodePagerItem]?,
+                                home: EpisodeSelectionScope? = nil) -> EpisodeRowView {
         let model = actionModel(feed: feed, episode: storedEpisode)
         applyLivePosition(model)
         let episode = model.snapshot().episode
@@ -2218,19 +2230,24 @@ final class LibraryViewController: UIViewController, UIGestureRecognizerDelegate
             guard let self, !toggleFeedSelection(episode.id) else { return }
             openEpisode(feedID: feed.id, episodeID: episode.id, list: pagerList ?? currentPagerList())
         }
-        if currentSelectionScope != nil || homeRowScopes[episode.id] != nil {
-            row.contextMenu = { [weak self] anchor, fraction in self?.showListEpisodeMenu(episode.id, feedID: feed.id, anchor: anchor, fraction: fraction) }
+        if currentSelectionScope != nil || home != nil {
+            row.contextMenu = { [weak self] anchor, fraction in
+                self?.showListEpisodeMenu(episode.id, feedID: feed.id, anchor: anchor, fraction: fraction, home: home)
+            }
         }
-        if isDownloadsRow(episode.id) {
+        if isDownloadsRow(episode.id, home: home) {
             row.swipe = EpisodeRowSwipe(row: row, configuration: { [weak self] direction in
-                self?.downloadsSwipeConfiguration(direction, episodeID: episode.id)
-            }, perform: { [weak self] direction in self?.performDownloadsSwipe(direction, episodeID: episode.id) })
-        } else if swipeScreen(for: episode.id) != nil {
+                self?.downloadsSwipeConfiguration(direction, episodeID: episode.id, home: home)
+            }, accept: { [weak self] direction in self?.acceptDownloadsSwipe(direction, episodeID: episode.id, home: home) })
+        } else if swipeScreen(for: episode.id, home: home) != nil {
             row.swipe = EpisodeRowSwipe(row: row, configuration: { [weak self] direction in
                 guard self?.actionBindings[episode.id]?.model === model else { return nil }
-                return self?.inboxSwipeConfiguration(direction, episodeID: episode.id)
-            }, perform: { [weak self] direction in self?.performInboxSwipe(direction, episodeID: episode.id, expectedModel: model) })
+                return self?.inboxSwipeConfiguration(direction, episodeID: episode.id, home: home)
+            }, accept: { [weak self] direction in
+                self?.acceptInboxSwipe(direction, episodeID: episode.id, expectedModel: model, home: home)
+            })
         }
+        row.swipe?.caughtUp = { [weak self] in self?.swipeCaughtUp(episode.id) }
         row.actionModel = model
         if onQueue {
             row.configureQueueLayout(traits: traitCollection,

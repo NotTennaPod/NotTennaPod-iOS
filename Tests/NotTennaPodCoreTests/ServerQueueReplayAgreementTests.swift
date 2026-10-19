@@ -476,6 +476,64 @@ import Testing
             try await Self.expectMerged(world, first: a, second: b, a: a, [t[0], t[1], t[2]], "no-op sort")
         }
     }
+
+    // MARK: Episodes without media
+
+    /// A feed whose second item has no enclosure (a text post), as the server and the phone both read it.
+    static let textPostRSS = "<?xml version=\"1.0\"?><rss version=\"2.0\"><channel><title>M</title><link>https://example.com/</link>"
+        + "<item><title>M 1</title><guid>m-1</guid><pubDate>Fri, 10 Oct 2025 12:00:00 GMT</pubDate>"
+        + "<enclosure url=\"https://media.example/m-1.mp3\" length=\"1000\" type=\"audio/mpeg\"/></item>"
+        + "<item><title>M 2</title><guid>m-2</guid><pubDate>Sat, 11 Oct 2025 12:00:00 GMT</pubDate></item>"
+        + "</channel></rss>"
+
+    static func textPostFeed(_ url: String) -> FetchedFeed {
+        let items = [
+            ParsedEpisode(identifier: "m-1", title: "M 1", publicationDate: Date(timeIntervalSince1970: 1_760_097_600),
+                          media: ParsedMedia(url: "https://media.example/m-1.mp3", size: 1_000, durationMilliseconds: 0)),
+            ParsedEpisode(identifier: "m-2", title: "M 2", publicationDate: Date(timeIntervalSince1970: 1_760_184_000), media: nil),
+        ]
+        return FetchedFeed(feed: ParsedFeed(format: .rss, title: "M", link: "https://example.com/", episodes: items), source: url,
+                           responseURL: URL(string: url)!, validator: nil, permanentRedirectURL: nil)
+    }
+
+    /// Another client queues an episode without media (the web client's episode menu can). The server queues it and lists
+    /// it in the browser's queue, as Android's queue (which joins media optionally) would show it; every phone shows the
+    /// same queue, the one that already had the podcast and one attached afterwards (PROTOCOL §7.6).
+    @Test func anEpisodeWithoutMediaQueuedElsewhereShowsInThePhonesQueue() async throws {
+        try await ExchangeWorld.run(feeds: [:]) { world in
+            world.setResponse("/m.xml", .init(headers: ["Content-Type": "application/rss+xml"], body: Data(Self.textPostRSS.utf8)))
+            let a = try await world.attach("A")
+            let feed = try await a.store.subscribeForTesting(Self.textPostFeed(world.url("m.xml")))
+            try await ServerExchangeAgreementTests.waitForCatalog(a, feedID: feed.id)
+            let text = try #require(feed.episodes.first { $0.details.title == "M 2" }?.id)
+            let audio = try #require(feed.episodes.first { $0.details.title == "M 1" }?.id)
+            _ = try await a.store.enqueue([audio])
+            await a.exchange()
+            let b = try await world.attach("B")
+            await b.exchange()
+            let onB = try await ServerExchangeConcurrencyTests.same(text, from: a, on: b)
+            // B stands in for the other client: the add its menu sends, at the back after M 1.
+            let (ref, target) = try #require(try await b.store.episodeRefForTesting(onB))
+            let (audioRef, _) = try #require(try await b.store.episodeRefForTesting(try await ServerExchangeConcurrencyTests.same(audio, from: a, on: b)))
+            let audioKey = try #require(try b.rows("SELECT key FROM ntp_queue_keys").first?.first ?? nil)
+            let positionID = UUID()
+            let key = try QueueKey.between(try QueueKey(wire: audioKey), nil, positionWriteID: positionID)
+            try await b.store.appendFactForTesting(type: "queue.add", targets: [target], payload: [
+                "members": [["episode": ref, "key": .string(key.wire), "position_id": .string(positionID.uuidString.lowercased())]],
+                "place": ["kind": "after", "after": audioRef]])
+            await b.exchange()
+            await a.exchange()
+            let wireText = try #require(try await a.store.wireEpisodeForTesting(text))
+            let wireAudio = try #require(try await a.store.wireEpisodeForTesting(audio))
+            let membership = try a.rows("SELECT CAST(value AS TEXT) FROM ntp_records WHERE entity = 'episode' AND id = '\(wireText)' AND field_group = 'queue_membership'")
+            #expect(membership.first?.first??.contains("\"in_queue\":true") == true, "the server queued it: \(membership)")
+            #expect(try await a.view().queue == [wireAudio, wireText], "the phone that had the podcast shows the server's queue")
+            #expect(try await a.store.queue().map(\.id) == [audio, text], "its queue screen lists both")
+            let fresh = try await world.attach("fresh")
+            #expect(try await fresh.view().queue == [wireAudio, wireText], "a phone attached afterwards shows the server's queue")
+            await fresh.close()
+        }
+    }
 }
 
 extension FeedLibraryStore {

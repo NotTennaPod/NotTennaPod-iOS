@@ -69,8 +69,13 @@ import NotTennaPodCore
     let actionButton: EpisodeDownloadButton
     private let track = UIView(), fill = UIView()
     private let title: UILabel, date: UILabel
-    private let progress: CGFloat?
+    /// The progress bar's fill, nil when it is hidden (`setProgressBar`).
+    private(set) var progress: CGFloat?
+    /// Whether the card shows the playing episode's background (`PlaybackStatus.isCurrentlyPlaying`).
+    private(set) var playing: Bool
     var contextMenu: ((UIView, CGPoint) -> Void)?
+    /// The episode's action model the card's menu acts through, as a row's.
+    var actionModel: EpisodeActionModel?
 
     init(feed: LibraryFeed, episode: LibraryEpisode, library: FeedLibraryStore?, playing: Bool, episodeCover: Bool = true,
          action: @escaping () -> Void, open: @escaping () -> Void) {
@@ -80,8 +85,8 @@ import NotTennaPodCore
         title = Appearance.label(episode.details.title, size: 14); title.numberOfLines = 2; title.lineBreakMode = .byTruncatingTail
         date = Appearance.label(EpisodeRowPresentation.publicationDate(episode.details.publicationDate), size: 14)
         date.textColor = Appearance.secondary; date.numberOfLines = 1
-        let duration = episode.details.media?.durationMilliseconds ?? 0, position = episode.userState.positionMilliseconds
-        progress = duration > 0 && position > 0 ? max(0.05, min(1, CGFloat(position) / CGFloat(duration))) : nil
+        progress = Self.storedProgress(episode)
+        self.playing = playing
         super.init(frame: .zero)
         backgroundColor = playing ? Appearance.selected : Appearance.navigation
         layer.cornerRadius = 12; clipsToBounds = true
@@ -100,6 +105,33 @@ import NotTennaPodCore
     }
     required init?(coder: NSCoder) { fatalError() }
     override var accessibilityElements: [Any]? { get { [actionButton] } set {} }
+
+    /// `bind`: the progress bar shows when the episode has a duration and a position, at least 5% filled.
+    private static func storedProgress(_ episode: LibraryEpisode) -> CGFloat? {
+        let duration = episode.details.media?.durationMilliseconds ?? 0, position = episode.userState.positionMilliseconds
+        return duration > 0 && position > 0 ? max(0.05, min(1, CGFloat(position) / CGFloat(duration))) : nil
+    }
+    /// A commit that changed only the episode's playback: its progress, in place.
+    func showPlayback(of episode: LibraryEpisode) {
+        guard episode.id == episodeID else { return }
+        setProgress(Self.storedProgress(episode))
+    }
+    /// `notifyPlaybackPositionUpdated`: the player's live position shows the bar.
+    func updatePlaybackPosition(position: Int32, duration: Int32) {
+        setProgress(duration > 0 ? max(0.05, min(1, CGFloat(position) / CGFloat(duration))) : 0.05)
+    }
+    private func setProgress(_ value: CGFloat?) {
+        guard value != progress else { return }
+        progress = value
+        track.isHidden = value == nil; fill.isHidden = value == nil
+        setNeedsLayout()
+    }
+    /// The playing episode's card background follows playback (the sections reload on `PlayerStatusEvent`).
+    func setPlaying(_ playing: Bool) {
+        guard playing != self.playing else { return }
+        self.playing = playing
+        backgroundColor = playing ? Appearance.selected : Appearance.navigation
+    }
     override func layoutSubviews() {
         super.layoutSubviews()
         let rtl = effectiveUserInterfaceLayoutDirection == .rightToLeft

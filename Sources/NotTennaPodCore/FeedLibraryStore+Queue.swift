@@ -261,6 +261,8 @@ extension FeedLibraryStore {
         return try write(.queueRemove(.user)) {
             var queue = try loadQueue()
             var events: [LibraryQueueChange.Event] = []
+            // Android's multi-select passes the whole selection to `DBWriter.removeQueueItem`.
+            activeCapture?.queueRemovalTargets = ids
             for id in ids {
                 guard let index = queue.firstIndex(where: { $0.id == id }) else { continue }
                 queue.remove(at: index)

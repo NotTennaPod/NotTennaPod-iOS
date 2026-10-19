@@ -50,7 +50,10 @@ extension LibraryViewController {
         toolbar.addSubview(clear)
     }
 
-    private func listEmpty(icon name: String, title: String, message: String, identifier: String) {
+    /// `EmptyViewHandler`: a 32-point icon, the title (16) and message (14), and an optional outlined button 16 points
+    /// below (`empty_view_layout.xml`), centred with 40-point sides.
+    func listEmpty(icon name: String, title: String, message: String, identifier: String,
+                   button action: (title: String, perform: () -> Void)? = nil) {
         let icon = UIImageView(image: UIImage(named: name)); icon.tintColor = Appearance.foreground
         let heading = Appearance.label(Appearance.text(title), size: 16)
         let detail = Appearance.label(Appearance.text(message), size: 14)
@@ -60,11 +63,36 @@ extension LibraryViewController {
         let width = max(0, content.bounds.width - 80)
         let headingHeight = heading.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude)).height + 3
         let detailHeight = detail.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude)).height + 3
-        let y = max(0, (content.bounds.height - 32 - headingHeight - detailHeight) / 2)
+        let button = action.map { action -> UIButton in
+            var configuration = UIButton.Configuration.plain()
+            configuration.title = Appearance.text(action.title)
+            configuration.baseForegroundColor = Appearance.accent
+            configuration.background.strokeColor = Appearance.foreground.withAlphaComponent(0.38)
+            configuration.background.strokeWidth = 1
+            configuration.cornerStyle = .capsule
+            configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 24, bottom: 10, trailing: 24)
+            configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attributes in
+                var result = attributes; result.font = Appearance.font(14, medium: true); return result
+            }
+            let button = UIButton(configuration: configuration, primaryAction: UIAction { _ in action.perform() })
+            button.accessibilityIdentifier = identifier + "EmptyButton"
+            return button
+        }
+        let buttonSize = button.map { button -> CGSize in
+            let size = button.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
+            return CGSize(width: min(width, size.width), height: max(40, size.height))
+        } ?? .zero
+        let buttonSpace = button == nil ? 0 : 16 + buttonSize.height
+        let y = max(0, (content.bounds.height - 32 - headingHeight - detailHeight - buttonSpace) / 2)
         icon.frame = CGRect(x: (content.bounds.width - 32) / 2, y: y, width: 32, height: 32)
         heading.frame = CGRect(x: 40, y: icon.frame.maxY, width: width, height: headingHeight)
         detail.frame = CGRect(x: 40, y: heading.frame.maxY, width: width, height: detailHeight)
         [icon, heading, detail].forEach(content.addSubview)
+        if let button {
+            button.frame = CGRect(x: (content.bounds.width - buttonSize.width) / 2, y: detail.frame.maxY + 16,
+                                  width: buttonSize.width, height: buttonSize.height)
+            content.addSubview(button)
+        }
     }
 
     private func updateEpisodeLists(_ change: (inout EpisodeListPreferences) -> Void) {

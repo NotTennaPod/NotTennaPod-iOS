@@ -44,9 +44,36 @@ public struct EpisodeActionStateDelta: Equatable, Sendable {
         replaceEpisode(episode)
     }
 
+    /// A commit that changed only the episode's playback (`LibraryEpisode.differsOnlyInPlayback`): the model shows the
+    /// stored episode and stays the presentation's model, as Android's rows are not rebound by a position save.
+    public func receiveStoredPlayback(_ episode: LibraryEpisode) {
+        guard episode.id == episodeID, episode.differsOnlyInPlayback(from: item.episode) else { return }
+        replaceEpisode(episode)
+    }
+
     private func replaceEpisode(_ episode: LibraryEpisode) {
         item = .init(episode: episode, local: item.local, subscription: item.subscription,
                      queued: item.queued, downloading: item.downloading)
+    }
+}
+
+extension LibraryEpisode {
+    /// Whether the two differ at most in what playing them changes: the position, the listening times and a duration
+    /// the player learned (`FeedLibraryStore.recordPlayback`). Anything else a row shows (played or new, favorite,
+    /// title, download) is a different episode to it.
+    public func differsOnlyInPlayback(from other: LibraryEpisode) -> Bool {
+        func withoutPlayback(_ episode: LibraryEpisode) -> LibraryEpisode {
+            var episode = episode
+            episode.userState.positionMilliseconds = 0
+            episode.userState.playedDurationMilliseconds = 0
+            episode.userState.timeSpentMilliseconds = 0
+            episode.userState.lastPlayedTimeMilliseconds = 0
+            episode.userState.lastPlayedHistoryMilliseconds = nil
+            episode.userState.playedHereMilliseconds = nil
+            episode.details.media?.durationMilliseconds = 0
+            return episode
+        }
+        return withoutPlayback(self) == withoutPlayback(other)
     }
 }
 

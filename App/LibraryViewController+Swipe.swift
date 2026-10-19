@@ -45,40 +45,73 @@ extension LibraryViewController {
         return SwipeRecipient(preferences: inboxSwipePreferences, screen: screen, coordinator: coordinator,
             offers: offers, configure: { [weak self] in self?.showInboxSwipeSettings(screen) },
             ordinary: { [weak self] decision, model, target in
-                self?.performOrdinaryInboxSwipe(decision, model: model, target: target)
+                await self?.performOrdinaryInboxSwipe(decision, model: model, target: target)?.value
             })
     }
     /// The screen whose swipe configuration a row uses; Home's See what's new rows use the Inbox's (source
-    /// `SwipeActions(this, InboxFragment.TAG)`).
-    func swipeScreen(for episodeID: Int64) -> SwipeScreen? {
-        inboxSwipeScreen ?? (homeRowScopes[episodeID] == .inbox ? .inbox : nil)
+    /// `SwipeActions(this, InboxFragment.TAG)`). `home`: the Home section the row is in (an episode can have a row in
+    /// New and one in Downloads, each with its section's settings).
+    func swipeScreen(for episodeID: Int64, home: EpisodeSelectionScope? = nil) -> SwipeScreen? {
+        inboxSwipeScreen ?? (home == .inbox ? .inbox : nil)
     }
-    private func swipeFilter(for episodeID: Int64) -> FeedEpisodeFilter {
-        inboxSwipeScreen == nil && homeRowScopes[episodeID] == .inbox ? .init(values: ["new"]) : inboxSwipeFilter
+    private func swipeFilter(for episodeID: Int64, home: EpisodeSelectionScope?) -> FeedEpisodeFilter {
+        inboxSwipeScreen == nil && home == .inbox ? .init(values: ["new"]) : inboxSwipeFilter
     }
-    func isDownloadsRow(_ episodeID: Int64) -> Bool {
+    func isDownloadsRow(_ episodeID: Int64, home: EpisodeSelectionScope? = nil) -> Bool {
         if case .destination(.downloads) = path.last { return true }
-        return homeRowScopes[episodeID] == .downloads
+        return home == .downloads
     }
     /// A podcast's list and the Queue detach swiping during selection (`FeedItemlistFragment`, `QueueFragment:560`);
     /// the other lists keep it (`EpisodesListFragment`).
     private func swipeDetached(_ screen: SwipeScreen) -> Bool {
         (screen == .feed || screen == .queue) && feedSelection.active
     }
-    func inboxSwipeConfiguration(_ direction: EpisodeSwipeDirection, episodeID: Int64) -> EpisodeRowSwipe.Configuration? {
-        guard presentedViewController == nil, let screen = swipeScreen(for: episodeID), !swipeDetached(screen),
+    func inboxSwipeConfiguration(_ direction: EpisodeSwipeDirection, episodeID: Int64,
+                                 home: EpisodeSelectionScope? = nil) -> EpisodeRowSwipe.Configuration? {
+        guard presentedViewController == nil, let screen = swipeScreen(for: episodeID, home: home), !swipeDetached(screen),
               let captured = captureAction(episodeID), let recipient = swipeRecipient(for: screen) else { return nil }
-        return recipient.configuration(direction: direction, item: contextItem(captured.model), filter: swipeFilter(for: episodeID))
+        return recipient.configuration(direction: direction, item: contextItem(captured.model),
+                                       filter: swipeFilter(for: episodeID, home: home))
     }
-    func performInboxSwipe(_ direction: EpisodeSwipeDirection, episodeID: Int64, expectedModel: EpisodeActionModel? = nil) {
-        guard presentedViewController == nil, let screen = swipeScreen(for: episodeID), !swipeDetached(screen),
+    func performInboxSwipe(_ direction: EpisodeSwipeDirection, episodeID: Int64, expectedModel: EpisodeActionModel? = nil,
+                           home: EpisodeSelectionScope? = nil) {
+        _ = acceptInboxSwipe(direction, episodeID: episodeID, expectedModel: expectedModel, home: home)?()
+    }
+    /// A swipe's action settled as the finger lifts, with the episode's current model, deletion target, filter and this
+    /// screen's library recipient: it runs later whatever happens to the row meanwhile (rebuilt, removed, off screen),
+    /// and not once this screen and its library are gone. `home`: the row's Home section.
+    func acceptInboxSwipe(_ direction: EpisodeSwipeDirection, episodeID: Int64, expectedModel: EpisodeActionModel? = nil,
+                          home: EpisodeSelectionScope? = nil) -> EpisodeRowSwipe.Accepted? {
+        guard presentedViewController == nil, let screen = swipeScreen(for: episodeID, home: home), !swipeDetached(screen),
               let captured = captureAction(episodeID), expectedModel == nil || captured.model === expectedModel,
-              let recipient = swipeRecipient(for: screen) else { return }
-        let filter = swipeFilter(for: episodeID), item = contextItem(captured.model)
-        lastInboxSwipe = Task {
-            await recipient.perform(direction: direction, model: captured.model, filter: filter, target: captured.deletionTarget,
-                item: item)
+              let recipient = swipeRecipient(for: screen),
+              let action = recipient.accept(direction: direction, model: captured.model, filter: swipeFilter(for: episodeID, home: home),
+                  target: captured.deletionTarget, item: contextItem(captured.model)) else { return nil }
+        return { [weak self] in
+            guard let self else { return nil }
+            let performed = Task { await action() }
+            lastInboxSwipe = performed
+            return Task { [weak self] in
+                await performed.value
+                await self?.settleLibraryChanges()
+            }
         }
+    }
+    /// A row being swiped, sliding or held out until its removal lands: a patch neither builds it again nor retires its
+    /// action binding; the row catches up when its swipe ends (`swipeCaughtUp`).
+    /// Every row of the episode counts (Home can show it in two sections): the one being swiped is held.
+    func holdForSwipe(_ id: Int64) -> Bool {
+        let active = episodeRowViews(id).compactMap(\.swipe).filter(\.isActive)
+        for swipe in active { swipe.heldBack = true }
+        return !active.isEmpty
+    }
+    /// The swipe on a row a patch held back ended (completed, cancelled or failed): the row shows the episode as it is
+    /// now, as a patch of that episode would show it.
+    func swipeCaughtUp(_ id: Int64) {
+        guard !episodeRowViews(id).isEmpty, let value = libraryEpisode(id) else { return }
+        var delta = LibraryMirrorDelta()
+        delta.episodes[id] = (value, value)
+        screenPatched(delta)
     }
     /// The screen's swipe owner: its results reach the models through the screen's action fence.
     func connectInboxSwipe(_ coordinator: EpisodeSwipeCoordinator) {
@@ -103,7 +136,8 @@ extension LibraryViewController {
            let captured = captureAction(id) { reconcileCommittedAction(captured, delta: delta, receipt: receipt) }
         else { lastEpisodeActionReconciliation = reloadLibrary(preservingEpisodeDetails: true, reconcilingPresentation: actionPresentation) }
     }
-    private func performOrdinaryInboxSwipe(_ decision: SwipeDecision, model: EpisodeActionModel, target: EpisodeMediaDeletionTarget?) {
+    /// The task of a list action, which ends when it is over.
+    private func performOrdinaryInboxSwipe(_ decision: SwipeDecision, model: EpisodeActionModel, target: EpisodeMediaDeletionTarget?) -> Task<Void, Never>? {
         switch decision.recipient {
         case .notice(let key): showEpisodeActionMessage(Appearance.text(key))
         case .download: downloadAction(model.episodeID)
@@ -111,9 +145,10 @@ extension LibraryViewController {
             let captured = CapturedAction(model: model, feedID: target?.feedID ?? actionBindings[model.episodeID]?.feedID ?? 0,
                 source: target?.source ?? actionBindings[model.episodeID]?.source ?? "", presentation: actionPresentation,
                 search: nil, searchRevision: nil, deletionTarget: target)
-            performEpisodeListAction(action, ids: [model.episodeID], captured: captured, guardedSwipe: true)
+            return performEpisodeListAction(action, ids: [model.episodeID], captured: captured, guardedSwipe: true)
         case .none, .markWithUndo, .removeHistory: break
         }
+        return nil
     }
 
     func showDownloadsSwipeSettings() {
@@ -123,26 +158,50 @@ extension LibraryViewController {
             catch { self?.showError(error) }
         }, animated: true)
     }
-    func downloadsSwipeConfiguration(_ direction: EpisodeSwipeDirection, episodeID: Int64) -> EpisodeRowSwipe.Configuration? {
-        guard isDownloadsRow(episodeID), !feedSelection.active, presentedViewController == nil,
+    func downloadsSwipeConfiguration(_ direction: EpisodeSwipeDirection, episodeID: Int64,
+                                     home: EpisodeSelectionScope? = nil) -> EpisodeRowSwipe.Configuration? {
+        guard isDownloadsRow(episodeID, home: home), !feedSelection.active, presentedViewController == nil,
               let preferences = downloadPreferences, preferences.value.swipe?.enabled != false,
               let item = episodeListItems([episodeID]).first else { return nil }
         let action = preferences.value.swipe?.action(direction)
         return .init(action: action, removes: action?.removesFromDownloads(item) ?? false)
     }
-    func performDownloadsSwipe(_ direction: EpisodeSwipeDirection, episodeID: Int64) {
-        guard downloadsSwipeConfiguration(direction, episodeID: episodeID) != nil else { return }
-        guard let action = downloadPreferences?.value.swipe?.action(direction) else { showDownloadsSwipeSettings(); return }
-        // Resolve the fresh stored item when the gesture commits; selection/queue changes may have arrived during dragging.
-        Task { [weak self] in
-            guard let self, let library else { return }
-            do {
-                guard let episode = try await library.episode(id: episodeID),
-                      let feed = try await library.listedFeedHeader(id: library.feedID(forEpisode: episodeID)) else { return }
-                let item = EpisodeListItem(episode: episode, local: feed.source.isLocalFeedSource, subscription: feed.subscriptionState,
-                    queued: try await library.queue().contains { $0.id == episodeID }, downloading: downloads?.activeJob(source: episode.details.media?.url) != nil)
-                if let operation = action.action(for: item) { performEpisodeListAction(operation, ids: [episodeID], resetPosition: action != .played) }
-            } catch { showError(error) }
+    func performDownloadsSwipe(_ direction: EpisodeSwipeDirection, episodeID: Int64, home: EpisodeSelectionScope? = nil) {
+        _ = acceptDownloadsSwipe(direction, episodeID: episodeID, home: home)?()
+    }
+    /// A Downloads swipe settled as the finger lifts (`acceptInboxSwipe`).
+    func acceptDownloadsSwipe(_ direction: EpisodeSwipeDirection, episodeID: Int64,
+                              home: EpisodeSelectionScope? = nil) -> EpisodeRowSwipe.Accepted? {
+        guard downloadsSwipeConfiguration(direction, episodeID: episodeID, home: home) != nil else { return nil }
+        guard let action = downloadPreferences?.value.swipe?.action(direction) else {
+            return { [weak self] in self?.showDownloadsSwipeSettings(); return nil }
+        }
+        // The row's model, its deletion target and the operation are settled now, as on the other lists: a later change
+        // to the episode (a sync, replaced media) neither reverses the operation nor redirects a deletion.
+        guard let captured = captureAction(episodeID) else { return nil }
+        let item = contextItem(captured.model)
+        // Toggle played is the lists' swipe mark (`TogglePlaybackStateSwipeAction`): it keeps the position, sends no
+        // manual sync action and offers no Undo on Downloads, whose filter it never leaves.
+        if action == .played {
+            guard let coordinator = inboxSwipeCoordinator else { return nil }
+            let mark: EpisodeSwipeMark = item.episode.userState.playState == .unplayed ? .markPlayed : .markUnplayed
+            return { [weak self] in
+                guard let self else { return nil }
+                return Task { [weak self] in
+                    _ = await coordinator.perform(model: captured.model, action: mark, target: captured.deletionTarget, offersUndo: false)
+                    await self?.settleLibraryChanges()
+                }
+            }
+        }
+        let operation = action.action(for: item)
+        return { [weak self] in
+            guard let self, let operation else { return nil }
+            // Delete removes only the captured file, also after a local folder's warning.
+            let performed = performEpisodeListAction(operation, ids: [episodeID], captured: captured, guardedSwipe: true)
+            return Task { [weak self] in
+                await performed?.value
+                await self?.settleLibraryChanges()
+            }
         }
     }
 }

@@ -64,4 +64,35 @@ struct EpisodeRowAccessibilityViewTests {
         #expect(button.accessibilityValue == prefix + "-00:00:40")
         #expect(button.accessibilityValue?.contains("00:00:20") == false)
     }
+
+    /// Android's row background (`bg_episode_list_item.xml`): the playing episode's row is activated
+    /// (`colorSecondaryContainer`) while it plays; selection deactivates every row (`EpisodeItemListAdapter` in action
+    /// mode) and stays selection. Playback is never spoken as selected.
+    @Test func thePlayingRowShowsItsBackgroundOutsideSelectionAndIsNotSpokenAsSelected() throws {
+        let row = row(playing: true)
+        let button = try openControl(in: row)
+        #expect(!row.showsPlayingBackground, "a row the player does not play has no background")
+        row.updateDownload(job: nil, progress: nil, playing: true)
+        #expect(row.showsPlayingBackground, "the playing episode's row is activated")
+        #expect(!button.accessibilityTraits.contains(.selected), "and is not spoken as selected")
+        row.setSelected(false, selectionMode: true)
+        #expect(!row.showsPlayingBackground, "selection deactivates it")
+        row.setSelected(true, selectionMode: true)
+        #expect(button.accessibilityTraits.contains(.selected), "a selected row is selected")
+        row.setSelected(false, selectionMode: false)
+        #expect(row.showsPlayingBackground, "after selection the playing row is activated again")
+        row.updateDownload(job: nil, progress: nil, playing: false)
+        #expect(!row.showsPlayingBackground, "playback stopped: no background")
+    }
+
+    /// The row's ripple: a press shows on touch-down and goes when the press ends.
+    @Test func aPressShowsOnTheRow() throws {
+        let row = row()
+        let button = try openControl(in: row)
+        #expect(!row.showsPressedFeedback)
+        button.isHighlighted = true
+        #expect(row.showsPressedFeedback, "touch-down shows the press")
+        button.isHighlighted = false
+        #expect(!row.showsPressedFeedback, "the press ends")
+    }
 }

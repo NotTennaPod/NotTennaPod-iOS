@@ -15,6 +15,33 @@ import Testing
     func unload() {}
 }
 
+/// Plays whatever position the test says it reached (the coordinator saves it every five seconds).
+@MainActor private final class ScriptedEngine: PlaybackEngine {
+    var reading: PlaybackEngineReading?
+    var onEvent: (@MainActor (PlaybackEngineEvent) -> Void)?
+    private var generation: UUID?, commandID: UUID?
+    private var position: Int32 = 0, playing = false
+    func load(episode: LibraryEpisode, generation: UUID, positionMilliseconds: Int64) {
+        self.generation = generation; commandID = generation; position = Int32(positionMilliseconds); reading = nil
+    }
+    func play(commandID: UUID) { self.commandID = commandID; playing = true; reading?.commandID = commandID; reading?.sample.status = .playing }
+    func pause(commandID: UUID) { self.commandID = commandID; playing = false; reading?.commandID = commandID; reading?.sample.status = .paused }
+    func seek(to positionMilliseconds: Int64, commandID: UUID) { self.commandID = commandID; position = Int32(positionMilliseconds) }
+    func setSpeed(_ speed: Float, commandID: UUID) throws { self.commandID = commandID }
+    func unload() { reading = nil; generation = nil; commandID = nil }
+    private func value(_ position: Int32) -> PlaybackEngineReading? {
+        guard let generation, let commandID else { return nil }
+        return PlaybackEngineReading(generation: generation, commandID: commandID,
+            sample: .init(positionMilliseconds: position, durationMilliseconds: 1_800_000, status: playing ? .playing : .paused))
+    }
+    func ready() { guard let value = value(position) else { return }; reading = value; onEvent?(.ready(value)) }
+    func moved(to position: Int32) {
+        self.position = position
+        guard let value = value(position) else { return }
+        reading = value; onEvent?(.position(value))
+    }
+}
+
 /// The patched list screens against a fresh open, as a person sees them. Two controllers share one library: T keeps
 /// itself current from the change sets (patches), F reads the whole library after every step (the old full reload).
 /// After each seeded step on Queue, Episodes, Inbox, Downloads, Favorites, History and a 400-episode podcast page they
@@ -650,5 +677,564 @@ extension FeedLibraryStore {
     /// As if the server had acknowledged every pending fact: no overlay waits on the next units.
     func retireFactsForViewTests() throws {
         try database.transaction { try database.execute("DELETE FROM ntp_overlays"); try database.execute("DELETE FROM ntp_outbox") }
+    }
+}
+
+// MARK: - Rows and what lives on them, after patches
+
+extension IncrementalScreenViewTests {
+    /// The menu a long press presented on `controller`, if any.
+    func presentedMenu(_ controller: LibraryViewController) -> PopupMenuController? {
+        (controller.presentedViewController ?? controller.view.window?.rootViewController?.presentedViewController) as? PopupMenuController
+    }
+
+    func dismissMenu(_ controller: LibraryViewController) async throws {
+        guard let menu = presentedMenu(controller) else { return }
+        menu.dismiss(animated: false)
+        try await wait("the menu is dismissed") { presentedMenu(controller) == nil }
+    }
+
+    /// A playback save (every five seconds while an episode plays) changes only the playing episode's position and
+    /// listening times. Its row on the Queue stays the view on screen and shows the saved position, as Android's row
+    /// does (`DBWriter.setFeedMediaPlaybackInformation` posts no list event): a row replaced every five seconds
+    /// cancels a press or a long press on it and moves VoiceOver's focus.
+    @Test func aPlaybackSaveKeepsThePlayingRowOnTheQueue() async throws {
+        try await mounted(.queue) { patched, fresh, fixture in
+            let id = try #require(patched.episodeList?.ids.first { id in
+                patched.episodeRows[id] != nil && patched.libraryEpisode(id)?.episode.details.media != nil
+            })
+            let session = try await fixture.store.beginPlayback(episodeID: id)
+            await settle(patched, fresh)
+            let row = try #require(patched.episodeRows[id]?.1)
+            let duration = try #require(patched.libraryEpisode(id)?.episode.details.media?.durationMilliseconds)
+            _ = try await fixture.store.recordPlayback(sessionID: session.id,
+                sample: PlaybackSample(positionMilliseconds: 12_000, durationMilliseconds: duration, status: .playing))
+            await settle(patched, fresh)
+            #expect(patched.mirror.episode(id)?.episode.userState.positionMilliseconds == 12_000, "the save reached the screen")
+            #expect(patched.episodeRows[id]?.1 === row, "the playing row is the same view after a save")
+            #expect(row.window != nil, "and stays on screen")
+            #expect(episodeControl(patched, id) == episodeControl(fresh, id), "showing the saved position as a fresh open does")
+        }
+    }
+
+    /// The same save on Home: the Continue listening strip (the playing episode's card) stays the strip on screen,
+    /// so a horizontal scroll of it or a press on a card is not cut off every five seconds.
+    @Test func aPlaybackSaveKeepsHomesContinueStrip() async throws {
+        try await mounted(.home) { patched, fresh, fixture in
+            @MainActor func strip() -> HomeStrip? { patched.content.firstSubview { $0.accessibilityIdentifier == "homeQueueStrip" } as? HomeStrip }
+            let id = try #require((strip()?.itemViews.first as? HomeEpisodeCard)?.episodeID)
+            let session = try await fixture.store.beginPlayback(episodeID: id)
+            await settle(patched, fresh)
+            let shown = try #require(strip())
+            let duration = try #require(patched.libraryEpisode(id)?.episode.details.media?.durationMilliseconds)
+            _ = try await fixture.store.recordPlayback(sessionID: session.id,
+                sample: PlaybackSample(positionMilliseconds: 12_000, durationMilliseconds: duration, status: .playing))
+            await settle(patched, fresh)
+            #expect(patched.mirror.episode(id)?.episode.userState.positionMilliseconds == 12_000, "the save reached the screen")
+            #expect(strip() === shown, "the Continue listening strip is the same view after a save")
+            #expect(shown.window != nil, "and stays on screen")
+        }
+    }
+
+    /// Home's Continue listening and Get surprised cards open the episode menu on a long press, as Android's
+    /// `HorizontalItemListAdapter` cards do.
+    @Test func aLongPressOnAHomeCardOpensTheEpisodeMenu() async throws {
+        try await mounted(.home) { patched, fresh, fixture in
+            let strip = try #require(patched.content.firstSubview { $0.accessibilityIdentifier == "homeQueueStrip" } as? HomeStrip)
+            let card = try #require(strip.itemViews.compactMap { $0 as? HomeEpisodeCard }.first { patched.episodeRows[$0.episodeID] == nil })
+            card.contextMenu?(card, CGPoint(x: 0.5, y: 0.5))
+            try? await wait("the card's menu opens") { presentedMenu(patched) != nil }
+            #expect(presentedMenu(patched) != nil, "a long press on a Continue listening card opens its menu")
+            try await dismissMenu(patched)
+        }
+    }
+
+    /// An episode shown in both Home's See what's new and Downloads sections (a new episode already downloaded) keeps
+    /// its See what's new row working when it later leaves the Downloads section (newer downloads push it out): a long
+    /// press on that row opens its menu, as it does after a fresh open of the same library.
+    @Test func aHomeRowKeepsItsMenuWhenItsTwinLeavesAnotherSection() async throws {
+        try await mounted(.home) { patched, fresh, fixture in
+            @MainActor func section(_ controller: LibraryViewController, _ kind: HomeSection) -> HomeSectionState? { controller.homeSections.first { $0.section == kind } }
+            let inbox = try #require(section(patched, .inbox)?.shown.rows.map(\.1))
+            let twin = try #require(inbox.first)
+            // The newest new episode is downloaded: it shows in both sections.
+            try await fixture.store.updateEpisode(id: twin.id) { $0.userState.isDownloaded = true; $0.userState.downloadDate = Self.now }
+            await settle(patched, fresh)
+            try #require(section(patched, .downloads)?.shown.rows.contains { $0.1.id == twin.id } == true)
+            // Two newer episodes that are not new are downloaded (one commit each): the Downloads section's two places go
+            // to them, See what's new does not change.
+            let date = try #require(twin.details.publicationDate)
+            let others = patched.mirror.feeds.flatMap(\.episodes).filter {
+                $0.userState.playState != .new && $0.details.media != nil && !$0.userState.isDownloaded
+            }.prefix(2)
+            try #require(others.count == 2)
+            for (offset, other) in others.enumerated() {
+                try await fixture.store.updateEpisode(id: other.id) {
+                    $0.details.publicationDate = date.addingTimeInterval(Double(offset + 1) * 3_600)
+                    $0.userState.isDownloaded = true; $0.userState.downloadDate = Self.now
+                }
+                await settle(patched, fresh)
+            }
+            try #require(section(patched, .downloads)?.shown.rows.contains { $0.1.id == twin.id } == false)
+            try #require(section(patched, .inbox)?.shown.rows.map(\.1.id) == inbox.map(\.id))
+            @MainActor func row(_ controller: LibraryViewController) -> EpisodeRowView? {
+                section(controller, .inbox)?.views.compactMap { $0 as? EpisodeRowView }.first { $0.actionModel?.episodeID == twin.id }
+            }
+            // The reference: a fresh open of the same library opens the menu.
+            let reference = try #require(row(fresh))
+            reference.contextMenu?(reference, CGPoint(x: 0.5, y: 0.5))
+            try await wait("a fresh open's row opens its menu") { presentedMenu(fresh) != nil }
+            try await dismissMenu(fresh)
+            let shown = try #require(row(patched))
+            shown.contextMenu?(shown, CGPoint(x: 0.5, y: 0.5))
+            try? await wait("the patched row opens its menu") { presentedMenu(patched) != nil }
+            #expect(presentedMenu(patched) != nil, "a long press on the See what's new row opens its menu after the Downloads section changed")
+            try await dismissMenu(patched)
+        }
+    }
+
+    /// Android's Queue empty state (`QueueFragment.loadItems`): its icon, and when the Inbox has new episodes, the message
+    /// that new episodes await and a Go to inbox button.
+    @Test func anEmptyQueueWithNewEpisodesOffersTheInbox() async throws {
+        try await mounted(.queue) { patched, fresh, fixture in
+            _ = try await fixture.store.clearQueue()
+            await settle(patched, fresh)
+            try #require(patched.mirror.queue.isEmpty && patched.mirror.inboxCount > 0)
+            let texts = patched.content.subviews.compactMap { ($0 as? UILabel)?.text }
+            #expect(texts.contains("No queued episodes"))
+            #expect(texts.contains("No episodes lined up, but there are new episodes that await you!"), "\(texts)")
+            let button = patched.content.firstSubview { ($0 as? UIButton)?.title(for: .normal) == "Go to inbox" || ($0 as? UIButton)?.configuration?.title == "Go to inbox" }
+            #expect(button != nil, "a Go to inbox button")
+            #expect(patched.content.subviews.contains { $0 is UIImageView }, "the empty state's icon")
+        }
+    }
+
+    /// The empty Queue follows the Inbox: its invitation goes when the Inbox empties and comes back with a new episode.
+    @Test func theEmptyQueueFollowsTheInbox() async throws {
+        try await mounted(.queue) { patched, fresh, fixture in
+            @MainActor func texts(_ controller: LibraryViewController) -> [String] {
+                controller.content.subviews.compactMap { ($0 as? UILabel)?.text }
+            }
+            @MainActor func offersInbox(_ controller: LibraryViewController) -> Bool {
+                controller.content.firstSubview { $0.accessibilityIdentifier == "queueEmptyButton" } != nil
+            }
+            _ = try await fixture.store.clearQueue()
+            await settle(patched, fresh)
+            try #require(offersInbox(patched))
+            // Icon, title, message and button, top to bottom, each whole within the screen and none over another.
+            let icon = UIImage(named: "ic_playlist_play")
+            let parts = patched.content.subviews.filter {
+                ($0 as? UIImageView)?.image == icon || ["queueEmptyTitle", "queueEmptyMessage", "queueEmptyButton"].contains($0.accessibilityIdentifier)
+            }.map(\.frame).sorted { $0.minY < $1.minY }
+            #expect(parts.count == 4)
+            #expect(parts.allSatisfy { patched.content.bounds.contains($0) && $0.width > 0 && $0.height > 0 }, "\(parts)")
+            #expect(zip(parts, parts.dropFirst()).allSatisfy { $0.maxY <= $1.minY + 0.5 }, "\(parts)")
+            let new = try await fixture.store.removeAllFromInbox()
+            await settle(patched, fresh)
+            #expect(!offersInbox(patched), "no invitation without new episodes")
+            #expect(texts(patched) == texts(fresh) && texts(patched).contains(Appearance.text("no_items_label")))
+            let id = try #require(new.first)
+            try await fixture.store.updateEpisode(id: id) { $0.userState.playState = .new }
+            await settle(patched, fresh)
+            #expect(offersInbox(patched), "the invitation is back with a new episode")
+            #expect(texts(patched) == texts(fresh))
+            let button = try #require(patched.content.firstSubview { $0.accessibilityIdentifier == "queueEmptyButton" } as? UIButton)
+            button.sendActions(for: .primaryActionTriggered)
+            try await wait("Go to inbox opens the Inbox") { if case .destination(.inbox) = patched.path.last { true } else { false } }
+        }
+    }
+
+    /// The selection toolbar (close, "N/M selected", more) stays the same while a download runs: the 1 Hz progress
+    /// updates rows' buttons only, so a tap on the toolbar is not cut off and VoiceOver's focus stays.
+    @Test func downloadProgressKeepsTheSelectionToolbar() async throws {
+        try await mounted(.inbox) { patched, fresh, fixture in
+            let id = try #require(patched.episodeList?.ids.first { patched.episodeRows[$0] != nil })
+            patched.startFeedSelection(id)
+            let bar = try #require(patched.toolbar.subviews.first { $0.accessibilityIdentifier == "feedSelectionToolbar" })
+            // What each download progress report does on a list screen.
+            patched.updateDownloadRows()
+            #expect(patched.toolbar.subviews.first { $0.accessibilityIdentifier == "feedSelectionToolbar" } === bar,
+                    "the selection toolbar is the same view after a progress update")
+            #expect(bar.window != nil)
+            patched.endFeedSelection()
+        }
+    }
+
+    /// Locking the queue hides the drag handles, which widens every row's text: each row on screen takes the height its
+    /// title now needs (no gap under a title that now fits one line, no title running into the next row), as Android's
+    /// rows do when the lock rebinds them (`updateDragDropEnabled`).
+    @Test func lockingTheQueueFitsEveryRowToItsTitle() async throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("QueueLockRows-\(UUID())")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let store = try FeedLibraryStore(url: folder.appendingPathComponent("library.sqlite"))
+        // Titles one character longer each: around the width where a title wraps, a 12-point change of the text width
+        // moves some of them between one and two lines.
+        let sentence = "An episode title that goes on with several more words until it needs a second line to finish"
+        let titles = (30...45).map { String(sentence.prefix($0)) }
+        do {
+            let source = "https://example.test/queue-lock.xml"
+            _ = try await store.insert(FetchedFeed(feed: ParsedFeed(format: .rss, title: "Queue lock", episodes: titles.enumerated().map { index, title in
+                ParsedEpisode(identifier: "\(source)#\(index)", title: title, publicationDate: Self.now.addingTimeInterval(Double(index) * 60),
+                              media: ParsedMedia(url: "https://media.example.test/lock/\(index).mp3", size: 1_000, durationMilliseconds: 120_000))
+            }), source: source, responseURL: URL(string: source)!, validator: nil, permanentRedirectURL: nil), options: .init(now: Self.now))
+            _ = try await store.enqueue(try await store.feeds().flatMap(\.episodes).map(\.id))
+            let navigation = try NavigationPreferenceStore(file: folder.appendingPathComponent("navigation.json"))
+            var value = navigation.value; value.defaultPage = NavigationDestination.queue.rawValue; try navigation.update(value)
+            let preferences = try QueueInteractionPreferenceStore(file: folder.appendingPathComponent("queue.json"))
+            try preferences.update(.init(locked: false, showLockWarning: false))
+            let controller = LibraryViewController(library: store, startupError: nil, downloads: nil, playback: nil,
+                timeDisplayPreferences: nil, navigationPreferences: navigation, speedPreferences: nil,
+                mobileNetworkPreferences: nil, usage: nil, queueInteractionPreferences: preferences)
+            try await withViewTestWindow { host, _ in
+                host.addChild(controller); host.view.addSubview(controller.view); controller.didMove(toParent: host)
+                controller.view.frame = host.view.bounds
+                defer { controller.willMove(toParent: nil); controller.view.removeFromSuperview(); controller.removeFromParent() }
+                await controller.reloadLibrary()?.value; controller.view.layoutIfNeeded()
+                // On this screen's width (iPhone, iPad, Duo), the titles that wrap differently with and without the
+                // handle: every queued episode takes one of them.
+                let metrics = EpisodeRowMetrics(queueTraits: controller.traitCollection, scale: controller.view.window?.screen.scale ?? 3)
+                let width = controller.content.bounds.width
+                @MainActor func crosses(_ title: String) -> Bool {
+                    metrics.height(title: title, progressLine: true, width: width, draggable: true, showAction: true)
+                        != metrics.height(title: title, progressLine: true, width: width, draggable: false, showAction: true)
+                }
+                let long = String(repeating: sentence + " ", count: 4)
+                let wrapping = (20...long.count).map { String(long.prefix($0)) }.filter(crosses)
+                try #require(!wrapping.isEmpty, "some title wraps differently with the handle")
+                for (index, id) in try await store.queue().map(\.id).enumerated() {
+                    try await store.updateEpisode(id: id) { $0.details.title = wrapping[index % wrapping.count] }
+                }
+                await controller.reloadLibrary()?.value; controller.view.layoutIfNeeded()
+                @MainActor func misfits() -> [Int64] {
+                    controller.view.layoutIfNeeded()
+                    guard let list = controller.episodeList else { return [-1] }
+                    return list.ids.filter { id in
+                        guard let row = list.views[id] else { return false }
+                        return abs(row.frame.height - row.sizeThatFits(CGSize(width: row.bounds.width, height: .greatestFiniteMagnitude)).height) > 0.5
+                    }
+                }
+                // The rows on screen include one whose title wraps differently with and without the handle.
+                let crossing = (controller.episodeList?.views.keys.map { $0 } ?? []).filter { id in
+                    crosses(controller.libraryEpisode(id)?.episode.details.title ?? "")
+                }
+                try #require(!crossing.isEmpty, "a row on screen changes height with the handle")
+                try #require(misfits().isEmpty, "unlocked, every row fits its title")
+                controller.toggleQueueLock()
+                try #require(preferences.value.locked)
+                #expect(misfits().isEmpty, "locked, every row fits its title")
+                controller.toggleQueueLock()
+                try #require(!preferences.value.locked)
+                #expect(misfits().isEmpty, "unlocked again, every row fits its title")
+            }
+            try await store.close()
+        } catch { try? await store.close(); throw error }
+    }
+
+    /// Move to bottom from a Queue row's menu moves that episode although sync added another episode to the queue while
+    /// the menu was open, as Android's `DBWriter.moveQueueItemToBottom` does.
+    @Test func moveToBottomFromAMenuOpenedBeforeASyncChangeMoves() async throws {
+        try await mounted(.queue) { patched, fresh, fixture in
+            let ids = try #require(patched.episodeList?.ids)
+            let id = try #require(ids.dropLast().first { patched.episodeRows[$0] != nil })
+            let row = try #require(patched.episodeRows[id]?.1)
+            row.contextMenu?(row, CGPoint(x: 0.5, y: 0.5))
+            try await wait("the menu opens") { presentedMenu(patched) != nil }
+            // Meanwhile another device adds an episode to the queue.
+            let queued = Set(try await fixture.store.queue().map(\.id))
+            let joining = try #require(patched.mirror.feeds.flatMap(\.episodes).first { !queued.contains($0.id) && $0.details.media != nil })
+            _ = try await fixture.store.enqueue([joining.id], location: .back)
+            await settle(patched, fresh)
+            let menu = try #require(presentedMenu(patched))
+            menu.view.layoutIfNeeded()
+            let bottom = try #require(menu.view.firstSubview { $0.accessibilityIdentifier == "queue-bottom" } as? UIButton)
+            bottom.sendActions(for: .touchUpInside)
+            try await wait("the menu closes") { presentedMenu(patched) == nil }
+            var last: Int64?
+            let deadline = ContinuousClock.now + .seconds(5)
+            while last != id, ContinuousClock.now < deadline {
+                last = try await fixture.store.queue().last?.id
+                try await Task.sleep(for: .milliseconds(20))
+            }
+            #expect(last == id, "the episode moved to the bottom of the queue")
+        }
+    }
+
+    /// Move to bottom from a Queue row's menu also moves the episode when the queue changed in storage and the screen
+    /// has not shown it yet: it moves by id in the stored queue, as `DBWriter` does.
+    @Test func moveToBottomMovesInTheStoredQueueBeforeTheScreenShowsIt() async throws {
+        try await mounted(.queue) { patched, fresh, fixture in
+            let ids = try #require(patched.episodeList?.ids)
+            let id = try #require(ids.dropLast().first { patched.episodeRows[$0] != nil })
+            let row = try #require(patched.episodeRows[id]?.1)
+            row.contextMenu?(row, CGPoint(x: 0.5, y: 0.5))
+            try await wait("the menu opens") { presentedMenu(patched) != nil }
+            let queued = Set(try await fixture.store.queue().map(\.id))
+            let joining = try #require(patched.mirror.feeds.flatMap(\.episodes).first { !queued.contains($0.id) && $0.details.media != nil })
+            // The screen does not show the joining episode yet.
+            patched.screenUpdater?.beginOpen()
+            _ = try await fixture.store.enqueue([joining.id], location: .back)
+            let menu = try #require(presentedMenu(patched))
+            menu.view.layoutIfNeeded()
+            let bottom = try #require(menu.view.firstSubview { $0.accessibilityIdentifier == "queue-bottom" } as? UIButton)
+            bottom.sendActions(for: .touchUpInside)
+            try await wait("the menu closes") { presentedMenu(patched) == nil }
+            var last: Int64?
+            let deadline = ContinuousClock.now + .seconds(5)
+            while last != id, ContinuousClock.now < deadline {
+                last = try await fixture.store.queue().last?.id
+                try await Task.sleep(for: .milliseconds(20))
+            }
+            patched.screenUpdater?.opened(at: nil)
+            #expect(last == id, "the episode moved to the bottom of the stored queue")
+            await settle(patched, fresh)
+            #expect(patched.episodeList?.ids == fresh.episodeList?.ids, "and the screen shows the stored queue")
+        }
+    }
+
+    // MARK: - Playback shown in place
+
+    /// A queued episode with media, not new and not started, whose row is built on the patched screen.
+    func unstartedQueuedRow(_ patched: LibraryViewController) throws -> Int64 {
+        try #require(patched.episodeList?.ids.first { id in
+            guard patched.episodeRows[id] != nil, let episode = patched.libraryEpisode(id)?.episode else { return false }
+            return episode.details.media != nil && episode.userState.playState == .unplayed && episode.userState.positionMilliseconds == 0
+        })
+    }
+
+    /// The player's save of `position` (and the duration it knows) for the open session, shown on both screens.
+    func save(_ position: Int32, duration: Int32, session: LibraryPlaybackSession, _ fixture: Fixture,
+              _ patched: LibraryViewController, _ fresh: LibraryViewController) async throws {
+        _ = try await fixture.store.recordPlayback(sessionID: session.id,
+            sample: PlaybackSample(positionMilliseconds: position, durationMilliseconds: duration, status: .playing))
+        await settle(patched, fresh)
+    }
+
+    /// The row of `id` as a person sees it on the two screens: the same place and height, and what VoiceOver reads.
+    func expectRowAsFresh(_ patched: LibraryViewController, _ fresh: LibraryViewController, _ id: Int64, _ comment: Comment) {
+        #expect(episodeControl(patched, id) == episodeControl(fresh, id), comment)
+        #expect(patched.episodeList?.frame(of: id) == fresh.episodeList?.frame(of: id), comment)
+        if let row = patched.episodeRows[id]?.1 {
+            #expect(abs(row.frame.height - row.sizeThatFits(CGSize(width: row.bounds.width, height: .greatestFiniteMagnitude)).height) < 0.5, comment)
+        }
+    }
+
+    /// The player learns the duration of an episode whose feed gave none: its row keeps its view and shows the progress
+    /// line it now has (taller), as a fresh open of the same library.
+    @Test func aSaveThatLearnsTheDurationShowsItInPlace() async throws {
+        try await mounted(.queue) { patched, fresh, fixture in
+            let id = try unstartedQueuedRow(patched)
+            // A title on two lines, so the progress line makes the row taller than its cover.
+            let title = String(repeating: "An episode title that goes on with several more words until it needs a second line. ", count: 2)
+            try await fixture.store.updateEpisode(id: id) { $0.details.title = title; $0.details.media?.durationMilliseconds = 0 }
+            let session = try await fixture.store.beginPlayback(episodeID: id)
+            await settle(patched, fresh)
+            let row = try #require(patched.episodeRows[id]?.1)
+            let height = row.frame.height
+            try await save(12_000, duration: 90_000, session: session, fixture, patched, fresh)
+            try #require(patched.mirror.episode(id)?.episode.details.media?.durationMilliseconds == 90_000, "the save reached the screen")
+            #expect(patched.episodeRows[id]?.1 === row, "the row is the same view")
+            #expect(row.frame.height > height, "with its progress line")
+            expectRowAsFresh(patched, fresh, id, "showing the position and duration as a fresh open does")
+        }
+    }
+
+    /// A save back at the start (a reset to zero) takes the row's position and progress away in place.
+    @Test func aSaveBackAtTheStartShowsItInPlace() async throws {
+        try await mounted(.queue) { patched, fresh, fixture in
+            let id = try unstartedQueuedRow(patched)
+            let duration = try #require(patched.libraryEpisode(id)?.episode.details.media?.durationMilliseconds)
+            let session = try await fixture.store.beginPlayback(episodeID: id)
+            await settle(patched, fresh)
+            let row = try #require(patched.episodeRows[id]?.1)
+            try await save(12_000, duration: duration, session: session, fixture, patched, fresh)
+            #expect(patched.episodeRows[id]?.1 === row, "the row is the same view")
+            expectRowAsFresh(patched, fresh, id, "showing the position from zero")
+            try await save(0, duration: duration, session: session, fixture, patched, fresh)
+            try #require(patched.mirror.episode(id)?.episode.userState.positionMilliseconds == 0, "the reset reached the screen")
+            #expect(patched.episodeRows[id]?.1 === row, "the row is the same view")
+            expectRowAsFresh(patched, fresh, id, "showing no position after the reset")
+        }
+    }
+
+    /// Anything else a row shows is not a position: an episode marked played with the position is painted again.
+    @Test func aPlayedChangeWithThePositionStillPaintsTheRowAgain() async throws {
+        try await mounted(.queue) { patched, fresh, fixture in
+            let id = try unstartedQueuedRow(patched)
+            let duration = try #require(patched.libraryEpisode(id)?.episode.details.media?.durationMilliseconds)
+            let session = try await fixture.store.beginPlayback(episodeID: id)
+            await settle(patched, fresh)
+            try await save(12_000, duration: duration, session: session, fixture, patched, fresh)
+            let row = try #require(patched.episodeRows[id]?.1)
+            try await fixture.store.updateEpisode(id: id) { $0.userState.playState = .played; $0.userState.positionMilliseconds = 30_000 }
+            await settle(patched, fresh)
+            #expect(patched.episodeRows[id]?.1 !== row, "the row is painted again")
+            expectRowAsFresh(patched, fresh, id, "showing it played, as a fresh open does")
+        }
+    }
+
+    /// The same save on Home: the Continue listening card shows the saved progress in place, as a fresh open draws it.
+    @Test func aPlaybackSaveShowsItsProgressOnHomesCard() async throws {
+        try await mounted(.home) { patched, fresh, fixture in
+            @MainActor func card(_ controller: LibraryViewController, _ id: Int64) -> HomeEpisodeCard? {
+                controller.homeCards.first { $0.1.episodeID == id && $0.1.window != nil }?.1
+            }
+            let strip = try #require(patched.content.firstSubview { $0.accessibilityIdentifier == "homeQueueStrip" } as? HomeStrip)
+            let id = try #require((strip.itemViews.first as? HomeEpisodeCard)?.episodeID)
+            let session = try await fixture.store.beginPlayback(episodeID: id)
+            await settle(patched, fresh)
+            let shown = try #require(card(patched, id))
+            let before = shown.progress
+            let duration = try #require(patched.libraryEpisode(id)?.episode.details.media?.durationMilliseconds)
+            try await save(duration / 2, duration: duration, session: session, fixture, patched, fresh)
+            #expect(card(patched, id) === shown, "the card is the same view")
+            #expect(shown.progress != before, "showing the new progress")
+            #expect(shown.progress == card(fresh, id)?.progress, "as a fresh open does")
+        }
+    }
+
+    /// An episode with a row in both See what's new and Downloads: a playback save reaches both rows in place.
+    @Test func aPlaybackSaveReachesBothHomeRowsOfAnEpisode() async throws {
+        try await mounted(.home) { patched, fresh, fixture in
+            @MainActor func rows(_ controller: LibraryViewController, _ id: Int64) -> [EpisodeRowView] {
+                controller.homeSections.filter { [.inbox, .downloads].contains($0.section) }.flatMap(\.views)
+                    .compactMap { $0 as? EpisodeRowView }.filter { $0.actionModel?.episodeID == id }
+            }
+            let twin = try #require(patched.homeSections.first { $0.section == .inbox }?.shown.rows.first?.1)
+            try await fixture.store.updateEpisode(id: twin.id) { $0.userState.isDownloaded = true; $0.userState.downloadDate = Self.now }
+            await settle(patched, fresh)
+            let both = rows(patched, twin.id)
+            try #require(both.count == 2, "the episode has a row in each section")
+            // What a save writes: the position and the listening times.
+            try await fixture.store.updateEpisode(id: twin.id) {
+                $0.userState.positionMilliseconds = 12_000; $0.userState.lastPlayedTimeMilliseconds = 1_760_000_000_000
+            }
+            await settle(patched, fresh)
+            try #require(patched.mirror.episode(twin.id)?.episode.userState.positionMilliseconds == 12_000)
+            #expect(rows(patched, twin.id).map(ObjectIdentifier.init) == both.map(ObjectIdentifier.init), "both rows are the same views")
+            #expect(rows(patched, twin.id).map { Self.spoken($0) } == rows(fresh, twin.id).map { Self.spoken($0) },
+                    "each shows the saved position, as a fresh open does")
+        }
+    }
+
+    /// While an episode plays, its row on the Queue shows the playing background (Android's activated row) and its
+    /// Continue listening card on Home the playing card's background and the live progress (`HorizontalItemViewHolder`
+    /// on `PlaybackPositionEvent`); both go when it pauses. Only the playing episode's row and card are highlighted.
+    @Test func thePlayingEpisodesRowAndCardFollowPlayback() async throws {
+        try await withPlayingScreen { controller, playback, engine, _ in
+            let id = try #require(controller.episodeList?.ids.first { id in
+                controller.episodeRows[id] != nil && controller.libraryEpisode(id)?.episode.details.media != nil
+            })
+            @MainActor func highlighted() -> [Int64] {
+                controller.episodeRows.filter { $0.value.1.showsPlayingBackground }.map(\.key)
+            }
+            try #require(highlighted().isEmpty)
+            try await playback.select(episodeID: id, play: true)
+            engine.ready()
+            try await wait("it plays") { playback.phase == .playing }
+            try await wait("the playing row shows its background") { highlighted() == [id] }
+            try await playback.pause()
+            try await wait("paused, no row is highlighted") { highlighted().isEmpty }
+            controller.select(.home); controller.view.layoutIfNeeded()
+            @MainActor func card() -> HomeEpisodeCard? { controller.homeCards.first { $0.1.episodeID == id && $0.1.window != nil }?.1 }
+            let shown = try #require(card(), "the episode has a Continue listening card")
+            #expect(!shown.playing)
+            try await playback.select(episodeID: id, play: true)
+            engine.moved(to: 900_000)
+            try await wait("the card shows the playing background") { shown.playing }
+            try await wait("and the live progress") { abs((shown.progress ?? 0) - 0.5) < 0.01 }
+            #expect(controller.homeCards.filter { $0.1.playing }.map(\.1) == [shown], "only the playing episode's card")
+            try await playback.pause()
+            try await wait("paused, the card is not highlighted") { !shown.playing }
+        }
+    }
+
+    /// The Queue on a screen that follows a player of scripted positions (the coordinator saves every five seconds).
+    private func withPlayingScreen(_ body: @MainActor (LibraryViewController, PlaybackCoordinator, ScriptedEngine, Fixture) async throws -> Void) async throws {
+        let fixture = try await fixture(start: .queue)
+        let engine = ScriptedEngine()
+        let playback = PlaybackCoordinator(store: fixture.store, engine: engine)
+        weak var screen: LibraryViewController?
+        do {
+            let controller = LibraryViewController(library: fixture.store, startupError: nil, downloads: fixture.downloads, playback: playback,
+                timeDisplayPreferences: try TimeDisplayPreferenceStore(file: fixture.folder.appendingPathComponent("time.json")),
+                navigationPreferences: fixture.navigation, speedPreferences: nil, mobileNetworkPreferences: nil, usage: nil)
+            screen = controller
+            try await withViewTestWindow { host, _ in
+                host.addChild(controller); host.view.addSubview(controller.view); controller.didMove(toParent: host)
+                controller.view.frame = host.view.bounds
+                defer { controller.willMove(toParent: nil); controller.view.removeFromSuperview(); controller.removeFromParent() }
+                await controller.reloadLibrary()?.value; controller.view.layoutIfNeeded()
+                try await body(controller, playback, engine, fixture)
+            }
+        } catch { try? await playback.stop(); await close(fixture); throw error }
+        try? await playback.stop()
+        await close(fixture)
+        try await wait("the screen is freed") { screen == nil }
+    }
+
+    /// An action the model holds before its patch, with the player's live position ahead of the stored one (a Played
+    /// swipe between two saves): the commit then differs from the model only in the position, but the row was painted
+    /// unplayed. It is painted again: dimmed and spoken as played, as a fresh row is.
+    @Test func aPlayedActionBeforeItsPatchDimsTheRowWhileTheLivePositionIsUnsaved() async throws {
+        try await withPlayingScreen { controller, playback, engine, fixture in
+            let id = try unstartedQueuedRow(controller)
+            try await playback.select(episodeID: id, play: true)
+            engine.ready()
+            try await wait("it plays") { playback.phase == .playing }
+            engine.moved(to: 20_000)
+            try await wait("the row shows the live position") {
+                controller.actionBindings[id]?.model.snapshot().episode.userState.positionMilliseconds == 20_000
+            }
+            await controller.settleLibraryChanges(); controller.view.layoutIfNeeded()
+            try #require(try await fixture.store.episode(id: id)?.userState.positionMilliseconds != 20_000, "the live position is not saved")
+            let row = try #require(controller.episodeRows[id]?.1)
+            try #require(row.alpha == 1)
+            let captured = try #require(controller.captureAction(id))
+            // The action's write completes and is reconciled before the screen's patch of it.
+            controller.screenUpdater?.beginOpen()
+            try await fixture.store.updateEpisode(id: id, scope: .userState) { $0.userState.playState = .played }
+            let receipt = try #require(controller.library?.changes.emitted)
+            controller.reconcileCommittedAction(captured, delta: .init(playState: .played), receipt: receipt)
+            controller.screenUpdater?.opened(at: nil)
+            await controller.settleLibraryChanges(); controller.view.layoutIfNeeded()
+            let shown = try #require(controller.episodeRows[id]?.1)
+            #expect(shown.alpha == 0.5, "the played row is dimmed")
+            #expect(Self.spoken(shown).first?.contains(Appearance.text("is_played")) == true, "and spoken as played")
+            #expect(!controller.rowIsStale(id), "and its paint record says what it shows")
+            try await playback.pause()
+        }
+    }
+
+    /// A Home row whose saved duration brings its progress line (a two-line title, the duration learned by the player)
+    /// keeps its view, takes its new height, and what follows moves, as a fresh open places them.
+    @Test func homeKeepsARowThatALearnedDurationMakesTaller() async throws {
+        try await mounted(.home) { patched, fresh, fixture in
+            @MainActor func row(_ controller: LibraryViewController, _ id: Int64) -> EpisodeRowView? {
+                controller.homeSections.first { $0.section == .downloads }?.views.compactMap { $0 as? EpisodeRowView }
+                    .first { $0.actionModel?.episodeID == id }
+            }
+            let id = try #require(patched.mirror.feeds.flatMap(\.episodes).first {
+                $0.details.media != nil && $0.userState.playState == .unplayed && $0.userState.positionMilliseconds == 0
+            }?.id)
+            let title = String(repeating: "An episode title that goes on with several more words until it needs a second line. ", count: 2)
+            try await fixture.store.updateEpisode(id: id) {
+                $0.details.title = title; $0.details.media?.durationMilliseconds = 0
+                $0.userState.isDownloaded = true; $0.userState.downloadDate = Self.now
+            }
+            let session = try await fixture.store.beginPlayback(episodeID: id)
+            await settle(patched, fresh)
+            let shown = try #require(row(patched, id), "the episode has a Downloads row")
+            let height = shown.frame.height
+            try await save(12_000, duration: 90_000, session: session, fixture, patched, fresh)
+            try #require(patched.mirror.episode(id)?.episode.details.media?.durationMilliseconds == 90_000, "the save reached the screen")
+            #expect(row(patched, id) === shown && shown.window != nil, "the row is the same view")
+            #expect(shown.frame.height > height, "taller with its progress line")
+            #expect(shown.frame == row(fresh, id)?.frame, "placed as a fresh open places it")
+            #expect(Self.spoken(shown) == row(fresh, id).map { Self.spoken($0) }, "showing what a fresh open shows")
+            #expect(patched.homeSections.map(\.top) == fresh.homeSections.map(\.top), "the sections below move")
+            #expect(patched.homeSections.map(\.height) == fresh.homeSections.map(\.height))
+            #expect(patched.content.contentSize.height == fresh.content.contentSize.height)
+        }
     }
 }

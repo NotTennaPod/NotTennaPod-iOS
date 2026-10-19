@@ -72,7 +72,30 @@ extension LibraryViewController {
     /// Lock and drag handles follow Keep sorted at once (`refreshToolbarState` on every QueueEvent).
     private func queueKeepSortedChanged() {
         for (_, row) in episodeRows.values { row.setQueueInteraction(queuePolicy); row.layoutIfNeeded() }
+        fitQueueRowsToHandles()
         updateFeedSelection()
+    }
+    /// The handles' change of the text width moves some titles between one and two lines: every loaded row takes the
+    /// height it needs now (the rows below move), as Android's rows rebind (`updateDragDropEnabled`).
+    private func fitQueueRowsToHandles() {
+        guard let list = episodeList else { return }
+        var measure = rowMeasure()
+        for id in list.ids {
+            guard let value = displayedEpisodeValues[id] else { continue }
+            list.setHeight(measure.height(feed: value.feed, stored: value.episode), of: id, in: content)
+        }
+        list.restoreViewOrder(in: content)
+        episodeListResized()
+        updateVisibleContent()
+    }
+
+    /// `QueueFragment`'s empty view (`EmptyViewHandler`): `ic_playlist_play`, its title and message, and while the Inbox
+    /// has new episodes their invitation with Go to inbox (`loadItems`).
+    func queueEmpty() {
+        queueEmptyOffersInbox = mirror.inboxCount > 0
+        listEmpty(icon: "ic_playlist_play", title: "no_items_header_label",
+                  message: queueEmptyOffersInbox ? "no_queue_items_inbox_has_items_label" : "no_items_label", identifier: "queue",
+                  button: queueEmptyOffersInbox ? ("no_queue_items_inbox_has_items_button_label", { [weak self] in self?.select(.inbox) }) : nil)
     }
 
     /// `QueueFragment` Clear queue: confirmation, then `DBWriter.clearQueue` (no Undo, no snackbar).
@@ -106,6 +129,7 @@ extension LibraryViewController {
     }
     private func queueLockChanged() {
         for (_, row) in episodeRows.values { row.setQueueInteraction(queuePolicy); row.layoutIfNeeded() }
+        fitQueueRowsToHandles()
         updateFeedSelection()
         if queuedEpisodes.isEmpty { showEpisodeActionMessage(Appearance.text(queuePolicy.locked ? "queue_locked" : "queue_unlocked")) }
     }
@@ -125,9 +149,10 @@ extension LibraryViewController {
         for (id, (_, row)) in episodeRows { controller.attach(row, id: id) }
         queueDragController = controller
     }
-    func moveQueue(to boundary: QueueBoundary, ids: [Int64], bulk: Bool, captured: [QueueEpisodeIdentity]? = nil) {
+    /// Move to top or bottom: the episodes move in the queue as it is at the tap.
+    func moveQueue(to boundary: QueueBoundary, ids: [Int64], bulk: Bool) {
         guard queueVisible, queueMoveTask == nil, queuePolicy.canMove(ids, in: queuedEpisodes.map(\.id), to: boundary, bulk: bulk) else { return }
-        let snapshot = captured ?? queuedEpisodes.map(QueueEpisodeIdentity.init)
+        let snapshot = queuedEpisodes.map(QueueEpisodeIdentity.init)
         if bulk { endFeedSelection() }
         commitQueueMove(.boundary(ids, boundary), captured: snapshot)
     }
@@ -138,7 +163,15 @@ extension LibraryViewController {
             guard let self else { return }
             defer { queueMoveTask = nil }
             do {
-                let result = try await library.performQueueMove(move, expected: captured)
+                var result = try await library.performQueueMove(move, expected: captured)
+                // Move to top or bottom moves the episodes by id in the queue as stored (`DBWriter.moveQueueItemToTop`):
+                // a change the screen has not shown yet does not drop it (the screen then reads it). A drag keeps the
+                // order it was made over.
+                var behind = false
+                if result.status == .stale, case .boundary = move {
+                    behind = true
+                    result = try await library.performQueueMove(move, expected: library.queue().map(QueueEpisodeIdentity.init))
+                }
                 guard queueVisible, queuePresentationID == presentation else {
                     // The accepted move may finish after resize/navigation rebuilt
                     // the rows. Reconcile from storage instead of leaving that
@@ -146,7 +179,7 @@ extension LibraryViewController {
                     reloadLibrary(preservingEpisodeDetails: true)
                     return
                 }
-                if result.status == .stale || queuedEpisodes.map(QueueEpisodeIdentity.init) != captured { reloadLibrary(); return }
+                if behind || result.status == .stale || queuedEpisodes.map(QueueEpisodeIdentity.init) != captured { reloadLibrary(); return }
                 mirror.reorderQueue(result.change.episodeIDs)
                 episodeList?.reorder(queuedEpisodes.map(\.id))
                 if let screen = listScreen, case .queue = screen.source { listScreen?.source = .queue(queuedEpisodes.map(\.id)) }

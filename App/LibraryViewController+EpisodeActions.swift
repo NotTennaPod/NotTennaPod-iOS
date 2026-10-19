@@ -34,8 +34,7 @@ extension LibraryViewController {
             row.setSelected(feedSelection.active && feedSelection.ids.contains(episode.id), selectionMode: feedSelection.active)
             if queueVisible { row.setQueueInteraction(queuePolicy) }
         }
-        toolbar.subviews.filter { $0.accessibilityIdentifier == "feedSelectionToolbar" }.forEach { $0.removeFromSuperview() }
-        toolbar.accessibilityElements = nil
+        let shownBar = toolbar.subviews.first { $0.accessibilityIdentifier == "feedSelectionToolbar" }
         if feedSelection.active {
             let items = episodeListItems(feedSelection.selected(displayed: feedSelectionIDs))
             if !items.isEmpty {
@@ -43,6 +42,16 @@ extension LibraryViewController {
                     hasMedia: items.count != 1 || items[0].episode.details.media != nil,
                     queueMoves: queueVisible ? [.top, .bottom].filter { queuePolicy.canMove(feedSelection.selected(displayed: feedSelectionIDs), in: queuedEpisodes.map(\.id), to: $0, bulk: true) } : [])
             }
+            // The toolbar on screen keeps its views; only its count changes (`ActionMode.setTitle`), so a download's
+            // progress each second never takes a tap or VoiceOver's focus from it. A new width draws the screen again.
+            if let count = shownBar?.subviews.first(where: { $0.accessibilityIdentifier == "episodeSelectionCount" }) as? UILabel {
+                count.text = String(format: Appearance.text("num_selected_label"), feedSelection.ids.count, feedSelectionIDs.count)
+                updateFeedPageFooter(); return
+            }
+        }
+        shownBar?.removeFromSuperview()
+        toolbar.accessibilityElements = nil
+        if feedSelection.active {
             let bar = UIView(frame: toolbar.bounds); bar.backgroundColor = Appearance.navigation
             bar.accessibilityIdentifier = "feedSelectionToolbar"
             let layout = toolbarLayout(hasOverflow: true, forceNavigation: true)
@@ -78,8 +87,9 @@ extension LibraryViewController {
         updateFeedSelection()
     }
 
-    func showListEpisodeMenu(_ id: Int64, feedID: Int64, anchor: UIView, fraction: CGPoint) {
-        guard let scope = currentSelectionScope ?? homeRowScopes[id], !feedSelection.active,
+    /// `home`: the Home section of the row or card pressed (its menu's identity).
+    func showListEpisodeMenu(_ id: Int64, feedID: Int64, anchor: UIView, fraction: CGPoint, home: EpisodeSelectionScope? = nil) {
+        guard let scope = currentSelectionScope ?? home, !feedSelection.active,
               let captured = captureAction(id), let feed = feeds.first(where: { $0.id == feedID }) else { return }
         let item = contextItem(captured.model), episode = item.episode
         let onHome: Bool = if case .destination(.home) = path.last { true } else { false }
@@ -87,7 +97,6 @@ extension LibraryViewController {
             // Home lists hide multi-select (source menu XML); feed lists hide it for previews.
             $0 != .multiSelect || (!onHome && (scope != .feed(feedID) || feed.subscriptionState != .notSubscribed))
         }
-        let capturedQueue = queuedEpisodes.map(QueueEpisodeIdentity.init)
         let moves: [QueueBoundary] = scope == .queue ? [.top, .bottom].filter {
             queuePolicy.canMove([id], in: queuedEpisodes.map(\.id), to: $0, bulk: false)
         } : []
@@ -96,7 +105,8 @@ extension LibraryViewController {
         present(PopupMenuController(title: episode.details.title ?? "", identifier: scope.contextIdentifier,
             anchor: anchor, anchorFraction: fraction, actions: entries) { [weak self] key in
                 if key.hasPrefix("queue-"), let boundary = QueueBoundary(rawValue: String(key.dropFirst(6))) {
-                    self?.moveQueue(to: boundary, ids: [id], bulk: false, captured: capturedQueue); return
+                    // The episode moves in the queue as it is at the tap (`DBWriter.moveQueueItemToTop/Bottom` by id).
+                    self?.moveQueue(to: boundary, ids: [id], bulk: false); return
                 }
                 guard let action = EpisodeListAction(rawValue: key) else { return }
                 if action == .multiSelect { self?.startFeedSelection(id) }
@@ -115,13 +125,18 @@ extension LibraryViewController {
         }
     }
 
-    func performEpisodeListAction(_ action: EpisodeListAction, ids: [Int64], confirmedLocalDelete: Bool = false, selection: Bool = false, resetPosition: Bool = true, captured: CapturedAction? = nil, guardedSwipe: Bool = false) {
-        guard let library, let downloads, let playback else { return }
+    /// The task ends when the action is over, after the person answered a local folder's delete warning.
+    @discardableResult
+    func performEpisodeListAction(_ action: EpisodeListAction, ids: [Int64], confirmedLocalDelete: Bool = false, selection: Bool = false, resetPosition: Bool = true, captured: CapturedAction? = nil, guardedSwipe: Bool = false) -> Task<Void, Never>? {
+        guard let library, let downloads, let playback else { return nil }
         let capturedItem = captured?.model.snapshot()
-        Task { [self] in
+        return Task { [self] in
             do {
                 let queue = try await library.queue()
-                var items: [EpisodeListItem] = capturedItem.map { [$0] } ?? []
+                // A captured item's queue membership is the queue's now: the model's may predate a queue change, which would
+                // veto an Add to queue settled after it.
+                var items: [EpisodeListItem] = capturedItem.map { item in [.init(episode: item.episode, local: item.local,
+                    subscription: item.subscription, queued: queue.contains { $0.id == item.episode.id }, downloading: item.downloading)] } ?? []
                 for id in capturedItem == nil ? ids : [] {
                     guard let episode = try await library.episode(id: id),
                           let feed = try await library.listedFeedHeader(id: library.feedID(forEpisode: id)) else { continue }
@@ -130,11 +145,18 @@ extension LibraryViewController {
                 }
                 guard !items.isEmpty else { showEpisodeActionMessage(Appearance.text("no_items_selected_message")); return }
                 if action == .delete && !confirmedLocalDelete && items.contains(where: \.local) {
-                    present(SourceMessageController(title: Appearance.text("delete_label"), message: Appearance.text("delete_local_feed_confirmation_dialog_message"),
-                        positive: .init(title: Appearance.text("delete_label"), identifier: "confirmLocalEpisodeDelete", perform: { [weak self] in
-                            self?.performEpisodeListAction(action, ids: ids, confirmedLocalDelete: true, selection: selection, captured: captured, guardedSwipe: guardedSwipe)
-                        }, performAfterDismiss: true),
-                        negative: .init(title: Appearance.text("cancel_label"), identifier: "cancelLocalEpisodeDelete")), animated: true)
+                    await withCheckedContinuation { (answered: CheckedContinuation<Void, Never>) in
+                        // Answered by either button, by cancelling, or by the warning going away unanswered.
+                        let answer = LocalDeleteAnswer(answered)
+                        let warning = SourceMessageController(title: Appearance.text("delete_label"), message: Appearance.text("delete_local_feed_confirmation_dialog_message"),
+                            positive: .init(title: Appearance.text("delete_label"), identifier: "confirmLocalEpisodeDelete", perform: { [weak self] in
+                                let deletion = self?.performEpisodeListAction(action, ids: ids, confirmedLocalDelete: true, selection: selection, captured: captured, guardedSwipe: guardedSwipe)
+                                Task { await deletion?.value; answer.resume() }
+                            }, performAfterDismiss: true),
+                            negative: .init(title: Appearance.text("cancel_label"), identifier: "cancelLocalEpisodeDelete", perform: { answer.resume() }))
+                        warning.onCancel = { answer.resume() }
+                        present(warning, animated: true)
+                    }
                     return
                 }
                 if action == .share {
@@ -416,4 +438,12 @@ extension LibraryViewController {
             }
         }
     }
+}
+
+/// The answer to a local folder's delete warning, given once: by a button, by cancelling, or when the warning goes away.
+@MainActor private final class LocalDeleteAnswer {
+    private var answered: CheckedContinuation<Void, Never>?
+    init(_ answered: CheckedContinuation<Void, Never>) { self.answered = answered }
+    func resume() { answered?.resume(); answered = nil }
+    isolated deinit { answered?.resume() }
 }

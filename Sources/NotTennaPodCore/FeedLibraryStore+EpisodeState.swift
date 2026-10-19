@@ -17,7 +17,10 @@ extension FeedLibraryStore {
 
     /// Explicit Add/Remove favorite commands are idempotent, never stale toggles.
     public func setFavorite(episodeID: Int64, favorite: Bool) throws {
-        try updateEpisode(id: episodeID, scope: .userState) { $0.userState.isFavorite = favorite }
+        try Task.checkCancellation()
+        try write(.registers) {
+            guard try setFavoriteInTransaction(episodeID, favorite: favorite) else { throw FeedLibraryError.missingEpisode(episodeID) }
+        }
     }
 
     public func setFeedEpisodeSortOrder(feedID: Int64, order: FeedEpisodeSortOrder) throws {
@@ -146,6 +149,8 @@ extension FeedLibraryStore {
                 applied = .unplayed
             case .togglePlayed:
                 applied = previous == .unplayed ? .played : .unplayed
+            case .markPlayed: applied = .played
+            case .markUnplayed: applied = .unplayed
             }
             let feedID = try feedID(forEpisode: episodeID)
             let receipt = EpisodeMarkReceipt(operationID: UUID(), episodeID: episodeID, feedID: feedID,
@@ -232,17 +237,24 @@ extension FeedLibraryStore {
     }
 
     /// Multi-select Add/Remove favorite: `setFavorite` for each episode, in one transaction. An episode that
-    /// no longer exists is skipped.
+    /// no longer exists is skipped. Every selected episode is set, as Android's `DBWriter.addFavoriteItems` sets the
+    /// whole selection, also one already shown with the value.
     public func setFavorite(episodeIDs: [Int64], favorite: Bool) throws {
         try Task.checkCancellation()
         try write(.registers) {
-            for id in episodeIDs {
-                guard var episode = try loadEpisode(id) else { continue }
-                episode.userState.isFavorite = favorite
-                try saveEpisode(episode, feedID: feedID(forEpisode: id))
-            }
+            for id in episodeIDs { _ = try setFavoriteInTransaction(id, favorite: favorite) }
             try Task.checkCancellation()
         }
+    }
+
+    /// One episode of an explicit favorite command; false when it no longer exists. In a server library it is recorded
+    /// with the value asked for even when the stored value already has it.
+    private func setFavoriteInTransaction(_ id: Int64, favorite: Bool) throws -> Bool {
+        guard var episode = try loadEpisode(id) else { return false }
+        episode.userState.isFavorite = favorite
+        try saveEpisode(episode, feedID: feedID(forEpisode: id))
+        activeCapture?.favoriteTargets.insert(id)
+        return true
     }
 
     public func markEpisodePlayed(episodeID: Int64, played: Bool, resetPosition: Bool = true,

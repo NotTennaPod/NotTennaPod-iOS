@@ -292,7 +292,7 @@ struct EpisodePagerViewTests {
     /// Home sections pass only their visible items; Queue passes the whole queue; Search its results.
     @Test func callersPassTheirDisplayedRows() async throws {
         try await mounted(start: .home) { controller, _, _ in
-            @MainActor func homeInbox() -> [Int64] { rows(controller).filter { controller.homeRowScopes[$0] == .inbox } }
+            @MainActor func homeInbox() -> [Int64] { rows(controller).filter { id in controller.homeRows.contains { $0.episode.id == id && $0.scope == .inbox } } }
             try await wait("Home Inbox rows") { homeInbox().count == 2 }
             let home = homeInbox()
             #expect(home == [310, 301], "See what's new shows two Inbox rows")

@@ -184,12 +184,17 @@ extension LibraryViewController {
         screenPatchCount += 1
         latestDatesStorage?.apply(delta, mirror: mirror)
         // A row whose stored episode now differs from what its action model shows is built again from storage with a new
-        // model; every other row keeps its model (an action in flight already shows its own commit).
+        // model; every other row keeps its model (an action in flight already shows its own commit). A change of its
+        // playback only (a position save every five seconds while it plays) is shown in place: Android's rows are not
+        // rebound by it, so a press, a scroll or VoiceOver's focus on them goes on. A row being swiped keeps its model
+        // through any other change until its swipe ends.
         for (id, change) in delta.episodes {
             guard let binding = actionBindings[id] else { continue }
-            if change.new.map({ binding.model.snapshot().episode == $0.episode && binding.feedID == $0.feed.id }) != true {
-                actionBindings[id] = nil
-            }
+            guard let new = change.new, binding.feedID == new.feed.id else { if !holdForSwipe(id) { actionBindings[id] = nil }; continue }
+            let shown = binding.model.snapshot().episode
+            if shown == new.episode { continue }
+            if new.episode.differsOnlyInPlayback(from: shown) { showPlaybackInPlace(binding, stored: new.episode) }
+            else if !holdForSwipe(id) { actionBindings[id] = nil }
         }
         if (delta.feedOrder || !delta.feedStates.isEmpty), checkLibraryNavigation() { render(); updatePlayer(); return }
         // The open podcast is gone: the page is drawn again as a full read would draw it.
@@ -237,6 +242,27 @@ extension LibraryViewController {
         updatePlayer()
     }
 
+    /// A commit that changed only an episode's playback: its model takes the stored episode and is bound again as a new
+    /// row's would be (the player's live position over it unless the stored one is newer, `storedAhead`), and every row
+    /// of it on screen shows it, keeping its views; their paint record follows. Home's cards follow with their section.
+    /// Only when the rows show everything else already: a row painted before an action the model holds (a Played swipe
+    /// reconciled before its patch) keeps its stale record, and is painted again.
+    private func showPlaybackInPlace(_ binding: ActionBinding, stored episode: LibraryEpisode) {
+        let model = binding.model, id = episode.id
+        model.receiveStoredPlayback(episode)
+        actionBindings[id] = .init(model: model, feedID: binding.feedID, source: binding.source,
+            positionRevision: playback?.positionRevision ?? 0, deletionTarget: binding.deletionTarget, storedAhead: storedAhead(episode))
+        applyLivePosition(model)
+        let shown = model.snapshot().episode
+        guard let paint = rowPaints[id], paint.episode.differsOnlyInPlayback(from: shown) else { return }
+        let activelyPlaying = playback?.episode?.id == id && playback?.wantsPlayback == true
+        for row in episodeRowViews(id) where row.actionModel === model {
+            row.showPlayback(of: shown, activelyPlaying: activelyPlaying,
+                             showRemainingTime: timeDisplayPreferences?.value.showRemainingTime == true)
+        }
+        rowPaints[id] = RowPaint(episode: shown, queued: paint.queued, header: paint.header)
+    }
+
     /// Paints a built row again when what it shows differs from what it was painted from (`RowPaint`), or when its model
     /// was retired: its model may be kept (an action in flight already shows its own commit). The row under a queue drag
     /// stays as it is until the drag lets it go, which calls this again.
@@ -249,7 +275,7 @@ extension LibraryViewController {
     /// painted again and bound to a current model, when what it shows (the episode its model shows, its queue membership,
     /// its podcast header) differs from what it was painted from (`RowPaint`), or when its model was retired.
     func rowIsStale(_ id: Int64, value: LibraryMirrorDelta.Value? = nil) -> Bool {
-        guard let value = value ?? libraryEpisode(id) else { return false }
+        guard !holdForSwipe(id), let value = value ?? libraryEpisode(id) else { return false }
         let desired = RowPaint(episode: actionBindings[id]?.model.snapshot().episode ?? value.episode,
                                queued: isQueued(id), header: .init(value.feed))
         var stale = desired != rowPaints[id] || actionBindings[id] == nil
@@ -306,6 +332,8 @@ extension LibraryViewController {
         }
         listScreen = screen
         if (before == 0) != (screen.count == 0) { retireActionPresentation(); render(); return }
+        // The empty Queue invites to the Inbox while it has new episodes.
+        if queueVisible, screen.count == 0, queueEmptyOffersInbox != (mirror.inboxCount > 0) { render(); return }
         guard let list = episodeList else { refreshNavigationCounters(delta); return }
         // Only the queue's structure (order, membership) ends a drag in progress; it puts back the order it started from
         // and is attached again to the new order. A row's content change (a position saved) keeps the drag.

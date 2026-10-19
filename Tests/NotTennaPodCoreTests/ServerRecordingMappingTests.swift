@@ -116,6 +116,25 @@ struct ServerRecordingMappingTests {
             try await store.updatePreferences(feedID: two.feed.id) { $0.customTitle = "Mine"; $0.skip = .init(introSeconds: 5, endingSeconds: 0); $0.showEpisodeNotification = true }
             try await store.setEpisodeFilter(feedID: two.feed.id, filter: .init(values: ["unplayed"]))
             #expect(try fixture.outboxCount() == before)
+            // A bulk Keep updated names every selected podcast, also one already showing the chosen value; the other bulk
+            // settings are device-only.
+            try await store.applyBulk(.keepUpdated(false), feedIDs: [one.feed.id, two.feed.id])
+            try await store.applyBulk(.notifications(false), feedIDs: [one.feed.id, two.feed.id])
+            try await store.applyBulk(.autoDownload(.disabled), feedIDs: [one.feed.id, two.feed.id])
+            try await store.applyBulk(.autoDelete(.never), feedIDs: [one.feed.id, two.feed.id])
+            facts = try fixture.newFacts(after: before)
+            #expect(facts.map(\.type) == ["podcast.set_policy", "podcast.set_policy"])
+            #expect(facts.map(\.payload) == [["keep_updated": false], ["keep_updated": false]])
+            #expect(facts.map(\.targets) == [[["entity": "podcast", "id": .string(one.podcast), "generation": .string(one.generation)]],
+                                             [["entity": "podcast", "id": .string(two.podcast), "generation": .string(two.generation)]]])
+            // The New episodes action dialog records the choice already shown; a generic write leaving it unchanged does not.
+            before = try fixture.outboxCount()
+            try await store.updatePreferences(feedID: two.feed.id) { $0.newEpisodesAction = .queue }
+            #expect(try fixture.outboxCount() == before)
+            try await store.setNewEpisodesAction(.queue, feedID: two.feed.id)
+            facts = try fixture.newFacts(after: before)
+            #expect(facts.map(\.type) == ["podcast.set_policy"])
+            #expect(facts.map(\.payload) == [["new_episodes_action": "queue"]])
         }
     }
 
@@ -251,17 +270,32 @@ struct ServerRecordingMappingTests {
         }
     }
 
-    @Test func favoritesRecordOnlyChangedEpisodes() async throws {
+    /// An explicit favorite command records every episode it names, one this device already showed as favorite too
+    /// (another device may have removed it meanwhile); a write that does not set favorites records none.
+    @Test func favoritesRecordEveryNamedEpisodeAndNothingForOtherWrites() async throws {
         try await withFixture { fixture in
             let store = fixture.store
             let registered = try await fixture.subscribeRegistered()
             let ids = registered.feed.episodes.map(\.id).sorted()
             try await store.setFavorite(episodeID: ids[0], favorite: true)
-            let before = try fixture.outboxCount()
+            var before = try fixture.outboxCount()
             try await store.setFavorite(episodeIDs: [ids[0], ids[1]], favorite: true)
-            let facts = try fixture.newFacts(after: before)
+            var facts = try fixture.newFacts(after: before)
+            #expect(facts.map(\.type) == ["favorite.set", "favorite.set"])
+            #expect(facts.map(\.episodeIDs) == [[try #require(try fixture.wireID(ids[0]))], [try #require(try fixture.wireID(ids[1]))]])
+            #expect(facts.map { $0.payload["on"] } == [true, true])
+            // A single command on an episode already favorite records it too.
+            before = try fixture.outboxCount()
+            try await store.setFavorite(episodeID: ids[1], favorite: true)
+            facts = try fixture.newFacts(after: before)
             #expect(facts.map(\.type) == ["favorite.set"])
-            #expect(facts[0].episodeIDs == [try #require(try fixture.wireID(ids[1]))])
+            #expect(facts.first?.episodeIDs == [try #require(try fixture.wireID(ids[1]))])
+            // Other writes of favorite episodes record no favorite: a metadata write, a played mark, a projected record.
+            before = try fixture.outboxCount()
+            try await store.updateEpisode(id: ids[0]) { $0.details.title = "Changed" }
+            try await store.markEpisodePlayed(episodeID: ids[1], played: true)
+            try await store.projectForTesting(ids[0]) { $0.userState.isFavorite = true }
+            #expect(try fixture.newFacts(after: before).map(\.type) == ["episode.mark_played"])
         }
     }
 

@@ -239,6 +239,17 @@ final class ChangeCapture: @unchecked Sendable {
     var movedQueueEpisodes: [Int64] = []
     var queueRestore: (episodeID: Int64, index: Int, operationID: UUID)?
     var queueRemovalReceipt: (operationID: UUID, episodeID: Int64)?
+    /// Every episode an explicit Add or Remove favorite named: each is recorded with the value the person asked for, also
+    /// one this device already showed with it (another device may have changed it meanwhile, PROTOCOL §7.1 "the last in
+    /// order wins").
+    var favoriteTargets: Set<Int64> = []
+    /// Every podcast an explicit bulk Keep updated, or the New episodes action dialog, named: recorded with the chosen
+    /// value, also one already showing it.
+    var keepUpdatedTargets: Set<Int64> = []
+    var newEpisodesActionTargets: Set<Int64> = []
+    /// Every episode an explicit Remove from queue named, in order: as for favorites, one this device did not show queued
+    /// is recorded too (another device may have queued it meanwhile).
+    var queueRemovalTargets: [Int64] = []
     var historyRemoval: (operationID: UUID, episodeID: Int64)?
     var historyRestore: (operationID: UUID, episodeID: Int64, time: Int64)?
     /// A subscription URL's userinfo, staged as a library credential before the transaction.

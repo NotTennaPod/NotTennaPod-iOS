@@ -124,7 +124,9 @@ extension LibraryViewController {
                 present(SourceSingleChoiceController(title: Appearance.text("pref_new_episodes_action_title"),
                     identifier: "feedNewEpisodes", choices: values.map { (String($0.rawValue), Appearance.text($0.titleKey)) },
                     selectedIndex: values.firstIndex(of: feed.newEpisodesAction)) { [weak self] index in
-                        self?.writeFeedPreference(feedID: feedID) { $0.newEpisodesAction = values[index] }
+                        // The choice already shown is saved too, as Android saves every tapped entry.
+                        let action = values[index]
+                        self?.saveFeedPreference { try await $0.setNewEpisodesAction(action, feedID: feedID) }
                     }, animated: true)
             } catch { self?.showError(error) }
         }
@@ -212,13 +214,19 @@ extension LibraryViewController {
 
     private func writeFeedPreference(feedID: Int64, completion: ((Bool) -> Void)? = nil,
                                      afterSave: (() async throws -> Void)? = nil, change: @escaping @Sendable (inout FeedLibraryPreferences) -> Void) {
+        saveFeedPreference(completion: completion, afterSave: afterSave) { try await $0.updatePreferences(feedID: feedID, change: change) }
+    }
+
+    /// One feed setting write, after the previous one, then the screen reloads.
+    private func saveFeedPreference(completion: ((Bool) -> Void)? = nil, afterSave: (() async throws -> Void)? = nil,
+                                    save: @escaping @Sendable (FeedLibraryStore) async throws -> Void) {
         guard let library else { return }
         let previous = feedPreferenceWrite
         let request = UUID(); feedPreferenceWriteID = request
         feedPreferenceWrite = Task { [weak self] in
             await previous?.value
             do {
-                try await library.updatePreferences(feedID: feedID, change: change)
+                try await save(library)
                 try await afterSave?()
                 completion?(true)
                 if self?.feedPreferenceWriteID == request { await self?.reloadLibrary(preservingEpisodeDetails: true)?.value }
