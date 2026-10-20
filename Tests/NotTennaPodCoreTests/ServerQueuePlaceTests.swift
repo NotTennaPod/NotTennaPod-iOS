@@ -443,7 +443,7 @@ import Testing
                 #expect(try place(added[0].payload, fixture) == expected, "\(location): main")
                 let runs = try fixture.drafts().dropFirst(drafted)
                 #expect(try runs.map { try place($0.template["payload"], fixture) } == drafts.map { Optional($0) }, "\(location): drafts")
-                // The drafts replay after the batch's main-author add: they depend on it.
+                // The drafts depend on the batch's main-author add.
                 for draft in runs {
                     #expect((try fixture.rows("SELECT dependencies FROM ntp_drafts WHERE op_id = '\(draft.opID)'").first?.first ?? nil)?
                         .contains(added[0].opID) == true, "\(location): a draft depends on the main-author add")
@@ -456,6 +456,48 @@ import Testing
             // At the front: R1 and R2 at the start, P1 after R1, P2 after R2.
             try await check(.front, [r[2], p[2], r[3], p[3]], main: .start, drafts: [.after(r[2]), .after(r[3])])
             #expect(try await store.queue().map(\.id) == [r[2], p[2], r[3], p[3]])
+        }
+    }
+
+    /// Within one add, Undo or move, every draft a pending registration's runs get depends on all of the action's
+    /// main-author facts (PROTOCOL §15.2): the action replays as this phone executed it, whatever the time of the
+    /// registration the drafts also depend on. The add and the move name more registered episodes than one fact holds
+    /// (500), so each has two main-author facts; a pending episode queued earlier is placed again by a snapshot.
+    @Test(arguments: ["add", "undo", "move"]) func aPendingRegistrationsDraftsDependOnEveryMainAuthorFactOfTheirAction(_ action: String) async throws {
+        try await withFixture { fixture in
+            let store = fixture.store
+            let r = try await fixture.subscribeRegistered(ServerLibraryFixture.fetched("https://example.test/one.xml", title: "One", count: 502))
+                .feed.episodes.map(\.id).sorted()
+            let p = try await store.insert(ServerLibraryFixture.fetched("https://example.test/p.xml", title: "Pending", count: 3)).episodes.map(\.id).sorted()
+            _ = try await store.enqueue([p[2]])
+            let batch = Array(r[0..<501]) + [p[0], r[501], p[1]]
+            if action != "add" { _ = try await store.enqueue(batch) }
+            let facts = try fixture.outboxCount(), drafted = Set(try fixture.drafts().map(\.opID))
+            let expected: (main: Int, drafts: [String], queue: [Int64])
+            switch action {
+            case "add":
+                _ = try await store.enqueue(batch)
+                expected = (2, ["queue.add", "queue.add", "queue.reorder"], [p[2]] + batch)
+            case "undo":
+                let receipt = try #require(try await store.removeFromQueueWithUndo(r[0]).receipt)
+                #expect(try await store.undoQueueRemoval(receipt).status == .restored)
+                expected = (1, ["queue.reorder", "queue.reorder", "queue.reorder"], [p[2]] + batch)
+            default:
+                let moved = Array(r[0...501]) + [p[0], p[1]]
+                _ = try await store.performQueueMove(.boundary(moved, .top), expected: try await store.queue().map(QueueEpisodeIdentity.init))
+                expected = (2, ["queue.reorder", "queue.reorder", "queue.reorder"], batch + [p[2]])
+            }
+            #expect(try await store.queue().map(\.id) == expected.queue, "\(action)")
+            let main = try fixture.newFacts(after: facts).filter { $0.type.hasPrefix("queue.") && $0.type != "queue.remove" }
+            #expect(main.count == expected.main, "\(action): main-author facts \(main.map(\.type))")
+            let drafts = try fixture.drafts().filter { !drafted.contains($0.opID) }
+            #expect(drafts.map(\.type).sorted() == expected.drafts, "\(action): drafts")
+            #expect(drafts.filter { $0.template["ntp_snapshot"] == true }.count == (action == "undo" ? 3 : 1), "\(action): snapshots")
+            for draft in drafts {
+                let text = try fixture.rows("SELECT dependencies FROM ntp_drafts WHERE op_id = '\(draft.opID)'").first?.first ?? nil
+                let dependencies = Set(try JSONDecoder().decode([String].self, from: Data((text ?? "[]").utf8)))
+                #expect(Set(main.map(\.opID)).isSubset(of: dependencies), "\(action): a \(draft.type) draft depends on every main-author fact")
+            }
         }
     }
 

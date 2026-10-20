@@ -2,4 +2,4 @@
 # the release candidate (PROTOCOL §16, with the web commit in web-version.txt). Tools/ntp-server.sh builds it from an
 # archived copy of the sibling checkout, never changing the checkout: alone into .work/ntp-server/<commit>/ for the
 # host tests, and with the web client (--with-web) into .work/ntp-server/<commit>+web-<web commit>/ for the candidate.
-3381ce2be80221c24c3b2197bca3eb6b52510856
+8f3924497e61bdd39cfd689481e7fe616e37a1e5

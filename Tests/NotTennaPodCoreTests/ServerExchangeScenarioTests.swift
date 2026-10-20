@@ -75,6 +75,69 @@ import Testing
         }
     }
 
+    /// 4a. A phone subscribes during an outage, queues an episode and listens to it; meanwhile another phone subscribes
+    /// to the same feed, resets that episode and removes it from the queue. Once both have exchanged, every device shows
+    /// the reset position and the episode out of the queue: the outage's actions keep the times they were made at
+    /// (PROTOCOL §6.1, §6.9, §15.2). When the phone's actions were the later ones (`phoneLater`), they stand.
+    @Test(arguments: [false, true]) func scenario4aAnOutageSubscriptionsActionsKeepTheirTimes(phoneLater: Bool) async throws {
+        try await ExchangeWorld.run { world in
+            let a = try await world.attach("A")
+            let b = try await world.attach("B")
+            let url = world.url("two.xml")
+            func first(_ feed: LibraryFeed) throws -> Int64 { try #require(feed.episodes.first { $0.details.identifier == "two-1" }?.id) }
+            // A never exchanges until it reconnects: its podcast stays pending, its actions drafts.
+            var onA: Int64 = 0
+            let playerA = StorePlayer(a.store, realTime: ())
+            func phoneActs() async throws {
+                let feed = try await a.store.insert(Agreement.fetched(url, title: "Two", prefix: "two", count: 3))
+                onA = try first(feed)
+                _ = try await a.store.enqueue([onA])
+                // A listens for a minute and pauses; the episode stays in its player.
+                try await playerA.load(onA)
+                try await playerA.play()
+                try await playerA.listen(60, every: 30)
+                try await playerA.pause()
+                #expect(try a.rows("SELECT count(*) FROM ntp_drafts") != [["0"]], "A's actions wait for its registration")
+            }
+            var onB: Int64 = 0
+            func otherPhoneActs() async throws {
+                let feed = try await b.store.insert(Agreement.fetched(url, title: "Two", prefix: "two", count: 3))
+                try await Agreement.waitForCatalog(b, feedID: feed.id)
+                onB = try first(feed)
+                _ = try await b.store.enqueue([onB])
+                let player = StorePlayer(b.store, realTime: ())
+                try await player.load(onB)
+                try await player.play()
+                try await player.listen(10)
+                try await player.end(.switched)
+                try await b.store.resetPlaybackPosition(episodeID: onB)
+                _ = try await b.store.removeFromQueue([onB])
+                await b.exchange()
+                #expect(try await b.store.episode(id: onB)?.userState.positionMilliseconds == 0)
+                #expect(try await b.store.queue().isEmpty)
+            }
+            if phoneLater { try await otherPhoneActs(); try await phoneActs() } else { try await phoneActs(); try await otherPhoneActs() }
+            // A reconnects: its subscription joins B's podcast and its drafts are sent.
+            for _ in 0..<2 { await a.exchange(); await b.exchange() }
+            // After the catch-up the app moves A's paused player to a position another device's claim holds (PROTOCOL §8.6).
+            let adopted = try await playerA.adopt()
+            #expect(adopted == (phoneLater ? nil : 0), "A's paused player adopts the reset only when it is the later action")
+            await a.exchange()
+            #expect(try a.rows("SELECT count(*) FROM ntp_drafts") == [["0"]])
+            #expect(try await a.store.serverUnsentChanges() == 0)
+            let wire = try #require(try await b.store.wireEpisodeForTesting(onB))
+            #expect(try await a.store.wireEpisodeForTesting(onA) == wire, "one episode on both phones")
+            let fresh = try await world.attach("fresh")
+            for (name, phone) in [("A", a), ("B", b), ("a fresh phone", fresh)] {
+                let view = try await phone.view()
+                #expect(view.episodes[wire]?.position == (phoneLater ? 60_000 : 0), "\(name): the position of the later action")
+                #expect(view.queue == (phoneLater ? [wire] : []), "\(name): the queue of the later action")
+            }
+            await fresh.close()
+            try await Concurrency.converge(world, [a, b], "scenario 4a, phone later \(phoneLater)")
+        }
+    }
+
     /// 20. The server is restored from an older backup: sync signs in again, finds the lineage changed and pauses for
     /// recovery; the library, its rows and its acknowledged facts are kept.
     @Test func scenario20ARestoredServerPausesForRecoveryKeepingEverything() async throws {

@@ -394,8 +394,8 @@ extension FeedLibraryStore {
     /// One command's members by author, for placements (PROTOCOL §7.6): the main author's members, every
     /// registered podcast's, are one run (its facts replay in order on one chain). A pending registration's members
     /// are split into runs wherever another author's member comes between them: its drafts depend on the command's
-    /// main-author facts, so they replay after them, and each run goes into its own gap. `followedByMain` says whether
-    /// a main-author member comes after the run.
+    /// main-author facts, so the command replays as this phone executed it, and each run goes into its own gap.
+    /// `followedByMain` says whether a main-author member comes after the run.
     struct AuthorRun {
         var author: PodcastBinding
         var members: [PlacedMember]
@@ -470,7 +470,7 @@ extension FeedLibraryStore {
     /// before it (the tail too: after the last, never `end`). A gap next to entries the author cannot name is
     /// projected onto the nearest one before it; the run's earlier members count, so a later chunk or another
     /// author's members follow them. A pending registration's run that a main-author member follows takes its gap at
-    /// the back too (`endAllowed` false): its draft replays after the main-author facts.
+    /// the back too (`endAllowed` false): its draft depends on the main-author facts.
     func insertionPlace(_ insertion: QueueInsertion, first: Int64, author: PodcastBinding, endAllowed: Bool = true,
                         _ s: RecordingSession) throws -> QueuePlace {
         if insertion.end && endAllowed { return .end }
@@ -546,8 +546,8 @@ extension FeedLibraryStore {
         for run in try authorRuns(members, s, register: true) {
             for start in stride(from: 0, to: run.members.count, by: Self.factMemberLimit) {
                 let chunk = Array(run.members[start..<min(run.members.count, start + Self.factMemberLimit)])
-                // A pending registration's run keeps the gap it was inserted into, at the back too (its draft replays
-                // after the main author's facts); with no episode before it its author can name, at the back it goes
+                // A pending registration's run keeps the gap it was inserted into, at the back too (its draft depends
+                // on the main author's facts); with no episode before it its author can name, at the back it goes
                 // to the end unless a main-author member follows it.
                 var place = try insertionPlace(insertion, first: chunk[0].id, author: run.author, endAllowed: run.isMain, s)
                 if !run.isMain, insertion.end, place.isStart, !run.followedByMain { place = .end }
@@ -563,15 +563,15 @@ extension FeedLibraryStore {
     /// where this phone shows them: a snapshot of drafts on the registration's chain, one per run of its episodes in
     /// the queue, `after` the nearest episode before the run the chain can name (a registered podcast's, or its own),
     /// else `start`, depending on the command's main-author facts. While a registration is pending (a whole outage,
-    /// perhaps) the main author's commands cannot name its episodes, and its drafts, which depend on its resolution,
-    /// replay after them; the snapshot, made from the queue the person saw when acting, settles them where the phone
-    /// shows them, with other devices' changes merged around the anchors. The main author never waits for a
-    /// registration. Members this command's own drafts placed are left to them.
+    /// perhaps) the main author's commands cannot name its episodes; the snapshot, made from the queue the person saw
+    /// when acting and depending on the command's facts, settles them where the phone shows them, with other devices'
+    /// changes merged around the anchors. The main author never waits for a registration. Members this command's own
+    /// drafts placed are left to them.
     ///
-    /// Every snapshot replays after the registration resolves, after all of the main author's commands meanwhile, so
-    /// only the latest one has a lasting effect: each replaces the registration's previous one, which was never sent
-    /// (its chain is renumbered; the person's own adds, removals and Undo stay). Under Keep sorted there is none: the
-    /// sorted adds and sort triggers order the queue at replay, and a snapshot would undo them.
+    /// Every snapshot depends on its command's main-author facts, and so follows all of the main author's commands
+    /// before it, so only the latest one has a lasting effect: each replaces the registration's previous one, which
+    /// was never sent (its chain is renumbered; the person's own adds, removals and Undo stay). Under Keep sorted there
+    /// is none: the sorted adds and sort triggers order the queue at replay, and a snapshot would undo them.
     func replacePendingMembers(_ s: RecordingSession, after mainFacts: [String], placed: Set<Int64>, dependencies: [String]) throws {
         guard !mainFacts.isEmpty else { return }
         for row in try database.rows("SELECT author_id FROM ntp_registrations WHERE state = 'pending'") {
@@ -719,7 +719,7 @@ extension FeedLibraryStore {
         for group in try authorRuns(run, s, register: true) {
             for start in stride(from: 0, to: group.members.count, by: Self.factMemberLimit) {
                 let chunk = Array(group.members[start..<min(group.members.count, start + Self.factMemberLimit)])
-                // A pending registration's run that a moved main-author member follows replays after that member's
+                // A pending registration's run that a moved main-author member follows depends on that member's
                 // fact: its place is the gap it landed in.
                 let place: QueuePlace
                 if !group.isMain && group.followedByMain, let first = s.queueAfter.firstIndex(of: chunk[0].id) {

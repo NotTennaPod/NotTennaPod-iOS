@@ -208,9 +208,9 @@ import Testing
     // MARK: Queue places across chains
 
     /// A podcast subscribed while the server is away stays pending for the whole outage; the main author's
-    /// later commands cannot name its episodes, and its drafts replay after them. After [R1, P1, R2, P2], each later
-    /// command (and the front add, a control) settles to the phone's order, with or without another phone's change
-    /// made meanwhile (merged around the anchors), and a fresh phone agrees.
+    /// later commands cannot name its episodes, so each places them again by drafts depending on it. After [R1, P1,
+    /// R2, P2], each later command (and the front add, a control) settles to the phone's order, with or without another
+    /// phone's change made meanwhile (merged around the anchors), and a fresh phone agrees.
     @Test(arguments: ["append", "front", "randomSort", "move"], [false, true])
     func aPendingPodcastsEpisodesSettleWhereThePhoneShowsThemAfterLaterCommands(action: String, concurrent: Bool) async throws {
         try await ExchangeWorld.run(feeds: ["/r.xml": ("R", "r", 4), "/p.xml": ("P", "p", 2)]) { world in
@@ -386,6 +386,58 @@ import Testing
             #expect(try await a.store.queue().map { $0.details.title ?? "" } == ["O 1", "P 1", "P 2", "R 1", "R 2"])
             #expect(try await a.store.serverUnsentChanges() == 0)
             await b.close()
+        }
+    }
+
+    /// Keep sorted with equal sort values (PROTOCOL §7.6): every podcast is titled "Tie" and the queue is kept sorted by
+    /// podcast title, so each sort is stable and keeps the order the commands built; Keep sorted writes no placement
+    /// snapshot. While P's subscription is pending the phone adds P 1 at the front, then [P 2, R 2, P 3] at the back,
+    /// then the registered R 3 at the front; meanwhile another phone adds O 1. The pending adds replay at the times they
+    /// were made, so the queue settles in the phone's order with O 1 after it, on both phones and a fresh one. (Replayed
+    /// after every later command, P 1 would land before R 3.)
+    @Test func keepSortedWithEqualSortValuesKeepsAPendingPodcastsOrderAcrossLaterCommands() async throws {
+        try await ExchangeWorld.run(feeds: ["/r.xml": ("Tie", "r", 3), "/p.xml": ("Tie", "p", 3), "/o.xml": ("Tie", "o", 1)]) { world in
+            let a = try await world.attach("A")
+            let rf = try await a.store.insert(ServerExchangeAgreementTests.fetched(world.url("r.xml"), title: "Tie", prefix: "r", count: 3))
+            try await ServerExchangeAgreementTests.waitForCatalog(a, feedID: rf.id)
+            let r = rf.episodes.map(\.id).sorted()
+            try await a.store.setServerAccountPolicy(.sorting(keepSorted: true, order: .feedTitleAZ))
+            a.store.setQueueInsertionSettings(.init(keepSortedOrder: .feedTitleAZ))
+            _ = try await a.store.enqueue([r[0]])
+            await a.exchange()
+            let b = try await world.attach("B")
+            b.store.setQueueInsertionSettings(.init(keepSortedOrder: .feedTitleAZ))
+            #expect(try await b.view().policies?.keepSorted == true)
+            // Away from the server: P is subscribed (pending throughout) and the commands interleave both authors.
+            let pf = try await a.store.insert(ServerExchangeAgreementTests.fetched(world.url("p.xml"), title: "Tie", prefix: "p", count: 3))
+            let p = pf.episodes.map(\.id).sorted()
+            _ = try await a.store.enqueue([p[0]], location: .front)
+            _ = try await a.store.enqueue([p[1], r[1], p[2]])
+            _ = try await a.store.enqueue([r[2]], location: .front)
+            let wanted = [r[2], p[0], r[0], p[1], r[1], p[2]]
+            #expect(try await a.store.queue().map(\.id) == wanted, "the phone's order before reconnecting")
+            #expect(try a.rows("SELECT count(*) FROM ntp_drafts WHERE kind = 'queue.add'") == [["3"]], "P 1's add and the batch's two pending runs")
+            #expect(try a.rows("SELECT count(*) FROM ntp_drafts WHERE CAST(template AS TEXT) LIKE '%ntp_snapshot%'") == [["0"]],
+                    "Keep sorted writes no placement snapshot")
+            // Meanwhile the other phone adds O 1 at the back.
+            let of = try await b.store.insert(ServerExchangeAgreementTests.fetched(world.url("o.xml"), title: "Tie", prefix: "o", count: 1))
+            try await ServerExchangeAgreementTests.waitForCatalog(b, feedID: of.id)
+            _ = try await b.store.enqueue(of.episodes.map(\.id))
+            await b.exchange()
+            // A reconnects.
+            for _ in 0..<4 { await a.exchange(); await b.exchange() }
+            #expect(try await a.store.serverUnsentChanges() == 0)
+            #expect(try a.rows("SELECT count(*) FROM ntp_drafts") == [["0"]])
+            let oWire = try #require(try await b.store.wireEpisodeForTesting(of.episodes[0].id))
+            let o = try #require(try await a.store.localEpisodeForTesting(wire: oWire))
+            #expect(try await a.store.queue().map(\.id) == wanted + [o], "the phone's order after reconnecting, the other phone's add after it")
+            var wires: [String] = []
+            for id in wanted + [o] { wires.append(try #require(try await a.store.wireEpisodeForTesting(id))) }
+            #expect(try await a.view().queue == wires)
+            #expect(try await b.view().queue == wires, "the other phone agrees")
+            let fresh = try await world.attach("fresh")
+            #expect(try await fresh.view().queue == wires, "a fresh phone agrees")
+            await fresh.close()
         }
     }
 
